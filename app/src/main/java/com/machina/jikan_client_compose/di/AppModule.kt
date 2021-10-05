@@ -1,8 +1,11 @@
 package com.machina.jikan_client_compose.di
 
-import com.google.gson.Gson
-import com.machina.jikan_client_compose.data.network.Endpoints
+import com.machina.jikan_client_compose.core.DefaultDispatchers
+import com.machina.jikan_client_compose.core.Endpoints
+import com.machina.jikan_client_compose.data.network.NetworkResponseAdapterFactory
+import com.machina.jikan_client_compose.data.network.SafeCall
 import com.machina.jikan_client_compose.data.source.AnimeService
+import com.machina.jikan_client_compose.data.utils.ErrorConverter
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,6 +18,18 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class AppModule {
+
+    @Provides
+    @Singleton
+    fun provideDefaultDispatchers(): DefaultDispatchers {
+        return DefaultDispatchers()
+    }
+
+    @Provides
+    @Singleton
+    fun provideSafeCall(): SafeCall {
+        return SafeCall()
+    }
 
     @Provides
     @Singleton
@@ -37,5 +52,11 @@ class AppModule {
     @Singleton
     fun provideAnimeService(retrofit: Retrofit): AnimeService {
         return retrofit.create(AnimeService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideErrorConverter(retrofit: Retrofit): ErrorConverter {
+        return ErrorConverter(retrofit)
     }
 }

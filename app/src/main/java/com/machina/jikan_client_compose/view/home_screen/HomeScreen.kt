@@ -1,34 +1,29 @@
 package com.machina.jikan_client_compose.view.home_screen
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import com.machina.jikan_client_compose.R
-import com.machina.jikan_client_compose.data.model.AnimeSearch
+import com.machina.jikan_client_compose.core.enum.ContentType.Anime
+import com.machina.jikan_client_compose.core.enum.ContentType.valueOf
+import com.machina.jikan_client_compose.data.model.ContentSearch
 import com.machina.jikan_client_compose.data.model.AnimeTop
-import com.machina.jikan_client_compose.ui.navigation.MainNavigation.ANIME_DETAILS_SCREEN
 import com.machina.jikan_client_compose.ui.theme.*
-import com.machina.jikan_client_compose.view.composable.CenterCircularProgressIndicator
+import com.machina.jikan_client_compose.view.composable.ChipGroup
 import com.machina.jikan_client_compose.view.composable.CustomTextField
 import com.machina.jikan_client_compose.viewmodels.HomeViewModel
+import timber.log.Timber
 
 @ExperimentalCoilApi
 @Composable
@@ -38,9 +33,12 @@ fun HomeScreen(
 ) {
 
     val topAnimeList: List<AnimeTop> by viewModel.topAnimeList.observeAsState(listOf())
-    val animeSearchList: List<AnimeSearch> by viewModel.searchAnimeList.observeAsState(listOf())
+    val searchList: List<ContentSearch> by viewModel.searchList.observeAsState(listOf())
 
     val isFetching: Boolean by viewModel.isFetching.observeAsState(false)
+
+    val listState = rememberLazyListState()
+    var selectedType by remember { mutableStateOf(Anime) }
 
     var searchQuery by remember {
         mutableStateOf("")
@@ -50,8 +48,9 @@ fun HomeScreen(
         viewModel.getTopAnimeList()
     }
 
-    LaunchedEffect(searchQuery) {
-        viewModel.searchAnimeByQuery(searchQuery)
+    LaunchedEffect(searchQuery + selectedType.name) {
+        viewModel.searchContentByQuery(searchQuery, selectedType)
+        Timber.d("query $searchQuery type ${selectedType.name.lowercase()}")
     }
     
     Scaffold {
@@ -75,23 +74,32 @@ fun HomeScreen(
                 }
             )
 
-            Divider(color = BlackLighterBackground, thickness = 1.dp, modifier = Modifier.padding(0.dp, 12.dp, 0.dp, 8.dp))
+            Divider(color = BlackLighterBackground, thickness = 1.dp, modifier = Modifier.padding(bottom = 8.dp))
 
-            if (isFetching) {
-                CenterCircularProgressIndicator(color = Yellow500, strokeWidth = 4.dp, size = 40.dp)
-            } else {
-                if (searchQuery.isNotEmpty()) {
-                    AnimeSearchList(
-                        navController = navController,
-                        dataSet = animeSearchList
-                    )
-                } else {
-                    HomeContentList(
-                        navController = navController,
-                        topAnimeList = topAnimeList
-                    )
+            if (searchQuery.isNotEmpty()) {
+                ChipGroup(
+                    selectedType = selectedType,
+                    onSelectedChanged = { selectedType = valueOf(it) }
+                )
+                AnimeSearchList(
+                    navController = navController,
+                    listState = listState,
+                    dataSet = searchList,
+                    isFetching = isFetching
+                )
+                if (listState.isScrolledToTheEnd()) {
+                    LaunchedEffect(searchQuery) {
+                        Timber.d("query next page with $searchQuery")
+                        viewModel.nextContentPageByQuery(searchQuery, selectedType)
+                    }
                 }
+            } else {
+                HomeContentList(
+                    navController = navController,
+                    topAnimeList = topAnimeList
+                )
             }
+
         }
     }
 }
@@ -116,4 +124,8 @@ fun SearchTrailingIcon(
             tint = Grey
         )
     }
+}
+
+fun LazyListState.isScrolledToTheEnd(): Boolean {
+    return layoutInfo.visibleItemsInfo.lastOrNull()?.index == layoutInfo.totalItemsCount - 1
 }

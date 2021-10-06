@@ -32,7 +32,7 @@ fun HomeContentList(
     topAnimeList: List<AnimeTop>
 ) {
     Row(
-        modifier = Modifier.padding(18.dp, 4.dp, 18.dp, 4.dp),
+        modifier = Modifier.padding(start = 18.dp, end = 18.dp, bottom = 4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(

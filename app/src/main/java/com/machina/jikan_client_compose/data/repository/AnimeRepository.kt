@@ -1,17 +1,13 @@
 package com.machina.jikan_client_compose.data.repository
 
-import com.machina.jikan_client_compose.core.DefaultDispatchers
-import com.machina.jikan_client_compose.data.error.GeneralError
-import com.machina.jikan_client_compose.data.network.NetworkResponse
 import com.machina.jikan_client_compose.data.network.Resource
 import com.machina.jikan_client_compose.data.network.SafeCall
-import com.machina.jikan_client_compose.data.response.AnimeSearchResponse
+import com.machina.jikan_client_compose.data.response.ContentSearchResponse
 import com.machina.jikan_client_compose.data.response.AnimeTopResponse
 import com.machina.jikan_client_compose.data.source.AnimeService
 import com.machina.jikan_client_compose.data.utils.ErrorConverter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -29,9 +25,9 @@ class AnimeRepository @Inject constructor(
         }
     }
 
-    fun searchAnimeByQuery(query: String, page: Int): Flow<Resource<AnimeSearchResponse>> {
+    fun searchContentByQuery(contentType: String, query: String, page: Int): Flow<Resource<ContentSearchResponse>> {
         return flow {
-            val res = safeCall.enqueue(query, page, errorConverter::convertBasicError, animeService::searchAnimeByQuery)
+            val res = safeCall.enqueue(contentType, query, page, errorConverter::convertBasicError, animeService::searchContentByQuery)
             emit(res)
         }
     }

@@ -23,7 +23,7 @@ import com.machina.jikan_client_compose.view.composable.CenterCircularProgressIn
 
 @ExperimentalCoilApi
 @Composable
-fun ItemAnimeSearch(
+fun ItemMangaSearch(
     modifier: Modifier = Modifier,
     data: ContentSearch
 ) {
@@ -91,7 +91,13 @@ fun ItemAnimeSearch(
                 )
 
                 Text(
-                    text = "${data.episodesCount} episodes",
+                    text = "${data.chapters} chapters",
+                    style = TextStyle(color = OnDarkSurface, fontSize = 13.sp, fontWeight = FontWeight.Normal),
+                    modifier = Modifier.padding(bottom = 2.dp)
+                )
+
+                Text(
+                    text = "${data.volumes} volumes",
                     style = TextStyle(color = OnDarkSurface, fontSize = 13.sp, fontWeight = FontWeight.Normal),
                     modifier = Modifier.padding(bottom = 2.dp)
                 )

@@ -98,6 +98,9 @@ dependencies {
     //Shimmer
     implementation 'com.valentinilk.shimmer:compose-shimmer:1.0.0'
 
+    // Collapsing toolbar with image
+    implementation "me.onebone:toolbar-compose:2.2.0"
+
     // Timber
     implementation 'com.jakewharton.timber:timber:5.0.1'
 }

@@ -29,7 +29,8 @@ import timber.log.Timber
 @Composable
 fun HomeScreen(
     navController: NavController,
-    viewModel: HomeViewModel
+    viewModel: HomeViewModel,
+    onContentClick: (String, Int) -> Unit
 ) {
 
     val topAnimeList: List<AnimeTop> by viewModel.topAnimeList.observeAsState(listOf())
@@ -39,14 +40,9 @@ fun HomeScreen(
 
     val listState = rememberLazyListState()
     var selectedType by remember { mutableStateOf(Anime) }
+    var searchQuery by remember { mutableStateOf("") }
 
-    var searchQuery by remember {
-        mutableStateOf("")
-    }
-
-    LaunchedEffect(viewModel) {
-        viewModel.getTopAnimeList()
-    }
+    LaunchedEffect(viewModel) { viewModel.getTopAnimeList() }
 
     LaunchedEffect(searchQuery + selectedType.name) {
         viewModel.searchContentByQuery(searchQuery, selectedType)
@@ -96,7 +92,8 @@ fun HomeScreen(
             } else {
                 HomeContentList(
                     navController = navController,
-                    topAnimeList = topAnimeList
+                    topAnimeList = topAnimeList,
+                    onContentClick = onContentClick
                 )
             }
 

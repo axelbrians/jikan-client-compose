@@ -25,55 +25,55 @@ import com.machina.jikan_client_compose.view.composable.CenterCircularProgressIn
 @ExperimentalCoilApi
 @Composable
 fun ItemAnime(
-    modifier: Modifier = Modifier,
-    anime: AnimeTop,
-    onItemClick: () -> Unit
+  modifier: Modifier = Modifier,
+  anime: AnimeTop,
+  onItemClick: () -> Unit
 ) {
-    val painter = rememberImagePainter(
-        data = anime.imageUrl,
-        builder = {
-            crossfade(true)
-        }
+  val painter = rememberImagePainter(
+    data = anime.imageUrl,
+    builder = {
+      crossfade(true)
+    }
+  )
+
+
+  Column(
+    modifier = modifier
+      .clip(RoundedCornerShape(12.dp))
+      .clickable { onItemClick() }
+  ) {
+    Box(
+      modifier = Modifier
+        .height(190.dp)
+    ) {
+      if (painter.state is ImagePainter.State.Loading) {
+        CenterCircularProgressIndicator(
+          strokeWidth = 2.dp,
+          size = 20.dp,
+          color = Yellow500
+        )
+      }
+      Image(
+        painter = painter,
+        contentDescription = "Thumbnail",
+        contentScale = ContentScale.Crop,
+        modifier = Modifier
+          .fillMaxSize()
+          .clip(RoundedCornerShape(12.dp))
+      )
+    }
+
+    Text(
+      text = anime.title,
+      style = TextStyle(color = OnDarkSurface, fontSize = 14.sp, fontWeight = FontWeight.Bold),
+      modifier = Modifier.padding(0.dp, 6.dp, 0.dp, 0.dp)
     )
 
-
-    Column(
-        modifier = modifier
-            .clip(RoundedCornerShape(12.dp))
-            .clickable { onItemClick() }
-    ) {
-        Box (
-            modifier = Modifier
-                .height(190.dp)
-        ) {
-            if (painter.state is ImagePainter.State.Loading) {
-                CenterCircularProgressIndicator(
-                    strokeWidth = 2.dp,
-                    size = 20.dp,
-                    color = Yellow500
-                )
-            }
-            Image(
-                painter = painter,
-                contentDescription = "Thumbnail",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clip(RoundedCornerShape(12.dp))
-            )
-        }
-
-        Text(
-            text = anime.title,
-            style = TextStyle(color = OnDarkSurface, fontSize = 14.sp, fontWeight = FontWeight.Bold),
-            modifier = Modifier.padding(0.dp, 6.dp, 0.dp, 0.dp)
-        )
-
-        Text(
-            text ="${anime.score}",
-            style = TextStyle(color = OnDarkSurface, fontSize = 14.sp, fontWeight = FontWeight.Normal),
-            modifier = Modifier
-                .padding(bottom = 3.dp)
-        )
-    }
+    Text(
+      text = "${anime.score}",
+      style = TextStyle(color = OnDarkSurface, fontSize = 14.sp, fontWeight = FontWeight.Normal),
+      modifier = Modifier
+        .padding(bottom = 3.dp)
+    )
+  }
 }

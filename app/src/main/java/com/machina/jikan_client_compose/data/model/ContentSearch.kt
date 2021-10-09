@@ -30,7 +30,7 @@ data class ContentSearch(
     @SerializedName("episodes")
     val episodesCount: Int,
 
-    // Manga
+    /*  Manga  */
     @SerializedName("publishing")
     val isPublishing: Boolean,
 

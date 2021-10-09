@@ -60,7 +60,7 @@ fun AnimeSearchList(
         }
 
         if (isFetching) {
-            items(12) {
+            items(4) {
                 ItemAnimeSearchShimmer(shimmerInstance)
             }
         }

@@ -3,6 +3,7 @@ package com.machina.jikan_client_compose.data.source
 import com.machina.jikan_client_compose.core.Endpoints
 import com.machina.jikan_client_compose.data.response.ContentSearchResponse
 import com.machina.jikan_client_compose.data.response.AnimeTopResponse
+import com.machina.jikan_client_compose.data.response.ContentDetailsResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -21,5 +22,9 @@ interface AnimeService {
         @Query("page") page: Int
     ): Response<ContentSearchResponse>
 
-
+    @GET("{contentType}/{malId}")
+    suspend fun getContentDetails(
+        @Path("contentType") contentType: String,
+        @Path("malId") malId: Int,
+    ): Response<ContentDetailsResponse>
 }

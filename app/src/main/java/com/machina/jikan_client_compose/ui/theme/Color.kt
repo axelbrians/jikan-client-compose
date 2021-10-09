@@ -10,6 +10,7 @@ val Teal200 = Color(0xFF03DAC5)
 val Yellow500 = Color(0xFFFEC501)
 val BlackBackground = Color(0xFF111111)
 val BlackLighterBackground = Color(0xFF2B2B2B)
+val BlackBlueBackground = Color(0xFF20202A)
 
 val Grey = Color(0xFF757575)
 val OnDarkSurfaceLight = Color(0xFFFFFFFF)

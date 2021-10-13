@@ -14,8 +14,8 @@ import coil.annotation.ExperimentalCoilApi
 import com.machina.jikan_client_compose.ui.navigation.MainNavigation.CONTENT_DETAILS_SCREEN
 import com.machina.jikan_client_compose.ui.navigation.MainNavigation.HOME_SCREEN
 import com.machina.jikan_client_compose.ui.theme.JikanclientcomposeTheme
-import com.machina.jikan_client_compose.view.detail_screen.ContentDetailsScreen
-import com.machina.jikan_client_compose.view.home_screen.HomeScreen
+import com.machina.jikan_client_compose.presentation.detail_screen.ContentDetailsScreen
+import com.machina.jikan_client_compose.presentation.home_screen.HomeScreen
 import com.machina.jikan_client_compose.viewmodels.ContentDetailsViewModel
 import com.machina.jikan_client_compose.viewmodels.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint

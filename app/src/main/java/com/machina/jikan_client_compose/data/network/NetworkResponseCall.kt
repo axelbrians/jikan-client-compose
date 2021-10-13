@@ -1,6 +1,6 @@
 package com.machina.jikan_client_compose.data.network
 
-import com.machina.jikan_client_compose.data.exception.UnknownError
+import com.machina.jikan_client_compose.core.exception.UnknownError
 import okhttp3.Request
 import okhttp3.ResponseBody
 import okio.IOException

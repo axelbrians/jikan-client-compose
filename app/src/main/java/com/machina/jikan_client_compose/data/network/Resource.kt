@@ -1,14 +1,9 @@
 package com.machina.jikan_client_compose.data.network
 
-data class Resource<out T>(val status: Status, val data: T?, val message: String?) {
+sealed class Resource<T>(val data: T? = null, val message: String? = null) {
+    class Success<T>(data: T): Resource<T>(data)
 
-    companion object {
-        fun <T> success(data: T?) = Resource(Status.SUCCESS, data, null)
+    class Error<T>(message: String, data: T? = null) : Resource<T>(data, message)
 
-        fun <T> error(message: String, data: T?) = Resource(Status.ERROR, data, message)
-
-        fun <T> loading(data: T?) = Resource(Status.LOADING, data, null)
-
-        val LOADING = loading(null)
-    }
+    class Loading<T>(data: T? = null) : Resource<T>(data)
 }

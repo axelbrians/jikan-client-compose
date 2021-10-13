@@ -1,7 +1,7 @@
 package com.machina.jikan_client_compose.data.network
 
-import com.machina.jikan_client_compose.data.exception.Error.TIMEOUT_ERROR
-import com.machina.jikan_client_compose.data.exception.Error.UNKNOWN_ERROR
+import com.machina.jikan_client_compose.core.exception.Error.TIMEOUT_ERROR
+import com.machina.jikan_client_compose.core.exception.Error.UNKNOWN_ERROR
 import okhttp3.ResponseBody
 import retrofit2.Response
 import timber.log.Timber
@@ -18,17 +18,17 @@ class SafeCall {
             Timber.d("body $body")
 
             if (res.isSuccessful && body != null) {
-                Resource.success(body)
+                Resource.Success(body)
             } else if (errorBody != null) {
-                Resource.error(UNKNOWN_ERROR, null)
+                Resource.Error(UNKNOWN_ERROR, null)
             } else {
-                Resource.error(UNKNOWN_ERROR, null)
+                Resource.Error(UNKNOWN_ERROR, null)
             }
 
         } catch (e: Exception) {
             when(e) {
-                is SocketTimeoutException -> Resource.error(TIMEOUT_ERROR,null)
-                else -> Resource.error(UNKNOWN_ERROR, null)
+                is SocketTimeoutException -> Resource.Error(TIMEOUT_ERROR,null)
+                else -> Resource.Error(UNKNOWN_ERROR, null)
             }
         }
     }
@@ -40,22 +40,22 @@ class SafeCall {
             val errorBody = res.errorBody()
 
             if (res.isSuccessful && body != null) {
-                Resource.success(body)
+                Resource.Success(body)
             } else if (errorBody != null) {
                 val parsedError = converter(errorBody)
                 if (parsedError != null) {
-                    Resource.error("", null)
+                    Resource.Error("", null)
                 } else {
-                    Resource.error(UNKNOWN_ERROR, null)
+                    Resource.Error(UNKNOWN_ERROR, null)
                 }
             } else {
-                Resource.error(UNKNOWN_ERROR, null)
+                Resource.Error(UNKNOWN_ERROR, null)
             }
 
         } catch (e: Exception) {
             when(e) {
-                is SocketTimeoutException -> Resource.error(TIMEOUT_ERROR,null)
-                else -> Resource.error(UNKNOWN_ERROR, null)
+                is SocketTimeoutException -> Resource.Error(TIMEOUT_ERROR,null)
+                else -> Resource.Error(UNKNOWN_ERROR, null)
             }
         }
     }
@@ -66,22 +66,22 @@ class SafeCall {
             val body = res.body()
             val errorBody = res.errorBody()
             if (res.isSuccessful && body != null) {
-                Resource.success(body)
+                Resource.Success(body)
             } else if (errorBody != null) {
                 val parsedError = converter(errorBody)
                 if (parsedError != null) {
-                    Resource.error("", null)
+                    Resource.Error("", null)
                 } else {
-                    Resource.error(UNKNOWN_ERROR, null)
+                    Resource.Error(UNKNOWN_ERROR, null)
                 }
             } else {
-                Resource.error(UNKNOWN_ERROR, null)
+                Resource.Error(UNKNOWN_ERROR, null)
             }
 
         } catch (e: Exception) {
             when(e) {
-                is SocketTimeoutException -> Resource.error(TIMEOUT_ERROR,null)
-                else -> Resource.error(UNKNOWN_ERROR, null)
+                is SocketTimeoutException -> Resource.Error(TIMEOUT_ERROR,null)
+                else -> Resource.Error(UNKNOWN_ERROR, null)
             }
         }
     }
@@ -96,22 +96,22 @@ class SafeCall {
             val body = res.body()
             val errorBody = res.errorBody()
             if (res.isSuccessful && body != null) {
-                Resource.success(body)
+                Resource.Success(body)
             } else if (errorBody != null) {
                 val parsedError = converter(errorBody)
                 if (parsedError != null) {
-                    Resource.error("", null)
+                    Resource.Error("", null)
                 } else {
-                    Resource.error(UNKNOWN_ERROR, null)
+                    Resource.Error(UNKNOWN_ERROR, null)
                 }
             } else {
-                Resource.error(UNKNOWN_ERROR, null)
+                Resource.Error(UNKNOWN_ERROR, null)
             }
 
         } catch (e: Exception) {
             when(e) {
-                is SocketTimeoutException -> Resource.error(TIMEOUT_ERROR,null)
-                else -> Resource.error(UNKNOWN_ERROR, null)
+                is SocketTimeoutException -> Resource.Error(TIMEOUT_ERROR,null)
+                else -> Resource.Error(UNKNOWN_ERROR, null)
             }
         }
     }

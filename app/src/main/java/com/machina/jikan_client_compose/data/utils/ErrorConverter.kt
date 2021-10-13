@@ -1,6 +1,6 @@
 package com.machina.jikan_client_compose.data.utils
 
-import com.machina.jikan_client_compose.data.error.GeneralError
+import com.machina.jikan_client_compose.core.error.GeneralError
 import okhttp3.ResponseBody
 import retrofit2.Converter
 import retrofit2.Retrofit

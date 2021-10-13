@@ -5,10 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.machina.jikan_client_compose.core.DefaultDispatchers
-import com.machina.jikan_client_compose.data.model.AnimeTop
-import com.machina.jikan_client_compose.data.network.Status
-import com.machina.jikan_client_compose.data.repository.AnimeRepository
-import com.machina.jikan_client_compose.data.response.ContentDetailsResponse
+import com.machina.jikan_client_compose.data.network.Resource
+import com.machina.jikan_client_compose.data.repository.AnimeRepositoryImpl
+import com.machina.jikan_client_compose.data.remote.dto.ContentDetailsResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onStart
@@ -17,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ContentDetailsViewModel @Inject constructor(
-  private val animeRepository: AnimeRepository,
+  private val animeRepository: AnimeRepositoryImpl,
   private val dispatchers: DefaultDispatchers
 ): ViewModel() {
 
@@ -33,7 +32,7 @@ class ContentDetailsViewModel @Inject constructor(
         .onStart { _isFetching.postValue(true) }
         .collect { res ->
           _isFetching.postValue(false)
-          if (res.status == Status.SUCCESS) {
+          if (res is Resource.Success) {
             _contentDetails.postValue(res.data)
           }
         }

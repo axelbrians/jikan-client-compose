@@ -6,6 +6,7 @@ import com.machina.jikan_client_compose.data.network.SafeCall
 import com.machina.jikan_client_compose.data.remote.AnimeService
 import com.machina.jikan_client_compose.data.remote.MangaService
 import com.machina.jikan_client_compose.data.repository.AnimeRepositoryImpl
+import com.machina.jikan_client_compose.data.repository.AnimeRepositoryImplKtor
 import com.machina.jikan_client_compose.data.repository.MangaRepositoryImpl
 import com.machina.jikan_client_compose.data.utils.ErrorConverter
 import com.machina.jikan_client_compose.domain.repository.AnimeRepository
@@ -14,6 +15,11 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import io.ktor.client.*
+import io.ktor.client.engine.android.*
+import io.ktor.client.features.json.*
+import io.ktor.client.features.json.serializer.*
+import io.ktor.client.features.logging.*
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -33,6 +39,30 @@ class AppModule {
   @Singleton
   fun provideSafeCall(): SafeCall {
     return SafeCall()
+  }
+
+  @Provides
+  @Singleton
+  fun provideKtorClient(): HttpClient {
+    return HttpClient(Android) {
+      engine {
+        // this: AndroidEngineConfig
+        connectTimeout = 15_000
+        socketTimeout = 100_000
+      }
+      install(JsonFeature) {
+        serializer = KotlinxSerializer()
+      }
+      install(Logging) {
+        logger = Logger.DEFAULT
+        level = LogLevel.HEADERS
+      }
+    }
+  }
+
+  @Provides
+  fun provideAnimeRepositoryImplKtor(client: HttpClient): AnimeRepositoryImplKtor {
+    return AnimeRepositoryImplKtor(client)
   }
 
   @Provides

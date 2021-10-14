@@ -1,4 +1,4 @@
-package com.machina.jikan_client_compose.viewmodels
+package com.machina.jikan_client_compose.presentation.home_screen
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
@@ -7,12 +7,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.machina.jikan_client_compose.core.DefaultDispatchers
 import com.machina.jikan_client_compose.core.enum.ContentType
-import com.machina.jikan_client_compose.data.network.Resource
 import com.machina.jikan_client_compose.data.repository.AnimeRepositoryImpl
 import com.machina.jikan_client_compose.domain.use_case.get_top_anime.GetTopAnimeUseCase
+import com.machina.jikan_client_compose.domain.use_case.get_top_anime.GetTopAnimeUseCaseKtor
 import com.machina.jikan_client_compose.domain.use_case.search_content.SearchContentUseCase
-import com.machina.jikan_client_compose.presentation.home_screen.AnimeTopState
-import com.machina.jikan_client_compose.presentation.home_screen.ContentSearchState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
@@ -22,9 +20,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-  private val animeRepository: AnimeRepositoryImpl,
   private val getTopAnimeUseCase: GetTopAnimeUseCase,
   private val searchContentUseCase: SearchContentUseCase,
+  private val getTopAnimeUseCaseKtor: GetTopAnimeUseCaseKtor,
   private val dispatchers: DefaultDispatchers
 ): ViewModel() {
 
@@ -41,7 +39,7 @@ class HomeViewModel @Inject constructor(
   }
 
   fun getTopAnimeList() {
-    getTopAnimeUseCase().onEach {
+    getTopAnimeUseCaseKtor().onEach {
       _animeTopState.value = it
     }.launchIn(viewModelScope)
   }

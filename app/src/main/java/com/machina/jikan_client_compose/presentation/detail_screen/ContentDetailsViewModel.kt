@@ -1,4 +1,4 @@
-package com.machina.jikan_client_compose.viewmodels
+package com.machina.jikan_client_compose.presentation.detail_screen
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

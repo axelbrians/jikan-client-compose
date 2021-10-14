@@ -21,7 +21,6 @@ import com.machina.jikan_client_compose.ui.theme.*
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
 import com.machina.jikan_client_compose.presentation.composable.ChipGroup
 import com.machina.jikan_client_compose.presentation.composable.CustomTextField
-import com.machina.jikan_client_compose.viewmodels.HomeViewModel
 import kotlinx.coroutines.delay
 import timber.log.Timber
 

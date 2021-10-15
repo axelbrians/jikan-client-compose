@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.ui.text.capitalize
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -11,12 +12,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import coil.annotation.ExperimentalCoilApi
+import com.machina.jikan_client_compose.core.enum.ContentType
 import com.machina.jikan_client_compose.ui.navigation.MainNavigation.CONTENT_DETAILS_SCREEN
 import com.machina.jikan_client_compose.ui.navigation.MainNavigation.HOME_SCREEN
 import com.machina.jikan_client_compose.ui.theme.JikanclientcomposeTheme
 import com.machina.jikan_client_compose.presentation.detail_screen.ContentDetailsScreen
 import com.machina.jikan_client_compose.presentation.home_screen.HomeScreen
-import com.machina.jikan_client_compose.presentation.detail_screen.ContentDetailsViewModel
+import com.machina.jikan_client_compose.presentation.detail_screen.data.ContentDetailsViewModel
 import com.machina.jikan_client_compose.presentation.home_screen.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -57,14 +59,15 @@ class MainActivity : ComponentActivity() {
             )
           }
           composable(
-            "${CONTENT_DETAILS_SCREEN}/{contentType}/{malId}",
+            CONTENT_DETAILS_SCREEN + "/{contentType}/{malId}",
             arguments = detailsScreenArgs
           ) { backStack ->
             val detailsViewModel = hiltViewModel<ContentDetailsViewModel>()
+            Timber.d("contentType ${backStack.arguments?.getString("contentType")}")
             ContentDetailsScreen(
               navController = navController,
               viewModel = detailsViewModel,
-              backStack.arguments?.getString("contentType"),
+              backStack.arguments?.getString("contentType")?.replaceFirstChar { it.uppercase() },
               backStack.arguments?.getInt("malId")
             )
           }

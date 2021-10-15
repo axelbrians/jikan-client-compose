@@ -1,5 +1,6 @@
 package com.machina.jikan_client_compose.di
 
+import com.machina.jikan_client_compose.core.Call
 import com.machina.jikan_client_compose.core.DefaultDispatchers
 import com.machina.jikan_client_compose.core.Endpoints
 import com.machina.jikan_client_compose.data.network.SafeCall
@@ -51,7 +52,9 @@ class AppModule {
         socketTimeout = 100_000
       }
       install(JsonFeature) {
-        serializer = KotlinxSerializer()
+        serializer = KotlinxSerializer(kotlinx.serialization.json.Json {
+          ignoreUnknownKeys = true
+        })
       }
       install(Logging) {
         logger = Logger.DEFAULT
@@ -61,8 +64,14 @@ class AppModule {
   }
 
   @Provides
-  fun provideAnimeRepositoryImplKtor(client: HttpClient): AnimeRepositoryImplKtor {
-    return AnimeRepositoryImplKtor(client)
+  @Singleton
+  fun provideCall(): Call {
+    return Call()
+  }
+
+  @Provides
+  fun provideAnimeRepositoryImplKtor(client: HttpClient, call: Call): AnimeRepositoryImplKtor {
+    return AnimeRepositoryImplKtor(client, call)
   }
 
   @Provides

@@ -95,6 +95,4 @@ data class ContentDetailsResponse(
 
   @SerializedName("background")
   val background: String,
-
-
 )

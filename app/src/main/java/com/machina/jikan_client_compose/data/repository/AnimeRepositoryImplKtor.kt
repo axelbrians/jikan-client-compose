@@ -1,14 +1,12 @@
 package com.machina.jikan_client_compose.data.repository
 
+import com.machina.jikan_client_compose.core.Call
 import com.machina.jikan_client_compose.core.Endpoints
 import com.machina.jikan_client_compose.core.exception.Error
 import com.machina.jikan_client_compose.core.exception.Error.UNKNOWN_ERROR
 import com.machina.jikan_client_compose.data.network.Resource
 import com.machina.jikan_client_compose.data.remote.AnimeServiceKtor
-import com.machina.jikan_client_compose.data.remote.dto.AnimeTopDtoKtor
-import com.machina.jikan_client_compose.data.remote.dto.AnimeTopResponseKtor
-import com.machina.jikan_client_compose.data.remote.dto.ContentSearchDtoKtor
-import com.machina.jikan_client_compose.data.remote.dto.ContentSearchResponseKtor
+import com.machina.jikan_client_compose.data.remote.dto.*
 import com.machina.jikan_client_compose.domain.model.ContentSearch
 import io.ktor.client.*
 import io.ktor.client.call.*
@@ -22,6 +20,7 @@ import javax.inject.Inject
 
 class AnimeRepositoryImplKtor @Inject constructor(
   private val client: HttpClient,
+  private val call: Call
 ) : AnimeServiceKtor {
 
   override suspend fun getTopAnimeList(): Resource<List<AnimeTopDtoKtor>> {
@@ -52,7 +51,8 @@ class AnimeRepositoryImplKtor @Inject constructor(
 
   override suspend fun searchAnime(query: String, page: Int): Resource<List<ContentSearchDtoKtor>> {
     return try {
-      val res = client.get<HttpResponse> {
+      val res = client.request<HttpResponse> {
+        method = HttpMethod.Get
         url {
           protocol = URLProtocol.HTTPS
           host = Endpoints.HOST
@@ -61,7 +61,6 @@ class AnimeRepositoryImplKtor @Inject constructor(
           parameter("page", page)
         }
       }
-
 
       if (res.status.isSuccess()) {
         val body = res.receive<ContentSearchResponseKtor>()
@@ -76,6 +75,19 @@ class AnimeRepositoryImplKtor @Inject constructor(
         else -> Resource.Error(UNKNOWN_ERROR)
       }
     }
+  }
+
+  override suspend fun getAnimeDetails(malId: Int): Resource<ContentDetailsDto> {
+    val request = HttpRequestBuilder().apply {
+      method = HttpMethod.Get
+      url {
+        protocol = URLProtocol.HTTPS
+        host = Endpoints.HOST
+        encodedPath = Endpoints.DETAILS_ANIME_URL + "/$malId"
+      }
+    }
+
+    return call.invoke(client, request)
   }
 
 

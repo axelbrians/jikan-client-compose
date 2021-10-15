@@ -29,6 +29,8 @@ import coil.compose.rememberImagePainter
 import com.machina.jikan_client_compose.data.remote.dto.ContentDetailsResponse
 import com.machina.jikan_client_compose.ui.theme.*
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
+import com.machina.jikan_client_compose.presentation.detail_screen.data.ContentDetailsState
+import com.machina.jikan_client_compose.presentation.detail_screen.data.ContentDetailsViewModel
 import me.onebone.toolbar.*
 
 @ExperimentalAnimationApi
@@ -42,10 +44,11 @@ fun ContentDetailsScreen(
 ) {
   val state = rememberCollapsingToolbarScaffoldState()
   val contentDetails: ContentDetailsResponse? by viewModel.contentDetails.observeAsState()
-  val isFetching: Boolean by viewModel.isFetching.observeAsState(false)
+
+  val contentDetailsState = viewModel.contentDetailsState.value
 
   val coilPainter = rememberImagePainter(
-    data = contentDetails?.imageUrl ?: "",
+    data = contentDetailsState.data?.imageUrl,
     builder = {
       crossfade(true)
     }
@@ -57,8 +60,42 @@ fun ContentDetailsScreen(
     block = { viewModel.getContentDetails(contentType, malId) }
   )
 
-  if (isFetching) {
-    Scaffold(
+
+  CollapsingToolbarScaffold(
+    modifier = Modifier
+      .fillMaxSize()
+      .background(BlackBackground),
+    state = state,
+    scrollStrategy = ScrollStrategy.EnterAlwaysCollapsed,
+    toolbar = { ContentDetailsScreenToolbar(coilPainter = coilPainter, state = state, onArrowClick = { navController.navigateUp() })  }
+  ) {
+    Column(
+      modifier = Modifier
+        .fillMaxWidth()
+        .verticalScroll(rememberScrollState()),
+      horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+      // Synopsis Composable
+      ContentDetailsSynopsis(state = contentDetailsState)
+      repeat(7) {
+        Text(
+          text = "Anime Detail's",
+          style = TextStyle(
+            color = OnDarkSurface,
+            fontWeight = FontWeight.Bold,
+            fontSize = 20.sp
+          ),
+          modifier = Modifier.height(220.dp)
+        )
+      }
+    }
+  }
+
+
+
+
+  if (contentDetailsState.isLoading) {
+    Surface(
       modifier = Modifier
         .fillMaxSize()
         .background(BlackBackground)
@@ -67,36 +104,6 @@ fun ContentDetailsScreen(
         size = 40.dp,
         color = Yellow500
       )
-    }
-  } else if (contentDetails != null) {
-    CollapsingToolbarScaffold(
-      modifier = Modifier
-        .fillMaxSize()
-        .background(BlackBackground),
-      state = state,
-      scrollStrategy = ScrollStrategy.EnterAlwaysCollapsed,
-      toolbar = { ContentDetailsScreenToolbar(coilPainter = coilPainter, state = state, onArrowClick = { navController.navigateUp() })  }
-    ) {
-      Column(
-        modifier = Modifier
-          .fillMaxWidth()
-          .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally,
-      ) {
-        // Synopsis Composable
-        ContentDetailsSynopsis(contentDetails = contentDetails)
-        repeat(7) {
-          Text(
-            text = "Anime Detail's",
-            style = TextStyle(
-              color = OnDarkSurface,
-              fontWeight = FontWeight.Bold,
-              fontSize = 20.sp
-            ),
-            modifier = Modifier.height(220.dp)
-          )
-        }
-      }
     }
   }
 }
@@ -142,7 +149,7 @@ fun CollapsingToolbarScope.ContentDetailsScreenToolbar(
 @ExperimentalAnimationApi
 @Composable
 fun ContentDetailsSynopsis(
-  contentDetails: ContentDetailsResponse?
+  state: ContentDetailsState?
 ) {
   var expanded by remember { mutableStateOf(false) }
 
@@ -173,7 +180,7 @@ fun ContentDetailsSynopsis(
         )
         if (targetExpanded) {
           Text(
-            text = contentDetails?.synopsis ?: "",
+            text = state?.data?.synopsis ?: "",
             style = TextStyle(color = OnDarkSurface, fontSize = 14.sp),
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 12.dp)
           )
@@ -182,7 +189,7 @@ fun ContentDetailsSynopsis(
           }
         } else {
           Text(
-            text = contentDetails?.synopsis ?: "",
+            text = state?.data?.synopsis ?: "",
             maxLines = 9,
             overflow = TextOverflow.Ellipsis,
             style = TextStyle(color = OnDarkSurface, fontSize = 14.sp),

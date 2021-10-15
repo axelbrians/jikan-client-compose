@@ -78,14 +78,6 @@ class AnimeRepositoryImpl @Inject constructor(
         }
     }
 
-    fun searchContentByQuery(contentType: String, query: String, page: Int): Flow<Resource<ContentSearchResponse>> {
-        return flow {
-            emit(Resource.Loading())
-            val res = safeCall.enqueue(contentType, query, page, errorConverter::convertBasicError, animeService::searchContentByQuery)
-            emit(res)
-        }
-    }
-
     fun getContentDetails(contentType: String?, malId: Int?): Flow<Resource<ContentDetailsResponse>> {
         return flow {
             val res = safeCall.enqueue(contentType ?: "", malId ?: 0, errorConverter::convertBasicError, animeService::getContentDetails)

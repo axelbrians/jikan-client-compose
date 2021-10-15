@@ -7,10 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.machina.jikan_client_compose.core.DefaultDispatchers
 import com.machina.jikan_client_compose.core.enum.ContentType
-import com.machina.jikan_client_compose.data.repository.AnimeRepositoryImpl
-import com.machina.jikan_client_compose.domain.use_case.get_top_anime.GetTopAnimeUseCase
 import com.machina.jikan_client_compose.domain.use_case.get_top_anime.GetTopAnimeUseCaseKtor
-import com.machina.jikan_client_compose.domain.use_case.search_content.SearchContentUseCase
+import com.machina.jikan_client_compose.domain.use_case.search_content.SearchContentUseCaseKtor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
@@ -20,8 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-  private val getTopAnimeUseCase: GetTopAnimeUseCase,
-  private val searchContentUseCase: SearchContentUseCase,
+  private val searchContentUseCaseKtor: SearchContentUseCaseKtor,
   private val getTopAnimeUseCaseKtor: GetTopAnimeUseCaseKtor,
   private val dispatchers: DefaultDispatchers
 ): ViewModel() {
@@ -47,7 +44,7 @@ class HomeViewModel @Inject constructor(
   fun searchContentByQuery(contentType: ContentType, query: String) {
     viewModelScope.launch(dispatchers.network) {
       if (query.length >= 3) {
-        searchContentUseCase(contentType, query, 1).collect { res ->
+        searchContentUseCaseKtor(contentType, query, 1).collect { res ->
           _contentSearchState.value = res
           if (res.error != null) currentPage = 2
         }
@@ -60,7 +57,7 @@ class HomeViewModel @Inject constructor(
   fun nextContentPageByQuery(query: String, contentType: ContentType) {
     viewModelScope.launch(dispatchers.network) {
       if (query.length >= 3) {
-        searchContentUseCase(contentType, query, currentPage).collect { res ->
+        searchContentUseCaseKtor(contentType, query, currentPage).collect { res ->
 
           if (res.isLoading) {
             _contentSearchState.value = _contentSearchState.value.copy(isLoading = true)

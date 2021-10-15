@@ -1,11 +1,10 @@
 package com.machina.jikan_client_compose.data.remote.dto
 
-import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AnimeTopKtorResponse(
+data class AnimeTopResponseKtor(
   @SerialName("request_hash")
   val requestHash: String,
 
@@ -16,5 +15,5 @@ data class AnimeTopKtorResponse(
   val requestCacheExpiry: Int,
 
   @SerialName("top")
-  val top: List<AnimeTopKtorDto>
+  val top: List<AnimeTopDtoKtor>
 )

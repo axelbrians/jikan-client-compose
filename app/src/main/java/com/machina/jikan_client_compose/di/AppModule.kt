@@ -102,16 +102,6 @@ class AppModule {
 
   @Provides
   @Singleton
-  fun provideAnimeRepository(
-    service: AnimeService,
-    errorConverter: ErrorConverter,
-    safeCall: SafeCall
-  ): AnimeRepository {
-    return AnimeRepositoryImpl(service, errorConverter, safeCall)
-  }
-
-  @Provides
-  @Singleton
   fun provideMangaRepository(
     service: MangaService,
     errorConverter: ErrorConverter,

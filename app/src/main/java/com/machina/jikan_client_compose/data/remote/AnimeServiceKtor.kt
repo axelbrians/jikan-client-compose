@@ -1,12 +1,15 @@
 package com.machina.jikan_client_compose.data.remote
 
 import com.machina.jikan_client_compose.data.network.Resource
-import com.machina.jikan_client_compose.data.remote.dto.AnimeTopKtorDto
-import com.machina.jikan_client_compose.data.remote.dto.AnimeTopResponse
-import io.ktor.client.statement.*
-import retrofit2.Response
+import com.machina.jikan_client_compose.data.remote.dto.AnimeTopDtoKtor
+import com.machina.jikan_client_compose.data.remote.dto.ContentSearchDtoKtor
+import com.machina.jikan_client_compose.domain.model.ContentSearch
 
 interface AnimeServiceKtor {
 
-  suspend fun getTopAnimeList(): Resource<List<AnimeTopKtorDto>>
+  suspend fun getTopAnimeList():
+    Resource<List<AnimeTopDtoKtor>>
+
+  suspend fun searchAnime(query: String, page: Int):
+    Resource<List<ContentSearchDtoKtor>>
 }

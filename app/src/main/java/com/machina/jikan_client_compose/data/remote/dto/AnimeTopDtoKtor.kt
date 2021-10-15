@@ -1,12 +1,11 @@
 package com.machina.jikan_client_compose.data.remote.dto
 
-import com.google.gson.annotations.SerializedName
 import com.machina.jikan_client_compose.domain.model.AnimeTop
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AnimeTopKtorDto(
+data class AnimeTopDtoKtor(
   @SerialName("mal_id")
   val malId: Int,
 
@@ -41,7 +40,7 @@ data class AnimeTopKtorDto(
   val score: Double,
 )
 
-fun AnimeTopKtorDto.toAnimeTop(): AnimeTop {
+fun AnimeTopDtoKtor.toAnimeTop(): AnimeTop {
   return AnimeTop(
     malId, rank, title, url, imageUrl, type, episodesCount, startDate, endDate, members, score
   )

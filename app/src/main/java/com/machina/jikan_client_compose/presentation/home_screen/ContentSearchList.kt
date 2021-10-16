@@ -13,8 +13,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
-import com.machina.jikan_client_compose.core.enum.ContentType.Manga
-import com.machina.jikan_client_compose.core.enum.MangaSubType
 import com.machina.jikan_client_compose.core.enum.MangaSubType.DOUJIN
 import com.machina.jikan_client_compose.core.enum.MangaSubType.LIGHT_NOVEL
 import com.machina.jikan_client_compose.core.enum.MangaSubType.MANGA
@@ -24,6 +22,7 @@ import com.machina.jikan_client_compose.core.enum.MangaSubType.ONE_SHOT
 import com.machina.jikan_client_compose.presentation.home_screen.component.ItemAnimeSearch
 import com.machina.jikan_client_compose.presentation.home_screen.component.ItemAnimeSearchShimmer
 import com.machina.jikan_client_compose.presentation.home_screen.component.ItemMangaSearch
+import com.machina.jikan_client_compose.presentation.home_screen.data.ContentSearchState
 import com.machina.jikan_client_compose.ui.theme.OnDarkSurface
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
@@ -32,9 +31,9 @@ import com.valentinilk.shimmer.unclippedBoundsInWindow
 @ExperimentalCoilApi
 @Composable
 fun ContentSearchList(
-    listState: LazyListState,
-    state: ContentSearchState,
-    onItemClick: (String, Int) -> Unit
+  listState: LazyListState,
+  state: ContentSearchState,
+  onItemClick: (String, Int) -> Unit
 ) {
     val shimmerInstance = rememberShimmer(shimmerBounds = ShimmerBounds.Custom)
 

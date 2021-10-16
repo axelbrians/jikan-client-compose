@@ -1,4 +1,4 @@
-package com.machina.jikan_client_compose.presentation.home_screen
+package com.machina.jikan_client_compose.presentation.home_screen.data
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.machina.jikan_client_compose.core.DefaultDispatchers
 import com.machina.jikan_client_compose.core.enum.ContentType
 import com.machina.jikan_client_compose.domain.use_case.get_top_anime.GetTopAnimeUseCaseKtor
-import com.machina.jikan_client_compose.domain.use_case.search_content.SearchContentUseCaseKtor
+import com.machina.jikan_client_compose.domain.use_case.search_content.SearchContentUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-  private val searchContentUseCaseKtor: SearchContentUseCaseKtor,
+  private val searchContentUseCaseKtor: SearchContentUseCase,
   private val getTopAnimeUseCaseKtor: GetTopAnimeUseCaseKtor,
   private val dispatchers: DefaultDispatchers
 ): ViewModel() {
@@ -26,7 +26,9 @@ class HomeViewModel @Inject constructor(
   private val _animeTopState : MutableState<AnimeTopState> = mutableStateOf(AnimeTopState())
   val animeTopState : State<AnimeTopState> = _animeTopState
 
-  private val _contentSearchState : MutableState<ContentSearchState> = mutableStateOf(ContentSearchState())
+  private val _contentSearchState : MutableState<ContentSearchState> = mutableStateOf(
+    ContentSearchState()
+  )
   val contentSearchState : State<ContentSearchState> = _contentSearchState
 
   private var currentPage = 1

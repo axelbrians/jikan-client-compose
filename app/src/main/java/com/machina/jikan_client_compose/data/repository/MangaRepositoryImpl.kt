@@ -1,45 +1,47 @@
 package com.machina.jikan_client_compose.data.repository
 
+import com.machina.jikan_client_compose.core.Endpoints
 import com.machina.jikan_client_compose.core.exception.Error
-import com.machina.jikan_client_compose.data.network.Resource
-import com.machina.jikan_client_compose.data.network.SafeCall
+import com.machina.jikan_client_compose.core.Resource
 import com.machina.jikan_client_compose.data.remote.MangaService
-import com.machina.jikan_client_compose.data.remote.dto.toMangaSearch
-import com.machina.jikan_client_compose.data.utils.ErrorConverter
-import com.machina.jikan_client_compose.domain.model.ContentSearch
-import com.machina.jikan_client_compose.domain.repository.MangaRepository
-import java.net.SocketTimeoutException
+import com.machina.jikan_client_compose.data.remote.dto.ContentSearchDtoKtor
+import com.machina.jikan_client_compose.data.remote.dto.ContentSearchResponse
+import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.features.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import io.ktor.http.*
+import io.ktor.network.sockets.*
 import javax.inject.Inject
 
 class MangaRepositoryImpl @Inject constructor(
-  private val mangaService: MangaService,
-  private val errorConverter: ErrorConverter,
-  private val safeCall: SafeCall
-): MangaRepository {
-
-  override suspend fun searchManga(query: String, page: Int): Resource<List<ContentSearch>> {
+  private val client: HttpClient
+): MangaService {
+  override suspend fun searchManga(query: String, page: Int): Resource<List<ContentSearchDtoKtor>> {
     return try {
-      val res = mangaService.searchManga(query, page)
-      val body = res.body()
-      val errorBody = res.errorBody()
+      val res = client.get<HttpResponse> {
+        url {
+          protocol = URLProtocol.HTTPS
+          host = Endpoints.HOST
+          encodedPath = Endpoints.SEARCH_MANGA_URL
+          parameter("q", query)
+          parameter("page", page)
+        }
+      }
 
-      if (res.isSuccessful && body != null) {
-        Resource.Success(body.results.map { it.toMangaSearch() })
-      } else if (errorBody != null) {
-        val error = errorConverter.convertBasicError(errorBody)
-
-        if (error != null) Resource.Error(error.message)
-        else Resource.Error(Error.UNKNOWN_ERROR)
+      if (res.status.isSuccess()) {
+        val body = res.receive<ContentSearchResponse>()
+        Resource.Success(body.results)
       } else {
         Resource.Error(Error.UNKNOWN_ERROR)
       }
     } catch (e: Exception) {
-      when(e) {
-        is SocketTimeoutException -> Resource.Error(Error.TIMEOUT_ERROR,null)
-        else -> Resource.Error(Error.UNKNOWN_ERROR, null)
+      when (e) {
+        is ClientRequestException -> Resource.Error(e.message)
+        is ConnectTimeoutException -> Resource.Error(e.message ?: Error.UNKNOWN_ERROR)
+        else -> Resource.Error(Error.UNKNOWN_ERROR)
       }
     }
   }
-
-
 }

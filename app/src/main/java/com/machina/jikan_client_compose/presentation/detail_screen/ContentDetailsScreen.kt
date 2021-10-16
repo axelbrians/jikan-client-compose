@@ -26,7 +26,6 @@ import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
-import com.machina.jikan_client_compose.data.remote.dto.ContentDetailsResponse
 import com.machina.jikan_client_compose.ui.theme.*
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
 import com.machina.jikan_client_compose.presentation.detail_screen.data.ContentDetailsState
@@ -43,7 +42,6 @@ fun ContentDetailsScreen(
   malId: Int?
 ) {
   val state = rememberCollapsingToolbarScaffoldState()
-  val contentDetails: ContentDetailsResponse? by viewModel.contentDetails.observeAsState()
 
   val contentDetailsState = viewModel.contentDetailsState.value
 

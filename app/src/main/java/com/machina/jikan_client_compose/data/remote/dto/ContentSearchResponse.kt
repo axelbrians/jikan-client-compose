@@ -1,21 +1,23 @@
 package com.machina.jikan_client_compose.data.remote.dto
 
 import com.google.gson.annotations.SerializedName
-import com.machina.jikan_client_compose.domain.model.ContentSearch
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class ContentSearchResponse(
-    @SerializedName("request_hash")
-    val requestHash: String,
+  @SerialName("request_hash")
+  val requestHash: String,
 
-    @SerializedName("request_cached")
-    val requestCached: Boolean,
+  @SerialName("request_cached")
+  val requestCached: Boolean,
 
-    @SerializedName("request_cache_expiry")
-    val requestCacheExpiry: Int,
+  @SerialName("request_cache_expiry")
+  val requestCacheExpiry: Int,
 
-    @SerializedName("last_page")
-    val lastPage: Int,
+  @SerialName("last_page")
+  val lastPage: Int,
 
-    @SerializedName("results")
-    val results: List<ContentSearchDto>
+  @SerialName("results")
+  val results: List<ContentSearchDtoKtor>
 )

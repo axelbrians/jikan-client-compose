@@ -1,66 +1,68 @@
 package com.machina.jikan_client_compose.data.remote.dto
 
-import com.google.gson.annotations.SerializedName
 import com.machina.jikan_client_compose.domain.model.ContentSearch
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-data class ContentSearchDto(
-  @SerializedName("mal_id")
+@Serializable
+data class ContentSearchDtoKtor(
+  @SerialName("mal_id")
   val malId: Int,
 
-  @SerializedName("title")
+  @SerialName("title")
   val title: String,
 
-  @SerializedName("url")
+  @SerialName("url")
   val url: String,
 
-  @SerializedName("image_url")
+  @SerialName("image_url")
   val imageUrl: String,
 
-  @SerializedName("synopsis")
+  @SerialName("synopsis")
   val synopsis: String,
 
   /* Optional based on ContentType */
 
   // Anime
-  @SerializedName("airing")
-  val isAiring: Boolean?,
+  @SerialName("airing")
+  val isAiring: Boolean? = null,
 
-  @SerializedName("rated")
-  val rated: String?,
+  @SerialName("rated")
+  val rated: String? = null,
 
-  @SerializedName("episodes")
-  val episodesCount: Int?,
+  @SerialName("episodes")
+  val episodesCount: Int? = null,
 
   /*  Manga  */
-  @SerializedName("publishing")
-  val isPublishing: Boolean?,
+  @SerialName("publishing")
+  val isPublishing: Boolean? = null,
 
-  @SerializedName("type")
-  val type: String?,
+  @SerialName("type")
+  val type: String? = null,
 
-  @SerializedName("chapters")
-  val chapters: Int?,
+  @SerialName("chapters")
+  val chapters: Int? = null,
 
-  @SerializedName("volumes")
-  val volumes: Int?,
+  @SerialName("volumes")
+  val volumes: Int? = null,
 
   /* - - - - - - - - - */
 
 
-  @SerializedName("start_date")
-  val startDate: String?,
+  @SerialName("start_date")
+  val startDate: String? = null,
 
-  @SerializedName("end_date")
-  val endDate: String?,
+  @SerialName("end_date")
+  val endDate: String? = null,
 
-  @SerializedName("members")
+  @SerialName("members")
   val members: Int,
 
-  @SerializedName("score")
+  @SerialName("score")
   val score: Double
 )
 
-fun ContentSearchDto.toAnimeSearch(): ContentSearch {
+fun ContentSearchDtoKtor.toAnimeModel(): ContentSearch {
   return ContentSearch(
     malId = malId,
     title = title,
@@ -79,7 +81,7 @@ fun ContentSearchDto.toAnimeSearch(): ContentSearch {
 }
 
 
-fun ContentSearchDto.toMangaSearch(): ContentSearch {
+fun ContentSearchDtoKtor.toMangaModel(): ContentSearch {
   return ContentSearch(
     malId = malId,
     title = title,

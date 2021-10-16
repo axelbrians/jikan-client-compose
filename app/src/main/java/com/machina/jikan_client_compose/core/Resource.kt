@@ -1,4 +1,4 @@
-package com.machina.jikan_client_compose.data.network
+package com.machina.jikan_client_compose.core
 
 sealed class Resource<T>(val data: T? = null, val message: String? = null) {
     class Success<T>(data: T): Resource<T>(data)

@@ -3,23 +3,20 @@ package com.machina.jikan_client_compose.domain.use_case.get_content_details
 import com.machina.jikan_client_compose.core.DefaultDispatchers
 import com.machina.jikan_client_compose.core.enum.ContentType
 import com.machina.jikan_client_compose.core.exception.Error
-import com.machina.jikan_client_compose.data.network.Resource
+import com.machina.jikan_client_compose.core.Resource
 import com.machina.jikan_client_compose.data.remote.dto.ContentDetailsDto
-import com.machina.jikan_client_compose.data.remote.dto.ContentSearchDtoKtor
 import com.machina.jikan_client_compose.data.remote.dto.toAnimeModel
 import com.machina.jikan_client_compose.data.remote.dto.toMangaModel
-import com.machina.jikan_client_compose.data.repository.AnimeRepositoryImplKtor
+import com.machina.jikan_client_compose.data.repository.AnimeRepositoryImpl
 import com.machina.jikan_client_compose.domain.model.ContentDetails
-import com.machina.jikan_client_compose.domain.model.ContentSearch
 import com.machina.jikan_client_compose.presentation.detail_screen.data.ContentDetailsState
-import com.machina.jikan_client_compose.presentation.home_screen.ContentSearchState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class GetContentDetailsUseCase @Inject constructor(
-  private val animeRepository: AnimeRepositoryImplKtor,
+  private val animeRepository: AnimeRepositoryImpl,
   private val dispatchers: DefaultDispatchers
 ) {
 

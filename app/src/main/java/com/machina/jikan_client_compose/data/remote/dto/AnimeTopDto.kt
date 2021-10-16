@@ -1,44 +1,46 @@
 package com.machina.jikan_client_compose.data.remote.dto
 
-import com.google.gson.annotations.SerializedName
 import com.machina.jikan_client_compose.domain.model.AnimeTop
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-data class AnimeTopDto(
-  @SerializedName("mal_id")
+@Serializable
+data class AnimeTopDtoKtor(
+  @SerialName("mal_id")
   val malId: Int,
 
-  @SerializedName("rank")
+  @SerialName("rank")
   val rank: Int,
 
-  @SerializedName("title")
+  @SerialName("title")
   val title: String,
 
-  @SerializedName("url")
+  @SerialName("url")
   val url: String,
 
-  @SerializedName("image_url")
+  @SerialName("image_url")
   val imageUrl: String,
 
-  @SerializedName("type")
+  @SerialName("type")
   val type: String,
 
-  @SerializedName("episodes")
+  @SerialName("episodes")
   val episodesCount: Int,
 
-  @SerializedName("start_date")
+  @SerialName("start_date")
   val startDate: String,
 
-  @SerializedName("end_date")
+  @SerialName("end_date")
   val endDate: String,
 
-  @SerializedName("members")
+  @SerialName("members")
   val members: Int,
 
-  @SerializedName("score")
+  @SerialName("score")
   val score: Double,
 )
 
-fun AnimeTopDto.toAnimeTop(): AnimeTop {
+fun AnimeTopDtoKtor.toAnimeTop(): AnimeTop {
   return AnimeTop(
     malId, rank, title, url, imageUrl, type, episodesCount, startDate, endDate, members, score
   )

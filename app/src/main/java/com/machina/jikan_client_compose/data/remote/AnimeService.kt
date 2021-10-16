@@ -1,35 +1,18 @@
 package com.machina.jikan_client_compose.data.remote
 
-import com.machina.jikan_client_compose.core.Endpoints
-import com.machina.jikan_client_compose.data.remote.dto.ContentSearchResponse
-import com.machina.jikan_client_compose.data.remote.dto.AnimeTopResponse
-import com.machina.jikan_client_compose.data.remote.dto.ContentDetailsResponse
-import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import com.machina.jikan_client_compose.core.Resource
+import com.machina.jikan_client_compose.data.remote.dto.AnimeTopDtoKtor
+import com.machina.jikan_client_compose.data.remote.dto.ContentDetailsDto
+import com.machina.jikan_client_compose.data.remote.dto.ContentSearchDtoKtor
 
 interface AnimeService {
 
-    @GET(Endpoints.TOP_ANIME_URL)
-    suspend fun getTopAnimeList(): Response<AnimeTopResponse>
+  suspend fun getTopAnimeList():
+    Resource<List<AnimeTopDtoKtor>>
 
-    @GET("${Endpoints.SEARCH_URL}/anime")
-    suspend fun searchAnime(
-        @Query("q") query: String,
-        @Query("page") page: Int
-    ): Response<ContentSearchResponse>
+  suspend fun searchAnime(query: String, page: Int):
+    Resource<List<ContentSearchDtoKtor>>
 
-    @GET("${Endpoints.SEARCH_URL}/{contentType}")
-    suspend fun searchContentByQuery(
-        @Path("contentType") contentType: String,
-        @Query("q") query: String,
-        @Query("page") page: Int
-    ): Response<ContentSearchResponse>
-
-    @GET("{contentType}/{malId}")
-    suspend fun getContentDetails(
-        @Path("contentType") contentType: String,
-        @Path("malId") malId: Int,
-    ): Response<ContentDetailsResponse>
+  suspend fun getAnimeDetails(malId: Int):
+    Resource<ContentDetailsDto>
 }

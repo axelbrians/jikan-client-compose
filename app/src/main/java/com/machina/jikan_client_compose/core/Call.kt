@@ -2,8 +2,6 @@ package com.machina.jikan_client_compose.core
 
 import com.machina.jikan_client_compose.core.error.GeneralError
 import com.machina.jikan_client_compose.core.exception.Error
-import com.machina.jikan_client_compose.data.network.Resource
-import com.machina.jikan_client_compose.data.remote.dto.ContentSearchResponseKtor
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.features.*

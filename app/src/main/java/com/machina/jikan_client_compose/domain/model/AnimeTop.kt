@@ -1,7 +1,5 @@
 package com.machina.jikan_client_compose.domain.model
 
-import com.google.gson.annotations.SerializedName
-
 data class AnimeTop(
   val malId: Int,
   val rank: Int,

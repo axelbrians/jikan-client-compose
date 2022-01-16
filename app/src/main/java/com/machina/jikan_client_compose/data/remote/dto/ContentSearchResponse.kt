@@ -1,6 +1,5 @@
 package com.machina.jikan_client_compose.data.remote.dto
 
-import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

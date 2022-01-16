@@ -19,15 +19,14 @@ import com.machina.jikan_client_compose.core.enum.MangaSubType.MANGA
 import com.machina.jikan_client_compose.core.enum.MangaSubType.MANHUA
 import com.machina.jikan_client_compose.core.enum.MangaSubType.MANHWA
 import com.machina.jikan_client_compose.core.enum.MangaSubType.ONE_SHOT
-import com.machina.jikan_client_compose.presentation.home_screen.component.ItemAnimeSearch
-import com.machina.jikan_client_compose.presentation.home_screen.component.ItemAnimeSearchShimmer
-import com.machina.jikan_client_compose.presentation.home_screen.component.ItemMangaSearch
+import com.machina.jikan_client_compose.presentation.home_screen.composable.ItemAnimeSearch
+import com.machina.jikan_client_compose.presentation.home_screen.composable.ItemAnimeSearchShimmer
+import com.machina.jikan_client_compose.presentation.home_screen.composable.ItemMangaSearch
 import com.machina.jikan_client_compose.presentation.home_screen.data.ContentSearchState
-import com.machina.jikan_client_compose.ui.theme.OnDarkSurface
+import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
 import com.valentinilk.shimmer.unclippedBoundsInWindow
-import timber.log.Timber
 
 @ExperimentalCoilApi
 @Composable
@@ -49,7 +48,7 @@ fun ContentSearchList(
     itemsIndexed(state.data, key = { index, data ->
       "${data.malId}-$index"
     }) { _, data ->
-      when(data.type) {
+      when (data.type) {
         MANGA, MANHUA, MANHWA, DOUJIN, ONE_SHOT, LIGHT_NOVEL -> {
           ItemMangaSearch(
             modifier = Modifier
@@ -81,10 +80,17 @@ fun ContentSearchList(
     if (state.error != null) {
       item {
         Row(
-          modifier = Modifier.fillMaxWidth()
+          modifier = Modifier
+            .fillMaxWidth()
             .padding(horizontal = 24.dp)
         ) {
-          Text(text = state.error, color = OnDarkSurface, fontSize = 20.sp, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
+          Text(
+            text = state.error,
+            color = MyColor.OnDarkSurface,
+            fontSize = 20.sp,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
+          )
         }
       }
     }

@@ -14,7 +14,7 @@ import androidx.navigation.navArgument
 import coil.annotation.ExperimentalCoilApi
 import com.machina.jikan_client_compose.ui.navigation.MainNavigation.CONTENT_DETAILS_SCREEN
 import com.machina.jikan_client_compose.ui.navigation.MainNavigation.HOME_SCREEN
-import com.machina.jikan_client_compose.ui.theme.JikanclientcomposeTheme
+import com.machina.jikan_client_compose.ui.theme.JikanClientComposeTheme
 import com.machina.jikan_client_compose.presentation.detail_screen.ContentDetailsScreen
 import com.machina.jikan_client_compose.presentation.home_screen.HomeScreen
 import com.machina.jikan_client_compose.presentation.detail_screen.data.ContentDetailsViewModel
@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContent {
-      JikanclientcomposeTheme {
+      JikanClientComposeTheme {
         val navController = rememberNavController()
         val homeScrollState = rememberLazyListState()
 

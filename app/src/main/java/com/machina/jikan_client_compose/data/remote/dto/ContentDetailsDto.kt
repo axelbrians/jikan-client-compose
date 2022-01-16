@@ -1,5 +1,6 @@
 package com.machina.jikan_client_compose.data.remote.dto
 
+import com.machina.jikan_client_compose.data.remote.dto.content_details.Genre
 import com.machina.jikan_client_compose.domain.model.ContentDetails
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -75,6 +76,10 @@ data class ContentDetailsDto(
 
   /* - - - - - - - - - */
 
+
+  @SerialName("genres")
+  val genres: List<Genre>,
+
   @SerialName("rank")
   val rank: Int,
 
@@ -97,7 +102,7 @@ data class ContentDetailsDto(
   val synopsis: String,
 
   @SerialName("background")
-  val background: String,
+  val background: String?,
 )
 
 fun ContentDetailsDto.toAnimeModel(): ContentDetails {
@@ -119,6 +124,7 @@ fun ContentDetailsDto.toAnimeModel(): ContentDetails {
     ageRating = ageRating,
     broadcast = broadcast,
 
+    genres = genres,
     rank = rank,
     score = score,
     scoredBy = scoredBy,
@@ -147,6 +153,7 @@ fun ContentDetailsDto.toMangaModel(): ContentDetails {
     chapters = chapters,
     volumes = volumes,
 
+    genres = genres,
     rank = rank,
     score = score,
     scoredBy = scoredBy,

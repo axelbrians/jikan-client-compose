@@ -1,4 +1,4 @@
-package com.machina.jikan_client_compose.presentation.home_screen
+package com.machina.jikan_client_compose.presentation.home_screen.composable
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -17,9 +17,8 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
 import com.machina.jikan_client_compose.domain.model.AnimeTop
-import com.machina.jikan_client_compose.ui.theme.OnDarkSurface
-import com.machina.jikan_client_compose.ui.theme.Yellow500
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
+import com.machina.jikan_client_compose.ui.theme.MyColor
 
 
 @ExperimentalCoilApi
@@ -50,7 +49,7 @@ fun ItemAnime(
         CenterCircularProgressIndicator(
           strokeWidth = 2.dp,
           size = 20.dp,
-          color = Yellow500
+          color = MyColor.Yellow500
         )
       }
       Image(
@@ -65,13 +64,21 @@ fun ItemAnime(
 
     Text(
       text = anime.title,
-      style = TextStyle(color = OnDarkSurface, fontSize = 14.sp, fontWeight = FontWeight.Bold),
+      style = TextStyle(
+        color = MyColor.OnDarkSurface,
+        fontSize = 14.sp,
+        fontWeight = FontWeight.Bold
+      ),
       modifier = Modifier.padding(0.dp, 6.dp, 0.dp, 0.dp)
     )
 
     Text(
       text = "${anime.score}",
-      style = TextStyle(color = OnDarkSurface, fontSize = 14.sp, fontWeight = FontWeight.Normal),
+      style = TextStyle(
+        color = MyColor.OnDarkSurface,
+        fontSize = 14.sp,
+        fontWeight = FontWeight.Normal
+      ),
       modifier = Modifier
         .padding(bottom = 3.dp)
     )

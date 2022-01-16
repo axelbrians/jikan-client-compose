@@ -13,10 +13,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.machina.jikan_client_compose.ui.theme.BlackLighterBackground
-import com.machina.jikan_client_compose.ui.theme.Grey
-import com.machina.jikan_client_compose.ui.theme.OnDarkSurface
-import com.machina.jikan_client_compose.ui.theme.Yellow500
+import com.machina.jikan_client_compose.ui.theme.MyColor
 
 @Composable
 fun CustomTextField(
@@ -34,7 +31,7 @@ fun CustomTextField(
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(8.dp),
-        color = BlackLighterBackground,
+        color = MyColor.BlackLighterBackground,
         elevation = fieldElevation
     ) {
         Row(
@@ -55,13 +52,13 @@ fun CustomTextField(
                     value = fieldValue,
                     onValueChange = onFieldValueChange,
                     singleLine = true,
-                    cursorBrush = SolidColor(Yellow500),
-                    textStyle = TextStyle(color = OnDarkSurface, fontSize = 16.sp),
+                    cursorBrush = SolidColor(MyColor.Yellow500),
+                    textStyle = TextStyle(color = MyColor.OnDarkSurface, fontSize = 16.sp),
                     modifier = Modifier.fillMaxWidth()
                 )
 
                 if (fieldValue.isEmpty()) {
-                    Text(text = fieldPlaceholder, style = TextStyle(color = Grey, fontSize = 16.sp))
+                    Text(text = fieldPlaceholder, style = TextStyle(color = MyColor.Grey, fontSize = 16.sp))
                 }
             }
 

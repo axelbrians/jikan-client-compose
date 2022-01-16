@@ -19,9 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.machina.jikan_client_compose.core.enum.ContentType
 import com.machina.jikan_client_compose.core.enum.ContentType.Anime
 import com.machina.jikan_client_compose.core.enum.ContentType.Manga
-import com.machina.jikan_client_compose.ui.theme.BlackLighterBackground
-import com.machina.jikan_client_compose.ui.theme.OnDarkSurface
-import com.machina.jikan_client_compose.ui.theme.Yellow500
+import com.machina.jikan_client_compose.ui.theme.MyColor
 
 @Preview(showBackground = true)
 @Composable
@@ -57,8 +55,8 @@ fun Chip(
         border = BorderStroke(
             width = 1.dp,
             color = when {
-                isSelected -> Yellow500
-                else -> BlackLighterBackground
+                isSelected -> MyColor.Yellow500
+                else -> MyColor.BlackLighterBackground
             }
         )
     ) {
@@ -69,9 +67,9 @@ fun Chip(
             )
         ) {
             val styleSelected = if (isSelected)  {
-                TextStyle(color = Yellow500, fontWeight = FontWeight.Bold )
+                TextStyle(color = MyColor.Yellow500, fontWeight = FontWeight.Bold )
             } else {
-                TextStyle(color = OnDarkSurface, fontWeight = FontWeight.Normal)
+                TextStyle(color = MyColor.OnDarkSurface, fontWeight = FontWeight.Normal)
             }
             Text (
                 text = name,

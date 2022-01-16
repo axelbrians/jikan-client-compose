@@ -7,17 +7,17 @@ import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 
 private val DarkColorPalette = darkColors(
-    primary = Yellow500,
-    primaryVariant = Yellow500,
-    secondary = Yellow500,
-    background = BlackBackground,
-    onSurface = OnDarkSurface
+    primary = MyColor.Yellow500,
+    primaryVariant = MyColor.Yellow500,
+    secondary = MyColor.Yellow500,
+    background = MyColor.BlackBackground,
+    onSurface = MyColor.OnDarkSurface
 )
 
 private val LightColorPalette = lightColors(
-    primary = Purple500,
-    primaryVariant = Purple700,
-    secondary = Teal200
+    primary = MyColor.Purple500,
+    primaryVariant = MyColor.Purple700,
+    secondary = MyColor.Teal200
 
     /* Other default colors to override
     background = Color.White,
@@ -30,7 +30,7 @@ private val LightColorPalette = lightColors(
 )
 
 @Composable
-fun JikanclientcomposeTheme(
+fun JikanClientComposeTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable() () -> Unit
 ) {

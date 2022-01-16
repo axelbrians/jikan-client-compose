@@ -1,41 +1,43 @@
 package com.machina.jikan_client_compose.domain.model
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class AnimeSearch(
-  @SerializedName("mal_id")
+  @SerialName("mal_id")
   val malId: Int,
 
-  @SerializedName("title")
+  @SerialName("title")
   val title: String,
 
-  @SerializedName("url")
+  @SerialName("url")
   val url: String,
 
-  @SerializedName("image_url")
+  @SerialName("image_url")
   val imageUrl: String,
 
-  @SerializedName("synopsis")
+  @SerialName("synopsis")
   val synopsis: String,
 
-  @SerializedName("airing")
+  @SerialName("airing")
   val isAiring: Boolean,
 
-  @SerializedName("rated")
+  @SerialName("rated")
   val rated: String?,
 
-  @SerializedName("episodes")
+  @SerialName("episodes")
   val episodesCount: Int,
 
-  @SerializedName("start_date")
+  @SerialName("start_date")
   val startDate: String?,
 
-  @SerializedName("end_date")
+  @SerialName("end_date")
   val endDate: String?,
 
-  @SerializedName("members")
+  @SerialName("members")
   val members: Int,
 
-  @SerializedName("score")
+  @SerialName("score")
   val score: Double
 )

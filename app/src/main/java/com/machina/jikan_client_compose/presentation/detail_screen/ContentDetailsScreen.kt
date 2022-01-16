@@ -2,34 +2,47 @@ package com.machina.jikan_client_compose.presentation.detail_screen
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.*
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
+import androidx.compose.ui.zIndex
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
-import com.machina.jikan_client_compose.ui.theme.*
+import com.google.accompanist.flowlayout.FlowMainAxisAlignment
+import com.google.accompanist.flowlayout.FlowRow
+import com.google.accompanist.flowlayout.SizeMode
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
+import com.machina.jikan_client_compose.presentation.detail_screen.composable.ContentDetailsScreenToolbar
 import com.machina.jikan_client_compose.presentation.detail_screen.data.ContentDetailsState
 import com.machina.jikan_client_compose.presentation.detail_screen.data.ContentDetailsViewModel
-import me.onebone.toolbar.*
+import com.machina.jikan_client_compose.ui.theme.MyColor
+import me.onebone.toolbar.CollapsingToolbarScaffold
+import me.onebone.toolbar.ScrollStrategy
+import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
+import timber.log.Timber
 
 @ExperimentalAnimationApi
 @ExperimentalCoilApi
@@ -40,8 +53,10 @@ fun ContentDetailsScreen(
   malId: Int?,
   onBackPressed: () -> Boolean = { false }
 ) {
-  val state = rememberCollapsingToolbarScaffoldState()
+  val toolbarScaffoldState = rememberCollapsingToolbarScaffoldState()
   val contentDetailsState = viewModel.contentDetailsState.value
+  val genres = contentDetailsState.data?.genres ?: listOf()
+  Timber.d(genres.toString())
 
   val coilPainter = rememberImagePainter(
     data = contentDetailsState.data?.imageUrl,
@@ -49,7 +64,6 @@ fun ContentDetailsScreen(
       crossfade(true)
     }
   )
-
 
   LaunchedEffect(
     key1 = contentType + malId,
@@ -60,28 +74,59 @@ fun ContentDetailsScreen(
   CollapsingToolbarScaffold(
     modifier = Modifier
       .fillMaxSize()
-      .background(BlackBackground),
-    state = state,
+      .background(MyColor.BlackBackground),
+    state = toolbarScaffoldState,
     scrollStrategy = ScrollStrategy.EnterAlwaysCollapsed,
-    toolbar = { ContentDetailsScreenToolbar(
-      coilPainter = coilPainter,
-      state = state,
-      onArrowClick = onBackPressed)
+    toolbar = {
+      ContentDetailsScreenToolbar(
+        coilPainter = coilPainter,
+        contentDetailsState = contentDetailsState,
+        toolbarScaffoldState = toolbarScaffoldState,
+        onArrowClick = onBackPressed
+      )
     }
   ) {
-    Column(
+    LazyColumn(
       modifier = Modifier
-        .fillMaxWidth()
-        .verticalScroll(rememberScrollState()),
+        .fillMaxWidth(),
       horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+      // Genre FlowRow Chips
+      item(key = "content_genre_chips") {
+        if (genres.isNotEmpty()) {
+          FlowRow(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            mainAxisSize = SizeMode.Expand,
+            mainAxisAlignment = FlowMainAxisAlignment.Start,
+            mainAxisSpacing = 7.dp
+          ) {
+            genres.forEach { genre ->
+              Surface(
+                modifier = Modifier.padding(vertical = 4.dp),
+                shape = RoundedCornerShape(16.dp),
+                color = MyColor.Yellow500,
+              ) {
+                Text(
+                  text = genre.name,
+                  style = TextStyle(color = MyColor.BlackBackground, fontWeight = FontWeight.SemiBold),
+                  modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
+                )
+              }
+            }
+          }
+        }
+      }
+
       // Synopsis Composable
-      ContentDetailsSynopsis(state = contentDetailsState)
-      repeat(7) {
+      item(key = "content_description_composable") {
+        ContentDetailsSynopsis(state = contentDetailsState)
+      }
+
+      items(7) {
         Text(
           text = "Anime Detail's",
           style = TextStyle(
-            color = OnDarkSurface,
+            color = MyColor.OnDarkSurface,
             fontWeight = FontWeight.Bold,
             fontSize = 20.sp
           ),
@@ -92,57 +137,17 @@ fun ContentDetailsScreen(
   }
 
 
-
-
   if (contentDetailsState.isLoading) {
     Surface(
       modifier = Modifier
         .fillMaxSize()
-        .background(BlackBackground)
+        .background(MyColor.BlackBackground)
     ) {
       CenterCircularProgressIndicator(
         size = 40.dp,
-        color = Yellow500
+        color = MyColor.Yellow500
       )
     }
-  }
-}
-
-@ExperimentalCoilApi
-@Composable
-fun CollapsingToolbarScope.ContentDetailsScreenToolbar(
-  coilPainter: ImagePainter,
-  state: CollapsingToolbarScaffoldState,
-  onArrowClick: () -> Boolean
-) {
-  Box(
-    modifier = Modifier
-      .fillMaxWidth()
-      .height(220.dp)
-      .parallax(0.5f)
-      .graphicsLayer {
-        // change alpha of Image as the toolbar expands
-        alpha = state.toolbarState.progress
-      },
-  ) {
-    if (coilPainter.state is ImagePainter.State.Loading) {
-      CenterCircularProgressIndicator(
-        strokeWidth = 2.dp,
-        size = 20.dp,
-        color = Yellow500
-      )
-    }
-    Image(
-      painter = coilPainter,
-      contentDescription = "Thumbnail",
-      contentScale = ContentScale.Crop,
-      modifier = Modifier
-        .fillMaxSize()
-    )
-  }
-
-  IconButton(onClick = { onArrowClick() }) {
-    Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back", tint = Grey)
   }
 }
 
@@ -152,6 +157,8 @@ fun ContentDetailsSynopsis(
   state: ContentDetailsState?
 ) {
   var expanded by remember { mutableStateOf(false) }
+  var contentSynopsis = "${state?.data?.synopsis}\n\n" +
+    "Alternate title: ${state?.data?.titleJapanese}, ${state?.data?.titleEnglish}"
 
   AnimatedContent(
     targetState = expanded,
@@ -161,45 +168,73 @@ fun ContentDetailsSynopsis(
         SizeTransform(clip = true)
     }
   ) { targetExpanded ->
-    Box(
-      modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 16.dp, vertical = 12.dp)
-        .clip(RoundedCornerShape(12.dp))
-        .background(BlackBlueBackground)
-    ) {
+    if (targetExpanded) {
       Column {
         Text(
-          text = "Synopsis",
+          text = if (state?.data?.synopsis != null) contentSynopsis else "",
           style = TextStyle(
-            color = OnDarkSurface,
-            fontWeight = FontWeight.Bold,
-            fontSize = 16.sp
+            color = MyColor.OnDarkSurface,
+            fontSize = 13.sp,
+            textAlign = TextAlign.Justify
           ),
           modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp)
         )
-        if (targetExpanded) {
-          Text(
-            text = state?.data?.synopsis ?: "",
-            style = TextStyle(color = OnDarkSurface, fontSize = 14.sp),
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 12.dp)
+
+        IconButton(
+          onClick = { expanded = !expanded },
+          modifier = Modifier.align(Alignment.CenterHorizontally)
+        ) {
+          Icon(
+            imageVector = Icons.Default.KeyboardArrowUp,
+            contentDescription = "Shrink",
+            tint = MyColor.Grey
           )
-          IconButton(onClick = { expanded = !expanded }, modifier = Modifier.align(Alignment.CenterHorizontally)) {
-            Icon(imageVector = Icons.Default.KeyboardArrowUp, contentDescription = "Shrink", tint = Grey)
-          }
-        } else {
-          Text(
-            text = state?.data?.synopsis ?: "",
-            maxLines = 9,
-            overflow = TextOverflow.Ellipsis,
-            style = TextStyle(color = OnDarkSurface, fontSize = 14.sp),
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 12.dp)
-          )
-          IconButton(onClick = { expanded = !expanded }, modifier = Modifier.align(Alignment.CenterHorizontally)) {
-            Icon(imageVector = Icons.Default.KeyboardArrowDown, contentDescription = "Expand", tint = Grey)
+        }
+      }
+    } else {
+      Box {
+        Text(
+          text = if (state?.data?.synopsis != null) contentSynopsis else "",
+          maxLines = 5,
+          overflow = TextOverflow.Ellipsis,
+          style = TextStyle(
+            color = MyColor.OnDarkSurface,
+            fontSize = 13.sp,
+            textAlign = TextAlign.Justify
+          ),
+          modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 4.dp)
+        )
+        Box(
+          modifier = Modifier
+            .zIndex(1F)
+            .fillMaxSize()
+            .align(Alignment.BottomCenter)
+            .background(
+              brush = Brush.verticalGradient(
+                colors = listOf(
+                  MyColor.BlackBackground.copy(alpha = 0F),
+                  MyColor.BlackBackground.copy(alpha = 0.9F),
+                  MyColor.BlackBackground
+                )
+              )
+            )
+        ) {
+          IconButton(
+            onClick = { expanded = !expanded },
+            modifier = Modifier
+              .align(Alignment.BottomCenter)
+              .zIndex(2F)
+          ) {
+            Icon(
+              imageVector = Icons.Default.KeyboardArrowDown,
+              contentDescription = "Expand",
+              tint = MyColor.OnDarkSurface
+            )
           }
         }
+
       }
     }
   }
+
 }

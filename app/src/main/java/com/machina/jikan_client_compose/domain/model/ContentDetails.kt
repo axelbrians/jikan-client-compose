@@ -1,5 +1,6 @@
 package com.machina.jikan_client_compose.domain.model
 
+import com.machina.jikan_client_compose.data.remote.dto.content_details.Genre
 import kotlinx.serialization.SerialName
 
 data class ContentDetails(
@@ -29,6 +30,7 @@ data class ContentDetails(
   val broadcast: String? = null,
 
   /* - - - - - - - - - */
+  val genres: List<Genre>,
   val rank: Int,
   val score: Double,
   val scoredBy: Int,
@@ -36,5 +38,5 @@ data class ContentDetails(
   val members: Int,
   val favorites: Int,
   val synopsis: String,
-  val background: String,
+  val background: String?,
 )

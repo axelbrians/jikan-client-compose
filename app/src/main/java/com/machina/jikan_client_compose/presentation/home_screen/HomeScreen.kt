@@ -27,6 +27,7 @@ import com.machina.jikan_client_compose.presentation.composable.CenterCircularPr
 import com.machina.jikan_client_compose.presentation.composable.ChipGroup
 import com.machina.jikan_client_compose.presentation.composable.CustomTextField
 import com.machina.jikan_client_compose.presentation.home_screen.data.HomeViewModel
+import com.machina.jikan_client_compose.ui.theme.MyColor.Grey
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
@@ -68,7 +69,7 @@ fun HomeScreen(
   Scaffold(
     modifier = Modifier
       .fillMaxSize()
-      .background(BlackBackground),
+      .background(MyColor.BlackBackground),
     scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
   ) {
     Column(
@@ -98,7 +99,7 @@ fun HomeScreen(
       }
 
       Divider(
-        color = BlackLighterBackground,
+        color = MyColor.BlackLighterBackground,
         thickness = 1.dp,
         modifier = Modifier.padding(bottom = 8.dp)
       )
@@ -170,7 +171,7 @@ fun SearchLeadingIcon() {
   Icon(
     Icons.Default.Search,
     "Search",
-    tint = Grey
+    tint = MyColor.Grey
   )
 }
 
@@ -186,7 +187,7 @@ fun SearchTrailingIcon(
     Icon(
       painter = painterResource(R.drawable.ic_close),
       contentDescription = "Close",
-      tint = Grey
+      tint = MyColor.Grey
     )
   }
 }

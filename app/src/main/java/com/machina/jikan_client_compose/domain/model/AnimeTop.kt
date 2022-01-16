@@ -9,7 +9,7 @@ data class AnimeTop(
   val url: String,
   val imageUrl: String,
   val type: String,
-  val episodesCount: Int,
+  val episodesCount: Int?,
   val startDate: String,
   val endDate: String,
   val members: Int,

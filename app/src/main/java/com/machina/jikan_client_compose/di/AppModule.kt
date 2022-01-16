@@ -2,6 +2,7 @@ package com.machina.jikan_client_compose.di
 
 import com.machina.jikan_client_compose.core.Call
 import com.machina.jikan_client_compose.core.DefaultDispatchers
+import com.machina.jikan_client_compose.core.DispatchersProvider
 import com.machina.jikan_client_compose.data.repository.AnimeRepositoryImpl
 import dagger.Module
 import dagger.Provides
@@ -12,6 +13,7 @@ import io.ktor.client.engine.android.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.features.logging.*
+import kotlinx.coroutines.Dispatchers
 import javax.inject.Singleton
 
 @Module
@@ -20,8 +22,14 @@ class AppModule {
 
   @Provides
   @Singleton
-  fun provideDefaultDispatchers(): DefaultDispatchers {
-    return DefaultDispatchers()
+  fun provideDispatchersProvider(): DispatchersProvider {
+    return DefaultDispatchers(
+      default = Dispatchers.Default,
+      main = Dispatchers.Main,
+      io = Dispatchers.IO,
+      mainImmediate = Dispatchers.Main,
+      unconfined = Dispatchers.Unconfined
+    )
   }
 
   @Provides

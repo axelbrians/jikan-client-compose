@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.machina.jikan_client_compose.core.DefaultDispatchers
+import com.machina.jikan_client_compose.core.DispatchersProvider
 import com.machina.jikan_client_compose.domain.use_case.get_content_details.GetContentDetailsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -16,8 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ContentDetailsViewModel @Inject constructor(
-  private val getContentDetailsUseCase: GetContentDetailsUseCase,
-  private val dispatchers: DefaultDispatchers
+  private val getContentDetailsUseCase: GetContentDetailsUseCase
 ): ViewModel() {
 
   private val _contentDetailsState : MutableState<ContentDetailsState> = mutableStateOf(ContentDetailsState())

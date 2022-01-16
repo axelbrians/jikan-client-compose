@@ -2,7 +2,7 @@ package com.machina.jikan_client_compose.data.repository
 
 import com.machina.jikan_client_compose.core.Endpoints
 import com.machina.jikan_client_compose.core.exception.Error
-import com.machina.jikan_client_compose.core.Resource
+import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.data.remote.MangaService
 import com.machina.jikan_client_compose.data.remote.dto.ContentSearchDtoKtor
 import com.machina.jikan_client_compose.data.remote.dto.ContentSearchResponse

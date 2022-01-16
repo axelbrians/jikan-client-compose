@@ -27,6 +27,7 @@ import com.machina.jikan_client_compose.ui.theme.OnDarkSurface
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
 import com.valentinilk.shimmer.unclippedBoundsInWindow
+import timber.log.Timber
 
 @ExperimentalCoilApi
 @Composable
@@ -35,57 +36,57 @@ fun ContentSearchList(
   state: ContentSearchState,
   onItemClick: (String, Int) -> Unit
 ) {
-    val shimmerInstance = rememberShimmer(shimmerBounds = ShimmerBounds.Custom)
+  val shimmerInstance = rememberShimmer(shimmerBounds = ShimmerBounds.Custom)
 
-    LazyColumn(
-        state = listState,
-        contentPadding = PaddingValues(12.dp, 0.dp, 12.dp, 0.dp),
-        modifier = Modifier.onGloballyPositioned { layoutCoordinates ->
-            val position = layoutCoordinates.unclippedBoundsInWindow()
-            shimmerInstance.updateBounds(position)
-        }
-    ) {
-        itemsIndexed(state.data, key = { index, data ->
-            "${data.malId}-$index"
-        }) { _, data ->
-            when(data.type) {
-                MANGA, MANHUA, MANHWA, DOUJIN, ONE_SHOT, LIGHT_NOVEL -> {
-                    ItemMangaSearch(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(12.dp, 8.dp),
-                        data = data,
-                        onItemClick = onItemClick
-                    )
-                }
-                else -> {
-                    ItemAnimeSearch(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(12.dp, 8.dp),
-                        data = data,
-                        onItemClick = onItemClick
-                    )
-                }
-            }
-
-        }
-
-        if (state.isLoading) {
-            items(4) {
-                ItemAnimeSearchShimmer(shimmerInstance)
-            }
-        }
-
-        if (state.error != null) {
-            item {
-                Row(
-                    modifier = Modifier.fillMaxWidth()
-                        .padding(horizontal = 24.dp)
-                ) {
-                    Text(text = state.error, color = OnDarkSurface, fontSize = 20.sp, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
-                }
-            }
-        }
+  LazyColumn(
+    state = listState,
+    contentPadding = PaddingValues(12.dp, 0.dp, 12.dp, 0.dp),
+    modifier = Modifier.onGloballyPositioned { layoutCoordinates ->
+      val position = layoutCoordinates.unclippedBoundsInWindow()
+      shimmerInstance.updateBounds(position)
     }
+  ) {
+    itemsIndexed(state.data, key = { index, data ->
+      "${data.malId}-$index"
+    }) { _, data ->
+      when(data.type) {
+        MANGA, MANHUA, MANHWA, DOUJIN, ONE_SHOT, LIGHT_NOVEL -> {
+          ItemMangaSearch(
+            modifier = Modifier
+              .fillMaxWidth()
+              .padding(12.dp, 8.dp),
+            data = data,
+            onItemClick = onItemClick
+          )
+        }
+        else -> {
+          ItemAnimeSearch(
+            modifier = Modifier
+              .fillMaxWidth()
+              .padding(12.dp, 8.dp),
+            data = data,
+            onItemClick = onItemClick
+          )
+        }
+      }
+
+    }
+
+    if (state.isLoading) {
+      items(4) {
+        ItemAnimeSearchShimmer(shimmerInstance)
+      }
+    }
+
+    if (state.error != null) {
+      item {
+        Row(
+          modifier = Modifier.fillMaxWidth()
+            .padding(horizontal = 24.dp)
+        ) {
+          Text(text = state.error, color = OnDarkSurface, fontSize = 20.sp, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
+        }
+      }
+    }
+  }
 }

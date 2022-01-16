@@ -25,13 +25,13 @@ data class AnimeTopDtoKtor(
   val type: String,
 
   @SerialName("episodes")
-  val episodesCount: Int,
+  val episodesCount: Int?,
 
   @SerialName("start_date")
   val startDate: String,
 
   @SerialName("end_date")
-  val endDate: String,
+  val endDate: String?,
 
   @SerialName("members")
   val members: Int,
@@ -42,6 +42,10 @@ data class AnimeTopDtoKtor(
 
 fun AnimeTopDtoKtor.toAnimeTop(): AnimeTop {
   return AnimeTop(
-    malId, rank, title, url, imageUrl, type, episodesCount, startDate, endDate, members, score
+    malId, rank, title,
+    url, imageUrl, type,
+    episodesCount, startDate,
+    endDate ?: "",
+    members, score
   )
 }

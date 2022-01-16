@@ -1,7 +1,9 @@
 package com.machina.jikan_client_compose.domain.model
 
-import com.google.gson.annotations.SerializedName
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class ContentSearch(
   val malId: Int,
   val title: String,
@@ -27,4 +29,4 @@ data class ContentSearch(
   val endDate: String?,
   val members: Int,
   val score: Double
-)
+): Parcelable

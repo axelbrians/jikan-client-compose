@@ -3,7 +3,7 @@ package com.machina.jikan_client_compose.data.repository
 import com.machina.jikan_client_compose.core.Call
 import com.machina.jikan_client_compose.core.Endpoints
 import com.machina.jikan_client_compose.core.exception.Error.UNKNOWN_ERROR
-import com.machina.jikan_client_compose.core.Resource
+import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.data.remote.AnimeService
 import com.machina.jikan_client_compose.data.remote.dto.*
 import io.ktor.client.*
@@ -20,13 +20,13 @@ class AnimeRepositoryImpl @Inject constructor(
   private val call: Call
 ) : AnimeService {
 
-  override suspend fun getTopAnimeList(): Resource<List<AnimeTopDtoKtor>> {
+  override suspend fun getTopAnimeList(page: Int): Resource<List<AnimeTopDtoKtor>> {
     return try {
       val res = client.get<HttpResponse> {
         url {
           protocol = URLProtocol.HTTPS
           host = Endpoints.HOST
-          encodedPath = "/${Endpoints.TOP_ANIME_URL}"
+          encodedPath = "${Endpoints.TOP_ANIME_URL}/$page"
         }
       }
 //    Timber.d("top anime url ${res.call.request.url.fullPath}")

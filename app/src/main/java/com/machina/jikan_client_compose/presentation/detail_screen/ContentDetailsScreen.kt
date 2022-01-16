@@ -11,7 +11,6 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,13 +35,12 @@ import me.onebone.toolbar.*
 @ExperimentalCoilApi
 @Composable
 fun ContentDetailsScreen(
-  navController: NavController,
   viewModel: ContentDetailsViewModel,
   contentType: String?,
-  malId: Int?
+  malId: Int?,
+  onBackPressed: () -> Boolean = { false }
 ) {
   val state = rememberCollapsingToolbarScaffoldState()
-
   val contentDetailsState = viewModel.contentDetailsState.value
 
   val coilPainter = rememberImagePainter(
@@ -65,7 +63,11 @@ fun ContentDetailsScreen(
       .background(BlackBackground),
     state = state,
     scrollStrategy = ScrollStrategy.EnterAlwaysCollapsed,
-    toolbar = { ContentDetailsScreenToolbar(coilPainter = coilPainter, state = state, onArrowClick = { navController.navigateUp() })  }
+    toolbar = { ContentDetailsScreenToolbar(
+      coilPainter = coilPainter,
+      state = state,
+      onArrowClick = onBackPressed)
+    }
   ) {
     Column(
       modifier = Modifier

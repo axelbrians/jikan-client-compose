@@ -1,7 +1,9 @@
 package com.machina.jikan_client_compose.domain.use_case.get_top_anime
 
 import com.machina.jikan_client_compose.core.DefaultDispatchers
-import com.machina.jikan_client_compose.core.Resource
+import com.machina.jikan_client_compose.core.DispatchersProvider
+import com.machina.jikan_client_compose.core.wrapper.Event
+import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.data.remote.dto.toAnimeTop
 import com.machina.jikan_client_compose.data.repository.AnimeRepositoryImpl
 import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeTopState
@@ -10,24 +12,25 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
-class GetTopAnimeUseCaseKtor @Inject constructor(
+class GetTopAnimeUseCase @Inject constructor(
   private val repository: AnimeRepositoryImpl,
-  private val dispatchers: DefaultDispatchers
+  private val dispatchers: DispatchersProvider
 ) {
-  operator fun invoke(): Flow<AnimeTopState> {
+  operator fun invoke(page: Int = 1): Flow<AnimeTopState> {
     return flow {
       emit(AnimeTopState(isLoading = true))
-      when (val res = repository.getTopAnimeList()) {
+
+      when (val res = repository.getTopAnimeList(page)) {
         is Resource.Success -> {
           emit(AnimeTopState(res.data?.map { it.toAnimeTop() } ?: emptyList()))
         }
         is Resource.Error -> {
-          emit(AnimeTopState(error = res.message))
+          emit(AnimeTopState(error = Event(res.message)))
         }
         is Resource.Loading -> {
           emit(AnimeTopState(isLoading = true))
         }
       }
-    }.flowOn(dispatchers.network)
+    }.flowOn(dispatchers.io)
   }
 }

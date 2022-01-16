@@ -22,12 +22,12 @@ import com.machina.jikan_client_compose.ui.theme.Yellow500
 fun CustomTextField(
     modifier: Modifier = Modifier,
     fieldValue: String = "",
-    onFieldValueChange: (String) -> Unit,
     fieldPlaceholder: String = "",
     fieldElevation: Dp = 0.dp,
+    onFieldValueChange: (String) -> Unit,
     fieldPadding: PaddingValues = PaddingValues(0.dp),
-    paddingLeadingIconEnd: Dp = 0.dp,
-    paddingTrailingIconStart: Dp = 0.dp,
+    paddingLeadingIcon: PaddingValues = PaddingValues(0.dp),
+    paddingTrailingIcon: PaddingValues = PaddingValues(0.dp),
     leadingIcon: (@Composable() () -> Unit)? = null,
     trailingIcon: (@Composable() () -> Unit)? = null
 ) {
@@ -41,14 +41,19 @@ fun CustomTextField(
             modifier = Modifier.padding(fieldPadding),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            if (leadingIcon != null) { leadingIcon() }
+            if (leadingIcon != null) {
+                Box(modifier = Modifier.padding(paddingLeadingIcon)) {
+                    leadingIcon()
+                }
+            }
 
             Box(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(start = paddingLeadingIconEnd, end = paddingTrailingIconStart)
             ) {
-                BasicTextField(value = fieldValue, onValueChange = onFieldValueChange,
+                BasicTextField(
+                    value = fieldValue,
+                    onValueChange = onFieldValueChange,
                     singleLine = true,
                     cursorBrush = SolidColor(Yellow500),
                     textStyle = TextStyle(color = OnDarkSurface, fontSize = 16.sp),
@@ -60,7 +65,12 @@ fun CustomTextField(
                 }
             }
 
-            if (trailingIcon != null) { trailingIcon() }
+            if (trailingIcon != null) {
+                Box(modifier = Modifier.padding(paddingTrailingIcon)) {
+                    trailingIcon()
+                }
+            }
         }
     }
 }
+

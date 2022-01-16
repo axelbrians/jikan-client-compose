@@ -1,9 +1,10 @@
 package com.machina.jikan_client_compose.domain.use_case.get_content_details
 
 import com.machina.jikan_client_compose.core.DefaultDispatchers
+import com.machina.jikan_client_compose.core.DispatchersProvider
 import com.machina.jikan_client_compose.core.enum.ContentType
 import com.machina.jikan_client_compose.core.exception.Error
-import com.machina.jikan_client_compose.core.Resource
+import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.data.remote.dto.ContentDetailsDto
 import com.machina.jikan_client_compose.data.remote.dto.toAnimeModel
 import com.machina.jikan_client_compose.data.remote.dto.toMangaModel
@@ -17,7 +18,7 @@ import javax.inject.Inject
 
 class GetContentDetailsUseCase @Inject constructor(
   private val animeRepository: AnimeRepositoryImpl,
-  private val dispatchers: DefaultDispatchers
+  private val dispatchers: DispatchersProvider
 ) {
 
   operator fun invoke(contentType: String?, malId: Int?): Flow<ContentDetailsState> {
@@ -39,7 +40,7 @@ class GetContentDetailsUseCase @Inject constructor(
         is Resource.Error -> emit(ContentDetailsState(error = res.message))
         is Resource.Loading -> emit(ContentDetailsState(isLoading = true))
       }
-    }.flowOn(dispatchers.network)
+    }.flowOn(dispatchers.io)
   }
 
   private fun resolveContentType(contentType: ContentType, data: ContentDetailsDto?): ContentDetails? {

@@ -1,14 +1,19 @@
 package com.machina.jikan_client_compose.presentation.home_screen
 
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -22,14 +27,20 @@ import com.machina.jikan_client_compose.presentation.composable.CenterCircularPr
 import com.machina.jikan_client_compose.presentation.composable.ChipGroup
 import com.machina.jikan_client_compose.presentation.composable.CustomTextField
 import com.machina.jikan_client_compose.presentation.home_screen.data.HomeViewModel
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.receiveAsFlow
 import timber.log.Timber
 
+@InternalCoroutinesApi
 @ExperimentalCoilApi
 @Composable
 fun HomeScreen(
   navController: NavController,
   viewModel: HomeViewModel,
+  lazyColumnState: LazyListState = rememberLazyListState(),
   onContentClick: (String, Int) -> Unit,
 ) {
 
@@ -37,20 +48,28 @@ fun HomeScreen(
   val contentSearchState = viewModel.contentSearchState.value
 
   val listState = rememberLazyListState()
-  var selectedType by remember { mutableStateOf(Anime) }
-  var searchQuery by remember { mutableStateOf("") }
+  val snackbarHostState = remember { SnackbarHostState() }
+  val selectedType = remember { mutableStateOf(Anime) }
+  val searchQuery = remember { mutableStateOf("") }
+
+  // Controlling snackbar on error. Only show one snackbar at a time with channel.
+  // Channel create somethign like queue, so no snackbar will be showed when one is still showing.
+  val snackbarChannel = remember { Channel<String?>(Channel.CONFLATED) }
+
 
   LaunchedEffect(viewModel) { viewModel.getTopAnimeList() }
 
-  LaunchedEffect(searchQuery + selectedType.name) {
+  LaunchedEffect(searchQuery.value + selectedType.value.name) {
     delay(500L)
-    viewModel.searchContentByQuery(selectedType, searchQuery)
-    Timber.d("query $searchQuery type ${selectedType.name.lowercase()}")
+    viewModel.searchContentByQuery(selectedType.value, searchQuery.value)
+    Timber.d("query $searchQuery.value type ${selectedType.value.name.lowercase()}")
   }
 
-  Box(
-    modifier = Modifier.fillMaxSize()
-      .background(BlackBackground)
+  Scaffold(
+    modifier = Modifier
+      .fillMaxSize()
+      .background(BlackBackground),
+    scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
   ) {
     Column(
       modifier = Modifier.fillMaxWidth()
@@ -59,55 +78,100 @@ fun HomeScreen(
         modifier = Modifier
           .fillMaxWidth()
           .padding(24.dp, 12.dp),
-        fieldValue = searchQuery,
-        onFieldValueChange = { searchQuery = it },
+        fieldValue = searchQuery.value,
         fieldPlaceholder = "Try 'One Piece'",
         fieldPadding = PaddingValues(12.dp),
+        onFieldValueChange = { searchQuery.value = it },
         leadingIcon = { SearchLeadingIcon() },
-        paddingLeadingIconEnd = 8.dp,
+        paddingLeadingIcon = PaddingValues(end = 8.dp),
         trailingIcon = {
-          if (searchQuery.isNotEmpty()) {
-            SearchTrailingIcon(size = 16.dp, onClick = { searchQuery = "" })
+          if (searchQuery.value.isNotEmpty()) {
+            SearchTrailingIcon(size = 16.dp, onClick = { searchQuery.value = "" })
           }
         }
       )
 
-      Divider(color = BlackLighterBackground, thickness = 1.dp, modifier = Modifier.padding(bottom = 8.dp))
+      Timber.d("backHandler ${searchQuery.value.isNotEmpty()}")
+      BackHandler(enabled = (searchQuery.value.isNotEmpty())) {
+        Timber.d("BackHandler()")
+        searchQuery.value = ""
+      }
 
-      if (searchQuery.isNotEmpty()) {
+      Divider(
+        color = BlackLighterBackground,
+        thickness = 1.dp,
+        modifier = Modifier.padding(bottom = 8.dp)
+      )
+
+      if (searchQuery.value.isNotEmpty()) {
         ChipGroup(
-          selectedType = selectedType,
-          onSelectedChanged = { selectedType = valueOf(it) }
+          selectedType = selectedType.value,
+          onSelectedChanged = { selectedType.value = valueOf(it) }
         )
         ContentSearchList(
           listState = listState,
           state = contentSearchState,
           onItemClick = onContentClick
         )
+
         if (listState.isScrolledToTheEnd()) {
-          LaunchedEffect(searchQuery) {
-            Timber.d("query next page with $searchQuery")
-            viewModel.nextContentPageByQuery(searchQuery, selectedType)
+          LaunchedEffect(searchQuery.value) {
+            Timber.d("query next page with $searchQuery.value")
+            viewModel.nextContentPageByQuery(searchQuery.value, selectedType.value)
           }
         }
       } else {
         HomeContentList(
           topAnimeList = animeTopState.data,
-          onContentClick = onContentClick
+          onContentClick = onContentClick,
+          lazyColumnState = lazyColumnState
         )
       }
 
+      // Loading Indicator while fetching data
       if (animeTopState.isLoading) {
         CenterCircularProgressIndicator(strokeWidth = 4.dp, size = 40.dp)
       }
+    }
 
+    // Try to emmit error message to snackbarChannel if not have been handled before.
+    with(animeTopState.error.getContentIfNotHandled()) {
+      snackbarChannel.trySend(this)
+    }
+
+    // Side-effect to control how snackbar should showing
+    LaunchedEffect(snackbarChannel) {
+      snackbarChannel.receiveAsFlow().collect { error ->
+
+        val result = if (error != null) {
+          snackbarHostState.showSnackbar(
+            message = error,
+            actionLabel = "Dismiss"
+          )
+        } else {
+          null
+        }
+
+        when (result) {
+          SnackbarResult.ActionPerformed -> {
+            /* action has been performed */
+          }
+          SnackbarResult.Dismissed -> {
+            /* dismissed, no action needed */
+          }
+        }
+      }
     }
   }
 }
 
 @Composable
 fun SearchLeadingIcon() {
-  Icon(Icons.Default.Search, "Search", tint = Grey)
+  Icon(
+    Icons.Default.Search,
+    "Search",
+    tint = Grey
+  )
 }
 
 @Composable

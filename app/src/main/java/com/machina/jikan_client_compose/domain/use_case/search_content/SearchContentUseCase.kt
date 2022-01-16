@@ -1,9 +1,10 @@
 package com.machina.jikan_client_compose.domain.use_case.search_content
 
 import com.machina.jikan_client_compose.core.DefaultDispatchers
+import com.machina.jikan_client_compose.core.DispatchersProvider
 import com.machina.jikan_client_compose.core.enum.ContentType
 import com.machina.jikan_client_compose.core.exception.Error.UNKNOWN_ERROR
-import com.machina.jikan_client_compose.core.Resource
+import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.data.remote.dto.ContentSearchDtoKtor
 import com.machina.jikan_client_compose.data.remote.dto.toAnimeModel
 import com.machina.jikan_client_compose.data.remote.dto.toMangaModel
@@ -19,7 +20,7 @@ import javax.inject.Inject
 class SearchContentUseCase @Inject constructor(
   private val animeRepository: AnimeRepositoryImpl,
   private val mangaRepository: MangaRepositoryImpl,
-  private val dispatchers: DefaultDispatchers
+  private val dispatchers: DispatchersProvider
 ) {
   operator fun invoke(contentType: ContentType, query: String, page: Int): Flow<ContentSearchState> {
     return flow {
@@ -39,7 +40,7 @@ class SearchContentUseCase @Inject constructor(
         is Resource.Error -> emit(ContentSearchState(error = res.message))
         is Resource.Loading -> emit(ContentSearchState(isLoading = true))
       }
-    }.flowOn(dispatchers.network)
+    }.flowOn(dispatchers.io)
   }
 
   private fun resolveContentType(contentType: ContentType, contentList: List<ContentSearchDtoKtor>?): List<ContentSearch> {

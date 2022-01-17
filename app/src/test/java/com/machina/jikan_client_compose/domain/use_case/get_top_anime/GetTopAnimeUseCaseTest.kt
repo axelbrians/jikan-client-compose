@@ -47,7 +47,7 @@ class GetTopAnimeUseCaseTest {
     // Prepare
     val expectedResult = AnimeTopState(emptyList(), false, Event(null))
 
-    coEvery { animeRepository.getTopAnimeList() } returns Resource.Success(emptyList())
+    coEvery { animeRepository.getTopAnimeList(0) } returns Resource.Success(emptyList())
 
     // Execute
     val result = topAnimeUseCaseKtor().drop(1).first()
@@ -63,7 +63,7 @@ class GetTopAnimeUseCaseTest {
     val errorMessage = "Something went wrong"
     val expectedResult = AnimeTopState(emptyList(), false, Event(errorMessage))
 
-    coEvery { animeRepository.getTopAnimeList() } returns Resource.Error(errorMessage)
+    coEvery { animeRepository.getTopAnimeList(0) } returns Resource.Error(errorMessage)
 
     // Execute
     val result = topAnimeUseCaseKtor().drop(1).first()

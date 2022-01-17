@@ -14,6 +14,7 @@ import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.features.logging.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.serialization.json.Json
 import javax.inject.Singleton
 
 @Module
@@ -44,6 +45,7 @@ class AppModule {
       install(JsonFeature) {
         serializer = KotlinxSerializer(kotlinx.serialization.json.Json {
           ignoreUnknownKeys = true
+          coerceInputValues = true
         })
       }
       install(Logging) {

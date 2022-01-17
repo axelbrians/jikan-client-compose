@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -36,6 +37,7 @@ import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.SizeMode
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
 import com.machina.jikan_client_compose.presentation.detail_screen.composable.ContentDetailsScreenToolbar
+import com.machina.jikan_client_compose.presentation.detail_screen.composable.ContentDetailsSynopsis
 import com.machina.jikan_client_compose.presentation.detail_screen.data.ContentDetailsState
 import com.machina.jikan_client_compose.presentation.detail_screen.data.ContentDetailsViewModel
 import com.machina.jikan_client_compose.ui.theme.MyColor
@@ -56,7 +58,6 @@ fun ContentDetailsScreen(
   val toolbarScaffoldState = rememberCollapsingToolbarScaffoldState()
   val contentDetailsState = viewModel.contentDetailsState.value
   val genres = contentDetailsState.data?.genres ?: listOf()
-  Timber.d(genres.toString())
 
   val coilPainter = rememberImagePainter(
     data = contentDetailsState.data?.imageUrl,
@@ -89,26 +90,28 @@ fun ContentDetailsScreen(
     LazyColumn(
       modifier = Modifier
         .fillMaxWidth(),
-      horizontalAlignment = Alignment.CenterHorizontally,
+      horizontalAlignment = Alignment.Start,
     ) {
       // Genre FlowRow Chips
       item(key = "content_genre_chips") {
         if (genres.isNotEmpty()) {
-          FlowRow(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            mainAxisSize = SizeMode.Expand,
-            mainAxisAlignment = FlowMainAxisAlignment.Start,
-            mainAxisSpacing = 7.dp
+          LazyRow(
+            contentPadding = PaddingValues(horizontal = 10.dp),
+            horizontalArrangement = Arrangement.Start
           ) {
-            genres.forEach { genre ->
+            this.items(genres) { genre ->
               Surface(
-                modifier = Modifier.padding(vertical = 4.dp),
+                modifier = Modifier.padding(vertical = 4.dp, horizontal = 6.dp),
                 shape = RoundedCornerShape(16.dp),
                 color = MyColor.Yellow500,
               ) {
                 Text(
                   text = genre.name,
-                  style = TextStyle(color = MyColor.BlackBackground, fontWeight = FontWeight.SemiBold),
+                  style = TextStyle(
+                    color = MyColor.BlackBackground,
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.SemiBold
+                  ),
                   modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
                 )
               }
@@ -149,92 +152,4 @@ fun ContentDetailsScreen(
       )
     }
   }
-}
-
-@ExperimentalAnimationApi
-@Composable
-fun ContentDetailsSynopsis(
-  state: ContentDetailsState?
-) {
-  var expanded by remember { mutableStateOf(false) }
-  var contentSynopsis = "${state?.data?.synopsis}\n\n" +
-    "Alternate title: ${state?.data?.titleJapanese}, ${state?.data?.titleEnglish}"
-
-  AnimatedContent(
-    targetState = expanded,
-    transitionSpec = {
-      expandVertically(animationSpec = tween(150, 150), initialHeight = { it }) with
-        shrinkVertically(animationSpec = tween(150, 150), targetHeight = { it }) using
-        SizeTransform(clip = true)
-    }
-  ) { targetExpanded ->
-    if (targetExpanded) {
-      Column {
-        Text(
-          text = if (state?.data?.synopsis != null) contentSynopsis else "",
-          style = TextStyle(
-            color = MyColor.OnDarkSurface,
-            fontSize = 13.sp,
-            textAlign = TextAlign.Justify
-          ),
-          modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp)
-        )
-
-        IconButton(
-          onClick = { expanded = !expanded },
-          modifier = Modifier.align(Alignment.CenterHorizontally)
-        ) {
-          Icon(
-            imageVector = Icons.Default.KeyboardArrowUp,
-            contentDescription = "Shrink",
-            tint = MyColor.Grey
-          )
-        }
-      }
-    } else {
-      Box {
-        Text(
-          text = if (state?.data?.synopsis != null) contentSynopsis else "",
-          maxLines = 5,
-          overflow = TextOverflow.Ellipsis,
-          style = TextStyle(
-            color = MyColor.OnDarkSurface,
-            fontSize = 13.sp,
-            textAlign = TextAlign.Justify
-          ),
-          modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 4.dp)
-        )
-        Box(
-          modifier = Modifier
-            .zIndex(1F)
-            .fillMaxSize()
-            .align(Alignment.BottomCenter)
-            .background(
-              brush = Brush.verticalGradient(
-                colors = listOf(
-                  MyColor.BlackBackground.copy(alpha = 0F),
-                  MyColor.BlackBackground.copy(alpha = 0.9F),
-                  MyColor.BlackBackground
-                )
-              )
-            )
-        ) {
-          IconButton(
-            onClick = { expanded = !expanded },
-            modifier = Modifier
-              .align(Alignment.BottomCenter)
-              .zIndex(2F)
-          ) {
-            Icon(
-              imageVector = Icons.Default.KeyboardArrowDown,
-              contentDescription = "Expand",
-              tint = MyColor.OnDarkSurface
-            )
-          }
-        }
-
-      }
-    }
-  }
-
 }

@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -52,10 +53,10 @@ fun CollapsingToolbarScope.ContentDetailsScreenToolbar(
   if (contentDetailsState.data?.isAiring == true
     || contentDetailsState.data?.isPublishing == true
   ) {
-    headerCaptionIcon = Icons.Outlined.Send
+    headerCaptionIcon = ImageVector.vectorResource(id = MyIcons.Outlined.Clock4)
     headerCaptionDescription = "Ongoing"
   } else {
-    headerCaptionIcon = Icons.Default.Done
+    headerCaptionIcon = ImageVector.vectorResource(id = MyIcons.Outlined.DoubleCheck)
     headerCaptionDescription = "Completed"
   }
 
@@ -137,7 +138,9 @@ fun CollapsingToolbarScope.ContentDetailsScreenToolbar(
               imageVector = headerCaptionIcon,
               contentDescription = headerCaptionDescription,
               tint = MyColor.OnDarkSurface,
-              modifier = Modifier.height(14.dp).padding(end = 6.dp))
+              modifier = Modifier
+                .height(14.dp)
+                .padding(end = 6.dp))
 
             Text(
               text = contentDetailsState.data?.status ?: "-",

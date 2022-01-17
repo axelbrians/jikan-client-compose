@@ -23,62 +23,26 @@ data class ContentDetailsDto(
   @SerialName("url")
   val url: String,
 
+  @SerialName("image_url")
+  val imageUrl: String = "",
+
   @SerialName("title")
   val title: String,
 
   @SerialName("title_english")
-  val titleEnglish: String,
-
-  @SerialName("title_synonyms")
-  val titleSynonyms: List<String>,
+  val titleEnglish: String = "",
 
   @SerialName("title_japanese")
-  val titleJapanese: String,
+  val titleJapanese: String = "",
 
-  @SerialName("status")
-  val status: String,
-
-  @SerialName("image_url")
-  val imageUrl: String,
+  @SerialName("title_synonyms")
+  val titleSynonyms: List<String> = listOf(),
 
   @SerialName("type")
-  val type: String,
+  val type: String = "",
 
-
-  /*  Manga  */
-  @SerialName("publishing")
-  val isPublishing: Boolean? = null,
-
-  @SerialName("chapters")
-  val chapters: Int? = null,
-
-  @SerialName("volumes")
-  val volumes: Int? = null,
-
-  /* - - - - - - - - - */
-
-
-  /*  Anime  */
-  @SerialName("episodes")
-  val episodeCount: Int? = null,
-
-  @SerialName("airing")
-  val isAiring: Boolean? = null,
-
-  @SerialName("duration")
-  val duration: String? = null,
-
-  @SerialName("rating")
-  val ageRating: String? = null,
-
-  @SerialName("broadcast")
-  val broadcast: String? = null,
-
-  /* - - - - - - - - - */
-
-
-  @SerialName("genres")
-  val genres: List<Genre>,
+  @SerialName("status")
+  val status: String = "",
 
   @SerialName("rank")
   val rank: Int,
@@ -103,6 +67,44 @@ data class ContentDetailsDto(
 
   @SerialName("background")
   val background: String?,
+
+  @SerialName("genres")
+  val genres: List<Genre> = listOf(),
+
+
+  /*  Manga  */
+  @SerialName("publishing")
+  val isPublishing: Boolean? = null,
+
+  @SerialName("chapters")
+  val chapters: Int? = null,
+
+  @SerialName("volumes")
+  val volumes: Int? = null,
+
+  /* - - - - - - - - - */
+
+
+  /*  Anime  */
+  @SerialName("trailer_url")
+  val trailerUrl: String? = null,
+
+  @SerialName("episodes")
+  val episodeCount: Int? = null,
+
+  @SerialName("airing")
+  val isAiring: Boolean? = null,
+
+  @SerialName("duration")
+  val duration: String? = null,
+
+  @SerialName("rating")
+  val ageRating: String? = null,
+
+  @SerialName("broadcast")
+  val broadcast: String? = null,
+
+  /* - - - - - - - - - */
 )
 
 fun ContentDetailsDto.toAnimeModel(): ContentDetails {

@@ -92,9 +92,7 @@ fun HomeScreen(
         }
       )
 
-      Timber.d("backHandler ${searchQuery.value.isNotEmpty()}")
       BackHandler(enabled = (searchQuery.value.isNotEmpty())) {
-        Timber.d("BackHandler()")
         searchQuery.value = ""
       }
 

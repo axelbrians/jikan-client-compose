@@ -15,7 +15,7 @@ class FakeAnimeRepository: AnimeService {
   var isReturnNetworkError = false
 
 
-  override suspend fun getTopAnimeList(): Resource<List<AnimeTopDtoKtor>> {
+  override suspend fun getTopAnimeList(page: Int): Resource<List<AnimeTopDtoKtor>> {
     val data = AnimeTopDtoKtor(
       1, 1, "title", "url", "imageUrl", "anime", 1, "1", "2", 1, 1.0
     )

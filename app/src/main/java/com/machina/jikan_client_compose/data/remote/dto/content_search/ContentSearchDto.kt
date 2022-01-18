@@ -1,4 +1,4 @@
-package com.machina.jikan_client_compose.data.remote.dto
+package com.machina.jikan_client_compose.data.remote.dto.content_search
 
 import com.machina.jikan_client_compose.domain.model.ContentSearch
 import kotlinx.serialization.SerialName

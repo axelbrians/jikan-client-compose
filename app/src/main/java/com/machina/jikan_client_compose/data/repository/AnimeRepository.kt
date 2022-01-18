@@ -3,18 +3,18 @@ package com.machina.jikan_client_compose.data.repository
 import com.machina.jikan_client_compose.core.SafeCall
 import com.machina.jikan_client_compose.core.Endpoints
 import com.machina.jikan_client_compose.core.error.GeneralError
-import com.machina.jikan_client_compose.core.exception.MyError.UNKNOWN_ERROR
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.data.remote.AnimeService
 import com.machina.jikan_client_compose.data.remote.dto.*
-import com.machina.jikan_client_compose.domain.model.AnimeTop
+import com.machina.jikan_client_compose.data.remote.dto.anime_schedule.AnimeScheduleDto
+import com.machina.jikan_client_compose.data.remote.dto.anime_top.AnimeTopResponse
+import com.machina.jikan_client_compose.data.remote.dto.content_details.ContentDetailsDto
+import com.machina.jikan_client_compose.data.remote.dto.content_search.ContentSearchResponse
 import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.features.*
 import io.ktor.client.request.*
-import io.ktor.client.statement.*
 import io.ktor.http.*
-import io.ktor.network.sockets.*
+import io.ktor.util.date.*
+import java.time.DayOfWeek
 import javax.inject.Inject
 
 class AnimeRepository @Inject constructor(
@@ -28,7 +28,7 @@ class AnimeRepository @Inject constructor(
       url {
         protocol = URLProtocol.HTTPS
         host = Endpoints.HOST
-        encodedPath = "${Endpoints.TOP_ANIME_URL}/$page"
+        encodedPath = "${Endpoints.ANIME_TOP}/$page"
       }
     }
 
@@ -41,7 +41,7 @@ class AnimeRepository @Inject constructor(
       url {
         protocol = URLProtocol.HTTPS
         host = Endpoints.HOST
-        encodedPath = Endpoints.SEARCH_ANIME_URL
+        encodedPath = Endpoints.ANIME_SEARCH
         parameter("q", query)
         parameter("page", page)
       }
@@ -56,12 +56,33 @@ class AnimeRepository @Inject constructor(
       url {
         protocol = URLProtocol.HTTPS
         host = Endpoints.HOST
-        encodedPath = Endpoints.DETAILS_ANIME_URL + "/$malId"
-
+        encodedPath = Endpoints.ANIME_DETAILS + "/$malId"
       }
     }
 
     return safeCall<ContentDetailsDto, GeneralError>(client, request)
+  }
+
+  override suspend fun getAnimeSchedule(day: WeekDay): Resource<AnimeScheduleDto> {
+    val dayInString = when (day) {
+      WeekDay.MONDAY -> "monday"
+      WeekDay.TUESDAY -> "tuesday"
+      WeekDay.WEDNESDAY -> "wednesday"
+      WeekDay.THURSDAY -> "thursday"
+      WeekDay.FRIDAY -> "friday"
+      WeekDay.SATURDAY -> "saturday"
+      WeekDay.SUNDAY -> "sunday"
+    }
+    val request = HttpRequestBuilder().apply {
+      method = HttpMethod.Get
+      url {
+        protocol = URLProtocol.HTTPS
+        host = Endpoints.HOST
+        encodedPath = Endpoints.ANIME_SCHEDULE + "/$dayInString"
+      }
+    }
+
+    return safeCall<AnimeScheduleDto, GeneralError>(client, request)
   }
 
 

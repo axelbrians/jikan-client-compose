@@ -1,4 +1,4 @@
-package com.machina.jikan_client_compose.data.remote.dto
+package com.machina.jikan_client_compose.data.remote.dto.anime_top
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

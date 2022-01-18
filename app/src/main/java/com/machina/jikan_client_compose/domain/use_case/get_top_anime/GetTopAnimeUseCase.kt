@@ -3,7 +3,7 @@ package com.machina.jikan_client_compose.domain.use_case.get_top_anime
 import com.machina.jikan_client_compose.core.DispatchersProvider
 import com.machina.jikan_client_compose.core.wrapper.Event
 import com.machina.jikan_client_compose.core.wrapper.Resource
-import com.machina.jikan_client_compose.data.remote.dto.toAnimeTop
+import com.machina.jikan_client_compose.data.remote.dto.anime_top.toAnimeTop
 import com.machina.jikan_client_compose.data.repository.AnimeRepository
 import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeTopState
 import kotlinx.coroutines.flow.Flow

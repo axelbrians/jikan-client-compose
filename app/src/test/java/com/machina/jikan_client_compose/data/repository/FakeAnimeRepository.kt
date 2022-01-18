@@ -3,9 +3,9 @@ package com.machina.jikan_client_compose.data.repository
 import com.machina.jikan_client_compose.core.exception.MyError
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.data.remote.AnimeService
-import com.machina.jikan_client_compose.data.remote.dto.AnimeTopDtoKtor
+import com.machina.jikan_client_compose.data.remote.dto.anime_top.AnimeTopDtoKtor
 import com.machina.jikan_client_compose.data.remote.dto.ContentDetailsDto
-import com.machina.jikan_client_compose.data.remote.dto.ContentSearchDtoKtor
+import com.machina.jikan_client_compose.data.remote.dto.content_search.ContentSearchDtoKtor
 
 class FakeAnimeRepository: AnimeService {
 

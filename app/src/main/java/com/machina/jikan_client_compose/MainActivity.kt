@@ -1,5 +1,6 @@
 package com.machina.jikan_client_compose
 
+import android.icu.util.Calendar
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -42,6 +43,7 @@ class MainActivity : ComponentActivity() {
   @ExperimentalAnimationApi
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+
     setContent {
       JikanClientComposeTheme {
         val navController = rememberNavController()

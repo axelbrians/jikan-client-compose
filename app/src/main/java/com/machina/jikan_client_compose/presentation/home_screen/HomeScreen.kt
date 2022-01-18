@@ -1,19 +1,15 @@
 package com.machina.jikan_client_compose.presentation.home_screen
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -27,7 +23,6 @@ import com.machina.jikan_client_compose.presentation.composable.CenterCircularPr
 import com.machina.jikan_client_compose.presentation.composable.ChipGroup
 import com.machina.jikan_client_compose.presentation.composable.CustomTextField
 import com.machina.jikan_client_compose.presentation.home_screen.data.HomeViewModel
-import com.machina.jikan_client_compose.ui.theme.MyColor.Grey
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
@@ -45,6 +40,7 @@ fun HomeScreen(
   onContentClick: (String, Int) -> Unit,
 ) {
 
+  val animeScheduleState = viewModel.animeScheduleState.value
   val animeTopState = viewModel.animeTopState.value
   val contentSearchState = viewModel.contentSearchState.value
 
@@ -58,7 +54,10 @@ fun HomeScreen(
   val snackbarChannel = remember { Channel<String?>(Channel.CONFLATED) }
 
 
-  LaunchedEffect(viewModel) { viewModel.getTopAnimeList() }
+  LaunchedEffect(viewModel) {
+    viewModel.getTodayAnimeSchedule()
+    viewModel.getTopAnimeList()
+  }
 
   LaunchedEffect(searchQuery.value + selectedType.value.name) {
     delay(1000L)
@@ -121,8 +120,9 @@ fun HomeScreen(
         }
       } else {
         HomeContentList(
-          topAnimeList = animeTopState.data,
-          onContentClick = onContentClick,
+          animeScheduleList = animeScheduleState.data,
+          animeTopList = animeTopState.data,
+          onTopAnimeClick = onContentClick,
           lazyColumnState = lazyColumnState
         )
       }

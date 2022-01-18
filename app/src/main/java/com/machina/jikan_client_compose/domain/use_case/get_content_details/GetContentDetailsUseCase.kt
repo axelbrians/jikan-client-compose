@@ -4,9 +4,9 @@ import com.machina.jikan_client_compose.core.DispatchersProvider
 import com.machina.jikan_client_compose.core.enum.ContentType
 import com.machina.jikan_client_compose.core.exception.MyError
 import com.machina.jikan_client_compose.core.wrapper.Resource
-import com.machina.jikan_client_compose.data.remote.dto.ContentDetailsDto
-import com.machina.jikan_client_compose.data.remote.dto.toAnimeModel
-import com.machina.jikan_client_compose.data.remote.dto.toMangaModel
+import com.machina.jikan_client_compose.data.remote.dto.content_details.ContentDetailsDto
+import com.machina.jikan_client_compose.data.remote.dto.content_details.toAnimeModel
+import com.machina.jikan_client_compose.data.remote.dto.content_details.toMangaModel
 import com.machina.jikan_client_compose.data.repository.AnimeRepository
 import com.machina.jikan_client_compose.data.repository.MangaRepository
 import com.machina.jikan_client_compose.domain.model.ContentDetails

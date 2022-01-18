@@ -3,19 +3,13 @@ package com.machina.jikan_client_compose.data.repository
 import com.machina.jikan_client_compose.core.Endpoints
 import com.machina.jikan_client_compose.core.SafeCall
 import com.machina.jikan_client_compose.core.error.GeneralError
-import com.machina.jikan_client_compose.core.exception.MyError
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.data.remote.MangaService
-import com.machina.jikan_client_compose.data.remote.dto.ContentDetailsDto
-import com.machina.jikan_client_compose.data.remote.dto.ContentSearchDtoKtor
-import com.machina.jikan_client_compose.data.remote.dto.ContentSearchResponse
+import com.machina.jikan_client_compose.data.remote.dto.content_details.ContentDetailsDto
+import com.machina.jikan_client_compose.data.remote.dto.content_search.ContentSearchResponse
 import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.features.*
 import io.ktor.client.request.*
-import io.ktor.client.statement.*
 import io.ktor.http.*
-import io.ktor.network.sockets.*
 import javax.inject.Inject
 
 class MangaRepository @Inject constructor(
@@ -29,7 +23,7 @@ class MangaRepository @Inject constructor(
       url {
         protocol = URLProtocol.HTTPS
         host = Endpoints.HOST
-        encodedPath = Endpoints.SEARCH_MANGA_URL
+        encodedPath = Endpoints.MANGA_SEARCH
         parameter("q", query)
         parameter("page", page)
       }

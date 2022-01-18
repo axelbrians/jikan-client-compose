@@ -16,21 +16,64 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
 import com.machina.jikan_client_compose.core.enum.ContentType
+import com.machina.jikan_client_compose.domain.model.AnimeSchedule
 import com.machina.jikan_client_compose.domain.model.AnimeTop
 import com.machina.jikan_client_compose.presentation.home_screen.composable.ItemAnime
+import com.machina.jikan_client_compose.presentation.home_screen.composable.ItemAnimeSchedule
 import com.machina.jikan_client_compose.ui.theme.MyColor
 
 @ExperimentalCoilApi
 @Composable
 fun HomeContentList(
-  topAnimeList: List<AnimeTop> = emptyList(),
+  animeScheduleList: List<AnimeSchedule> = emptyList(),
+  animeTopList: List<AnimeTop> = emptyList(),
   lazyColumnState: LazyListState = rememberLazyListState(),
-  onContentClick: (String, Int) -> Unit
+  onTopAnimeClick: (String, Int) -> Unit
 ) {
-  LazyColumn(
-
+  LazyColumn (
+    state = lazyColumnState
   ) {
-    item(key = topAnimeList) {
+    item(key = "anime_schedule_list") {
+      Row(
+        modifier = Modifier.padding(start = 18.dp, end = 18.dp, bottom = 4.dp),
+        verticalAlignment = Alignment.CenterVertically
+      ) {
+        Text(
+          modifier = Modifier.weight(1f),
+          text = "Airing today",
+          style = TextStyle(
+            color = MyColor.Yellow500,
+            fontWeight = FontWeight.Bold,
+            fontSize = 14.sp
+          )
+        )
+
+        IconButton(onClick = { }) {
+          Icon(
+            imageVector = Icons.Default.ArrowForward,
+            contentDescription = "See all",
+            tint = MyColor.Grey
+          )
+        }
+      }
+
+      LazyRow(
+        contentPadding = PaddingValues(12.dp, 0.dp, 12.dp, 0.dp)
+      ) {
+        items(animeScheduleList, key = { item -> item.malId }) { anime ->
+          ItemAnimeSchedule(
+            modifier = Modifier
+              .width(160.dp)
+              .padding(12.dp, 0.dp),
+            anime = anime,
+            onItemClick = { onTopAnimeClick(ContentType.Anime.name, anime.malId) }
+          )
+        }
+      }
+    }
+
+
+    item(key = "anime_top_list") {
       Row(
         modifier = Modifier.padding(start = 18.dp, end = 18.dp, bottom = 4.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -57,13 +100,13 @@ fun HomeContentList(
       LazyRow(
         contentPadding = PaddingValues(12.dp, 0.dp, 12.dp, 0.dp)
       ) {
-        items(topAnimeList, key = { item -> item.malId }) { anime ->
+        items(animeTopList, key = { item -> item.malId }) { anime ->
           ItemAnime(
             modifier = Modifier
               .width(160.dp)
               .padding(12.dp, 0.dp),
             anime = anime,
-            onItemClick = { onContentClick(ContentType.Anime.name, anime.malId) }
+            onItemClick = { onTopAnimeClick(ContentType.Anime.name, anime.malId) }
           )
         }
       }

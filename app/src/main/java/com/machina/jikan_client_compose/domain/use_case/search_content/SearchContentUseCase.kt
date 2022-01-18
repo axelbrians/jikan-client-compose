@@ -4,9 +4,9 @@ import com.machina.jikan_client_compose.core.DispatchersProvider
 import com.machina.jikan_client_compose.core.enum.ContentType
 import com.machina.jikan_client_compose.core.exception.MyError.UNKNOWN_ERROR
 import com.machina.jikan_client_compose.core.wrapper.Resource
-import com.machina.jikan_client_compose.data.remote.dto.ContentSearchDtoKtor
-import com.machina.jikan_client_compose.data.remote.dto.toAnimeModel
-import com.machina.jikan_client_compose.data.remote.dto.toMangaModel
+import com.machina.jikan_client_compose.data.remote.dto.content_search.ContentSearchDtoKtor
+import com.machina.jikan_client_compose.data.remote.dto.content_search.toAnimeModel
+import com.machina.jikan_client_compose.data.remote.dto.content_search.toMangaModel
 import com.machina.jikan_client_compose.data.repository.AnimeRepository
 import com.machina.jikan_client_compose.data.repository.MangaRepository
 import com.machina.jikan_client_compose.domain.model.ContentSearch

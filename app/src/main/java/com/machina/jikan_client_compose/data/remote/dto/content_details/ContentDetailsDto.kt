@@ -1,4 +1,4 @@
-package com.machina.jikan_client_compose.data.remote.dto
+package com.machina.jikan_client_compose.data.remote.dto.content_details
 
 import com.machina.jikan_client_compose.data.remote.dto.content_details.Genre
 import com.machina.jikan_client_compose.domain.model.ContentDetails

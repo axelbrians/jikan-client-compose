@@ -5,7 +5,8 @@ import com.google.common.truth.Truth.assertThat
 import com.machina.jikan_client_compose.core.DefaultDispatchers
 import com.machina.jikan_client_compose.core.wrapper.Event
 import com.machina.jikan_client_compose.core.wrapper.Resource
-import com.machina.jikan_client_compose.data.repository.AnimeRepositoryImpl
+import com.machina.jikan_client_compose.data.remote.dto.AnimeTopResponse
+import com.machina.jikan_client_compose.data.repository.AnimeRepository
 import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeTopState
 import io.mockk.coEvery
 import org.junit.runner.RunWith
@@ -15,7 +16,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
 
@@ -26,7 +26,7 @@ class GetTopAnimeUseCaseTest {
   @get:Rule
   val rule = InstantTaskExecutorRule()
 
-  private val animeRepository = mockk<AnimeRepositoryImpl>()
+  private val animeRepository = mockk<AnimeRepository>()
 
   @ExperimentalCoroutinesApi
   private val testDispatchers = DefaultDispatchers(
@@ -47,7 +47,15 @@ class GetTopAnimeUseCaseTest {
     // Prepare
     val expectedResult = AnimeTopState(emptyList(), false, Event(null))
 
-    coEvery { animeRepository.getTopAnimeList(0) } returns Resource.Success(emptyList())
+    coEvery {
+      animeRepository.getTopAnimeList(0)
+    } returns Resource.Success(
+      AnimeTopResponse(
+        "",
+        true,
+        0,
+        emptyList())
+    )
 
     // Execute
     val result = topAnimeUseCaseKtor().drop(1).first()

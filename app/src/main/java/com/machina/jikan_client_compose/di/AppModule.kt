@@ -1,9 +1,9 @@
 package com.machina.jikan_client_compose.di
 
-import com.machina.jikan_client_compose.core.Call
+import com.machina.jikan_client_compose.core.SafeCall
 import com.machina.jikan_client_compose.core.DefaultDispatchers
 import com.machina.jikan_client_compose.core.DispatchersProvider
-import com.machina.jikan_client_compose.data.repository.AnimeRepositoryImpl
+import com.machina.jikan_client_compose.data.repository.AnimeRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,7 +14,6 @@ import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.features.logging.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.serialization.json.Json
 import javax.inject.Singleton
 
 @Module
@@ -57,12 +56,12 @@ class AppModule {
 
   @Provides
   @Singleton
-  fun provideCall(): Call {
-    return Call()
+  fun provideCall(): SafeCall {
+    return SafeCall()
   }
 
   @Provides
-  fun provideAnimeRepositoryImplKtor(client: HttpClient, call: Call): AnimeRepositoryImpl {
-    return AnimeRepositoryImpl(client, call)
+  fun provideAnimeRepositoryImplKtor(client: HttpClient, call: SafeCall): AnimeRepository {
+    return AnimeRepository(client, call)
   }
 }

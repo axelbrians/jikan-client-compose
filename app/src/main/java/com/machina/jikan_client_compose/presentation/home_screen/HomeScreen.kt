@@ -61,7 +61,7 @@ fun HomeScreen(
   LaunchedEffect(viewModel) { viewModel.getTopAnimeList() }
 
   LaunchedEffect(searchQuery.value + selectedType.value.name) {
-    delay(500L)
+    delay(1000L)
     viewModel.searchContentByQuery(selectedType.value, searchQuery.value)
     Timber.d("query $searchQuery.value type ${selectedType.value.name.lowercase()}")
   }

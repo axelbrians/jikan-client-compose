@@ -1,2 +1,2 @@
 # jikan-client-compose
-Jikan public API Android Client made with Jetpack Compsoe
+[Jikan](https://jikan.moe/) public API Android Client made with Jetpack Compose.

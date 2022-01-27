@@ -1,4 +1,4 @@
-package com.machina.jikan_client_compose.domain.model
+package com.machina.jikan_client_compose.domain.model.anime
 
 data class AnimeTop(
   val malId: Int,
@@ -8,8 +8,6 @@ data class AnimeTop(
   val imageUrl: String,
   val type: String,
   val episodesCount: Int?,
-  val startDate: String,
-  val endDate: String,
   val members: Int,
   val score: Double,
 )

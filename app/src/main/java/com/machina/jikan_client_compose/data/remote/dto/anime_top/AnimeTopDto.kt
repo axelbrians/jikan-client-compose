@@ -1,6 +1,6 @@
 package com.machina.jikan_client_compose.data.remote.dto.anime_top
 
-import com.machina.jikan_client_compose.domain.model.AnimeTop
+import com.machina.jikan_client_compose.domain.model.anime.AnimeTop
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -44,8 +44,7 @@ fun AnimeTopDtoKtor.toAnimeTop(): AnimeTop {
   return AnimeTop(
     malId, rank, title,
     url, imageUrl, type,
-    episodesCount, startDate,
-    endDate ?: "",
+    episodesCount,
     members, score
   )
 }

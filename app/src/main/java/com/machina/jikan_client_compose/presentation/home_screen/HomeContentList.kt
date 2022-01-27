@@ -16,8 +16,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
 import com.machina.jikan_client_compose.core.enum.ContentType
-import com.machina.jikan_client_compose.domain.model.AnimeSchedule
-import com.machina.jikan_client_compose.domain.model.AnimeTop
+import com.machina.jikan_client_compose.domain.model.anime.AnimeSchedule
+import com.machina.jikan_client_compose.domain.model.anime.AnimeTop
 import com.machina.jikan_client_compose.presentation.home_screen.composable.ItemAnime
 import com.machina.jikan_client_compose.presentation.home_screen.composable.ItemAnimeSchedule
 import com.machina.jikan_client_compose.ui.theme.MyColor
@@ -33,6 +33,8 @@ fun HomeContentList(
   LazyColumn (
     state = lazyColumnState
   ) {
+
+    // Start of Anime Airing Today
     item(key = "anime_schedule_list") {
       Row(
         modifier = Modifier.padding(start = 18.dp, end = 18.dp, bottom = 4.dp),
@@ -71,8 +73,10 @@ fun HomeContentList(
         }
       }
     }
+    // End of Anime Airing Today
 
 
+    // Start of Top Anime of All Times
     item(key = "anime_top_list") {
       Row(
         modifier = Modifier.padding(start = 18.dp, end = 18.dp, bottom = 4.dp),
@@ -111,5 +115,9 @@ fun HomeContentList(
         }
       }
     }
+    // End of Top Anime of All Times
+
+
+
   }
 }

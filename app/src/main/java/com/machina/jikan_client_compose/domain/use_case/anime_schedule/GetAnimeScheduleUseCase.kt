@@ -6,9 +6,8 @@ import com.machina.jikan_client_compose.core.wrapper.Event
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.data.remote.dto.anime_schedule.AnimeScheduleDto
 import com.machina.jikan_client_compose.data.remote.dto.anime_schedule.toAnimeSchedule
-import com.machina.jikan_client_compose.data.remote.dto.anime_top.toAnimeTop
 import com.machina.jikan_client_compose.data.repository.AnimeRepository
-import com.machina.jikan_client_compose.domain.model.AnimeSchedule
+import com.machina.jikan_client_compose.domain.model.anime.AnimeSchedule
 import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeScheduleState
 import io.ktor.util.date.*
 import kotlinx.coroutines.flow.Flow

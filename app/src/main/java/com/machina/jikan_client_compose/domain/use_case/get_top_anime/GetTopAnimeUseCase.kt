@@ -4,6 +4,7 @@ import com.machina.jikan_client_compose.core.DispatchersProvider
 import com.machina.jikan_client_compose.core.wrapper.Event
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.data.remote.dto.anime_top.toAnimeTop
+import com.machina.jikan_client_compose.data.remote.dto_v4.anime_top.toAnimeTop
 import com.machina.jikan_client_compose.data.repository.AnimeRepository
 import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeTopState
 import kotlinx.coroutines.flow.Flow
@@ -21,7 +22,7 @@ class GetTopAnimeUseCase @Inject constructor(
 
       val state = when (val res = repository.getTopAnimeList(page)) {
         is Resource.Success -> {
-          val data = res.data?.top?.map { it.toAnimeTop() } ?: emptyList()
+          val data = res.data?.data?.map { it.toAnimeTop() } ?: emptyList()
           AnimeTopState(data)
         }
         is Resource.Error -> AnimeTopState(error = Event(res.message))

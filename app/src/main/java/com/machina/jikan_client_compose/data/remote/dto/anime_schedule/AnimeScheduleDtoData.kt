@@ -1,7 +1,7 @@
 package com.machina.jikan_client_compose.data.remote.dto.anime_schedule
 
 
-import com.machina.jikan_client_compose.domain.model.AnimeSchedule
+import com.machina.jikan_client_compose.domain.model.anime.AnimeSchedule
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

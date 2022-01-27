@@ -1,4 +1,4 @@
-package com.machina.jikan_client_compose.domain.model
+package com.machina.jikan_client_compose.domain.model.anime
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

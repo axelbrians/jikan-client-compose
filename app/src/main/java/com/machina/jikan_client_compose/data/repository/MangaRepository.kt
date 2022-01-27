@@ -22,7 +22,7 @@ class MangaRepository @Inject constructor(
       method = HttpMethod.Get
       url {
         protocol = URLProtocol.HTTPS
-        host = Endpoints.HOST
+        host = Endpoints.HOST_V3
         encodedPath = Endpoints.MANGA_SEARCH
         parameter("q", query)
         parameter("page", page)
@@ -37,7 +37,7 @@ class MangaRepository @Inject constructor(
       method = HttpMethod.Get
       url {
         protocol = URLProtocol.HTTPS
-        host = Endpoints.HOST
+        host = Endpoints.HOST_V3
         encodedPath = Endpoints.MANGA_DETAILS + "/$malId"
       }
     }

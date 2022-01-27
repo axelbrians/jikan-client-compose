@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -20,16 +21,25 @@ import com.machina.jikan_client_compose.domain.model.anime.AnimeSchedule
 import com.machina.jikan_client_compose.domain.model.anime.AnimeTop
 import com.machina.jikan_client_compose.presentation.home_screen.composable.ItemAnime
 import com.machina.jikan_client_compose.presentation.home_screen.composable.ItemAnimeSchedule
+import com.machina.jikan_client_compose.presentation.home_screen.composable.ItemAnimeTopShimmer
+import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeScheduleState
+import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeTopState
 import com.machina.jikan_client_compose.ui.theme.MyColor
+import com.valentinilk.shimmer.Shimmer
+import com.valentinilk.shimmer.ShimmerBounds
+import com.valentinilk.shimmer.rememberShimmer
+import com.valentinilk.shimmer.unclippedBoundsInWindow
 
 @ExperimentalCoilApi
 @Composable
 fun HomeContentList(
-  animeScheduleList: List<AnimeSchedule> = emptyList(),
-  animeTopList: List<AnimeTop> = emptyList(),
+  animeScheduleState: AnimeScheduleState = AnimeScheduleState(),
+  animeTopState: AnimeTopState = AnimeTopState(),
   lazyColumnState: LazyListState = rememberLazyListState(),
   onTopAnimeClick: (String, Int) -> Unit
 ) {
+
+
   LazyColumn (
     state = lazyColumnState
   ) {
@@ -59,17 +69,28 @@ fun HomeContentList(
         }
       }
 
+
+      val shimmerInstance = rememberShimmer(shimmerBounds = ShimmerBounds.Custom)
+
       LazyRow(
-        contentPadding = PaddingValues(12.dp, 0.dp, 12.dp, 0.dp)
+        contentPadding = PaddingValues(12.dp, 0.dp, 12.dp, 0.dp),
+        modifier = Modifier.onGloballyPositioned { layoutCoordinates ->
+          val position = layoutCoordinates.unclippedBoundsInWindow()
+          shimmerInstance.updateBounds(position)
+        }
       ) {
-        items(animeScheduleList, key = { item -> item.malId }) { anime ->
-          ItemAnimeSchedule(
-            modifier = Modifier
-              .width(160.dp)
-              .padding(12.dp, 0.dp),
-            anime = anime,
-            onItemClick = { onTopAnimeClick(ContentType.Anime.name, anime.malId) }
-          )
+        if (animeScheduleState.isLoading) {
+          showShimmerPlaceholder(shimmerInstance)
+        } else {
+          items(animeScheduleState.data, key = { item -> item.malId }) { anime ->
+            ItemAnimeSchedule(
+              modifier = Modifier
+                .width(160.dp)
+                .padding(12.dp, 0.dp),
+              anime = anime,
+              onItemClick = { onTopAnimeClick(ContentType.Anime.name, anime.malId) }
+            )
+          }
         }
       }
     }
@@ -101,23 +122,40 @@ fun HomeContentList(
         }
       }
 
+      val shimmerInstance = rememberShimmer(shimmerBounds = ShimmerBounds.Custom)
+
       LazyRow(
-        contentPadding = PaddingValues(12.dp, 0.dp, 12.dp, 0.dp)
-      ) {
-        items(animeTopList, key = { item -> item.malId }) { anime ->
-          ItemAnime(
-            modifier = Modifier
-              .width(160.dp)
-              .padding(12.dp, 0.dp),
-            anime = anime,
-            onItemClick = { onTopAnimeClick(ContentType.Anime.name, anime.malId) }
-          )
+        contentPadding = PaddingValues(12.dp, 0.dp, 12.dp, 0.dp),
+        modifier = Modifier.onGloballyPositioned { layoutCoordinates ->
+          val position = layoutCoordinates.unclippedBoundsInWindow()
+          shimmerInstance.updateBounds(position)
         }
+      ) {
+        if (animeTopState.isLoading) {
+          showShimmerPlaceholder(shimmerInstance)
+        } else {
+          items(animeTopState.data, key = { item -> item.malId }) { anime ->
+            ItemAnime(
+              modifier = Modifier
+                .width(160.dp)
+                .padding(12.dp, 0.dp),
+              anime = anime,
+              onItemClick = { onTopAnimeClick(ContentType.Anime.name, anime.malId) }
+            )
+          }
+        }
+
       }
     }
     // End of Top Anime of All Times
 
 
 
+  }
+}
+
+private fun LazyListScope.showShimmerPlaceholder(shimmerInstance: Shimmer, count: Int = 5) {
+  items(count) {
+    ItemAnimeTopShimmer(shimmerInstance)
   }
 }

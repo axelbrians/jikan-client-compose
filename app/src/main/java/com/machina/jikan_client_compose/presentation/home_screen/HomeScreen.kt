@@ -120,17 +120,17 @@ fun HomeScreen(
         }
       } else {
         HomeContentList(
-          animeScheduleList = animeScheduleState.data,
-          animeTopList = animeTopState.data,
+          animeScheduleState = animeScheduleState,
+          animeTopState = animeTopState,
           onTopAnimeClick = onContentClick,
           lazyColumnState = lazyColumnState
         )
       }
 
       // Loading Indicator while fetching data
-      if (animeTopState.isLoading) {
-        CenterCircularProgressIndicator(strokeWidth = 4.dp, size = 40.dp)
-      }
+//      if (animeTopState.isLoading) {
+//        CenterCircularProgressIndicator(strokeWidth = 4.dp, size = 40.dp)
+//      }
     }
 
     // Try to emmit error message to snackbarChannel if not have been handled before.

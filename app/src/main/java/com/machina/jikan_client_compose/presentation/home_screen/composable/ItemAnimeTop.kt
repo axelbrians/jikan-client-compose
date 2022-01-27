@@ -92,7 +92,7 @@ fun ItemAnime(
 
     for (index in titleLines.value..2) {
       Text(
-        text = "-",
+        text = " ",
         style = TextStyle(
           fontSize = 14.sp,
           color = MyColor.OnDarkSurface)

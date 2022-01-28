@@ -8,6 +8,8 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -15,14 +17,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.machina.jikan_client_compose.R
 import com.machina.jikan_client_compose.core.enum.ContentType
 import com.machina.jikan_client_compose.presentation.composable.ChipGroup
 import com.machina.jikan_client_compose.presentation.composable.CustomTextField
+import com.machina.jikan_client_compose.presentation.extension.isScrolledToTheEnd
 import com.machina.jikan_client_compose.presentation.home_screen.*
 import com.machina.jikan_client_compose.presentation.home_screen.data.HomeViewModel
+import com.machina.jikan_client_compose.presentation.search_screen.composable.SearchEditText
+import com.machina.jikan_client_compose.presentation.search_screen.composable.SearchLeadingIcon
+import com.machina.jikan_client_compose.presentation.search_screen.composable.SearchTrailingIcon
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
@@ -155,28 +164,5 @@ fun SearchScreen(
         }
       }
     }
-  }
-}
-
-@Composable
-fun SearchEditText(
-  fieldValue: String = "",
-  fieldPlaceholder: String = "",
-  onFieldValueChange: (String) -> Unit = { }
-) {
-  BasicTextField(
-    value = fieldValue,
-    onValueChange = onFieldValueChange,
-    singleLine = true,
-    cursorBrush = SolidColor(MyColor.Yellow500),
-    textStyle = TextStyle(color = MyColor.OnDarkSurface, fontSize = 16.sp),
-    modifier = Modifier.fillMaxWidth()
-  )
-
-  if (fieldValue.isEmpty()) {
-    Text(
-      text = fieldPlaceholder,
-      style = TextStyle(color = MyColor.Grey, fontSize = 16.sp)
-    )
   }
 }

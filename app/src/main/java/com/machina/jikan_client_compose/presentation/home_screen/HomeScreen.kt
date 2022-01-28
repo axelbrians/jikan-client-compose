@@ -29,7 +29,9 @@ import com.machina.jikan_client_compose.ui.theme.*
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
 import com.machina.jikan_client_compose.presentation.composable.ChipGroup
 import com.machina.jikan_client_compose.presentation.composable.CustomTextField
+import com.machina.jikan_client_compose.presentation.home_screen.composable.SearchEditText
 import com.machina.jikan_client_compose.presentation.home_screen.data.HomeViewModel
+import com.machina.jikan_client_compose.presentation.search_screen.composable.SearchLeadingIcon
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
@@ -150,49 +152,4 @@ fun HomeScreen(
       }
     }
   }
-}
-
-@Composable
-fun SearchEditText(
-  fieldPlaceholder: String = ""
-) {
-  Text(
-    text = fieldPlaceholder,
-    style = TextStyle(color = MyColor.Grey, fontSize = 16.sp)
-  )
-}
-
-@Composable
-fun SearchLeadingIcon(
-  size: Dp = 24.dp,
-  padding: PaddingValues = PaddingValues(6.dp)
-) {
-  Icon(
-    imageVector = Icons.Default.Search,
-    contentDescription = "Search",
-    modifier = Modifier.padding(padding),
-    tint = MyColor.Grey
-  )
-}
-
-@Composable
-fun SearchTrailingIcon(
-  size: Dp = 24.dp,
-  padding: PaddingValues = PaddingValues(6.dp),
-  onClick: () -> Unit
-) {
-  IconButton(
-    modifier = Modifier.then(Modifier.size(size)),
-    onClick = onClick,
-  ) {
-    Icon(
-      painter = painterResource(R.drawable.ic_close),
-      contentDescription = "Close",
-      tint = MyColor.Grey
-    )
-  }
-}
-
-fun LazyListState.isScrolledToTheEnd(): Boolean {
-  return layoutInfo.visibleItemsInfo.lastOrNull()?.index == layoutInfo.totalItemsCount - 1
 }

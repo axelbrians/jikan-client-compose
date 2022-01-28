@@ -20,6 +20,8 @@ import com.machina.jikan_client_compose.presentation.detail_screen.ContentDetail
 import com.machina.jikan_client_compose.presentation.home_screen.HomeScreen
 import com.machina.jikan_client_compose.presentation.detail_screen.data.ContentDetailsViewModel
 import com.machina.jikan_client_compose.presentation.home_screen.data.HomeViewModel
+import com.machina.jikan_client_compose.presentation.search_screen.SearchScreen
+import com.machina.jikan_client_compose.ui.navigation.MainNavigation.CONTENT_SEARCH_SCREEN
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.InternalCoroutinesApi
 import timber.log.Timber
@@ -57,11 +59,27 @@ class MainActivity : ComponentActivity() {
               navController = navController,
               viewModel = homeViewModel,
               lazyColumnState = homeScrollState,
+              onSearchFieldClick = {
+               navController.navigate(CONTENT_SEARCH_SCREEN)
+              },
               onContentClick = { type, malId ->
                 navController.navigate("${CONTENT_DETAILS_SCREEN}/$type/$malId".lowercase())
                 Timber.d("navigated with ${CONTENT_DETAILS_SCREEN}/$type/$malId")
               }
             )
+          }
+
+          composable(
+            CONTENT_SEARCH_SCREEN
+          ) { backstack ->
+            val homeViewModel = hiltViewModel<HomeViewModel>()
+
+            SearchScreen(
+              viewModel = homeViewModel,
+              onContentClick = { type, malId ->
+                navController.navigate("${CONTENT_DETAILS_SCREEN}/$type/$malId".lowercase())
+                Timber.d("navigated with ${CONTENT_DETAILS_SCREEN}/$type/$malId")
+              })
           }
 
           composable(

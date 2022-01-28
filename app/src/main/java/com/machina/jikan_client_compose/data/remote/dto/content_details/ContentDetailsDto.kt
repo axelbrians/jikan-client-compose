@@ -48,10 +48,10 @@ data class ContentDetailsDto(
   val rank: Int,
 
   @SerialName("score")
-  val score: Double,
+  val score: Double?,
 
   @SerialName("scored_by")
-  val scoredBy: Int,
+  val scoredBy: Int?,
 
   @SerialName("popularity")
   val popularity: Int,
@@ -128,8 +128,8 @@ fun ContentDetailsDto.toAnimeModel(): ContentDetails {
 
     genres = genres,
     rank = rank,
-    score = score,
-    scoredBy = scoredBy,
+    score = score ?: 0.0,
+    scoredBy = scoredBy ?: 0,
     popularity = popularity,
     members = members,
     favorites = favorites,
@@ -157,8 +157,8 @@ fun ContentDetailsDto.toMangaModel(): ContentDetails {
 
     genres = genres,
     rank = rank,
-    score = score,
-    scoredBy = scoredBy,
+    score = score ?: 0.0,
+    scoredBy = scoredBy ?: 0,
     popularity = popularity,
     members = members,
     favorites = favorites,

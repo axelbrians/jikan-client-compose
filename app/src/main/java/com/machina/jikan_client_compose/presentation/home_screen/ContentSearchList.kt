@@ -77,7 +77,8 @@ fun ContentSearchList(
       }
     }
 
-    if (state.error != null) {
+    val error = state.error.getContentIfNotHandled()
+    if (error != null) {
       item {
         Row(
           modifier = Modifier
@@ -85,7 +86,7 @@ fun ContentSearchList(
             .padding(horizontal = 24.dp)
         ) {
           Text(
-            text = state.error,
+            text = error,
             color = MyColor.OnDarkSurface,
             fontSize = 20.sp,
             textAlign = TextAlign.Center,

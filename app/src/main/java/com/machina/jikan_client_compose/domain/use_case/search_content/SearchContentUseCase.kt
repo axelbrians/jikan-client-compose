@@ -3,6 +3,7 @@ package com.machina.jikan_client_compose.domain.use_case.search_content
 import com.machina.jikan_client_compose.core.DispatchersProvider
 import com.machina.jikan_client_compose.core.enum.ContentType
 import com.machina.jikan_client_compose.core.exception.MyError.UNKNOWN_ERROR
+import com.machina.jikan_client_compose.core.wrapper.Event
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.data.remote.dto.content_search.ContentSearchDtoKtor
 import com.machina.jikan_client_compose.data.remote.dto.content_search.toAnimeModel
@@ -34,7 +35,7 @@ class SearchContentUseCase @Inject constructor(
 
       val state = when (res) {
         is Resource.Success -> ContentSearchState(resolveContentType(contentType, res.data?.results))
-        is Resource.Error -> ContentSearchState(error = res.message)
+        is Resource.Error -> ContentSearchState(error = Event(res.message))
         is Resource.Loading -> ContentSearchState(isLoading = true)
       }
 

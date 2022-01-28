@@ -1,75 +1,60 @@
-package com.machina.jikan_client_compose.presentation.home_screen
+package com.machina.jikan_client_compose.presentation.search_screen
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import coil.annotation.ExperimentalCoilApi
-import com.machina.jikan_client_compose.R
-import com.machina.jikan_client_compose.core.enum.ContentType.Anime
-import com.machina.jikan_client_compose.core.enum.ContentType.valueOf
-import com.machina.jikan_client_compose.ui.theme.*
-import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
+import com.machina.jikan_client_compose.core.enum.ContentType
 import com.machina.jikan_client_compose.presentation.composable.ChipGroup
 import com.machina.jikan_client_compose.presentation.composable.CustomTextField
+import com.machina.jikan_client_compose.presentation.home_screen.*
 import com.machina.jikan_client_compose.presentation.home_screen.data.HomeViewModel
-import kotlinx.coroutines.InternalCoroutinesApi
+import com.machina.jikan_client_compose.ui.theme.MyColor
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import timber.log.Timber
 
-@OptIn(ExperimentalMaterialApi::class)
-@InternalCoroutinesApi
-@ExperimentalCoilApi
 @Composable
-fun HomeScreen(
-  navController: NavController,
+fun SearchScreen(
+  modifier: Modifier = Modifier,
   viewModel: HomeViewModel,
-  lazyColumnState: LazyListState = rememberLazyListState(),
-  onSearchFieldClick: (() -> Unit) = { },
   onContentClick: ((String, Int) -> Unit) = { type, id -> },
 ) {
 
-  val animeScheduleState = viewModel.animeScheduleState.value
-  val animeTopState = viewModel.animeTopState.value
-
+  val listState = rememberLazyListState()
   val snackbarHostState = remember { SnackbarHostState() }
+  val selectedType = remember { mutableStateOf(ContentType.Anime) }
   val searchQuery = remember { mutableStateOf("") }
 
   // Controlling snackbar on error. Only show one snackbar at a time with channel.
-  // Channel create something like queue, so no snackbar will be showed when one is still showing.
+  // Channel create somethign like queue, so no snackbar will be showed when one is still showing.
   val snackbarChannel = remember { Channel<String?>(Channel.CONFLATED) }
 
 
-  LaunchedEffect(viewModel) {
-    viewModel.getTodayAnimeSchedule()
-    viewModel.getTopAnimeList()
-  }
+  val contentSearchState = viewModel.contentSearchState.value
 
-//  LaunchedEffect(searchQuery.value + selectedType.value.name) {
-//    delay(1000L)
-//    viewModel.searchContentByQuery(selectedType.value, searchQuery.value)
-//    Timber.d("query $searchQuery.value type ${selectedType.value.name.lowercase()}")
-//  }
+
+  LaunchedEffect(searchQuery.value + selectedType.value.name) {
+    delay(1000L)
+    viewModel.searchContentByQuery(selectedType.value, searchQuery.value)
+    Timber.d("query $searchQuery.value type ${selectedType.value.name.lowercase()}")
+  }
 
   Scaffold(
     modifier = Modifier
@@ -82,15 +67,13 @@ fun HomeScreen(
         CustomTextField(
           modifier = Modifier
             .fillMaxWidth()
-            .padding(24.dp, 12.dp)
-            .clip(RoundedCornerShape(8.dp))
-            .clickable {
-              onSearchFieldClick()
-            },
+            .padding(24.dp, 12.dp),
           padding = PaddingValues(12.dp),
           content = {
             SearchEditText(
+              fieldValue = searchQuery.value,
               fieldPlaceholder = "Try 'One Piece'",
+              onFieldValueChange = { searchQuery.value = it }
             )
           },
           leadingIcon = {
@@ -98,10 +81,18 @@ fun HomeScreen(
               size = 16.dp,
               padding = PaddingValues(end = 8.dp)
             )
+          },
+          trailingIcon = {
+            if (searchQuery.value.isNotEmpty()) {
+              SearchTrailingIcon(
+                size = 16.dp,
+                padding = PaddingValues(start = 8.dp),
+                onClick = { searchQuery.value = "" })
+            }
           }
         )
-      }
 
+      }
 
       BackHandler(enabled = (searchQuery.value.isNotEmpty())) {
         searchQuery.value = ""
@@ -113,16 +104,31 @@ fun HomeScreen(
         modifier = Modifier.padding(bottom = 8.dp)
       )
 
-      HomeContentList(
-        animeScheduleState = animeScheduleState,
-        animeTopState = animeTopState,
-        onTopAnimeClick = onContentClick,
-        lazyColumnState = lazyColumnState
+      ChipGroup(
+        selectedType = selectedType.value,
+        onSelectedChanged = { selectedType.value = ContentType.valueOf(it) }
       )
+      ContentSearchList(
+        listState = listState,
+        state = contentSearchState,
+        onItemClick = onContentClick
+      )
+
+      if (listState.isScrolledToTheEnd()) {
+        LaunchedEffect(searchQuery.value) {
+          Timber.d("query next page with $searchQuery.value")
+          viewModel.nextContentPageByQuery(searchQuery.value, selectedType.value)
+        }
+      }
+
+      // Loading Indicator while fetching data
+//      if (animeTopState.isLoading) {
+//        CenterCircularProgressIndicator(strokeWidth = 4.dp, size = 40.dp)
+//      }
     }
 
     // Try to emmit error message to snackbarChannel if not have been handled before.
-    with(animeTopState.error.getContentIfNotHandled()) {
+    with(contentSearchState.error.getContentIfNotHandled()) {
       snackbarChannel.trySend(this)
     }
 
@@ -154,45 +160,23 @@ fun HomeScreen(
 
 @Composable
 fun SearchEditText(
-  fieldPlaceholder: String = ""
+  fieldValue: String = "",
+  fieldPlaceholder: String = "",
+  onFieldValueChange: (String) -> Unit = { }
 ) {
-  Text(
-    text = fieldPlaceholder,
-    style = TextStyle(color = MyColor.Grey, fontSize = 16.sp)
+  BasicTextField(
+    value = fieldValue,
+    onValueChange = onFieldValueChange,
+    singleLine = true,
+    cursorBrush = SolidColor(MyColor.Yellow500),
+    textStyle = TextStyle(color = MyColor.OnDarkSurface, fontSize = 16.sp),
+    modifier = Modifier.fillMaxWidth()
   )
-}
 
-@Composable
-fun SearchLeadingIcon(
-  size: Dp = 24.dp,
-  padding: PaddingValues = PaddingValues(6.dp)
-) {
-  Icon(
-    imageVector = Icons.Default.Search,
-    contentDescription = "Search",
-    modifier = Modifier.padding(padding),
-    tint = MyColor.Grey
-  )
-}
-
-@Composable
-fun SearchTrailingIcon(
-  size: Dp = 24.dp,
-  padding: PaddingValues = PaddingValues(6.dp),
-  onClick: () -> Unit
-) {
-  IconButton(
-    modifier = Modifier.then(Modifier.size(size)),
-    onClick = onClick,
-  ) {
-    Icon(
-      painter = painterResource(R.drawable.ic_close),
-      contentDescription = "Close",
-      tint = MyColor.Grey
+  if (fieldValue.isEmpty()) {
+    Text(
+      text = fieldPlaceholder,
+      style = TextStyle(color = MyColor.Grey, fontSize = 16.sp)
     )
   }
-}
-
-fun LazyListState.isScrolledToTheEnd(): Boolean {
-  return layoutInfo.visibleItemsInfo.lastOrNull()?.index == layoutInfo.totalItemsCount - 1
 }

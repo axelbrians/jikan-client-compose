@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.machina.jikan_client_compose.core.enum.ContentType
+import com.machina.jikan_client_compose.core.wrapper.Event
 import com.machina.jikan_client_compose.domain.use_case.anime_schedule.GetAnimeScheduleUseCase
 import com.machina.jikan_client_compose.domain.use_case.get_top_anime.GetTopAnimeUseCase
 import com.machina.jikan_client_compose.domain.use_case.search_content.SearchContentUseCase
@@ -61,7 +62,7 @@ class HomeViewModel @Inject constructor(
       Timber.d("search query must longer")
       currentPage = 1
       _contentSearchState.value =
-        ContentSearchState(error = "Search query must be at least 3 characters long")
+        ContentSearchState(error = Event("Search query must be at least 3 characters long"))
     }
   }
 

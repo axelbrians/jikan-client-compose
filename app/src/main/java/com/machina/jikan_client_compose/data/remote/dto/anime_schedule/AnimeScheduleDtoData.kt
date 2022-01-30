@@ -67,15 +67,11 @@ data class AnimeScheduleDtoData(
 
 fun AnimeScheduleDtoData.toAnimeSchedule(): AnimeSchedule {
   return AnimeSchedule(
-    malId,
-    url,
-    title,
-    imageUrl,
-    episodes,
-    members,
-    demographics,
-    score,
-    r18,
-    kids
+    malId = malId,
+    url = url,
+    title = title,
+    imageUrl = imageUrl,
+    score = score ?: 0.0,
+    rank = 0
   )
 }

@@ -1,11 +1,11 @@
-package com.machina.jikan_client_compose.data.remote.dto_v4.anime_top
+package com.machina.jikan_client_compose.data.remote.dto_v4.anime
 
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Genre(
+data class Theme(
   @SerialName("mal_id")
   val malId: Int = 0,
   @SerialName("type")

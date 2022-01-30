@@ -12,34 +12,7 @@ data class AnimeSchedule(
 
   val imageUrl: String = "",
 
-//  val synopsis: String = "",
+  val score: Double = 0.0,
 
-//  val type: String? = null,
-
-//  val airingStart: String = "",
-
-  val episodes: Int? = null,
-
-  val members: Int = 0,
-
-//  val genres: List<Genre> = listOf(),
-
-//  val explicitGenres: List<ExplicitGenre> = listOf(),
-
-//  val themes: List<Theme> = listOf(),
-
-  val demographics: List<Demographic> = listOf(),
-
-//  val source: String = "",
-
-//  val producers: List<Producer> = listOf(),
-
-  val score: Double? = null,
-
-//
-//  val licensors: List<Any> = listOf(),
-
-  val r18: Boolean = false,
-
-  val kids: Boolean = false
+  val rank: Int = 0
 )

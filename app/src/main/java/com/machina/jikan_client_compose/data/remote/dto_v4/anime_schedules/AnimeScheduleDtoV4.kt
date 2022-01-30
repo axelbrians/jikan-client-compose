@@ -1,13 +1,13 @@
-package com.machina.jikan_client_compose.data.remote.dto_v4.anime_top
+package com.machina.jikan_client_compose.data.remote.dto_v4.anime_schedules
 
 
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime.*
-import com.machina.jikan_client_compose.domain.model.anime.AnimeTop
+import com.machina.jikan_client_compose.domain.model.anime.AnimeSchedule
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AnimeTopDtoV4(
+data class AnimeScheduleDtoV4(
   @SerialName("mal_id")
   val malId: Int = 0,
   @SerialName("url")
@@ -78,11 +78,13 @@ data class AnimeTopDtoV4(
   val demographics: List<Demographic> = listOf()
 )
 
-fun AnimeTopDtoV4.toAnimeTop(): AnimeTop {
-  return AnimeTop(
-    malId, rank, title,
-    url, images.jpg.imageUrl, type,
-    episodes,
-    members, score ?: 0.0
+fun AnimeScheduleDtoV4.toAnimeSchedule(): AnimeSchedule {
+  return AnimeSchedule(
+    malId = malId,
+    url =  url,
+    title = title,
+    imageUrl = images.jpg.imageUrl,
+    score = score ?: 0.0,
+    rank = rank
   )
 }

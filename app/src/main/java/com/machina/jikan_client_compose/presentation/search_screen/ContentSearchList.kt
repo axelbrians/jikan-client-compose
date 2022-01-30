@@ -1,4 +1,4 @@
-package com.machina.jikan_client_compose.presentation.home_screen
+package com.machina.jikan_client_compose.presentation.search_screen
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -19,9 +19,9 @@ import com.machina.jikan_client_compose.core.enum.MangaSubType.MANGA
 import com.machina.jikan_client_compose.core.enum.MangaSubType.MANHUA
 import com.machina.jikan_client_compose.core.enum.MangaSubType.MANHWA
 import com.machina.jikan_client_compose.core.enum.MangaSubType.ONE_SHOT
-import com.machina.jikan_client_compose.presentation.home_screen.composable.ItemAnimeSearch
-import com.machina.jikan_client_compose.presentation.home_screen.composable.ItemAnimeSearchShimmer
-import com.machina.jikan_client_compose.presentation.home_screen.composable.ItemMangaSearch
+import com.machina.jikan_client_compose.presentation.search_screen.composable.ItemAnimeSearch
+import com.machina.jikan_client_compose.presentation.search_screen.composable.ItemAnimeSearchShimmer
+import com.machina.jikan_client_compose.presentation.search_screen.composable.ItemMangaSearch
 import com.machina.jikan_client_compose.presentation.home_screen.data.ContentSearchState
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.valentinilk.shimmer.ShimmerBounds

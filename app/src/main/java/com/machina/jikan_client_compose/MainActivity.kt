@@ -21,6 +21,7 @@ import com.machina.jikan_client_compose.presentation.home_screen.HomeScreen
 import com.machina.jikan_client_compose.presentation.detail_screen.data.ContentDetailsViewModel
 import com.machina.jikan_client_compose.presentation.home_screen.data.HomeViewModel
 import com.machina.jikan_client_compose.presentation.search_screen.SearchScreen
+import com.machina.jikan_client_compose.presentation.search_screen.data.SearchScreenViewModel
 import com.machina.jikan_client_compose.ui.navigation.MainNavigation.CONTENT_SEARCH_SCREEN
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -72,7 +73,7 @@ class MainActivity : ComponentActivity() {
           composable(
             CONTENT_SEARCH_SCREEN
           ) { backstack ->
-            val homeViewModel = hiltViewModel<HomeViewModel>()
+            val homeViewModel = hiltViewModel<SearchScreenViewModel>()
 
             SearchScreen(
               viewModel = homeViewModel,

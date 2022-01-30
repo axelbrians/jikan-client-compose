@@ -3,35 +3,23 @@ package com.machina.jikan_client_compose.presentation.search_screen
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.machina.jikan_client_compose.R
 import com.machina.jikan_client_compose.core.enum.ContentType
 import com.machina.jikan_client_compose.presentation.composable.ChipGroup
 import com.machina.jikan_client_compose.presentation.composable.CustomTextField
 import com.machina.jikan_client_compose.presentation.extension.isScrolledToTheEnd
-import com.machina.jikan_client_compose.presentation.home_screen.*
 import com.machina.jikan_client_compose.presentation.home_screen.data.HomeViewModel
 import com.machina.jikan_client_compose.presentation.search_screen.composable.SearchEditText
 import com.machina.jikan_client_compose.presentation.search_screen.composable.SearchLeadingIcon
 import com.machina.jikan_client_compose.presentation.search_screen.composable.SearchTrailingIcon
+import com.machina.jikan_client_compose.presentation.search_screen.data.SearchScreenViewModel
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
@@ -42,7 +30,7 @@ import timber.log.Timber
 @Composable
 fun SearchScreen(
   modifier: Modifier = Modifier,
-  viewModel: HomeViewModel,
+  viewModel: SearchScreenViewModel,
   onContentClick: ((String, Int) -> Unit) = { type, id -> },
 ) {
 

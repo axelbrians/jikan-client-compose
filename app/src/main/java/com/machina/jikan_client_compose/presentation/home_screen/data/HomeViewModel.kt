@@ -19,7 +19,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-  private val searchContentUseCase: SearchContentUseCase,
   private val getTopAnimeUseCase: GetTopAnimeUseCase,
   private val getAnimeScheduleUseCase: GetAnimeScheduleUseCase
 ) : ViewModel() {
@@ -31,12 +30,6 @@ class HomeViewModel @Inject constructor(
     mutableStateOf(AnimeScheduleState())
   val animeScheduleState : State<AnimeScheduleState> = _animeScheduleState
 
-
-  private val _contentSearchState: MutableState<ContentSearchState> =
-    mutableStateOf(ContentSearchState())
-  val contentSearchState: State<ContentSearchState> = _contentSearchState
-
-  private var currentPage = 1
 
   fun getTopAnimeList() {
     getTopAnimeUseCase().onEach {
@@ -50,39 +43,5 @@ class HomeViewModel @Inject constructor(
     getAnimeScheduleUseCase(dayInCalendar).onEach {
       _animeScheduleState.value = it
     }.launchIn(viewModelScope)
-  }
-
-  fun searchContentByQuery(contentType: ContentType, query: String) {
-    if (query.length >= 3) {
-      searchContentUseCase(contentType, query, 1).onEach { res ->
-        _contentSearchState.value = res
-        if (res.error != null) currentPage = 2
-      }.launchIn(viewModelScope)
-    } else {
-      Timber.d("search query must longer")
-      currentPage = 1
-      _contentSearchState.value =
-        ContentSearchState(error = Event("Search query must be at least 3 characters long"))
-    }
-  }
-
-  fun nextContentPageByQuery(query: String, contentType: ContentType) {
-    if (query.length >= 3) {
-      searchContentUseCase(contentType, query, currentPage).onEach { res ->
-
-        if (res.isLoading) {
-          _contentSearchState.value = _contentSearchState.value.copy(isLoading = true)
-        } else if (!res.isLoading) {
-          if (res.error != null) {
-            currentPage++
-            val temp = _contentSearchState.value.data.toMutableList()
-            temp.addAll(res.data)
-            _contentSearchState.value = ContentSearchState(temp)
-          } else {
-            _contentSearchState.value = _contentSearchState.value.copy(error = res.error)
-          }
-        }
-      }.launchIn(viewModelScope)
-    }
   }
 }

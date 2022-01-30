@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -13,6 +12,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -24,22 +25,23 @@ import com.machina.jikan_client_compose.ui.theme.MyColor
 
 @Composable
 fun SearchEditText(
-  fieldValue: String = "",
-  fieldPlaceholder: String = "",
-  onFieldValueChange: (String) -> Unit = { }
+  value: String = "",
+  placeholder: String = "",
+  focusRequester: FocusRequester = FocusRequester(),
+  onValueChange: (String) -> Unit = { }
 ) {
   BasicTextField(
-    value = fieldValue,
-    onValueChange = onFieldValueChange,
+    value = value,
+    onValueChange = onValueChange,
     singleLine = true,
     cursorBrush = SolidColor(MyColor.Yellow500),
     textStyle = TextStyle(color = MyColor.OnDarkSurface, fontSize = 16.sp),
-    modifier = Modifier.fillMaxWidth()
+    modifier = Modifier.fillMaxWidth().focusRequester(focusRequester)
   )
 
-  if (fieldValue.isEmpty()) {
+  if (value.isEmpty()) {
     Text(
-      text = fieldPlaceholder,
+      text = placeholder,
       style = TextStyle(color = MyColor.Grey, fontSize = 16.sp)
     )
   }

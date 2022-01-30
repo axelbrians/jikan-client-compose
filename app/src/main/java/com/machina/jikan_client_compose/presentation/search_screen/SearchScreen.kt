@@ -5,17 +5,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
+import coil.annotation.ExperimentalCoilApi
 import com.machina.jikan_client_compose.core.enum.ContentType
 import com.machina.jikan_client_compose.presentation.composable.ChipGroup
 import com.machina.jikan_client_compose.presentation.composable.CustomTextField
 import com.machina.jikan_client_compose.presentation.extension.isScrolledToTheEnd
-import com.machina.jikan_client_compose.presentation.home_screen.data.HomeViewModel
 import com.machina.jikan_client_compose.presentation.search_screen.composable.SearchEditText
 import com.machina.jikan_client_compose.presentation.search_screen.composable.SearchLeadingIcon
 import com.machina.jikan_client_compose.presentation.search_screen.composable.SearchTrailingIcon
@@ -25,8 +23,10 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun SearchScreen(
   modifier: Modifier = Modifier,
@@ -38,14 +38,15 @@ fun SearchScreen(
   val snackbarHostState = remember { SnackbarHostState() }
   val selectedType = remember { mutableStateOf(ContentType.Anime) }
   val searchQuery = remember { mutableStateOf("") }
-
-  // Controlling snackbar on error. Only show one snackbar at a time with channel.
-  // Channel create somethign like queue, so no snackbar will be showed when one is still showing.
+  val focusRequester = remember { FocusRequester() }
   val snackbarChannel = remember { Channel<String?>(Channel.CONFLATED) }
 
 
   val contentSearchState = viewModel.contentSearchState.value
 
+  LaunchedEffect(key1 = viewModel.hashCode()) {
+    focusRequester.requestFocus()
+  }
 
   LaunchedEffect(searchQuery.value + selectedType.value.name) {
     delay(1000L)
@@ -68,9 +69,12 @@ fun SearchScreen(
           padding = PaddingValues(12.dp),
           content = {
             SearchEditText(
-              fieldValue = searchQuery.value,
-              fieldPlaceholder = "Try 'One Piece'",
-              onFieldValueChange = { searchQuery.value = it }
+              value = searchQuery.value,
+              placeholder = "Try 'One Piece'",
+              focusRequester = focusRequester,
+              onValueChange = {
+                searchQuery.value = it
+              }
             )
           },
           leadingIcon = {
@@ -117,11 +121,6 @@ fun SearchScreen(
           viewModel.nextContentPageByQuery(searchQuery.value, selectedType.value)
         }
       }
-
-      // Loading Indicator while fetching data
-//      if (animeTopState.isLoading) {
-//        CenterCircularProgressIndicator(strokeWidth = 4.dp, size = 40.dp)
-//      }
     }
 
     // Try to emmit error message to snackbarChannel if not have been handled before.

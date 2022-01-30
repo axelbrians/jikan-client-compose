@@ -77,7 +77,7 @@ fun ContentSearchList(
       }
     }
 
-    val error = state.error.getContentIfNotHandled()
+    val error = state.error.peekContent()
     if (error != null) {
       item {
         Row(

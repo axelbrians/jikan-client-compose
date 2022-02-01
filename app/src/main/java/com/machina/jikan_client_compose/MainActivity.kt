@@ -88,7 +88,7 @@ class MainActivity : ComponentActivity() {
             arguments = detailsScreenArgs
           ) { backStack ->
             val detailsViewModel = hiltViewModel<ContentDetailsViewModel>()
-            Timber.d("contentType ${backStack.arguments?.getString("contentType")}")
+//            Timber.d("contentType ${backStack.arguments?.getString("contentType")}")
             ContentDetailsScreen(
               viewModel = detailsViewModel,
               backStack.arguments?.getString("contentType")?.replaceFirstChar { it.uppercase() },

@@ -1,11 +1,11 @@
-package com.machina.jikan_client_compose.data.remote.dto_v4.anime
+package com.machina.jikan_client_compose.data.remote.dto_v4.common
 
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Jpg(
+data class Webp(
   @SerialName("image_url")
   val imageUrl: String = "",
   @SerialName("small_image_url")

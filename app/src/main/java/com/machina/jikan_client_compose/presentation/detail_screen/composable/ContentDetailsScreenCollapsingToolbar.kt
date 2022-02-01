@@ -9,8 +9,6 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.outlined.Send
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,7 +33,8 @@ import me.onebone.toolbar.CollapsingToolbarScope
 @ExperimentalCoilApi
 @Composable
 fun CollapsingToolbarScope.ContentDetailsScreenToolbar(
-  coilPainter: ImagePainter,
+  largeCoil: ImagePainter,
+  smallCoil: ImagePainter,
   contentDetailsState: ContentDetailsState,
   toolbarScaffoldState: CollapsingToolbarScaffoldState,
   onArrowClick: () -> Boolean
@@ -70,17 +69,17 @@ fun CollapsingToolbarScope.ContentDetailsScreenToolbar(
         alpha = toolbarScaffoldState.toolbarState.progress
       },
   ) {
-    if (coilPainter.state is ImagePainter.State.Loading) {
-      CenterCircularProgressIndicator(
-        strokeWidth = 2.dp,
-        size = 20.dp,
-        color = MyColor.Yellow500
-      )
-    }
+//    if (largeCoil.state is ImagePainter.State.Loading) {
+//      CenterCircularProgressIndicator(
+//        strokeWidth = 2.dp,
+//        size = 20.dp,
+//        color = MyColor.Yellow500
+//      )
+//    }
     Box {
       Image(
-        painter = coilPainter,
-        contentDescription = "Thumbnail",
+        painter = largeCoil,
+        contentDescription = "Heading Background",
         contentScale = ContentScale.Crop,
         modifier = Modifier
           .fillMaxSize()
@@ -103,7 +102,7 @@ fun CollapsingToolbarScope.ContentDetailsScreenToolbar(
           modifier = Modifier
             .width(100.dp)
         ) {
-          if (coilPainter.state is ImagePainter.State.Loading) {
+          if (smallCoil.state is ImagePainter.State.Loading) {
             CenterCircularProgressIndicator(
               strokeWidth = 2.dp,
               size = 20.dp,
@@ -111,7 +110,7 @@ fun CollapsingToolbarScope.ContentDetailsScreenToolbar(
             )
           }
           Image(
-            painter = coilPainter,
+            painter = smallCoil,
             contentDescription = "Thumbnail",
             contentScale = ContentScale.Crop,
             modifier = Modifier

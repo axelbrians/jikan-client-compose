@@ -4,9 +4,12 @@ import com.machina.jikan_client_compose.core.DispatchersProvider
 import com.machina.jikan_client_compose.core.enum.ContentType
 import com.machina.jikan_client_compose.core.exception.MyError
 import com.machina.jikan_client_compose.core.wrapper.Resource
-import com.machina.jikan_client_compose.data.remote.dto.content_details.ContentDetailsDto
-import com.machina.jikan_client_compose.data.remote.dto.content_details.toAnimeModel
-import com.machina.jikan_client_compose.data.remote.dto.content_details.toMangaModel
+import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.AnimeDetailsDtoV4
+import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.AnimeDetailsResponseV4
+import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.toContentDetails
+import com.machina.jikan_client_compose.data.remote.dto_v4.manga_details.MangaDetailsDtoV4
+import com.machina.jikan_client_compose.data.remote.dto_v4.manga_details.MangaDetailsResponseV4
+import com.machina.jikan_client_compose.data.remote.dto_v4.manga_details.toContentDetails
 import com.machina.jikan_client_compose.data.repository.AnimeRepository
 import com.machina.jikan_client_compose.data.repository.MangaRepository
 import com.machina.jikan_client_compose.domain.model.ContentDetails
@@ -14,6 +17,7 @@ import com.machina.jikan_client_compose.presentation.detail_screen.data.ContentD
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import timber.log.Timber
 import javax.inject.Inject
 
 class GetContentDetailsUseCase @Inject constructor(
@@ -34,7 +38,7 @@ class GetContentDetailsUseCase @Inject constructor(
 
       val state = when (res) {
         is Resource.Success -> {
-          val data = resolveContentType(type, res.data)
+          val data = resolveContentType(res.data)
           ContentDetailsState(data)
         }
         is Resource.Error -> ContentDetailsState(error = res.message)
@@ -46,13 +50,23 @@ class GetContentDetailsUseCase @Inject constructor(
     }.flowOn(dispatchers.io)
   }
 
-  private fun resolveContentType(contentType: ContentType, data: ContentDetailsDto?): ContentDetails? {
-    val result = when (contentType) {
-      ContentType.Anime -> data?.toAnimeModel()
-      ContentType.Manga -> data?.toMangaModel()
+  private fun resolveContentType(data: Any?): ContentDetails? {
+    if (data is AnimeDetailsDtoV4) {
+      data.toContentDetails()
+    } else if (data is MangaDetailsDtoV4) {
+      data.toContentDetails()
+    } else {
+      null
+    }
+    val res = when (data) {
+      is AnimeDetailsDtoV4 -> data.toContentDetails()
+      is MangaDetailsDtoV4 -> data.toContentDetails()
       else -> null
     }
 
-    return result
+
+    Timber.d("res resolveContent $res")
+
+    return res
   }
 }

@@ -1,6 +1,6 @@
 package com.machina.jikan_client_compose.data.remote.dto.content_details
 
-import com.machina.jikan_client_compose.data.remote.dto.content_details.Genre
+import com.machina.jikan_client_compose.data.remote.dto_v4.anime.Broadcast
 import com.machina.jikan_client_compose.domain.model.ContentDetails
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -106,63 +106,65 @@ data class ContentDetailsDto(
 
   /* - - - - - - - - - */
 )
-
-fun ContentDetailsDto.toAnimeModel(): ContentDetails {
-  return ContentDetails(
-    malId = malId,
-    url = url,
-    title = title,
-    titleEnglish = titleEnglish,
-    titleSynonyms = titleSynonyms,
-    titleJapanese = titleJapanese,
-    status = status,
-    imageUrl = imageUrl,
-    type = type,
-
-    /* Anime Specific */
-    episodeCount = episodeCount,
-    isAiring = isAiring,
-    duration = duration,
-    ageRating = ageRating,
-    broadcast = broadcast,
-
-    genres = genres,
-    rank = rank,
-    score = score ?: 0.0,
-    scoredBy = scoredBy ?: 0,
-    popularity = popularity,
-    members = members,
-    favorites = favorites,
-    synopsis = synopsis,
-    background = background,
-  )
-}
-
-fun ContentDetailsDto.toMangaModel(): ContentDetails {
-  return ContentDetails(
-    malId = malId,
-    url = url,
-    title = title,
-    titleEnglish = titleEnglish,
-    titleSynonyms = titleSynonyms,
-    titleJapanese = titleJapanese,
-    status = status,
-    imageUrl = imageUrl,
-    type = type,
-
-    /* Manga specific */
-    isPublishing = isPublishing,
-    chapters = chapters,
-    volumes = volumes,
-
-    genres = genres,
-    rank = rank,
-    score = score ?: 0.0,
-    scoredBy = scoredBy ?: 0,
-    popularity = popularity,
-    members = members,
-    favorites = favorites,
-    synopsis = synopsis,
-    background = background,
-  )
-}
+//
+//fun ContentDetailsDto.toAnimeModel(): ContentDetails {
+//  return ContentDetails(
+//    malId = malId,
+//    url = url,
+//    title = title,
+//    titleEnglish = titleEnglish,
+//    titleSynonyms = titleSynonyms,
+//    titleJapanese = titleJapanese,
+//    status = status,
+//    imageUrl = imageUrl,
+//    type = type,
+//    source = "",
+//
+//    /* Anime Specific */
+//    episodes = episodeCount,
+//    isAiring = isAiring,
+//    duration = duration,
+//    ageRating = ageRating,
+//    broadcast = Broadcast(),
+//
+//    genres = genres,
+//    rank = rank,
+//    score = score ?: 0.0,
+//    scoredBy = scoredBy ?: 0,
+//    popularity = popularity,
+//    members = members,
+//    favorites = favorites,
+//    synopsis = synopsis,
+//    background = background,
+//  )
+//}
+//
+//fun ContentDetailsDto.toMangaModel(): ContentDetails {
+//  return ContentDetails(
+//    malId = malId,
+//    url = url,
+//    title = title,
+//    titleEnglish = titleEnglish,
+//    titleSynonyms = titleSynonyms,
+//    titleJapanese = titleJapanese,
+//    status = status,
+////    imageUrl = imageUrl,
+//    type = type,
+//    source = "",
+//
+//    /* Manga specific */
+//    isPublishing = isPublishing,
+//    chapters = chapters,
+//    volumes = volumes,
+//
+////    genres = genres,
+////    rank = rank,
+////    score = score ?: 0.0,
+////    scoredBy = scoredBy ?: 0,
+////    popularity = popularity,
+////    members = members,
+////    favorites = favorites,
+////    synopsis = synopsis,
+////    background = background,
+//  )
+//}

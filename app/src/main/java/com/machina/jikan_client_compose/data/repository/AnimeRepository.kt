@@ -4,18 +4,19 @@ import android.icu.util.Calendar
 import com.machina.jikan_client_compose.core.SafeCall
 import com.machina.jikan_client_compose.core.Endpoints
 import com.machina.jikan_client_compose.core.error.GeneralError
+import com.machina.jikan_client_compose.core.exception.MyError
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.data.remote.AnimeService
-import com.machina.jikan_client_compose.data.remote.dto.anime_schedule.AnimeScheduleDto
-import com.machina.jikan_client_compose.data.remote.dto.anime_top.AnimeTopResponse
-import com.machina.jikan_client_compose.data.remote.dto.content_details.ContentDetailsDto
 import com.machina.jikan_client_compose.data.remote.dto.content_search.ContentSearchResponse
+import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.AnimeDetailsDtoV4
+import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.AnimeDetailsResponseV4
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_schedules.AnimeScheduleResponseV4
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_top.AnimeTopResponseV4
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.util.date.*
+import timber.log.Timber
 import javax.inject.Inject
 
 class AnimeRepository @Inject constructor(
@@ -52,17 +53,25 @@ class AnimeRepository @Inject constructor(
     return safeCall<ContentSearchResponse, GeneralError>(client, request)
   }
 
-  override suspend fun getAnimeDetails(malId: Int): Resource<ContentDetailsDto> {
+  override suspend fun getAnimeDetails(malId: Int): Resource<AnimeDetailsDtoV4> {
     val request = HttpRequestBuilder().apply {
       method = HttpMethod.Get
       url {
         protocol = URLProtocol.HTTPS
-        host = Endpoints.HOST_V3
+        host = Endpoints.HOST_V4
         encodedPath = Endpoints.ANIME_DETAILS + "/$malId"
       }
     }
 
-    return safeCall<ContentDetailsDto, GeneralError>(client, request)
+    val res = safeCall<AnimeDetailsResponseV4, GeneralError>(client, request)
+
+    Timber.d("res repository ${res.data}")
+
+    return if (res is Resource.Success && res.data != null) {
+      Resource.Success(res.data.data)
+    } else {
+      Resource.Error(res.message ?: MyError.UNKNOWN_ERROR)
+    }
   }
 
   override suspend fun getAnimeSchedule(day: Int): Resource<AnimeScheduleResponseV4> {

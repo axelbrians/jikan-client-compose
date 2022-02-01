@@ -3,13 +3,17 @@ package com.machina.jikan_client_compose.data.repository
 import com.machina.jikan_client_compose.core.Endpoints
 import com.machina.jikan_client_compose.core.SafeCall
 import com.machina.jikan_client_compose.core.error.GeneralError
+import com.machina.jikan_client_compose.core.exception.MyError
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.data.remote.MangaService
 import com.machina.jikan_client_compose.data.remote.dto.content_details.ContentDetailsDto
 import com.machina.jikan_client_compose.data.remote.dto.content_search.ContentSearchResponse
+import com.machina.jikan_client_compose.data.remote.dto_v4.manga_details.MangaDetailsDtoV4
+import com.machina.jikan_client_compose.data.remote.dto_v4.manga_details.MangaDetailsResponseV4
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import timber.log.Timber
 import javax.inject.Inject
 
 class MangaRepository @Inject constructor(
@@ -32,16 +36,22 @@ class MangaRepository @Inject constructor(
     return safeCall<ContentSearchResponse, GeneralError>(client, request)
   }
 
-  override suspend fun getMangaDetails(malId: Int): Resource<ContentDetailsDto> {
+  override suspend fun getMangaDetails(malId: Int): Resource<MangaDetailsDtoV4> {
     val request = HttpRequestBuilder().apply {
       method = HttpMethod.Get
       url {
         protocol = URLProtocol.HTTPS
-        host = Endpoints.HOST_V3
+        host = Endpoints.HOST_V4
         encodedPath = Endpoints.MANGA_DETAILS + "/$malId"
       }
     }
 
-    return safeCall<ContentDetailsDto, GeneralError>(client, request)
+    val res = safeCall<MangaDetailsResponseV4, GeneralError>(client, request)
+
+    return if (res is Resource.Success && res.data != null) {
+      Resource.Success(res.data.data)
+    } else {
+      Resource.Error(res.message ?: MyError.UNKNOWN_ERROR)
+    }
   }
 }

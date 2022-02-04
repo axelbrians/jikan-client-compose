@@ -1,5 +1,8 @@
 package com.machina.jikan_client_compose.di
 
+import android.content.Context
+import com.chuckerteam.chucker.api.ChuckerCollector
+import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.machina.jikan_client_compose.core.SafeCall
 import com.machina.jikan_client_compose.core.DefaultDispatchers
 import com.machina.jikan_client_compose.core.DispatchersProvider
@@ -7,13 +10,16 @@ import com.machina.jikan_client_compose.data.repository.AnimeRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import io.ktor.client.*
 import io.ktor.client.engine.android.*
+import io.ktor.client.engine.okhttp.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.features.logging.*
 import kotlinx.coroutines.Dispatchers
+import okhttp3.OkHttpClient
 import javax.inject.Singleton
 
 @Module
@@ -34,6 +40,7 @@ class AppModule {
 
   @Provides
   @Singleton
+  @AndroidKtorClient
   fun provideKtorClient(): HttpClient {
     return HttpClient(Android) {
       engine {
@@ -56,12 +63,33 @@ class AppModule {
 
   @Provides
   @Singleton
-  fun provideCall(): SafeCall {
-    return SafeCall()
+  @OkHttpKtorClient
+  fun provideOkHttpClient(@ApplicationContext context: Context): HttpClient {
+    return HttpClient(OkHttp) {
+      engine {
+        addInterceptor(
+          ChuckerInterceptor.Builder(context)
+            .collector(ChuckerCollector(context))
+            .maxContentLength(250000L)
+            .redactHeaders(emptySet())
+            .alwaysReadResponseBody(false)
+            .build()
+        )
+
+      }
+
+      install(JsonFeature) {
+        serializer = KotlinxSerializer(kotlinx.serialization.json.Json {
+          ignoreUnknownKeys = true
+          coerceInputValues = true
+        })
+      }
+    }
   }
 
   @Provides
-  fun provideAnimeRepositoryImplKtor(client: HttpClient, call: SafeCall): AnimeRepository {
-    return AnimeRepository(client, call)
+  @Singleton
+  fun provideCall(): SafeCall {
+    return SafeCall()
   }
 }

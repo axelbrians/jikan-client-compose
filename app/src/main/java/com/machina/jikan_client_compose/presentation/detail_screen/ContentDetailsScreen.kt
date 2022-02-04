@@ -22,6 +22,7 @@ import com.machina.jikan_client_compose.presentation.composable.CenterCircularPr
 import com.machina.jikan_client_compose.presentation.detail_screen.composable.ContentDetailsScreenToolbar
 import com.machina.jikan_client_compose.presentation.detail_screen.composable.ContentDetailsSynopsis
 import com.machina.jikan_client_compose.presentation.detail_screen.data.ContentDetailsViewModel
+import com.machina.jikan_client_compose.presentation.detail_screen.three_column.ContentDetailsThreeColumnSection
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
@@ -77,6 +78,21 @@ fun ContentDetailsScreen(
         .fillMaxWidth(),
       horizontalAlignment = Alignment.Start,
     ) {
+
+      // Three Column Section
+      item(key = "three_column_section") {
+        ContentDetailsThreeColumnSection(
+          modifier = Modifier.padding(top = 12.dp, bottom = 4.dp),
+          state = contentDetailsState)
+      }
+
+
+      // Synopsis Composable
+      item(key = "content_description_composable") {
+        ContentDetailsSynopsis(state = contentDetailsState)
+      }
+
+
       // Genre FlowRow Chips
       item(key = "content_genre_chips") {
         if (genres.isNotEmpty()) {
@@ -103,11 +119,6 @@ fun ContentDetailsScreen(
             }
           }
         }
-      }
-
-      // Synopsis Composable
-      item(key = "content_description_composable") {
-        ContentDetailsSynopsis(state = contentDetailsState)
       }
 
       items(7) {

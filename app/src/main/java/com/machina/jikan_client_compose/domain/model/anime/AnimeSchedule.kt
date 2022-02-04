@@ -1,7 +1,5 @@
 package com.machina.jikan_client_compose.domain.model.anime
 
-import com.machina.jikan_client_compose.data.remote.dto.anime_schedule.*
-import kotlinx.serialization.SerialName
 
 data class AnimeSchedule(
   val malId: Int = 0,

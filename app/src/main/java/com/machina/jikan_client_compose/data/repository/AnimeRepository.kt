@@ -12,15 +12,18 @@ import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.AnimeDe
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.AnimeDetailsResponseV4
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_schedules.AnimeScheduleResponseV4
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_top.AnimeTopResponseV4
+import com.machina.jikan_client_compose.di.OkHttpKtorClient
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.util.date.*
 import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class AnimeRepository @Inject constructor(
-  private val client: HttpClient,
+  @OkHttpKtorClient private val client: HttpClient,
   private val safeCall: SafeCall
 ) : AnimeService {
 

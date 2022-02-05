@@ -69,6 +69,13 @@ data class MangaDetailsDtoV4(
 )
 
 fun MangaDetailsDtoV4.toContentDetails(): ContentDetails {
+  val combinedGenres = mutableListOf<Genre>()
+
+  combinedGenres.apply {
+    addAll(genres)
+    addAll(explicitGenres.map { it.toGenre() })
+  }
+
   return ContentDetails(
     malId = malId,
     url = url,
@@ -87,7 +94,7 @@ fun MangaDetailsDtoV4.toContentDetails(): ContentDetails {
     favorites = favorites,
     synopsis = synopsis,
     background = background,
-    genres = genres,
+    genres = combinedGenres,
     explicitGenres = explicitGenres,
     themes = themes,
     demographics = demographics,

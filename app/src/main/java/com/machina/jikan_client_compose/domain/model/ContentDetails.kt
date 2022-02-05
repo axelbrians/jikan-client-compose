@@ -35,7 +35,7 @@ data class ContentDetails(
   val isPublishing: Boolean? = null,
   val published: Published? = null,
   val authors: List<Author> = listOf(),
-  val serialization: List<Serialization> = listOf(),
+  val serializations: List<Serialization> = listOf(),
 
   /* - - - - - - - - - */
 

@@ -9,6 +9,7 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,24 +21,25 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.ImagePainter
+import coil.compose.rememberImagePainter
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
 import com.machina.jikan_client_compose.presentation.detail_screen.data.ContentDetailsState
 import com.machina.jikan_client_compose.ui.theme.*
-import me.onebone.toolbar.CollapsingToolbarScaffoldState
-import me.onebone.toolbar.CollapsingToolbarScope
+import me.onebone.toolbar.*
 
 @ExperimentalCoilApi
 @Composable
 fun CollapsingToolbarScope.ContentDetailsScreenToolbar(
-  largeCoil: ImagePainter,
-  smallCoil: ImagePainter,
-  contentDetailsState: ContentDetailsState,
-  toolbarScaffoldState: CollapsingToolbarScaffoldState,
-  onArrowClick: () -> Boolean
+  largeCoil: ImagePainter = rememberImagePainter(data = null),
+  smallCoil: ImagePainter = rememberImagePainter(data = null),
+  contentDetailsState: ContentDetailsState = ContentDetailsState(null),
+  toolbarScaffoldState: CollapsingToolbarScaffoldState = rememberCollapsingToolbarScaffoldState(),
+  onArrowClick: () -> Boolean = { false }
 ) {
   val blockerColorGradients = listOf(
     MyColor.BlackBackground.copy(alpha = 0.8F),
@@ -126,11 +128,36 @@ fun CollapsingToolbarScope.ContentDetailsScreenToolbar(
           Text(
             text = contentDetailsState.data?.title ?: "-",
             style = TextStyle(
-              color = MyColor.OnDarkSurface,
+              color = MyColor.OnDarkSurfaceLight,
               fontWeight = FontWeight.Bold,
-              fontSize = 16.sp
+              fontSize = MySize.Text20
             )
           )
+
+          with(contentDetailsState.data) {
+            this?.authors?.firstOrNull()?.let { author ->
+              Text(
+                text = author.name,
+                style = TextStyle(
+                  color = MyColor.OnDarkSurface,
+                  fontWeight = FontWeight.Bold,
+                  fontSize = MySize.Text14
+                )
+              )
+            }
+
+            this?.studios?.firstOrNull()?.let { studio ->
+              Text(
+                text = studio.name,
+                style = TextStyle(
+                  color = MyColor.OnDarkSurface,
+                  fontWeight = FontWeight.Bold,
+                  fontSize = MySize.Text14
+                )
+              )
+            }
+
+          }
           Row(verticalAlignment = Alignment.CenterVertically) {
 
             Icon(
@@ -144,7 +171,7 @@ fun CollapsingToolbarScope.ContentDetailsScreenToolbar(
             Text(
               text = contentDetailsState.data?.status ?: "-",
               style = TextStyle(
-                color = MyColor.Grey,
+                color = MyColor.OnDarkSurface,
                 fontWeight = FontWeight.Bold,
                 fontSize = 13.sp
               )
@@ -160,5 +187,23 @@ fun CollapsingToolbarScope.ContentDetailsScreenToolbar(
       imageVector = Icons.Default.ArrowBack,
       contentDescription = "Back", tint = MyColor.OnDarkSurface
     )
+  }
+}
+
+@OptIn(ExperimentalCoilApi::class)
+@Preview(widthDp = 280)
+@Composable
+fun ContentDetailsScreenCollapsingToolbarPrev() {
+  CollapsingToolbarScaffold(
+    modifier = Modifier
+      .fillMaxSize()
+      .background(MyColor.BlackBackground),
+    state = rememberCollapsingToolbarScaffoldState(),
+    scrollStrategy = ScrollStrategy.EnterAlwaysCollapsed,
+    toolbar = {
+      ContentDetailsScreenToolbar()
+    }
+  ) {
+
   }
 }

@@ -93,7 +93,12 @@ fun MangaDetailsDtoV4.toContentDetails(): ContentDetails {
     demographics = demographics,
 
     /* Manga Specific */
-
+    chapters = chapters,
+    volumes = volumes,
+    isPublishing = publishing,
+    published = published,
+    authors = authors,
+    serializations = serializations
 
   )
 }

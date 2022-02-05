@@ -15,3 +15,7 @@ data class ExplicitGenre(
   @SerialName("url")
   val url: String = ""
 )
+
+fun ExplicitGenre.toGenre(): Genre {
+  return Genre(malId, type, name, url)
+}

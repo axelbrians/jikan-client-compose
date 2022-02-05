@@ -61,7 +61,7 @@ private fun RowScope.TwoRowTextComp(
       style = TextStyle(
         fontSize = MySize.Text14,
         fontWeight = FontWeight.Normal,
-        color = MyColor.OnDarkSurfaceLight,
+        color = MyColor.OnDarkSurface,
       ))
   }
 }

@@ -15,3 +15,7 @@ data class Theme(
   @SerialName("url")
   val url: String = ""
 )
+
+fun Theme.toGenre(): Genre {
+  return Genre(malId, type, name, url)
+}

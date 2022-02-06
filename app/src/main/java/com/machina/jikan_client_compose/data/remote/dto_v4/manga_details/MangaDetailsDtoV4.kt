@@ -74,6 +74,8 @@ fun MangaDetailsDtoV4.toContentDetails(): ContentDetails {
   combinedGenres.apply {
     addAll(genres)
     addAll(explicitGenres.map { it.toGenre() })
+    addAll(themes.map { it.toGenre() })
+    addAll(demographics.map { it.toGenre() })
   }
 
   return ContentDetails(

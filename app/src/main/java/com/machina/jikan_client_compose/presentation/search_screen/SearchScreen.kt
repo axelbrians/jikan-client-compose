@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
@@ -34,10 +35,10 @@ fun SearchScreen(
   onContentClick: ((String, Int) -> Unit) = { type, id -> },
 ) {
 
+  val selectedType = rememberSaveable { mutableStateOf(ContentType.Anime) }
+  val searchQuery = rememberSaveable { mutableStateOf("") }
   val listState = rememberLazyListState()
   val snackbarHostState = remember { SnackbarHostState() }
-  val selectedType = remember { mutableStateOf(ContentType.Anime) }
-  val searchQuery = remember { mutableStateOf("") }
   val focusRequester = remember { FocusRequester() }
   val snackbarChannel = remember { Channel<String?>(Channel.CONFLATED) }
 

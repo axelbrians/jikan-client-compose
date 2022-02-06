@@ -82,6 +82,19 @@ data class AnimeDetailsDtoV4(
 )
 
 fun AnimeDetailsDtoV4.toContentDetails(): ContentDetails {
+
+  val combinedGenres = mutableListOf<Genre>()
+
+  combinedGenres.apply {
+    addAll(genres)
+    addAll(explicitGenres.map { it.toGenre() })
+    addAll(themes.map { it.toGenre() })
+    addAll(demographics.map { it.toGenre() })
+    if (ageRating.isBlank()) {
+      add(Genre(name = "Content rating: $ageRating"))
+    }
+  }
+
   return ContentDetails(
     malId = malId,
     url = url,
@@ -99,7 +112,7 @@ fun AnimeDetailsDtoV4.toContentDetails(): ContentDetails {
     favorites = favorites,
     synopsis = synopsis,
     background = background,
-    genres = genres,
+    genres = combinedGenres,
     images = images,
     explicitGenres = explicitGenres,
     themes = themes,

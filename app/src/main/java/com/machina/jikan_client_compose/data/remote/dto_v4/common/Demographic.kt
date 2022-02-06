@@ -15,3 +15,7 @@ data class Demographic(
   @SerialName("url")
   val url: String = ""
 )
+
+fun Demographic.toGenre(): Genre {
+  return Genre(malId, type, name, url)
+}

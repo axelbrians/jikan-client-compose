@@ -1,4 +1,4 @@
-package com.machina.jikan_client_compose.presentation.detail_screen.composable
+package com.machina.jikan_client_compose.presentation.detail_screen.synopsis
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween

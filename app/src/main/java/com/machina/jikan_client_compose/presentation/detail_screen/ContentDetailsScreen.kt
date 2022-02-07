@@ -19,8 +19,8 @@ import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
-import com.machina.jikan_client_compose.presentation.detail_screen.composable.ContentDetailsScreenToolbar
-import com.machina.jikan_client_compose.presentation.detail_screen.composable.ContentDetailsSynopsis
+import com.machina.jikan_client_compose.presentation.detail_screen.header.ContentDetailsScreenToolbar
+import com.machina.jikan_client_compose.presentation.detail_screen.synopsis.ContentDetailsSynopsis
 import com.machina.jikan_client_compose.presentation.detail_screen.data.ContentDetailsViewModel
 import com.machina.jikan_client_compose.presentation.detail_screen.three_column.ContentDetailsThreeColumnSection
 import com.machina.jikan_client_compose.ui.theme.MyColor

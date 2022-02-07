@@ -1,15 +1,17 @@
-package com.machina.jikan_client_compose.presentation.detail_screen.composable
+package com.machina.jikan_client_compose.presentation.detail_screen.header
 
+import androidx.compose.animation.*
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,9 +20,11 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -31,7 +35,9 @@ import com.machina.jikan_client_compose.presentation.composable.CenterCircularPr
 import com.machina.jikan_client_compose.presentation.detail_screen.data.ContentDetailsState
 import com.machina.jikan_client_compose.ui.theme.*
 import me.onebone.toolbar.*
+import kotlin.math.roundToInt
 
+@OptIn(ExperimentalAnimationApi::class)
 @ExperimentalCoilApi
 @Composable
 fun CollapsingToolbarScope.ContentDetailsScreenToolbar(
@@ -46,6 +52,8 @@ fun CollapsingToolbarScope.ContentDetailsScreenToolbar(
     MyColor.BlackBackground.copy(alpha = 0.9F),
     MyColor.BlackBackground
   )
+
+  val isTitleVisible = toolbarScaffoldState.toolbarState.progress <= 0.25
 
 
   val headerCaptionIcon: ImageVector
@@ -182,12 +190,60 @@ fun CollapsingToolbarScope.ContentDetailsScreenToolbar(
     }
   }
 
-  IconButton(onClick = { onArrowClick() }) {
-    Icon(
-      imageVector = Icons.Default.ArrowBack,
-      contentDescription = "Back", tint = MyColor.OnDarkSurface
-    )
+  Row(
+    modifier = Modifier.fillMaxWidth(),
+    verticalAlignment = Alignment.CenterVertically
+  ) {
+    IconButton(onClick = { onArrowClick() }) {
+      Icon(
+        imageVector = Icons.Default.ArrowBack,
+        contentDescription = "Back", tint = MyColor.OnDarkSurfaceLight
+      )
+    }
+
+    val density = LocalDensity.current
+    val initialOffset = with(density) {
+      40.dp.toPx().roundToInt()
+    }
+    val targetOffset = with(density) {
+      -40.dp.toPx().roundToInt()
+    }
+
+    AnimatedVisibility(
+      visible = isTitleVisible,
+      enter = slideInVertically(
+        initialOffsetY = { initialOffset },
+        animationSpec = tween(
+          durationMillis = 800,
+          delayMillis = 50,
+          easing = FastOutSlowInEasing
+        )
+      ) + fadeIn(initialAlpha = 0f),
+      exit = slideOutVertically(
+        targetOffsetY = { targetOffset },
+        animationSpec = tween(
+          durationMillis = 800,
+          delayMillis = 50,
+          easing = LinearOutSlowInEasing
+        )
+      ) + fadeOut()
+    ) {
+      Text(
+        text = contentDetailsState.data?.title ?: "-",
+        overflow = TextOverflow.Ellipsis,
+        maxLines = 1,
+        style = TextStyle(
+          color = MyColor.OnDarkSurfaceLight,
+          fontWeight = FontWeight.Bold,
+          fontSize = 20.sp
+        ),
+        modifier = Modifier.weight(1f).padding(start = 8.dp, end = 12.dp)
+      )
+    }
+
   }
+
+
 }
 
 @OptIn(ExperimentalCoilApi::class)

@@ -90,7 +90,7 @@ fun AnimeDetailsDtoV4.toContentDetails(): ContentDetails {
     addAll(explicitGenres.map { it.toGenre() })
     addAll(themes.map { it.toGenre() })
     addAll(demographics.map { it.toGenre() })
-    if (ageRating.isBlank()) {
+    if (ageRating.isNotBlank()) {
       add(Genre(name = "Content rating: $ageRating"))
     }
   }

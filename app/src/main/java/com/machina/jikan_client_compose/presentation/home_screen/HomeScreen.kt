@@ -37,6 +37,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -55,7 +56,7 @@ fun HomeScreen(
   val animeTopState = viewModel.animeTopState.value
 
   val snackbarHostState = remember { SnackbarHostState() }
-  val searchQuery = remember { mutableStateOf("") }
+
 
   // Controlling snackbar on error. Only show one snackbar at a time with channel.
   // Channel create something like queue, so no snackbar will be showed when one is still showing.
@@ -66,12 +67,6 @@ fun HomeScreen(
     viewModel.getTodayAnimeSchedule()
     viewModel.getTopAnimeList()
   }
-
-//  LaunchedEffect(searchQuery.value + selectedType.value.name) {
-//    delay(1000L)
-//    viewModel.searchContentByQuery(selectedType.value, searchQuery.value)
-//    Timber.d("query $searchQuery.value type ${selectedType.value.name.lowercase()}")
-//  }
 
   Scaffold(
     modifier = Modifier
@@ -102,11 +97,6 @@ fun HomeScreen(
             )
           }
         )
-      }
-
-
-      BackHandler(enabled = (searchQuery.value.isNotEmpty())) {
-        searchQuery.value = ""
       }
 
       Divider(

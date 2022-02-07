@@ -13,6 +13,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import coil.annotation.ExperimentalCoilApi
+import com.machina.jikan_client_compose.core.DefaultDispatchers
+import com.machina.jikan_client_compose.core.DispatchersProvider
 import com.machina.jikan_client_compose.ui.navigation.MainNavigation.CONTENT_DETAILS_SCREEN
 import com.machina.jikan_client_compose.ui.navigation.MainNavigation.HOME_SCREEN
 import com.machina.jikan_client_compose.ui.theme.JikanClientComposeTheme
@@ -26,10 +28,14 @@ import com.machina.jikan_client_compose.ui.navigation.MainNavigation.CONTENT_SEA
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.InternalCoroutinesApi
 import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 @ExperimentalCoilApi
 class MainActivity : ComponentActivity() {
+
+  @Inject
+  lateinit var dispatchers: DispatchersProvider
 
   private val detailsScreenArgs = listOf(
     navArgument(name = "contentType") {
@@ -77,6 +83,7 @@ class MainActivity : ComponentActivity() {
 
             SearchScreen(
               viewModel = homeViewModel,
+              dispatchers = dispatchers,
               onContentClick = { type, malId ->
                 navController.navigate("${CONTENT_DETAILS_SCREEN}/$type/$malId".lowercase())
                 Timber.d("navigated with ${CONTENT_DETAILS_SCREEN}/$type/$malId")

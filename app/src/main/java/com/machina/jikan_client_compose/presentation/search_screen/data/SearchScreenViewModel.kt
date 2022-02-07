@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.machina.jikan_client_compose.core.enum.ContentType
 import com.machina.jikan_client_compose.core.wrapper.Event
+import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.domain.use_case.search_content.SearchContentUseCase
 import com.machina.jikan_client_compose.presentation.home_screen.data.ContentSearchState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -43,6 +44,10 @@ class SearchScreenViewModel @Inject constructor(
   }
 
   fun nextContentPageByQuery(query: String, contentType: ContentType) {
+    if (contentSearchState.value.data.isEmpty()) {
+      return
+    }
+
     if (query.length >= 3) {
       searchContentUseCase(contentType, query, currentPage).onEach { res ->
 

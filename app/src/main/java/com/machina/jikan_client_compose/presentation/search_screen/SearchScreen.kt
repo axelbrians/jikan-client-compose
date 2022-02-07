@@ -11,6 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
+import com.machina.jikan_client_compose.core.DefaultDispatchers
+import com.machina.jikan_client_compose.core.DispatchersProvider
 import com.machina.jikan_client_compose.core.enum.ContentType
 import com.machina.jikan_client_compose.presentation.composable.ChipGroup
 import com.machina.jikan_client_compose.presentation.composable.CustomTextField
@@ -20,6 +22,8 @@ import com.machina.jikan_client_compose.presentation.search_screen.composable.Se
 import com.machina.jikan_client_compose.presentation.search_screen.composable.SearchTrailingIcon
 import com.machina.jikan_client_compose.presentation.search_screen.data.SearchScreenViewModel
 import com.machina.jikan_client_compose.ui.theme.MyColor
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
@@ -32,27 +36,28 @@ import timber.log.Timber
 fun SearchScreen(
   modifier: Modifier = Modifier,
   viewModel: SearchScreenViewModel,
+  dispatchers: DispatchersProvider,
   onContentClick: ((String, Int) -> Unit) = { type, id -> },
 ) {
 
+  val listState = rememberLazyListState()
+  val scope = rememberCoroutineScope()
+
   val selectedType = rememberSaveable { mutableStateOf(ContentType.Anime) }
   val searchQuery = rememberSaveable { mutableStateOf("") }
-  val listState = rememberLazyListState()
+
+  val job = remember { mutableStateOf<Job?>(null) }
   val snackbarHostState = remember { SnackbarHostState() }
-  val focusRequester = remember { FocusRequester() }
+  val focusRequester = remember { (FocusRequester()) }
   val snackbarChannel = remember { Channel<String?>(Channel.CONFLATED) }
+
+
 
 
   val contentSearchState = viewModel.contentSearchState.value
 
   LaunchedEffect(key1 = viewModel.hashCode()) {
     focusRequester.requestFocus()
-  }
-
-  LaunchedEffect(searchQuery.value + selectedType.value.name) {
-    delay(1000L)
-    viewModel.searchContentByQuery(selectedType.value, searchQuery.value)
-    Timber.d("query $searchQuery.value type ${selectedType.value.name.lowercase()}")
   }
 
   Scaffold(
@@ -75,6 +80,12 @@ fun SearchScreen(
               focusRequester = focusRequester,
               onValueChange = {
                 searchQuery.value = it
+                job.value?.cancel()
+                job.value = scope.launch(dispatchers.default) {
+                  delay(1000L)
+                  viewModel.searchContentByQuery(selectedType.value, searchQuery.value)
+                  Timber.d("query $searchQuery.value type ${selectedType.value.name.lowercase()}")
+                }
               }
             )
           },

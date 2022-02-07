@@ -15,6 +15,7 @@ import com.machina.jikan_client_compose.presentation.home_screen.data.ContentSea
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import timber.log.Timber
 import javax.inject.Inject
 
 class SearchContentUseCase @Inject constructor(

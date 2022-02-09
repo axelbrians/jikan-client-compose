@@ -23,6 +23,7 @@ import com.machina.jikan_client_compose.presentation.detail_screen.header.Conten
 import com.machina.jikan_client_compose.presentation.detail_screen.synopsis.ContentDetailsSynopsis
 import com.machina.jikan_client_compose.presentation.detail_screen.data.ContentDetailsViewModel
 import com.machina.jikan_client_compose.presentation.detail_screen.three_column.ContentDetailsThreeColumnSection
+import com.machina.jikan_client_compose.presentation.detail_screen.trailer_player.ContentDetailsTrailerPlayer
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
@@ -118,6 +119,16 @@ fun ContentDetailsScreen(
               }
             }
           }
+        }
+      }
+
+      // Content Trailer (if any, like TV or Movies or Anime
+      contentDetailsState.data?.trailer?.embedUrl?.let {
+        item(key = "content_trailer") {
+          ContentDetailsTrailerPlayer(
+            modifier = Modifier.padding(top = 12.dp).height(240.dp),
+            it
+          )
         }
       }
 

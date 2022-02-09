@@ -8,6 +8,8 @@ object MyColor {
   val Purple700 = Color(0xFF3700B3)
   val Teal200 = Color(0xFF03DAC5)
 
+  val Transparent = Color.Transparent
+
   val Yellow500 = Color(0xFFFEC501)
   val BlackBackground = Color(0xFF20202A)
   val BlackLighterBackground = Color(0xFF2B2B2B)

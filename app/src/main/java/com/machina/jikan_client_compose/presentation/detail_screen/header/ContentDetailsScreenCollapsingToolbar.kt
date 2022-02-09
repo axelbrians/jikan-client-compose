@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
+import com.google.accompanist.insets.statusBarsPadding
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
 import com.machina.jikan_client_compose.presentation.detail_screen.data.ContentDetailsState
 import com.machina.jikan_client_compose.ui.theme.*
@@ -72,20 +73,15 @@ fun CollapsingToolbarScope.ContentDetailsScreenToolbar(
   Box(
     modifier = Modifier
       .fillMaxWidth()
-      .height(220.dp)
+      .height(240.dp)
       .parallax(0.5f)
       .graphicsLayer {
         // change alpha of Image as the toolbar expands
         alpha = toolbarScaffoldState.toolbarState.progress
       },
   ) {
-//    if (largeCoil.state is ImagePainter.State.Loading) {
-//      CenterCircularProgressIndicator(
-//        strokeWidth = 2.dp,
-//        size = 20.dp,
-//        color = MyColor.Yellow500
-//      )
-//    }
+
+    // Parallax header background
     Box {
       Image(
         painter = largeCoil,
@@ -102,12 +98,16 @@ fun CollapsingToolbarScope.ContentDetailsScreenToolbar(
           )
       )
 
+      // Header Content
       Row(
         modifier = Modifier
           .fillMaxSize()
-          .padding(top = 52.dp, start = 16.dp, end = 16.dp, bottom = 12.dp),
+          .statusBarsPadding()
+          .then(Modifier.padding(top = 52.dp, start = 16.dp, end = 16.dp, bottom = 12.dp)),
         verticalAlignment = Alignment.CenterVertically
       ) {
+
+        // Left cover image
         Box(
           modifier = Modifier
             .width(100.dp)
@@ -128,6 +128,8 @@ fun CollapsingToolbarScope.ContentDetailsScreenToolbar(
               .clip(RoundedCornerShape(8.dp))
           )
         }
+
+        // Header right content
         Column(
           modifier = Modifier
             .fillMaxWidth()
@@ -164,8 +166,9 @@ fun CollapsingToolbarScope.ContentDetailsScreenToolbar(
                 )
               )
             }
-
           }
+
+          // Toolbar
           Row(verticalAlignment = Alignment.CenterVertically) {
 
             Icon(
@@ -190,8 +193,10 @@ fun CollapsingToolbarScope.ContentDetailsScreenToolbar(
     }
   }
 
+
+  // Toolbar
   Row(
-    modifier = Modifier.fillMaxWidth(),
+    modifier = Modifier.fillMaxWidth().statusBarsPadding(),
     verticalAlignment = Alignment.CenterVertically
   ) {
     IconButton(onClick = { onArrowClick() }) {
@@ -240,16 +245,15 @@ fun CollapsingToolbarScope.ContentDetailsScreenToolbar(
         modifier = Modifier.weight(1f).padding(start = 8.dp, end = 12.dp)
       )
     }
-
   }
-
-
 }
+
+
 
 @OptIn(ExperimentalCoilApi::class)
 @Preview(widthDp = 280)
 @Composable
-fun ContentDetailsScreenCollapsingToolbarPrev() {
+fun Preview_ContentDetailsScreenCollapsingToolbar() {
   CollapsingToolbarScaffold(
     modifier = Modifier
       .fillMaxSize()

@@ -168,7 +168,7 @@ fun CollapsingToolbarScope.ContentDetailsScreenToolbar(
             }
           }
 
-          // Toolbar
+          // Ongoing / Airing status
           Row(verticalAlignment = Alignment.CenterVertically) {
 
             Icon(

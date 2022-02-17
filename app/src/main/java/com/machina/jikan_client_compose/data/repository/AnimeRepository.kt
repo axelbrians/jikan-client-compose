@@ -8,10 +8,12 @@ import com.machina.jikan_client_compose.core.exception.MyError
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.data.remote.AnimeService
 import com.machina.jikan_client_compose.data.remote.dto.content_search.ContentSearchResponse
+import com.machina.jikan_client_compose.data.remote.dto_v4.anime_airing_popular.AnimeAiringPopularResponseV4
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.AnimeDetailsDtoV4
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.AnimeDetailsResponseV4
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_schedules.AnimeScheduleResponseV4
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_top.AnimeTopResponseV4
+import com.machina.jikan_client_compose.di.AndroidKtorClient
 import com.machina.jikan_client_compose.di.OkHttpKtorClient
 import io.ktor.client.*
 import io.ktor.client.request.*
@@ -23,11 +25,11 @@ import javax.inject.Singleton
 
 @Singleton
 class AnimeRepository @Inject constructor(
-  @OkHttpKtorClient private val client: HttpClient,
+  @AndroidKtorClient private val client: HttpClient,
   private val safeCall: SafeCall
 ) : AnimeService {
 
-  override suspend fun getTopAnimeList(page: Int): Resource<AnimeTopResponseV4> {
+  override suspend fun getTopAnimeOfAllTime(page: Int): Resource<AnimeTopResponseV4> {
     val request = HttpRequestBuilder().apply {
       method = HttpMethod.Get
       url {
@@ -39,6 +41,27 @@ class AnimeRepository @Inject constructor(
     }
 
     return safeCall<AnimeTopResponseV4, GeneralError>(client, request)
+  }
+
+  override suspend fun getAiringPopularAnime(): Resource<AnimeAiringPopularResponseV4> {
+    val request = HttpRequestBuilder().apply {
+      method = HttpMethod.Get
+      url {
+        protocol = URLProtocol.HTTPS
+        host = Endpoints.HOST_V4
+        encodedPath = Endpoints.ANIME_DETAILS
+        parameter("page", 1)
+        parameter("status", "airing")
+        parameter("order_by", "score")
+        parameter("sort", "desc")
+      }
+    }
+
+    val res = safeCall<AnimeAiringPopularResponseV4, GeneralError>(client, request)
+
+    Timber.d(res.data?.toString())
+    Timber.d(res.message?.toString())
+    return res
   }
 
   override suspend fun searchAnime(query: String, page: Int): Resource<ContentSearchResponse> {

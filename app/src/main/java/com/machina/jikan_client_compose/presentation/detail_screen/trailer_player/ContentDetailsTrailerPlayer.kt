@@ -3,42 +3,82 @@ package com.machina.jikan_client_compose.presentation.detail_screen.trailer_play
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import androidx.compose.foundation.border
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.material.Colors
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.viewinterop.AndroidView
-import timber.log.Timber
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.ImagePainter
+import coil.compose.rememberImagePainter
 
+private enum class TrailerState {
+  THUMBNAIL,
+  LOADING,
+  FINISHED
+}
+
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun ContentDetailsTrailerPlayer(
   modifier: Modifier = Modifier,
-  url: String = ""
+  trailerUrl: String = "",
+  coilPainter: ImagePainter = rememberImagePainter("")
 ) {
-  AndroidView(
-    factory = {
-      WebView(it).apply {
-        layoutParams = ViewGroup.LayoutParams(
-          ViewGroup.LayoutParams.MATCH_PARENT,
-          ViewGroup.LayoutParams.MATCH_PARENT
-        )
-        webViewClient = WebViewClient()
-        settings.javaScriptEnabled = true
-        loadUrl(url)
-      }
-    },
-    modifier = modifier
-      .fillMaxWidth(),
-    update = {
-      it.loadUrl(url)
-    }
-  )
+  val trailerState = remember { mutableStateOf(TrailerState.THUMBNAIL) }
+
+//  Box(modifier = modifier) {
+//    if (trailerState.value == TrailerState.THUMBNAIL) {
+//      Box(modifier = Modifier.fillMaxSize()) {
+//        Image(
+//          painter = coilPainter,
+//          contentDescription = "Trailer Thumbnail",
+//          contentScale = ContentScale.Crop,
+//          modifier = Modifier.fillMaxSize()
+//        )
+//
+//        TextButton(onClick = { /*TODO*/ }) {
+//
+//        }
+//      }
+//    } else {
+      AndroidView(
+        factory = {
+          WebView(it).apply {
+            layoutParams = ViewGroup.LayoutParams(
+              ViewGroup.LayoutParams.MATCH_PARENT,
+              ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            webViewClient = object : WebViewClient() {
+              override fun onPageFinished(view: WebView?, url: String?) {
+                if (trailerUrl == url) {
+                  trailerState.value = TrailerState.FINISHED
+                }
+              }
+
+              override fun onLoadResource(view: WebView?, url: String?) {
+                if (trailerUrl == url) {
+                  trailerState.value = TrailerState.LOADING
+                }
+              }
+            }
+
+            settings.javaScriptEnabled = true
+          }
+        },
+        modifier = modifier
+          .fillMaxSize(),
+        update = {
+          it.loadUrl(trailerUrl)
+        }
+      )
+//    }
+
+//  }
 }

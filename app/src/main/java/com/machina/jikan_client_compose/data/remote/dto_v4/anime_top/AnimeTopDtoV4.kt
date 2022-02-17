@@ -1,6 +1,5 @@
 package com.machina.jikan_client_compose.data.remote.dto_v4.anime_top
 
-
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime.*
 import com.machina.jikan_client_compose.data.remote.dto_v4.common.*
 import com.machina.jikan_client_compose.domain.model.anime.AnimeTop

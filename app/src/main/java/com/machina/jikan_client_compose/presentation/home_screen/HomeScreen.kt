@@ -52,6 +52,7 @@ fun HomeScreen(
   onContentClick: ((String, Int) -> Unit) = { type, id -> },
 ) {
 
+  val animeAiringPopularState = viewModel.animeAiringPopular.value
   val animeScheduleState = viewModel.animeScheduleState.value
   val animeTopState = viewModel.animeTopState.value
 
@@ -64,6 +65,7 @@ fun HomeScreen(
 
 
   LaunchedEffect(viewModel) {
+    viewModel.getAnimeAiringPopular()
     viewModel.getTodayAnimeSchedule()
     viewModel.getTopAnimeList()
   }
@@ -106,6 +108,7 @@ fun HomeScreen(
       )
 
       HomeContentList(
+        animeAiringPopularState = animeAiringPopularState,
         animeScheduleState = animeScheduleState,
         animeTopState = animeTopState,
         onTopAnimeClick = onContentClick,

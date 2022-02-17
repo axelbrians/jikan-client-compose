@@ -5,7 +5,6 @@ import com.google.common.truth.Truth.assertThat
 import com.machina.jikan_client_compose.core.DefaultDispatchers
 import com.machina.jikan_client_compose.core.wrapper.Event
 import com.machina.jikan_client_compose.core.wrapper.Resource
-import com.machina.jikan_client_compose.data.remote.dto.anime_top.AnimeTopResponse
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_top.AnimeTopResponseV4
 import com.machina.jikan_client_compose.data.repository.AnimeRepository
 import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeTopState
@@ -39,7 +38,7 @@ class GetTopAnimeUseCaseTest {
   )
 
   @ExperimentalCoroutinesApi
-  private val topAnimeUseCaseKtor by lazy { GetTopAnimeUseCase(animeRepository, testDispatchers) }
+  private val topAnimeUseCaseKtor by lazy { GetAnimeTopUseCase(animeRepository, testDispatchers) }
 
 
   @Test
@@ -49,7 +48,7 @@ class GetTopAnimeUseCaseTest {
     val expectedResult = AnimeTopState(emptyList(), false, Event(null))
 
     coEvery {
-      animeRepository.getTopAnimeList(0)
+      animeRepository.getTopAnimeOfAllTime(0)
     } returns Resource.Success(
       AnimeTopResponseV4()
     )
@@ -68,7 +67,7 @@ class GetTopAnimeUseCaseTest {
     val errorMessage = "Something went wrong"
     val expectedResult = AnimeTopState(emptyList(), false, Event(errorMessage))
 
-    coEvery { animeRepository.getTopAnimeList(0) } returns Resource.Error(errorMessage)
+    coEvery { animeRepository.getTopAnimeOfAllTime(0) } returns Resource.Error(errorMessage)
 
     // Execute
     val result = topAnimeUseCaseKtor().drop(1).first()

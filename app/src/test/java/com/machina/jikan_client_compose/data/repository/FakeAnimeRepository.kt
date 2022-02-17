@@ -22,7 +22,7 @@ class FakeAnimeRepository: AnimeService {
   var isReturnNetworkError = false
 
 
-  override suspend fun getTopAnimeList(page: Int): Resource<AnimeTopResponseV4> {
+  override suspend fun getTopAnimeOfAllTime(page: Int): Resource<AnimeTopResponseV4> {
     return if (isReturnNetworkError) {
       Resource.Error(MyError.UNKNOWN_ERROR)
     } else {

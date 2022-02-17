@@ -16,10 +16,10 @@ class SafeCall {
     client: HttpClient,
     request: HttpRequestBuilder)
   : Resource<T> {
-    try {
+    return try {
       val res = client.request<HttpResponse>(request)
 
-      return if (res.status.isSuccess()) {
+      if (res.status.isSuccess()) {
         val body = res.receive<T>()
         Resource.Success(body)
       } else {
@@ -30,7 +30,7 @@ class SafeCall {
 
       }
     } catch (e: Exception) {
-      return when (e) {
+      when (e) {
         is ClientRequestException -> Resource.Error(e.message)
         is ConnectTimeoutException -> Resource.Error(e.message ?: MyError.UNKNOWN_ERROR)
         else -> Resource.Error(MyError.UNKNOWN_ERROR)

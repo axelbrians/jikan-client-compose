@@ -20,8 +20,10 @@ import com.machina.jikan_client_compose.core.enum.ContentType
 import com.machina.jikan_client_compose.domain.model.anime.AnimeSchedule
 import com.machina.jikan_client_compose.domain.model.anime.AnimeTop
 import com.machina.jikan_client_compose.presentation.home_screen.composable.ItemAnime
+import com.machina.jikan_client_compose.presentation.home_screen.composable.ItemAnimeAiringPopular
 import com.machina.jikan_client_compose.presentation.home_screen.composable.ItemAnimeSchedule
 import com.machina.jikan_client_compose.presentation.home_screen.composable.ItemAnimeTopShimmer
+import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeAiringPopularState
 import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeScheduleState
 import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeTopState
 import com.machina.jikan_client_compose.ui.theme.MyColor
@@ -33,6 +35,7 @@ import com.valentinilk.shimmer.unclippedBoundsInWindow
 @ExperimentalCoilApi
 @Composable
 fun HomeContentList(
+  animeAiringPopularState: AnimeAiringPopularState = AnimeAiringPopularState(),
   animeScheduleState: AnimeScheduleState = AnimeScheduleState(),
   animeTopState: AnimeTopState = AnimeTopState(),
   lazyColumnState: LazyListState = rememberLazyListState(),
@@ -43,6 +46,57 @@ fun HomeContentList(
   LazyColumn (
     state = lazyColumnState
   ) {
+
+    // Start of Anime Airing Today
+    item(key = "anime_airing_popular_list") {
+      Row(
+        modifier = Modifier.padding(start = 18.dp, end = 18.dp, bottom = 4.dp),
+        verticalAlignment = Alignment.CenterVertically
+      ) {
+        Text(
+          modifier = Modifier.weight(1f),
+          text = "Currently popular",
+          style = TextStyle(
+            color = MyColor.Yellow500,
+            fontWeight = FontWeight.Bold,
+            fontSize = 14.sp
+          )
+        )
+
+        IconButton(onClick = { }) {
+          Icon(
+            imageVector = Icons.Default.ArrowForward,
+            contentDescription = "See all",
+            tint = MyColor.Grey
+          )
+        }
+      }
+
+
+      val shimmerInstance = rememberShimmer(shimmerBounds = ShimmerBounds.Custom)
+
+      LazyRow(
+        contentPadding = PaddingValues(12.dp, 0.dp, 12.dp, 0.dp),
+        modifier = Modifier.onGloballyPositioned { layoutCoordinates ->
+          val position = layoutCoordinates.unclippedBoundsInWindow()
+          shimmerInstance.updateBounds(position)
+        }
+      ) {
+        if (animeAiringPopularState.isLoading) {
+          showShimmerPlaceholder(shimmerInstance)
+        } else {
+          items(animeAiringPopularState.data, key = { item -> item.malId }) { anime ->
+            ItemAnimeAiringPopular(
+              modifier = Modifier
+                .width(160.dp)
+                .padding(12.dp, 0.dp),
+              anime = anime,
+              onItemClick = { onTopAnimeClick(ContentType.Anime.name, anime.malId) }
+            )
+          }
+        }
+      }
+    }
 
     // Start of Anime Airing Today
     item(key = "anime_schedule_list") {

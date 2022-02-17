@@ -84,136 +84,93 @@ fun ContentDetailsScreen(
       )
     }
   } else {
-    if (contentDetailsState.data != null) {
-      CollapsingToolbarScaffold(
+    CollapsingToolbarScaffold(
+      modifier = Modifier
+        .fillMaxSize()
+        .background(MyColor.BlackBackground),
+      state = toolbarScaffoldState,
+      scrollStrategy = ScrollStrategy.ExitUntilCollapsed,
+      toolbar = {
+        ContentDetailsScreenToolbar(
+          largeCoil = largeImageCoil,
+          smallCoil = smallImageCoil,
+          contentDetailsState = contentDetailsState,
+          toolbarScaffoldState = toolbarScaffoldState,
+          onArrowClick = onBackPressed
+        )
+      }
+    ) {
+      LazyColumn(
         modifier = Modifier
-          .fillMaxSize()
-          .background(MyColor.BlackBackground),
-        state = toolbarScaffoldState,
-        scrollStrategy = ScrollStrategy.ExitUntilCollapsed,
-        toolbar = {
-          ContentDetailsScreenToolbar(
-            largeCoil = largeImageCoil,
-            smallCoil = smallImageCoil,
-            contentDetailsState = contentDetailsState,
-            toolbarScaffoldState = toolbarScaffoldState,
-            onArrowClick = onBackPressed
-          )
-        }
+          .fillMaxWidth(),
+        horizontalAlignment = Alignment.Start,
       ) {
-        SwipeRefresh(
-          state = rememberSwipeRefreshState(isRefreshing = viewModel.isRefreshing.value),
-          onRefresh = { viewModel.getContentDetails(contentType, malId, true) }
-        ) {
-          LazyColumn(
-            modifier = Modifier
-              .fillMaxWidth(),
-            horizontalAlignment = Alignment.Start,
-          ) {
 
-            // Three Column Section
-            item(key = "three_column_section") {
-              ContentDetailsThreeColumnSection(
-                modifier = Modifier.padding(top = 12.dp, bottom = 4.dp),
-                state = contentDetailsState)
-            }
+        // Three Column Section
+        item(key = "three_column_section") {
+          ContentDetailsThreeColumnSection(
+            modifier = Modifier.padding(top = 12.dp, bottom = 4.dp),
+            state = contentDetailsState)
+        }
 
 
-            // Synopsis Composable
-            item(key = "content_description_composable") {
-              ContentDetailsSynopsis(state = contentDetailsState)
-            }
+        // Synopsis Composable
+        item(key = "content_description_composable") {
+          ContentDetailsSynopsis(state = contentDetailsState)
+        }
 
 
-            // Genre FlowRow Chips
-            item(key = "content_genre_chips") {
-              if (genres.isNotEmpty()) {
-                LazyRow(
-                  contentPadding = PaddingValues(horizontal = 10.dp),
-                  horizontalArrangement = Arrangement.Start
+        // Genre FlowRow Chips
+        item(key = "content_genre_chips") {
+          if (genres.isNotEmpty()) {
+            LazyRow(
+              contentPadding = PaddingValues(horizontal = 10.dp),
+              horizontalArrangement = Arrangement.Start
+            ) {
+              this.items(genres) { genre ->
+                Surface(
+                  modifier = Modifier.padding(vertical = 4.dp, horizontal = 6.dp),
+                  shape = RoundedCornerShape(16.dp),
+                  color = MyColor.Yellow500,
                 ) {
-                  this.items(genres) { genre ->
-                    Surface(
-                      modifier = Modifier.padding(vertical = 4.dp, horizontal = 6.dp),
-                      shape = RoundedCornerShape(16.dp),
-                      color = MyColor.Yellow500,
-                    ) {
-                      Text(
-                        text = genre.name,
-                        style = TextStyle(
-                          color = MyColor.BlackBackground,
-                          fontSize = 13.sp,
-                          fontWeight = FontWeight.SemiBold
-                        ),
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
-                      )
-                    }
-                  }
+                  Text(
+                    text = genre.name,
+                    style = TextStyle(
+                      color = MyColor.BlackBackground,
+                      fontSize = 13.sp,
+                      fontWeight = FontWeight.SemiBold
+                    ),
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
+                  )
                 }
               }
             }
-
-            // Content Trailer (if any, like TV or Movies or Anime
-            contentDetailsState.data?.trailer?.embedUrl?.let {
-              item(key = "content_trailer") {
-                ContentDetailsTrailerPlayer(
-                  modifier = Modifier
-                    .padding(top = 12.dp)
-                    .height(240.dp),
-                  it
-                )
-              }
-            }
-
-            items(7) {
-              Text(
-                text = "Anime Detail's",
-                style = TextStyle(
-                  color = MyColor.OnDarkSurface,
-                  fontWeight = FontWeight.Bold,
-                  fontSize = 20.sp
-                ),
-                modifier = Modifier.height(220.dp)
-              )
-            }
           }
         }
-      }
-    } else {
-      SwipeRefresh(
-        state = rememberSwipeRefreshState(isRefreshing = viewModel.isRefreshing.value),
-        onRefresh = { viewModel.getContentDetails(contentType, malId, true) }
-      ) {
-        Column(
-          modifier = Modifier
-            .fillMaxSize()
-            .background(MyColor.BlackBackground)
-            .verticalScroll(state = rememberScrollState())
-        ) {
-          Row(
-            modifier = Modifier.fillMaxWidth().statusBarsPadding(),
-            verticalAlignment = Alignment.CenterVertically
-          ) {
-            IconButton(onClick = { onBackPressed() }) {
-              Icon(
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = "Back", tint = MyColor.OnDarkSurfaceLight
-              )
-            }
-            Text(
-              text = "",
-              overflow = TextOverflow.Ellipsis,
-              maxLines = 1,
-              style = TextStyle(
-                color = MyColor.OnDarkSurfaceLight,
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
-              ),
+
+        // Content Trailer (if any, like TV or Movies or Anime
+        contentDetailsState.data?.trailer?.embedUrl?.let {
+          item(key = "content_trailer") {
+            ContentDetailsTrailerPlayer(
               modifier = Modifier
-                .weight(1f)
-                .padding(start = 8.dp, end = 12.dp)
+                .padding(top = 12.dp)
+                .height(240.dp)
+                .fillMaxWidth(),
+              it
             )
           }
+        }
+
+        items(7) {
+          Text(
+            text = "Anime Detail's",
+            style = TextStyle(
+              color = MyColor.OnDarkSurface,
+              fontWeight = FontWeight.Bold,
+              fontSize = 20.sp
+            ),
+            modifier = Modifier.height(220.dp)
+          )
         }
       }
     }

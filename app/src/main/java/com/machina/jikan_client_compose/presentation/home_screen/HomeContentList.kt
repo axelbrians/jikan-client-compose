@@ -1,6 +1,13 @@
 package com.machina.jikan_client_compose.presentation.home_screen
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
+import androidx.compose.foundation.interaction.DragInteraction
+import androidx.compose.foundation.interaction.Interaction
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.CircleShape
@@ -9,6 +16,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,6 +40,7 @@ import coil.compose.rememberImagePainter
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.calculateCurrentOffsetForPage
+import com.google.accompanist.pager.rememberPagerState
 import com.machina.jikan_client_compose.core.enum.ContentType
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
 import com.machina.jikan_client_compose.presentation.home_screen.composable.ItemAnime
@@ -47,6 +56,7 @@ import com.valentinilk.shimmer.Shimmer
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
 import com.valentinilk.shimmer.unclippedBoundsInWindow
+import timber.log.Timber
 import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalCoilApi::class)
@@ -80,107 +90,105 @@ fun HomeContentList(
     state = lazyColumnState
   ) {
 
-    item(key = "horizontal_pager_demo") {
-      HorizontalPager(
-        modifier = Modifier
-          .fillMaxWidth()
-          .height(280.dp),
-        count = animeAiringPopularState.data.size,
-        itemSpacing = 12.dp,
-        contentPadding = PaddingValues(horizontal = 48.dp),
-        key = { page -> animeAiringPopularState.data[page].malId }
-      ) { page ->
-        val data = animeAiringPopularState.data[page]
-        val imagePainter = rememberImagePainter(data = data.imageUrl)
-        Surface(
-          color = Color.Transparent,
-          modifier = Modifier
-            .graphicsLayer {
-              // Calculate the absolute offset for the current page from the
-              // scroll position. We use the absolute value which allows us to mirror
-              // any effects for both directions
-              val pageOffset = calculateCurrentOffsetForPage(page).absoluteValue
-
-              // We animate the scaleX + scaleY, between 85% and 100%
-              lerp(
-                start = 0.85f,
-                stop = 1f,
-                fraction = 1f - pageOffset.coerceIn(0f, 1f)
-              ).also { scale ->
-                scaleX = scale
-                scaleY = scale
-              }
-
-              // We animate the alpha, between 50% and 100%
-              alpha = lerp(
-                start = 0.5f,
-                stop = 1f,
-                fraction = 1f - pageOffset.coerceIn(0f, 1f)
-              )
-            }
-            .fillMaxSize()
-            .aspectRatio(1.3f)
-        ) {
-          ItemAnimeHorizontalPager(
-            modifier = Modifier,
-            data = data,
-            imagePainter = imagePainter,
-            onClick = { onTopAnimeClick(ContentType.Anime.name, data.malId) })
-        }
-      }
-    }
-
-
     // Start of Currently popular anime
-    item(key = "anime_airing_popular_list") {
-      Row(
-        modifier = Modifier.padding(start = 18.dp, end = 18.dp, bottom = 4.dp),
-        verticalAlignment = Alignment.CenterVertically
+    item(key = "horizontal_pager_demo") {
+      val pagerState = rememberPagerState()
+      val itemCount = animeAiringPopularState.data.size.coerceAtMost(7)
+      Box(
+        modifier = Modifier.fillMaxWidth()
       ) {
-        Text(
-          modifier = Modifier.weight(1f),
-          text = "Currently popular",
-          style = TextStyle(
-            color = MyColor.Yellow500,
-            fontWeight = FontWeight.Bold,
-            fontSize = 14.sp
-          )
-        )
+        HorizontalPager(
+          modifier = Modifier
+            .fillMaxWidth()
+            .height(280.dp),
+          state = pagerState,
+          count = itemCount,
+          itemSpacing = 12.dp,
+          contentPadding = PaddingValues(horizontal = 48.dp),
+          key = { page -> animeAiringPopularState.data[page].malId }
+        ) { page ->
+          val data = animeAiringPopularState.data[page]
+          val imagePainter = rememberImagePainter(data = data.imageUrl)
+          Surface(
+            color = Color.Transparent,
+            modifier = Modifier
+              .graphicsLayer {
+                // Calculate the absolute offset for the current page from the
+                // scroll position. We use the absolute value which allows us to mirror
+                // any effects for both directions
+                val pageOffset = calculateCurrentOffsetForPage(page).absoluteValue
+                // We animate the scaleX + scaleY, between 85% and 100%
+                lerp(
+                  start = 0.85f,
+                  stop = 1f,
+                  fraction = 1f - pageOffset.coerceIn(0f, 1f)
+                ).also { scale ->
+                  scaleX = scale
+                  scaleY = scale
+                }
 
-        IconButton(onClick = { }) {
-          Icon(
-            imageVector = Icons.Default.ArrowForward,
-            contentDescription = "See all",
-            tint = MyColor.Grey
-          )
+                // We animate the alpha, between 50% and 100%
+                alpha = lerp(
+                  start = 0.5f,
+                  stop = 1f,
+                  fraction = 1f - pageOffset.coerceIn(0f, 1f)
+                )
+              }
+              .fillMaxSize()
+              .aspectRatio(1.3f)
+          ) {
+            ItemAnimeHorizontalPager(
+              modifier = Modifier,
+              data = data,
+              imagePainter = imagePainter,
+              onClick = { onTopAnimeClick(ContentType.Anime.name, data.malId) })
+          }
         }
-      }
 
+        Row(
+          modifier = Modifier.align(Alignment.BottomCenter),
+          horizontalArrangement = Arrangement.Center,
+          verticalAlignment = Alignment.CenterVertically
+        ) {
+          repeat(itemCount) {
 
-      val shimmerInstance = rememberShimmer(shimmerBounds = ShimmerBounds.Custom)
+            val minWidth = 8.dp
+            val maxWidth = 24.dp
+            val rangeWidth = maxWidth - minWidth
+            val targetPage = pagerState.targetPage
+            val currentPage = pagerState.currentPage
+            val currentPageOffset = pagerState.currentPageOffset.absoluteValue
+            val targetPageOffset = ((currentPage + pagerState.currentPageOffset) - targetPage).absoluteValue
 
-      LazyRow(
-        contentPadding = PaddingValues(12.dp, 0.dp, 12.dp, 0.dp),
-        modifier = Modifier.onGloballyPositioned { layoutCoordinates ->
-          val position = layoutCoordinates.unclippedBoundsInWindow()
-          shimmerInstance.updateBounds(position)
-        }
-      ) {
-        if (animeAiringPopularState.isLoading) {
-          showShimmerPlaceholder(shimmerInstance)
-        } else {
-          items(animeAiringPopularState.data, key = { item -> item.malId }) { anime ->
-            ItemAnimeAiringPopular(
-              modifier = Modifier
-                .width(160.dp)
-                .padding(12.dp, 0.dp),
-              anime = anime,
-              onItemClick = { onTopAnimeClick(ContentType.Anime.name, anime.malId) }
+            val animateWidth = when(it) {
+              currentPage -> minWidth + (rangeWidth * (1f - currentPageOffset.coerceIn(0f, 1f)))
+              targetPage -> minWidth + (rangeWidth * (1f - targetPageOffset.coerceIn(0f, 1f)))
+              else -> minWidth
+            }
+            val animateColor = animateColorAsState(
+              targetValue = if (it == pagerState.currentPage) {
+                MyColor.Yellow500
+              } else {
+                MyColor.Grey
+              },
+              animationSpec = tween(
+                durationMillis = 400,
+                easing = LinearOutSlowInEasing
+              )
             )
+            Surface(
+              modifier = Modifier
+                .padding(horizontal = 2.dp)
+                .width(animateWidth)
+                .height(8.dp),
+              color = animateColor.value,
+              shape = RoundedCornerShape(50f)
+            ) { }
           }
         }
       }
     }
+    /* End of Currently Popular Anime */
 
     // Start of Anime Airing Today
     item(key = "anime_schedule_list") {

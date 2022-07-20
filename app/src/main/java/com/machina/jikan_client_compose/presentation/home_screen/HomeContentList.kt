@@ -24,8 +24,9 @@ import com.google.accompanist.pager.rememberPagerState
 import com.machina.jikan_client_compose.core.enum.ContentType
 import com.machina.jikan_client_compose.presentation.home_screen.anime_popular_current.AnimeAiringPopularHorizontalPager
 import com.machina.jikan_client_compose.presentation.home_screen.anime_popular_current.state.AnimeAiringPopularState
-import com.machina.jikan_client_compose.presentation.home_screen.composable.ItemAnime
-import com.machina.jikan_client_compose.presentation.home_screen.composable.ItemAnimeSchedule
+import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeHorizontalContentState
+import com.machina.jikan_client_compose.presentation.home_screen.view_holder.ItemVerticalAnime
+import com.machina.jikan_client_compose.presentation.home_screen.view_holder.ItemAnimeSchedule
 import com.machina.jikan_client_compose.presentation.home_screen.view_holder.ItemAnimeTopShimmer
 import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeScheduleState
 import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeTopState
@@ -39,14 +40,16 @@ import com.valentinilk.shimmer.unclippedBoundsInWindow
 @ExperimentalCoilApi
 @Composable
 fun HomeContentList(
+  modifier: Modifier = Modifier,
   animeAiringPopularState: AnimeAiringPopularState = AnimeAiringPopularState(),
-  animeScheduleState: AnimeScheduleState = AnimeScheduleState(),
-  animeTopState: AnimeTopState = AnimeTopState(),
+  animeScheduleState: AnimeHorizontalContentState = AnimeHorizontalContentState(),
+  animeTopState: AnimeHorizontalContentState = AnimeHorizontalContentState(),
   lazyColumnState: LazyListState = rememberLazyListState(),
   onTopAnimeClick: (String, Int) -> Unit
 ) {
 
   LazyColumn(
+    modifier = modifier,
     state = lazyColumnState
   ) {
 
@@ -56,11 +59,14 @@ fun HomeContentList(
       val pagerState = rememberPagerState()
       val itemCount = animeAiringPopularState.data.size.coerceAtMost(7)
       AnimeAiringPopularHorizontalPager(
-        modifier = Modifier.onGloballyPositioned { layoutCoordinates ->
-          val position = layoutCoordinates.unclippedBoundsInWindow()
-          shimmerInstance.updateBounds(position)
-        },
+        modifier = Modifier
+          .padding(top = 8.dp)
+          .onGloballyPositioned { layoutCoordinates ->
+            val position = layoutCoordinates.unclippedBoundsInWindow()
+            shimmerInstance.updateBounds(position)
+          },
         pagerState = pagerState,
+        animeAiringPopularState = animeAiringPopularState,
         data = animeAiringPopularState.data.slice(0 until itemCount),
         shimmerInstance = shimmerInstance,
         onItemClick = onTopAnimeClick
@@ -70,29 +76,10 @@ fun HomeContentList(
 
     /* Start of Anime Airing Today */
     item(key = "anime_schedule_list") {
-      Row(
-        modifier = Modifier.padding(start = 18.dp, end = 18.dp, bottom = 4.dp),
-        verticalAlignment = Alignment.CenterVertically
-      ) {
-        Text(
-          modifier = Modifier.weight(1f),
-          text = "Airing today",
-          style = TextStyle(
-            color = MyColor.Yellow500,
-            fontWeight = FontWeight.Bold,
-            fontSize = 14.sp
-          )
-        )
-
-        IconButton(onClick = { }) {
-          Icon(
-            imageVector = Icons.Default.ArrowForward,
-            contentDescription = "See all",
-            tint = MyColor.Grey
-          )
-        }
-      }
-
+      HorizontalContentHeader(
+        title = "Airing today",
+        onButtonClick = { }
+      )
 
       val shimmerInstance = rememberShimmer(shimmerBounds = ShimmerBounds.Custom)
 
@@ -106,13 +93,10 @@ fun HomeContentList(
         if (animeScheduleState.isLoading) {
           showShimmerPlaceholder(shimmerInstance)
         } else {
-          items(animeScheduleState.data, key = { item -> item.malId }) { anime ->
-            ItemAnimeSchedule(
-              modifier = Modifier
-                .width(160.dp)
-                .padding(12.dp, 0.dp),
-              anime = anime,
-              onItemClick = { onTopAnimeClick(ContentType.Anime.name, anime.malId) }
+          items(animeScheduleState.data, key = { item -> item.malId }) { data ->
+            ItemVerticalAnime(
+              anime = data,
+              onItemClick = { onTopAnimeClick(ContentType.Anime.name, data.malId) }
             )
           }
         }
@@ -123,28 +107,10 @@ fun HomeContentList(
 
     // Start of Top Anime of All Times
     item(key = "anime_top_list") {
-      Row(
-        modifier = Modifier.padding(start = 18.dp, end = 18.dp, bottom = 4.dp),
-        verticalAlignment = Alignment.CenterVertically
-      ) {
-        Text(
-          modifier = Modifier.weight(1f),
-          text = "Top Anime of All Times",
-          style = TextStyle(
-            color = MyColor.Yellow500,
-            fontWeight = FontWeight.Bold,
-            fontSize = 14.sp
-          )
-        )
-
-        IconButton(onClick = { }) {
-          Icon(
-            imageVector = Icons.Default.ArrowForward,
-            contentDescription = "See all",
-            tint = MyColor.Grey
-          )
-        }
-      }
+      HorizontalContentHeader(
+        title = "Top Anime of All Times",
+        onButtonClick = { }
+      )
 
       val shimmerInstance = rememberShimmer(shimmerBounds = ShimmerBounds.Custom)
 
@@ -158,13 +124,10 @@ fun HomeContentList(
         if (animeTopState.isLoading) {
           showShimmerPlaceholder(shimmerInstance)
         } else {
-          items(animeTopState.data, key = { item -> item.malId }) { anime ->
-            ItemAnime(
-              modifier = Modifier
-                .width(160.dp)
-                .padding(12.dp, 0.dp),
-              anime = anime,
-              onItemClick = { onTopAnimeClick(ContentType.Anime.name, anime.malId) }
+          items(animeTopState.data, key = { item -> item.malId }) { data ->
+            ItemVerticalAnime(
+              anime = data,
+              onItemClick = { onTopAnimeClick(ContentType.Anime.name, data.malId) }
             )
           }
         }
@@ -174,6 +137,35 @@ fun HomeContentList(
     // End of Top Anime of All Times
 
 
+  }
+}
+
+@Composable
+private fun HorizontalContentHeader(
+  title: String,
+  onButtonClick: () -> Unit
+) {
+  Row(
+    modifier = Modifier.padding(start = 18.dp, end = 18.dp, bottom = 4.dp),
+    verticalAlignment = Alignment.CenterVertically
+  ) {
+    Text(
+      modifier = Modifier.weight(1f),
+      text = title,
+      style = TextStyle(
+        color = MyColor.Yellow500,
+        fontWeight = FontWeight.Bold,
+        fontSize = 16.sp
+      )
+    )
+
+    IconButton(onClick = onButtonClick) {
+      Icon(
+        imageVector = Icons.Default.ArrowForward,
+        contentDescription = "See all",
+        tint = MyColor.Grey
+      )
+    }
   }
 }
 

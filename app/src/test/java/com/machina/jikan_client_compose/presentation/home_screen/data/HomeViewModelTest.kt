@@ -1,7 +1,6 @@
 package com.machina.jikan_client_compose.presentation.home_screen.data
 
-import com.machina.jikan_client_compose.domain.use_case.search_content.SearchContentUseCase
-import org.junit.Assert.*
+import com.machina.jikan_client_compose.presentation.home_screen.viewmodel.HomeViewModel
 
 import org.junit.After
 import org.junit.Before

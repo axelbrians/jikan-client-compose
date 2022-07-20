@@ -1,44 +1,27 @@
 package com.machina.jikan_client_compose.presentation.home_screen
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
-import com.machina.jikan_client_compose.R
-import com.machina.jikan_client_compose.core.enum.ContentType.Anime
-import com.machina.jikan_client_compose.core.enum.ContentType.valueOf
 import com.machina.jikan_client_compose.ui.theme.*
-import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
-import com.machina.jikan_client_compose.presentation.composable.ChipGroup
 import com.machina.jikan_client_compose.presentation.composable.CustomTextField
 import com.machina.jikan_client_compose.presentation.home_screen.composable.SearchEditText
-import com.machina.jikan_client_compose.presentation.home_screen.data.HomeViewModel
+import com.machina.jikan_client_compose.presentation.home_screen.viewmodel.HomeViewModel
 import com.machina.jikan_client_compose.presentation.search_screen.composable.SearchLeadingIcon
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @OptIn(ExperimentalMaterialApi::class)
 @InternalCoroutinesApi
@@ -103,8 +86,7 @@ fun HomeScreen(
 
       Divider(
         color = MyColor.BlackLighterBackground,
-        thickness = 1.dp,
-        modifier = Modifier.padding(bottom = 8.dp)
+        thickness = 1.dp
       )
 
       HomeContentList(
@@ -128,7 +110,8 @@ fun HomeScreen(
         val result = if (error != null) {
           snackbarHostState.showSnackbar(
             message = error,
-            actionLabel = "Dismiss"
+            actionLabel = "Dismiss",
+            duration = SnackbarDuration.Long
           )
         } else {
           null

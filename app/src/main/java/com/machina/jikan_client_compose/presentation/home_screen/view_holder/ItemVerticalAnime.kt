@@ -1,4 +1,4 @@
-package com.machina.jikan_client_compose.presentation.home_screen.composable
+package com.machina.jikan_client_compose.presentation.home_screen.view_holder
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -20,15 +20,16 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
 import com.machina.jikan_client_compose.domain.model.anime.AnimeTop
+import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalModel
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
 import com.machina.jikan_client_compose.ui.theme.MyColor
 
 
 @ExperimentalCoilApi
 @Composable
-fun ItemAnime(
-  modifier: Modifier = Modifier,
-  anime: AnimeTop,
+fun ItemVerticalAnime(
+  modifier: Modifier = Modifier.width(160.dp).padding(12.dp, 0.dp),
+  anime: AnimeVerticalModel,
   onItemClick: () -> Unit
 ) {
 
@@ -70,7 +71,7 @@ fun ItemAnime(
     Text(
       text = anime.title,
       modifier = Modifier.padding(0.dp, 6.dp, 0.dp, 0.dp),
-      maxLines = 3,
+      maxLines = 2,
       overflow = TextOverflow.Ellipsis,
       style = TextStyle(
         color = MyColor.OnDarkSurface,
@@ -95,7 +96,8 @@ fun ItemAnime(
         text = " ",
         style = TextStyle(
           fontSize = 14.sp,
-          color = MyColor.OnDarkSurface)
+          color = MyColor.OnDarkSurface
+        )
       )
     }
   }

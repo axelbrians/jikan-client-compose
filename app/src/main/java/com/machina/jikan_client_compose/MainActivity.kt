@@ -1,28 +1,20 @@
 package com.machina.jikan_client_compose
 
-import android.icu.util.Calendar
 import android.os.Bundle
 import android.view.Window
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.machina.jikan_client_compose.core.DefaultDispatchers
 import com.machina.jikan_client_compose.core.DispatchersProvider
 import com.machina.jikan_client_compose.ui.navigation.MainNavigation.CONTENT_DETAILS_SCREEN
 import com.machina.jikan_client_compose.ui.navigation.MainNavigation.HOME_SCREEN
@@ -30,7 +22,7 @@ import com.machina.jikan_client_compose.ui.theme.JikanClientComposeTheme
 import com.machina.jikan_client_compose.presentation.detail_screen.ContentDetailsScreen
 import com.machina.jikan_client_compose.presentation.home_screen.HomeScreen
 import com.machina.jikan_client_compose.presentation.detail_screen.data.ContentDetailsViewModel
-import com.machina.jikan_client_compose.presentation.home_screen.data.HomeViewModel
+import com.machina.jikan_client_compose.presentation.home_screen.viewmodel.HomeViewModel
 import com.machina.jikan_client_compose.presentation.search_screen.SearchScreen
 import com.machina.jikan_client_compose.presentation.search_screen.data.SearchScreenViewModel
 import com.machina.jikan_client_compose.ui.navigation.MainNavigation.CONTENT_SEARCH_SCREEN

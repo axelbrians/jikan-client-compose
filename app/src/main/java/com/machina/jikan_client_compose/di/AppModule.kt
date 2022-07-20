@@ -40,11 +40,10 @@ class AppModule {
 
   @Provides
   @Singleton
-  @AndroidKtorClient
+//  @AndroidKtorClient
   fun provideKtorClient(): HttpClient {
     return HttpClient(Android) {
       engine {
-        // this: AndroidEngineConfig
         connectTimeout = 15_000
         socketTimeout = 100_000
       }
@@ -63,7 +62,7 @@ class AppModule {
 
   @Provides
   @Singleton
-  @OkHttpKtorClient
+  @AndroidKtorClient
   fun provideOkHttpClient(@ApplicationContext context: Context): HttpClient {
     return HttpClient(OkHttp) {
       engine {
@@ -72,7 +71,7 @@ class AppModule {
             .collector(ChuckerCollector(context))
             .maxContentLength(250000L)
             .redactHeaders(emptySet())
-            .alwaysReadResponseBody(false)
+            .alwaysReadResponseBody(true)
             .build()
         )
 

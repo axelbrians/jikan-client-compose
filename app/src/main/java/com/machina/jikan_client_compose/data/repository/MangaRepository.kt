@@ -10,6 +10,7 @@ import com.machina.jikan_client_compose.data.remote.dto.content_details.ContentD
 import com.machina.jikan_client_compose.data.remote.dto.content_search.ContentSearchResponse
 import com.machina.jikan_client_compose.data.remote.dto_v4.manga_details.MangaDetailsDtoV4
 import com.machina.jikan_client_compose.data.remote.dto_v4.manga_details.MangaDetailsResponseV4
+import com.machina.jikan_client_compose.di.AndroidKtorClient
 import com.machina.jikan_client_compose.di.OkHttpKtorClient
 import io.ktor.client.*
 import io.ktor.client.request.*
@@ -20,7 +21,7 @@ import javax.inject.Singleton
 
 @Singleton
 class MangaRepository @Inject constructor(
-  @OkHttpKtorClient private val client: HttpClient,
+  @AndroidKtorClient private val client: HttpClient,
   private val safeCall: SafeCall
 ): MangaService {
 

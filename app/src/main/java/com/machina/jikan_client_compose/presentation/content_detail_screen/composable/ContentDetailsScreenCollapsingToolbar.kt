@@ -1,12 +1,13 @@
-package com.machina.jikan_client_compose.presentation.detail_screen.header
+package com.machina.jikan_client_compose.presentation.content_detail_screen.header
 
 import androidx.compose.animation.*
-import androidx.compose.animation.core.*
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -33,8 +34,10 @@ import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.statusBarsPadding
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
-import com.machina.jikan_client_compose.presentation.detail_screen.data.ContentDetailsState
-import com.machina.jikan_client_compose.ui.theme.*
+import com.machina.jikan_client_compose.presentation.content_detail_screen.data.ContentDetailsState
+import com.machina.jikan_client_compose.ui.theme.MyColor
+import com.machina.jikan_client_compose.ui.theme.MyIcons
+import com.machina.jikan_client_compose.ui.theme.MySize
 import me.onebone.toolbar.*
 import kotlin.math.roundToInt
 

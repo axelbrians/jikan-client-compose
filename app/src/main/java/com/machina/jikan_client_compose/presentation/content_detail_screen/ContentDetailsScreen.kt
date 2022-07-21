@@ -1,48 +1,34 @@
-package com.machina.jikan_client_compose.presentation.detail_screen
+package com.machina.jikan_client_compose.presentation.content_detail_screen
 
-import androidx.compose.animation.*
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
-import com.google.accompanist.insets.statusBarsPadding
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
-import com.machina.jikan_client_compose.presentation.detail_screen.header.ContentDetailsScreenToolbar
-import com.machina.jikan_client_compose.presentation.detail_screen.synopsis.ContentDetailsSynopsis
-import com.machina.jikan_client_compose.presentation.detail_screen.data.ContentDetailsViewModel
-import com.machina.jikan_client_compose.presentation.detail_screen.three_column.ContentDetailsThreeColumnSection
-import com.machina.jikan_client_compose.presentation.detail_screen.trailer_player.ContentDetailsTrailerPlayer
+import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.ContentDetailsTrailerPlayer
+import com.machina.jikan_client_compose.presentation.content_detail_screen.data.ContentDetailsViewModel
+import com.machina.jikan_client_compose.presentation.content_detail_screen.header.ContentDetailsScreenToolbar
+import com.machina.jikan_client_compose.presentation.content_detail_screen.synopsis.ContentDetailsSynopsis
+import com.machina.jikan_client_compose.presentation.content_detail_screen.three_column.ContentDetailsThreeColumnSection
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
 import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
-import kotlin.math.roundToInt
 
 @ExperimentalAnimationApi
 @ExperimentalCoilApi

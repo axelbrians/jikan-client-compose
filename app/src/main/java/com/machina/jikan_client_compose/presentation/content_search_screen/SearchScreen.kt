@@ -1,4 +1,4 @@
-package com.machina.jikan_client_compose.presentation.search_screen
+package com.machina.jikan_client_compose.presentation.content_search_screen
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -11,22 +11,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
-import com.machina.jikan_client_compose.core.DefaultDispatchers
 import com.machina.jikan_client_compose.core.DispatchersProvider
 import com.machina.jikan_client_compose.core.enum.ContentType
 import com.machina.jikan_client_compose.presentation.composable.ChipGroup
 import com.machina.jikan_client_compose.presentation.composable.CustomTextField
+import com.machina.jikan_client_compose.presentation.content_search_screen.composable.SearchEditText
+import com.machina.jikan_client_compose.presentation.content_search_screen.composable.SearchLeadingIcon
+import com.machina.jikan_client_compose.presentation.content_search_screen.composable.SearchTrailingIcon
+import com.machina.jikan_client_compose.presentation.content_search_screen.data.SearchScreenViewModel
 import com.machina.jikan_client_compose.presentation.extension.isScrolledToTheEnd
-import com.machina.jikan_client_compose.presentation.search_screen.composable.SearchEditText
-import com.machina.jikan_client_compose.presentation.search_screen.composable.SearchLeadingIcon
-import com.machina.jikan_client_compose.presentation.search_screen.composable.SearchTrailingIcon
-import com.machina.jikan_client_compose.presentation.search_screen.data.SearchScreenViewModel
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber

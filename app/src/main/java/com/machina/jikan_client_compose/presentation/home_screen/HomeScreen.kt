@@ -7,20 +7,21 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
-import com.machina.jikan_client_compose.ui.theme.*
 import com.machina.jikan_client_compose.presentation.composable.CustomTextField
+import com.machina.jikan_client_compose.presentation.content_search_screen.composable.SearchLeadingIcon
 import com.machina.jikan_client_compose.presentation.home_screen.composable.SearchEditText
 import com.machina.jikan_client_compose.presentation.home_screen.viewmodel.HomeViewModel
-import com.machina.jikan_client_compose.presentation.search_screen.composable.SearchLeadingIcon
+import com.machina.jikan_client_compose.ui.theme.MyColor
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -31,6 +32,7 @@ fun HomeScreen(
   navController: NavController,
   viewModel: HomeViewModel,
   lazyColumnState: LazyListState = rememberLazyListState(),
+  navigateToViewAllScreen: () -> Unit = { },
   onSearchFieldClick: (() -> Unit) = { },
   onContentClick: ((String, Int) -> Unit) = { type, id -> },
 ) {
@@ -93,7 +95,8 @@ fun HomeScreen(
         animeAiringPopularState = animeAiringPopularState,
         animeScheduleState = animeScheduleState,
         animeTopState = animeTopState,
-        onTopAnimeClick = onContentClick,
+        navigateToViewAllScreen = navigateToViewAllScreen,
+        navigateToAnimeDetail = onContentClick,
         lazyColumnState = lazyColumnState
       )
     }

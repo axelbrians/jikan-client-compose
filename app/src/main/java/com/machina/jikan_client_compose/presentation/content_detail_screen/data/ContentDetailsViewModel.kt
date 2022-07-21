@@ -1,11 +1,10 @@
-package com.machina.jikan_client_compose.presentation.detail_screen.data
+package com.machina.jikan_client_compose.presentation.content_detail_screen.data
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.domain.use_case.get_content_details.GetContentDetailsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn

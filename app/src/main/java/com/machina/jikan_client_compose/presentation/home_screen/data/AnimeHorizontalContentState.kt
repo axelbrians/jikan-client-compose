@@ -13,6 +13,18 @@ data class AnimeHorizontalContentState(
       isLoading = true
     )
 
+    fun AnimeHorizontalContentState.isSuccess(): Boolean {
+      return this.error.peekContent() == null
+    }
+
+    fun AnimeHorizontalContentState.copyKeepData(state: AnimeHorizontalContentState): AnimeHorizontalContentState {
+      return AnimeHorizontalContentState(
+        data = this.data,
+        isLoading = state.isLoading,
+        error = state.error
+      )
+    }
+
     fun from(state: AnimeScheduleState): AnimeHorizontalContentState {
       return AnimeHorizontalContentState(
         data = state.data.map { AnimeVerticalModel.from(it) },

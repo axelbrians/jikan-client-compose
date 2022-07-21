@@ -14,7 +14,6 @@ import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeHoriz
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -51,7 +50,6 @@ class HomeViewModel @Inject constructor(
 
   fun getTopAnimeList() {
     getAnimeTopUseCase().onEach {
-      Timber.d(it.error.peekContent())
       _animeTopState.value = AnimeHorizontalContentState.from(it)
     }.launchIn(viewModelScope)
   }

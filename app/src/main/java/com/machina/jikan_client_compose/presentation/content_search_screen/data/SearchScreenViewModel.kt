@@ -1,4 +1,4 @@
-package com.machina.jikan_client_compose.presentation.search_screen.data
+package com.machina.jikan_client_compose.presentation.content_search_screen.data
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.machina.jikan_client_compose.core.enum.ContentType
 import com.machina.jikan_client_compose.core.wrapper.Event
-import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.domain.use_case.search_content.SearchContentUseCase
 import com.machina.jikan_client_compose.presentation.home_screen.data.ContentSearchState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,7 +26,7 @@ class SearchScreenViewModel @Inject constructor(
   val contentSearchState: State<ContentSearchState> = _contentSearchState
 
 
-  private var currentPage = 1
+  private var currentPage: Int = 1
 
   fun searchContentByQuery(contentType: ContentType, query: String) {
     if (query.length >= 3) {
@@ -53,15 +52,16 @@ class SearchScreenViewModel @Inject constructor(
 
         if (res.isLoading) {
           _contentSearchState.value = _contentSearchState.value.copy(isLoading = true)
-        } else if (!res.isLoading) {
-          if (res.error.peekContent() != null) {
-            currentPage++
-            val temp = _contentSearchState.value.data.toMutableList()
-            temp.addAll(res.data)
-            _contentSearchState.value = ContentSearchState(temp)
-          } else {
-            _contentSearchState.value = _contentSearchState.value.copy(error = res.error)
-          }
+          return@onEach
+        }
+
+        if (res.error.peekContent() != null) {
+          currentPage++
+          val temp = _contentSearchState.value.data.toMutableList()
+          temp.addAll(res.data)
+          _contentSearchState.value = ContentSearchState(temp)
+        } else {
+          _contentSearchState.value = _contentSearchState.value.copy(error = res.error)
         }
       }.launchIn(viewModelScope)
     }

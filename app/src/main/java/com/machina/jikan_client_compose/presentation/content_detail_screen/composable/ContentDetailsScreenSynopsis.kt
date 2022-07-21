@@ -1,4 +1,4 @@
-package com.machina.jikan_client_compose.presentation.detail_screen.synopsis
+package com.machina.jikan_client_compose.presentation.content_detail_screen.synopsis
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
@@ -23,7 +23,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import com.machina.jikan_client_compose.presentation.detail_screen.data.ContentDetailsState
+import com.machina.jikan_client_compose.presentation.content_detail_screen.data.ContentDetailsState
 import com.machina.jikan_client_compose.ui.theme.MyColor
 
 @ExperimentalAnimationApi

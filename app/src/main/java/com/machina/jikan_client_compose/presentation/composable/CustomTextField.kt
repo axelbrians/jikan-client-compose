@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.machina.jikan_client_compose.presentation.search_screen.composable.SearchEditText
+import com.machina.jikan_client_compose.presentation.content_search_screen.composable.SearchEditText
 import com.machina.jikan_client_compose.ui.theme.MyColor
 
 @Composable

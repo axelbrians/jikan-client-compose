@@ -3,7 +3,6 @@ package com.machina.jikan_client_compose.presentation.home_screen
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -25,11 +24,9 @@ import com.machina.jikan_client_compose.core.enum.ContentType
 import com.machina.jikan_client_compose.presentation.home_screen.anime_popular_current.AnimeAiringPopularHorizontalPager
 import com.machina.jikan_client_compose.presentation.home_screen.anime_popular_current.state.AnimeAiringPopularState
 import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeHorizontalContentState
-import com.machina.jikan_client_compose.presentation.home_screen.view_holder.ItemVerticalAnime
-import com.machina.jikan_client_compose.presentation.home_screen.view_holder.ItemAnimeSchedule
 import com.machina.jikan_client_compose.presentation.home_screen.view_holder.ItemAnimeTopShimmer
-import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeScheduleState
-import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeTopState
+import com.machina.jikan_client_compose.presentation.home_screen.view_holder.ItemVerticalAnime
+import com.machina.jikan_client_compose.presentation.home_screen.view_holder.ItemVerticalAnimeConfig
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.valentinilk.shimmer.Shimmer
 import com.valentinilk.shimmer.ShimmerBounds
@@ -45,7 +42,8 @@ fun HomeContentList(
   animeScheduleState: AnimeHorizontalContentState = AnimeHorizontalContentState(),
   animeTopState: AnimeHorizontalContentState = AnimeHorizontalContentState(),
   lazyColumnState: LazyListState = rememberLazyListState(),
-  onTopAnimeClick: (String, Int) -> Unit
+  navigateToAnimeDetail: (String, Int) -> Unit,
+  navigateToViewAllScreen: () -> Unit
 ) {
 
   LazyColumn(
@@ -69,7 +67,7 @@ fun HomeContentList(
         animeAiringPopularState = animeAiringPopularState,
         data = animeAiringPopularState.data.slice(0 until itemCount),
         shimmerInstance = shimmerInstance,
-        onItemClick = onTopAnimeClick
+        onItemClick = navigateToAnimeDetail
       )
     }
     /* End of Currently Popular Anime */
@@ -91,12 +89,13 @@ fun HomeContentList(
         }
       ) {
         if (animeScheduleState.isLoading) {
-          showShimmerPlaceholder(shimmerInstance)
+          showItemAnimeTopShimmer(shimmerInstance)
         } else {
           items(animeScheduleState.data, key = { item -> item.malId }) { data ->
             ItemVerticalAnime(
+              modifier = ItemVerticalAnimeConfig.defaultModifier,
               anime = data,
-              onItemClick = { onTopAnimeClick(ContentType.Anime.name, data.malId) }
+              onItemClick = { navigateToAnimeDetail(ContentType.Anime.name, data.malId) }
             )
           }
         }
@@ -109,7 +108,7 @@ fun HomeContentList(
     item(key = "anime_top_list") {
       HorizontalContentHeader(
         title = "Top Anime of All Times",
-        onButtonClick = { }
+        onButtonClick = { navigateToViewAllScreen() }
       )
 
       val shimmerInstance = rememberShimmer(shimmerBounds = ShimmerBounds.Custom)
@@ -122,12 +121,13 @@ fun HomeContentList(
         }
       ) {
         if (animeTopState.isLoading) {
-          showShimmerPlaceholder(shimmerInstance)
+          showItemAnimeTopShimmer(shimmerInstance)
         } else {
           items(animeTopState.data, key = { item -> item.malId }) { data ->
             ItemVerticalAnime(
+              modifier = ItemVerticalAnimeConfig.defaultModifier,
               anime = data,
-              onItemClick = { onTopAnimeClick(ContentType.Anime.name, data.malId) }
+              onItemClick = { navigateToAnimeDetail(ContentType.Anime.name, data.malId) }
             )
           }
         }
@@ -146,7 +146,7 @@ private fun HorizontalContentHeader(
   onButtonClick: () -> Unit
 ) {
   Row(
-    modifier = Modifier.padding(start = 18.dp, end = 18.dp, bottom = 4.dp),
+    modifier = Modifier.padding(start = 18.dp, end = 12.dp, bottom = 4.dp),
     verticalAlignment = Alignment.CenterVertically
   ) {
     Text(
@@ -169,8 +169,11 @@ private fun HorizontalContentHeader(
   }
 }
 
-private fun LazyListScope.showShimmerPlaceholder(shimmerInstance: Shimmer, count: Int = 5) {
+private fun LazyListScope.showItemAnimeTopShimmer(shimmerInstance: Shimmer, count: Int = 5) {
   items(count) {
-    ItemAnimeTopShimmer(shimmerInstance)
+    ItemAnimeTopShimmer(
+      modifier = ItemVerticalAnimeConfig.defaultModifier,
+      shimmerInstance = shimmerInstance
+    )
   }
 }

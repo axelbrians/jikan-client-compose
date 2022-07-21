@@ -6,34 +6,42 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
-import com.machina.jikan_client_compose.domain.model.anime.AnimeTop
 import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalModel
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
 import com.machina.jikan_client_compose.ui.theme.MyColor
 
+object ItemVerticalAnimeConfig {
+  val defaultModifier = Modifier
+    .width(140.dp)
+    .padding(6.dp, 4.dp)
+
+  val fillParentWidthModifier = Modifier
+    .fillMaxWidth()
+    .padding(6.dp, 4.dp)
+
+}
 
 @ExperimentalCoilApi
 @Composable
 fun ItemVerticalAnime(
-  modifier: Modifier = Modifier.width(160.dp).padding(12.dp, 0.dp),
+  modifier: Modifier = Modifier,
   anime: AnimeVerticalModel,
+  thumbnailHeight: Dp = 190.dp,
   onItemClick: () -> Unit
 ) {
 
-  val titleLines = remember { mutableStateOf(0) }
   val painter = rememberImagePainter(
     data = anime.imageUrl,
     builder = {
@@ -49,7 +57,7 @@ fun ItemVerticalAnime(
   ) {
     Box(
       modifier = Modifier
-        .height(190.dp)
+        .height(thumbnailHeight)
     ) {
       if (painter.state is ImagePainter.State.Loading) {
         CenterCircularProgressIndicator(
@@ -75,10 +83,9 @@ fun ItemVerticalAnime(
       overflow = TextOverflow.Ellipsis,
       style = TextStyle(
         color = MyColor.OnDarkSurface,
-        fontSize = 14.sp,
+        fontSize = 13.sp,
         fontWeight = FontWeight.Bold
-      ),
-      onTextLayout = { res -> titleLines.value = res.lineCount }
+      )
     )
 
     Text(
@@ -86,19 +93,9 @@ fun ItemVerticalAnime(
       modifier = Modifier.padding(bottom = 3.dp),
       style = TextStyle(
         color = MyColor.OnDarkSurface,
-        fontSize = 14.sp,
+        fontSize = 13.sp,
         fontWeight = FontWeight.Normal
       )
     )
-
-    for (index in titleLines.value..2) {
-      Text(
-        text = " ",
-        style = TextStyle(
-          fontSize = 14.sp,
-          color = MyColor.OnDarkSurface
-        )
-      )
-    }
   }
 }

@@ -5,15 +5,13 @@ import com.machina.jikan_client_compose.core.enum.ContentType
 import com.machina.jikan_client_compose.core.exception.MyError
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.AnimeDetailsDtoV4
-import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.AnimeDetailsResponseV4
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.toContentDetails
 import com.machina.jikan_client_compose.data.remote.dto_v4.manga_details.MangaDetailsDtoV4
-import com.machina.jikan_client_compose.data.remote.dto_v4.manga_details.MangaDetailsResponseV4
 import com.machina.jikan_client_compose.data.remote.dto_v4.manga_details.toContentDetails
 import com.machina.jikan_client_compose.data.repository.AnimeRepository
 import com.machina.jikan_client_compose.data.repository.MangaRepository
 import com.machina.jikan_client_compose.domain.model.ContentDetails
-import com.machina.jikan_client_compose.presentation.detail_screen.data.ContentDetailsState
+import com.machina.jikan_client_compose.presentation.content_detail_screen.data.ContentDetailsState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn

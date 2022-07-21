@@ -16,16 +16,19 @@ import androidx.navigation.navArgument
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.machina.jikan_client_compose.core.DispatchersProvider
+import com.machina.jikan_client_compose.presentation.content_detail_screen.ContentDetailsScreen
+import com.machina.jikan_client_compose.presentation.content_detail_screen.data.ContentDetailsViewModel
+import com.machina.jikan_client_compose.presentation.content_search_screen.SearchScreen
+import com.machina.jikan_client_compose.presentation.content_search_screen.data.SearchScreenViewModel
+import com.machina.jikan_client_compose.presentation.content_view_all_screen.ContentViewAllListScreen
+import com.machina.jikan_client_compose.presentation.content_view_all_screen.viewmodel.ContentViewAllTopAnimeViewModel
+import com.machina.jikan_client_compose.presentation.home_screen.HomeScreen
+import com.machina.jikan_client_compose.presentation.home_screen.viewmodel.HomeViewModel
 import com.machina.jikan_client_compose.ui.navigation.MainNavigation.CONTENT_DETAILS_SCREEN
+import com.machina.jikan_client_compose.ui.navigation.MainNavigation.CONTENT_SEARCH_SCREEN
+import com.machina.jikan_client_compose.ui.navigation.MainNavigation.CONTENT_VIEW_ALL_SCREEN
 import com.machina.jikan_client_compose.ui.navigation.MainNavigation.HOME_SCREEN
 import com.machina.jikan_client_compose.ui.theme.JikanClientComposeTheme
-import com.machina.jikan_client_compose.presentation.detail_screen.ContentDetailsScreen
-import com.machina.jikan_client_compose.presentation.home_screen.HomeScreen
-import com.machina.jikan_client_compose.presentation.detail_screen.data.ContentDetailsViewModel
-import com.machina.jikan_client_compose.presentation.home_screen.viewmodel.HomeViewModel
-import com.machina.jikan_client_compose.presentation.search_screen.SearchScreen
-import com.machina.jikan_client_compose.presentation.search_screen.data.SearchScreenViewModel
-import com.machina.jikan_client_compose.ui.navigation.MainNavigation.CONTENT_SEARCH_SCREEN
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -80,7 +83,7 @@ fun MyApp(
   val navController = rememberNavController()
   val homeScrollState = rememberLazyListState()
   NavHost(navController = navController, startDestination = HOME_SCREEN) {
-    composable(HOME_SCREEN) {
+    composable(route = HOME_SCREEN) {
       OnDestinationChanged(
         systemUiController = systemUiController,
         color = MyColor.BlackBackground,
@@ -94,6 +97,9 @@ fun MyApp(
         navController = navController,
         viewModel = homeViewModel,
         lazyColumnState = homeScrollState,
+        navigateToViewAllScreen = {
+          navController.navigate(CONTENT_VIEW_ALL_SCREEN)
+        },
         onSearchFieldClick = {
           navController.navigate(CONTENT_SEARCH_SCREEN)
         },
@@ -104,9 +110,7 @@ fun MyApp(
       )
     }
 
-    composable(
-      CONTENT_SEARCH_SCREEN
-    ) { backstack ->
+    composable(route = CONTENT_SEARCH_SCREEN) { backstack ->
       OnDestinationChanged(
         systemUiController = systemUiController,
         color = MyColor.BlackBackground,
@@ -126,7 +130,7 @@ fun MyApp(
     }
 
     composable(
-      "$CONTENT_DETAILS_SCREEN/{contentType}/{malId}",
+      route = "$CONTENT_DETAILS_SCREEN/{contentType}/{malId}",
       arguments = detailsScreenArgs
     ) { backStack ->
       OnDestinationChanged(
@@ -144,6 +148,21 @@ fun MyApp(
         backStack.arguments?.getInt("malId"),
         onBackPressed = { navController.navigateUp() }
       )
+    }
+
+    composable(
+      route = CONTENT_VIEW_ALL_SCREEN
+    ) { backStack ->
+      OnDestinationChanged(
+        systemUiController = systemUiController,
+        color = MyColor.BlackBackground,
+        drawOverStatusBar = false,
+        window = window,
+      )
+
+      val contentViewAllViewModel = hiltViewModel<ContentViewAllTopAnimeViewModel>()
+
+      ContentViewAllListScreen(viewModel = contentViewAllViewModel)
     }
   }
 }

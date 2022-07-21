@@ -1,4 +1,4 @@
-package com.machina.jikan_client_compose.presentation.detail_screen.three_column
+package com.machina.jikan_client_compose.presentation.content_detail_screen.three_column
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
@@ -10,7 +10,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.machina.jikan_client_compose.presentation.detail_screen.data.ContentDetailsState
+import com.machina.jikan_client_compose.presentation.content_detail_screen.data.ContentDetailsState
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.machina.jikan_client_compose.ui.theme.MySize
 

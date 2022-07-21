@@ -24,6 +24,7 @@ import com.machina.jikan_client_compose.presentation.content_view_all_screen.Con
 import com.machina.jikan_client_compose.presentation.content_view_all_screen.viewmodel.ContentViewAllTopAnimeViewModel
 import com.machina.jikan_client_compose.presentation.home_screen.HomeScreen
 import com.machina.jikan_client_compose.presentation.home_screen.viewmodel.HomeViewModel
+import com.machina.jikan_client_compose.ui.navigation.MainNavigation
 import com.machina.jikan_client_compose.ui.navigation.MainNavigation.CONTENT_DETAILS_SCREEN
 import com.machina.jikan_client_compose.ui.navigation.MainNavigation.CONTENT_SEARCH_SCREEN
 import com.machina.jikan_client_compose.ui.navigation.MainNavigation.CONTENT_VIEW_ALL_SCREEN
@@ -162,7 +163,10 @@ fun MyApp(
 
       val contentViewAllViewModel = hiltViewModel<ContentViewAllTopAnimeViewModel>()
 
-      ContentViewAllListScreen(viewModel = contentViewAllViewModel)
+      ContentViewAllListScreen(
+        viewModel = contentViewAllViewModel,
+        navigation = MainNavigation.ContentViewAllScreenNavigation(navController)
+      )
     }
   }
 }

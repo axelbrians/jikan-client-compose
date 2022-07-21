@@ -10,11 +10,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
+import com.machina.jikan_client_compose.core.enum.ContentType
 import com.machina.jikan_client_compose.presentation.content_view_all_screen.viewmodel.ContentViewAllViewModel
 import com.machina.jikan_client_compose.presentation.extension.isScrolledToTheEnd
 import com.machina.jikan_client_compose.presentation.home_screen.view_holder.ItemAnimeTopShimmer
 import com.machina.jikan_client_compose.presentation.home_screen.view_holder.ItemVerticalAnime
 import com.machina.jikan_client_compose.presentation.home_screen.view_holder.ItemVerticalAnimeConfig
+import com.machina.jikan_client_compose.ui.navigation.MainNavigation
 import com.machina.jikan_client_compose.ui.shimmer.onUpdateShimmerBounds
 import com.machina.jikan_client_compose.ui.shimmer.rememberShimmerCustom
 import com.valentinilk.shimmer.Shimmer
@@ -23,6 +25,7 @@ import com.valentinilk.shimmer.Shimmer
 @Composable
 fun ContentViewAllListScreen(
   modifier: Modifier = Modifier,
+  navigation: MainNavigation.ContentViewAllScreenNavigation,
   viewModel: ContentViewAllViewModel
 ) {
 
@@ -45,7 +48,9 @@ fun ContentViewAllListScreen(
           modifier = ItemVerticalAnimeConfig.fillParentWidthModifier,
           anime = data,
           thumbnailHeight = 160.dp,
-          onItemClick = {  }
+          onItemClick = {
+            navigation.navigateToContentDetailsScreen(data.malId, ContentType.Anime)
+          }
         )
       }
 

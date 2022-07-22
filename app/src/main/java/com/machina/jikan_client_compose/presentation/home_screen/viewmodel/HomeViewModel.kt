@@ -1,6 +1,5 @@
 package com.machina.jikan_client_compose.presentation.home_screen.viewmodel
 
-import android.icu.util.Calendar
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -42,8 +41,7 @@ class HomeViewModel @Inject constructor(
   }
 
   fun getTodayAnimeSchedule() {
-    val dayInCalendar = Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
-    getAnimeScheduleUseCase(dayInCalendar).onEach {
+    getAnimeScheduleUseCase().onEach {
       _animeScheduleState.value = AnimeHorizontalContentState.from(it)
     }.launchIn(viewModelScope)
   }

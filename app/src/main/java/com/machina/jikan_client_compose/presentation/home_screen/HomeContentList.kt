@@ -12,7 +12,6 @@ import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -20,30 +19,31 @@ import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
-import com.machina.jikan_client_compose.core.enum.ContentType
 import com.machina.jikan_client_compose.presentation.home_screen.anime_popular_current.AnimeAiringPopularHorizontalPager
 import com.machina.jikan_client_compose.presentation.home_screen.anime_popular_current.state.AnimeAiringPopularState
 import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeHorizontalContentState
 import com.machina.jikan_client_compose.presentation.home_screen.view_holder.ItemAnimeTopShimmer
 import com.machina.jikan_client_compose.presentation.home_screen.view_holder.ItemVerticalAnime
 import com.machina.jikan_client_compose.presentation.home_screen.view_holder.ItemVerticalAnimeConfig
+import com.machina.jikan_client_compose.ui.navigation.MainNavigation
+import com.machina.jikan_client_compose.ui.navigation.content_view_all.ContentViewAllType
+import com.machina.jikan_client_compose.ui.shimmer.onUpdateShimmerBounds
+import com.machina.jikan_client_compose.ui.shimmer.rememberShimmerCustomBounds
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.valentinilk.shimmer.Shimmer
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
-import com.valentinilk.shimmer.unclippedBoundsInWindow
 
 @OptIn(ExperimentalPagerApi::class)
 @ExperimentalCoilApi
 @Composable
 fun HomeContentList(
   modifier: Modifier = Modifier,
+  navigation: MainNavigation.HomeScreenNavigation,
   animeAiringPopularState: AnimeAiringPopularState = AnimeAiringPopularState(),
   animeScheduleState: AnimeHorizontalContentState = AnimeHorizontalContentState(),
   animeTopState: AnimeHorizontalContentState = AnimeHorizontalContentState(),
-  lazyColumnState: LazyListState = rememberLazyListState(),
-  navigateToAnimeDetail: (String, Int) -> Unit,
-  navigateToViewAllScreen: () -> Unit
+  lazyColumnState: LazyListState = rememberLazyListState()
 ) {
 
   LazyColumn(
@@ -51,7 +51,7 @@ fun HomeContentList(
     state = lazyColumnState
   ) {
 
-    // Start of Currently popular anime
+    /* - - - Start of Currently popular anime - - - */
     item(key = "horizontal_pager_demo") {
       val shimmerInstance = rememberShimmer(shimmerBounds = ShimmerBounds.Custom)
       val pagerState = rememberPagerState()
@@ -59,43 +59,38 @@ fun HomeContentList(
       AnimeAiringPopularHorizontalPager(
         modifier = Modifier
           .padding(top = 8.dp)
-          .onGloballyPositioned { layoutCoordinates ->
-            val position = layoutCoordinates.unclippedBoundsInWindow()
-            shimmerInstance.updateBounds(position)
-          },
+          .onUpdateShimmerBounds(shimmerInstance),
         pagerState = pagerState,
         animeAiringPopularState = animeAiringPopularState,
         data = animeAiringPopularState.data.slice(0 until itemCount),
         shimmerInstance = shimmerInstance,
-        onItemClick = navigateToAnimeDetail
+        navigateToContentDetailsScreen = navigation::navigateToContentDetailsScreen
       )
     }
     /* End of Currently Popular Anime */
 
+
     /* Start of Anime Airing Today */
     item(key = "anime_schedule_list") {
+      val shimmerInstance = rememberShimmerCustomBounds()
+
       HorizontalContentHeader(
         title = "Airing today",
-        onButtonClick = { }
+        onButtonClick = { navigation.navigateToContentViewAllScreen(ContentViewAllType.AnimeSchedule) }
       )
-
-      val shimmerInstance = rememberShimmer(shimmerBounds = ShimmerBounds.Custom)
 
       LazyRow(
         contentPadding = PaddingValues(12.dp, 0.dp, 12.dp, 0.dp),
-        modifier = Modifier.onGloballyPositioned { layoutCoordinates ->
-          val position = layoutCoordinates.unclippedBoundsInWindow()
-          shimmerInstance.updateBounds(position)
-        }
+        modifier = Modifier.onUpdateShimmerBounds(shimmerInstance)
       ) {
         if (animeScheduleState.isLoading) {
           showItemAnimeTopShimmer(shimmerInstance)
         } else {
-          items(animeScheduleState.data, key = { item -> item.malId }) { data ->
+          items(animeScheduleState.data, key = { it.malId }) { data ->
             ItemVerticalAnime(
               modifier = ItemVerticalAnimeConfig.defaultModifier,
-              anime = data,
-              onItemClick = { navigateToAnimeDetail(ContentType.Anime.name, data.malId) }
+              data = data,
+              navigateToContentDetailsScreen = navigation::navigateToContentDetailsScreen
             )
           }
         }
@@ -106,19 +101,16 @@ fun HomeContentList(
 
     // Start of Top Anime of All Times
     item(key = "anime_top_list") {
+      val shimmerInstance = rememberShimmer(shimmerBounds = ShimmerBounds.Custom)
+
       HorizontalContentHeader(
         title = "Top Anime of All Times",
-        onButtonClick = { navigateToViewAllScreen() }
+        onButtonClick = { navigation.navigateToContentViewAllScreen(ContentViewAllType.AnimeTop) }
       )
-
-      val shimmerInstance = rememberShimmer(shimmerBounds = ShimmerBounds.Custom)
 
       LazyRow(
         contentPadding = PaddingValues(12.dp, 0.dp, 12.dp, 0.dp),
-        modifier = Modifier.onGloballyPositioned { layoutCoordinates ->
-          val position = layoutCoordinates.unclippedBoundsInWindow()
-          shimmerInstance.updateBounds(position)
-        }
+        modifier = Modifier.onUpdateShimmerBounds(shimmerInstance)
       ) {
         if (animeTopState.isLoading) {
           showItemAnimeTopShimmer(shimmerInstance)
@@ -126,12 +118,11 @@ fun HomeContentList(
           items(animeTopState.data, key = { item -> item.malId }) { data ->
             ItemVerticalAnime(
               modifier = ItemVerticalAnimeConfig.defaultModifier,
-              anime = data,
-              onItemClick = { navigateToAnimeDetail(ContentType.Anime.name, data.malId) }
+              data = data,
+              navigateToContentDetailsScreen = navigation::navigateToContentDetailsScreen
             )
           }
         }
-
       }
     }
     // End of Top Anime of All Times

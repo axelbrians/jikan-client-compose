@@ -8,22 +8,15 @@ data class AnimeHorizontalContentState(
   val isLoading: Boolean = false,
   val error: Event<String?> = Event(null)
 ) {
+
+  fun isSuccess(): Boolean {
+    return this.error.peekContent() == null
+  }
+
   companion object {
     val Loading = AnimeHorizontalContentState(
       isLoading = true
     )
-
-    fun AnimeHorizontalContentState.isSuccess(): Boolean {
-      return this.error.peekContent() == null
-    }
-
-    fun AnimeHorizontalContentState.copyKeepData(state: AnimeHorizontalContentState): AnimeHorizontalContentState {
-      return AnimeHorizontalContentState(
-        data = this.data,
-        isLoading = state.isLoading,
-        error = state.error
-      )
-    }
 
     fun from(state: AnimeScheduleState): AnimeHorizontalContentState {
       return AnimeHorizontalContentState(

@@ -11,8 +11,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
-import com.google.accompanist.pager.*
-import com.machina.jikan_client_compose.core.enum.ContentType
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.PagerState
+import com.google.accompanist.pager.rememberPagerState
+import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.domain.model.anime.AnimeAiringPopular
 import com.machina.jikan_client_compose.presentation.home_screen.anime_popular_current.composable.PagerItemAnimeAiringPopular
 import com.machina.jikan_client_compose.presentation.home_screen.anime_popular_current.composable.ShimmerHorizontalChipIndicator
@@ -20,8 +23,6 @@ import com.machina.jikan_client_compose.presentation.home_screen.anime_popular_c
 import com.machina.jikan_client_compose.presentation.home_screen.anime_popular_current.state.AnimeAiringPopularState
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.valentinilk.shimmer.Shimmer
-import com.valentinilk.shimmer.ShimmerBounds
-import com.valentinilk.shimmer.rememberShimmer
 import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalPagerApi::class, coil.annotation.ExperimentalCoilApi::class)
@@ -32,7 +33,7 @@ fun AnimeAiringPopularHorizontalPager(
   pagerState: PagerState = rememberPagerState(),
   data: List<AnimeAiringPopular> = emptyList(),
   shimmerInstance: Shimmer,
-  onItemClick: (String, Int) -> Unit
+  navigateToContentDetailsScreen: (Int, ContentType) -> Unit
 ) {
   val isLoading = animeAiringPopularState.isLoading
   val shownCount = if (isLoading) 3 else data.size
@@ -58,7 +59,7 @@ fun AnimeAiringPopularHorizontalPager(
           data = data[page],
           currentPage = page,
           painter = rememberImagePainter(data = data[page].imageUrl),
-          onClick = { onItemClick(ContentType.Anime.name, data[page].malId) }
+          onClick = { navigateToContentDetailsScreen(data[page].malId, ContentType.Anime) }
         )
       }
     }

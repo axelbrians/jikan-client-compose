@@ -21,7 +21,9 @@ import com.machina.jikan_client_compose.presentation.content_detail_screen.data.
 import com.machina.jikan_client_compose.presentation.content_search_screen.SearchScreen
 import com.machina.jikan_client_compose.presentation.content_search_screen.data.SearchScreenViewModel
 import com.machina.jikan_client_compose.presentation.content_view_all_screen.ContentViewAllListScreen
-import com.machina.jikan_client_compose.presentation.content_view_all_screen.viewmodel.ContentViewAllTopAnimeViewModel
+import com.machina.jikan_client_compose.presentation.content_view_all_screen.viewmodel.ContentViewAllAnimeScheduleViewModel
+import com.machina.jikan_client_compose.presentation.content_view_all_screen.viewmodel.ContentViewAllAnimeTopViewModel
+import com.machina.jikan_client_compose.presentation.content_view_all_screen.viewmodel.ContentViewAllViewModel
 import com.machina.jikan_client_compose.presentation.home_screen.HomeScreen
 import com.machina.jikan_client_compose.presentation.home_screen.viewmodel.HomeViewModel
 import com.machina.jikan_client_compose.ui.navigation.MainNavigation
@@ -29,6 +31,7 @@ import com.machina.jikan_client_compose.ui.navigation.MainNavigation.CONTENT_DET
 import com.machina.jikan_client_compose.ui.navigation.MainNavigation.CONTENT_SEARCH_SCREEN
 import com.machina.jikan_client_compose.ui.navigation.MainNavigation.CONTENT_VIEW_ALL_SCREEN
 import com.machina.jikan_client_compose.ui.navigation.MainNavigation.HOME_SCREEN
+import com.machina.jikan_client_compose.ui.navigation.content_view_all.ContentViewAllType
 import com.machina.jikan_client_compose.ui.theme.JikanClientComposeTheme
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import dagger.hilt.android.AndroidEntryPoint
@@ -95,18 +98,11 @@ fun MyApp(
       val homeViewModel = hiltViewModel<HomeViewModel>()
 
       HomeScreen(
-        navController = navController,
+        navigation = MainNavigation.HomeScreenNavigation(navController),
         viewModel = homeViewModel,
         lazyColumnState = homeScrollState,
-        navigateToViewAllScreen = {
-          navController.navigate(CONTENT_VIEW_ALL_SCREEN)
-        },
         onSearchFieldClick = {
           navController.navigate(CONTENT_SEARCH_SCREEN)
-        },
-        onContentClick = { type, malId ->
-          navController.navigate("${CONTENT_DETAILS_SCREEN}/$type/$malId".lowercase())
-          Timber.d("navigated with ${CONTENT_DETAILS_SCREEN}/$type/$malId")
         }
       )
     }
@@ -152,7 +148,7 @@ fun MyApp(
     }
 
     composable(
-      route = CONTENT_VIEW_ALL_SCREEN
+      route = "$CONTENT_VIEW_ALL_SCREEN/{content}",
     ) { backStack ->
       OnDestinationChanged(
         systemUiController = systemUiController,
@@ -161,12 +157,24 @@ fun MyApp(
         window = window,
       )
 
-      val contentViewAllViewModel = hiltViewModel<ContentViewAllTopAnimeViewModel>()
-
-      ContentViewAllListScreen(
-        viewModel = contentViewAllViewModel,
-        navigation = MainNavigation.ContentViewAllScreenNavigation(navController)
+      val content = ContentViewAllType.valueOf(
+        backStack.arguments?.getString("content", "") ?: ""
       )
+
+      val contentViewAllViewModel = when(content) {
+        ContentViewAllType.AnimeSchedule -> hiltViewModel<ContentViewAllAnimeScheduleViewModel>()
+        ContentViewAllType.AnimeTop -> hiltViewModel<ContentViewAllAnimeTopViewModel>()
+        else -> null
+      } as? ContentViewAllViewModel
+
+      if (contentViewAllViewModel != null) {
+        ContentViewAllListScreen(
+          viewModel = contentViewAllViewModel,
+          navigation = MainNavigation.ContentViewAllScreenNavigation(navController)
+        )
+      } else { // Close screen if content is not supported
+        navController.popBackStack()
+      }
     }
   }
 }

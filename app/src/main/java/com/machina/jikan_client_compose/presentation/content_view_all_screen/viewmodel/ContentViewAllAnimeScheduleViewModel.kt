@@ -4,20 +4,16 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.machina.jikan_client_compose.domain.use_case.get_top_anime.GetAnimeTopUseCase
+import com.machina.jikan_client_compose.domain.use_case.anime_schedule.GetAnimeScheduleUseCase
 import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeHorizontalContentState
-import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeHorizontalContentState.Companion.copyKeepData
-import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeHorizontalContentState.Companion.isSuccess
+import com.machina.jikan_client_compose.presentation.home_screen.data.copyKeepData
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
-class ContentViewAllTopAnimeViewModel @Inject constructor(
-  private val getAnimeTopUseCase: GetAnimeTopUseCase
+class ContentViewAllAnimeScheduleViewModel @Inject constructor(
+  private val getAnimeScheduleUseCase: GetAnimeScheduleUseCase
 ): ViewModel(), ContentViewAllViewModel {
 
   private val _contentState: MutableState<AnimeHorizontalContentState> =
@@ -27,14 +23,13 @@ class ContentViewAllTopAnimeViewModel @Inject constructor(
   private var currentPage: Int = 1
 
   override fun getNextContentPart() {
-    getAnimeTopUseCase(currentPage).onEach {
+    getAnimeScheduleUseCase().onEach {
       val animeHorizontalState = AnimeHorizontalContentState.from(it)
       if (it.isLoading) {
         _contentState.value = _contentState.value.copy(isLoading = true)
         return@onEach
       }
 
-      delay(5000L)
       if (!animeHorizontalState.isSuccess()) { // If CURRENT call was failed, only take error and loading
         _contentState.value = _contentState.value.copyKeepData(animeHorizontalState)
         return@onEach
@@ -44,8 +39,8 @@ class ContentViewAllTopAnimeViewModel @Inject constructor(
         !_contentState.value.isSuccess() &&
         _contentState.value.data.isEmpty()
       ) {
-          currentPage = 2
-          _contentState.value = animeHorizontalState
+        currentPage = 2
+        _contentState.value = animeHorizontalState
       }
 
       // Normal case (Success), append new fetched data
@@ -53,7 +48,7 @@ class ContentViewAllTopAnimeViewModel @Inject constructor(
         _contentState.value,
         animeHorizontalState
       )
-    }.launchIn(viewModelScope)
+    }
   }
 
   private fun appendNextContentPart(

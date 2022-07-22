@@ -1,7 +1,7 @@
 package com.machina.jikan_client_compose.domain.use_case.get_content_details
 
 import com.machina.jikan_client_compose.core.DispatchersProvider
-import com.machina.jikan_client_compose.core.enum.ContentType
+import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.core.exception.MyError
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.AnimeDetailsDtoV4

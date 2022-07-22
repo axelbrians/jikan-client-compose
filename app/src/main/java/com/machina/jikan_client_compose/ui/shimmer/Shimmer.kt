@@ -11,7 +11,7 @@ import com.valentinilk.shimmer.rememberShimmer
 import com.valentinilk.shimmer.unclippedBoundsInWindow
 
 @Composable
-fun rememberShimmerCustom(): Shimmer {
+fun rememberShimmerCustomBounds(): Shimmer {
   return rememberShimmer(shimmerBounds = ShimmerBounds.Custom)
 }
 

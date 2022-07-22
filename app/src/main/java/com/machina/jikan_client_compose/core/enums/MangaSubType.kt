@@ -1,4 +1,4 @@
-package com.machina.jikan_client_compose.core.enum
+package com.machina.jikan_client_compose.core.enums
 
 object MangaSubType {
   const val MANGA = "Manga"

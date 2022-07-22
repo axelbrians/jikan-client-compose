@@ -10,7 +10,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
-import com.machina.jikan_client_compose.core.enum.ContentType
 import com.machina.jikan_client_compose.presentation.content_view_all_screen.viewmodel.ContentViewAllViewModel
 import com.machina.jikan_client_compose.presentation.extension.isScrolledToTheEnd
 import com.machina.jikan_client_compose.presentation.home_screen.view_holder.ItemAnimeTopShimmer
@@ -18,8 +17,9 @@ import com.machina.jikan_client_compose.presentation.home_screen.view_holder.Ite
 import com.machina.jikan_client_compose.presentation.home_screen.view_holder.ItemVerticalAnimeConfig
 import com.machina.jikan_client_compose.ui.navigation.MainNavigation
 import com.machina.jikan_client_compose.ui.shimmer.onUpdateShimmerBounds
-import com.machina.jikan_client_compose.ui.shimmer.rememberShimmerCustom
+import com.machina.jikan_client_compose.ui.shimmer.rememberShimmerCustomBounds
 import com.valentinilk.shimmer.Shimmer
+import timber.log.Timber
 
 @OptIn(ExperimentalCoilApi::class, ExperimentalFoundationApi::class)
 @Composable
@@ -29,7 +29,7 @@ fun ContentViewAllListScreen(
   viewModel: ContentViewAllViewModel
 ) {
 
-  val shimmerInstance = rememberShimmerCustom()
+  val shimmerInstance = rememberShimmerCustomBounds()
   val lazyGridState = rememberLazyListState()
   val contentState = viewModel.contentState.value
 
@@ -46,11 +46,9 @@ fun ContentViewAllListScreen(
       items(contentState.data) { data ->
         ItemVerticalAnime(
           modifier = ItemVerticalAnimeConfig.fillParentWidthModifier,
-          anime = data,
+          data = data,
           thumbnailHeight = 160.dp,
-          onItemClick = {
-            navigation.navigateToContentDetailsScreen(data.malId, ContentType.Anime)
-          }
+          navigateToContentDetailsScreen = navigation::navigateToContentDetailsScreen
         )
       }
 
@@ -60,8 +58,10 @@ fun ContentViewAllListScreen(
     }
   }
 
-  if (lazyGridState.isScrolledToTheEnd()) {
+  if (lazyGridState.isScrolledToTheEnd()) { // fetch more item when scrolled to the end
+    Timber.d("scrolled to the end, size ${contentState.data.size}")
     LaunchedEffect(key1 = contentState.data.size) {
+      Timber.d("fetch more item, size ${contentState.data.size}")
       viewModel.getNextContentPart()
     }
   }

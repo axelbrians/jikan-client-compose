@@ -17,7 +17,9 @@ class GetAnimeScheduleUseCase @Inject constructor(
   private val dispatchers: DispatchersProvider
 ) {
 
-  operator fun invoke(dayInCalendar: Int): Flow<AnimeScheduleState> {
+  operator fun invoke(
+    dayInCalendar: Int = Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
+  ): Flow<AnimeScheduleState> {
     return flow {
       emit(AnimeScheduleState(isLoading = true))
 

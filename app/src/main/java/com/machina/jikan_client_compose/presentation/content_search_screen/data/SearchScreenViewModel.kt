@@ -5,7 +5,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.machina.jikan_client_compose.core.enum.ContentType
+import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.core.wrapper.Event
 import com.machina.jikan_client_compose.domain.use_case.search_content.SearchContentUseCase
 import com.machina.jikan_client_compose.presentation.home_screen.data.ContentSearchState

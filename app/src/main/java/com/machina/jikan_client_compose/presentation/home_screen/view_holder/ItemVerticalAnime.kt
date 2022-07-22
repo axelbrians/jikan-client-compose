@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
+import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalModel
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
 import com.machina.jikan_client_compose.ui.theme.MyColor
@@ -37,13 +38,13 @@ object ItemVerticalAnimeConfig {
 @Composable
 fun ItemVerticalAnime(
   modifier: Modifier = Modifier,
-  anime: AnimeVerticalModel,
+  data: AnimeVerticalModel,
   thumbnailHeight: Dp = 190.dp,
-  onItemClick: () -> Unit
+  navigateToContentDetailsScreen: (Int, ContentType) -> Unit
 ) {
 
   val painter = rememberImagePainter(
-    data = anime.imageUrl,
+    data = data.imageUrl,
     builder = {
       crossfade(true)
     }
@@ -53,7 +54,7 @@ fun ItemVerticalAnime(
   Column(
     modifier = modifier
       .clip(RoundedCornerShape(12.dp))
-      .clickable { onItemClick() }
+      .clickable { navigateToContentDetailsScreen(data.malId, ContentType.Anime) }
   ) {
     Box(
       modifier = Modifier
@@ -77,7 +78,7 @@ fun ItemVerticalAnime(
     }
 
     Text(
-      text = anime.title,
+      text = data.title,
       modifier = Modifier.padding(0.dp, 6.dp, 0.dp, 0.dp),
       maxLines = 2,
       overflow = TextOverflow.Ellipsis,
@@ -89,7 +90,7 @@ fun ItemVerticalAnime(
     )
 
     Text(
-      text = "${anime.score}",
+      text = "${data.score}",
       modifier = Modifier.padding(bottom = 3.dp),
       style = TextStyle(
         color = MyColor.OnDarkSurface,

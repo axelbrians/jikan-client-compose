@@ -16,9 +16,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.machina.jikan_client_compose.core.enum.ContentType
-import com.machina.jikan_client_compose.core.enum.ContentType.Anime
-import com.machina.jikan_client_compose.core.enum.ContentType.Manga
+import com.machina.jikan_client_compose.core.enums.ContentType
+import com.machina.jikan_client_compose.core.enums.ContentType.Anime
+import com.machina.jikan_client_compose.core.enums.ContentType.Manga
 import com.machina.jikan_client_compose.ui.theme.MyColor
 
 @Preview(showBackground = true)

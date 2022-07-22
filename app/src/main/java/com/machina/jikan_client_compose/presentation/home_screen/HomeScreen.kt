@@ -13,12 +13,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import com.machina.jikan_client_compose.presentation.composable.CustomTextField
 import com.machina.jikan_client_compose.presentation.content_search_screen.composable.SearchLeadingIcon
 import com.machina.jikan_client_compose.presentation.home_screen.composable.SearchEditText
 import com.machina.jikan_client_compose.presentation.home_screen.viewmodel.HomeViewModel
+import com.machina.jikan_client_compose.ui.navigation.MainNavigation
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
@@ -29,12 +29,10 @@ import kotlinx.coroutines.flow.receiveAsFlow
 @ExperimentalCoilApi
 @Composable
 fun HomeScreen(
-  navController: NavController,
+  navigation: MainNavigation.HomeScreenNavigation,
   viewModel: HomeViewModel,
   lazyColumnState: LazyListState = rememberLazyListState(),
-  navigateToViewAllScreen: () -> Unit = { },
-  onSearchFieldClick: (() -> Unit) = { },
-  onContentClick: ((String, Int) -> Unit) = { type, id -> },
+  onSearchFieldClick: (() -> Unit) = { }
 ) {
 
   val animeAiringPopularState = viewModel.animeAiringPopular.value
@@ -92,11 +90,10 @@ fun HomeScreen(
       )
 
       HomeContentList(
+        navigation = navigation,
         animeAiringPopularState = animeAiringPopularState,
         animeScheduleState = animeScheduleState,
         animeTopState = animeTopState,
-        navigateToViewAllScreen = navigateToViewAllScreen,
-        navigateToAnimeDetail = onContentClick,
         lazyColumnState = lazyColumnState
       )
     }

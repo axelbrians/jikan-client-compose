@@ -12,7 +12,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import com.machina.jikan_client_compose.core.DispatchersProvider
-import com.machina.jikan_client_compose.core.enum.ContentType
+import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.presentation.composable.ChipGroup
 import com.machina.jikan_client_compose.presentation.composable.CustomTextField
 import com.machina.jikan_client_compose.presentation.content_search_screen.composable.SearchEditText

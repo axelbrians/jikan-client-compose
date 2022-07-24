@@ -1,29 +1,8 @@
 package com.machina.jikan_client_compose.domain.model.anime
 
+import com.machina.jikan_client_compose.data.remote.dto_v4.anime.Pagination
+
 data class AnimeVerticalModel(
-  val malId: Int,
-  val title: String,
-  val score: Double,
-  val imageUrl: String
-) {
-  companion object {
-
-    fun from(data: AnimeTop): AnimeVerticalModel {
-      return AnimeVerticalModel(
-        malId = data.malId,
-        title = data.title,
-        score = data.score,
-        imageUrl = data.imageUrl
-      )
-    }
-
-    fun from(data: AnimeSchedule): AnimeVerticalModel {
-      return AnimeVerticalModel(
-        malId = data.malId,
-        title = data.title,
-        score = data.score,
-        imageUrl = data.imageUrl
-      )
-    }
-  }
-}
+  val data: List<AnimeVerticalDataModel> = listOf(),
+  val pagination: Pagination = Pagination.Default
+)

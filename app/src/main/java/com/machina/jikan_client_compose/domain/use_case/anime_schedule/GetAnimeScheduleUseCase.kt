@@ -6,6 +6,9 @@ import com.machina.jikan_client_compose.core.wrapper.Event
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_schedules.toAnimeSchedule
 import com.machina.jikan_client_compose.data.repository.AnimeRepository
+import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalDataModel
+import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalModel
+import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeHorizontalListContentState
 import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeScheduleState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -21,7 +24,7 @@ class GetAnimeScheduleUseCase @Inject constructor(
     dayInCalendar: Int = Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
   ): Flow<AnimeScheduleState> {
     return flow {
-      emit(AnimeScheduleState(isLoading = true))
+      emit(AnimeScheduleState.Loading)
 
       val state = when (val res = repository.getAnimeSchedule(dayInCalendar)) {
         is Resource.Success -> {
@@ -29,7 +32,10 @@ class GetAnimeScheduleUseCase @Inject constructor(
             it.toAnimeSchedule()
           }.orEmpty()
 
-          AnimeScheduleState(data)
+          AnimeScheduleState(
+            data = data,
+            error = Event(res.message)
+          )
         }
         is Resource.Error -> AnimeScheduleState(error = Event(res.message))
         is Resource.Loading -> AnimeScheduleState(isLoading = true)
@@ -37,5 +43,32 @@ class GetAnimeScheduleUseCase @Inject constructor(
 
       emit(state)
     }.flowOn(dispatchers.io)
+  }
+
+  fun getAsAnimeHorizontalList(
+    dayInCalendar: Int = Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
+  ): Flow<AnimeHorizontalListContentState> {
+    return flow {
+      emit(AnimeHorizontalListContentState.Loading)
+
+      val state = when (val res = repository.getAnimeSchedule(dayInCalendar)) {
+        is Resource.Success -> {
+          val data = res.data!!.data.map {
+            AnimeVerticalDataModel.from(it)
+          }
+
+          AnimeHorizontalListContentState(
+            data = AnimeVerticalModel(
+              data = data,
+              pagination = res.data.pagination
+            )
+          )
+        }
+        is Resource.Error -> AnimeHorizontalListContentState(error = Event(res.message))
+        is Resource.Loading -> AnimeHorizontalListContentState(isLoading = true)
+      }
+
+      emit(state)
+    }
   }
 }

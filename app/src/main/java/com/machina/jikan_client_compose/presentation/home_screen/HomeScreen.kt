@@ -18,7 +18,7 @@ import com.machina.jikan_client_compose.presentation.composable.CustomTextField
 import com.machina.jikan_client_compose.presentation.content_search_screen.composable.SearchLeadingIcon
 import com.machina.jikan_client_compose.presentation.home_screen.composable.SearchEditText
 import com.machina.jikan_client_compose.presentation.home_screen.viewmodel.HomeViewModel
-import com.machina.jikan_client_compose.ui.navigation.MainNavigation
+import com.machina.jikan_client_compose.ui.navigation.navigator.HomeScreenNavigation
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
@@ -29,7 +29,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 @ExperimentalCoilApi
 @Composable
 fun HomeScreen(
-  navigation: MainNavigation.HomeScreenNavigation,
+  navigation: HomeScreenNavigation,
   viewModel: HomeViewModel,
   lazyColumnState: LazyListState = rememberLazyListState(),
   onSearchFieldClick: (() -> Unit) = { }

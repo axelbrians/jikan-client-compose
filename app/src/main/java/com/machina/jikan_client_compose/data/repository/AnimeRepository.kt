@@ -1,8 +1,8 @@
 package com.machina.jikan_client_compose.data.repository
 
 import android.icu.util.Calendar
-import com.machina.jikan_client_compose.core.SafeCall
 import com.machina.jikan_client_compose.core.Endpoints
+import com.machina.jikan_client_compose.core.SafeCall
 import com.machina.jikan_client_compose.core.error.GeneralError
 import com.machina.jikan_client_compose.core.exception.MyError
 import com.machina.jikan_client_compose.core.wrapper.Resource
@@ -14,11 +14,9 @@ import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.AnimeDe
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_schedules.AnimeScheduleResponseV4
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_top.AnimeTopResponseV4
 import com.machina.jikan_client_compose.di.AndroidKtorClient
-import com.machina.jikan_client_compose.di.OkHttpKtorClient
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
-import io.ktor.util.date.*
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -60,7 +58,7 @@ class AnimeRepository @Inject constructor(
     val res = safeCall<AnimeAiringPopularResponseV4, GeneralError>(client, request)
 
     Timber.d(res.data?.toString())
-    Timber.d(res.message?.toString())
+    Timber.d(res.message)
     return res
   }
 
@@ -90,8 +88,6 @@ class AnimeRepository @Inject constructor(
     }
 
     val res = safeCall<AnimeDetailsResponseV4, GeneralError>(client, request)
-
-    Timber.d("res repository ${res.data}")
 
     return if (res is Resource.Success && res.data != null) {
       Resource.Success(res.data.data)
@@ -124,10 +120,11 @@ class AnimeRepository @Inject constructor(
 
     // Sort the result by Rank, and move the 0 rank value to last
     return if (res is Resource.Success && res.data != null) {
-      val sortedSchedule = res.data.data.sortedBy { it.rank }.toMutableList() ?: mutableListOf()
-      val zeroRank = sortedSchedule.count { it.rank < 1 }
 
-      for (i in 0 until zeroRank) {
+      val sortedSchedule = res.data.data.sortedBy { it.rank }.toMutableList()
+      val zeroRankCount = sortedSchedule.count { it.rank < 1 }
+
+      for (i in 0 until zeroRankCount) {
         val temp = sortedSchedule.removeFirst()
         sortedSchedule.add(temp)
       }

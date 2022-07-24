@@ -9,7 +9,7 @@ import com.machina.jikan_client_compose.domain.use_case.anime_airing_popular.Get
 import com.machina.jikan_client_compose.domain.use_case.anime_schedule.GetAnimeScheduleUseCase
 import com.machina.jikan_client_compose.domain.use_case.get_top_anime.GetAnimeTopUseCase
 import com.machina.jikan_client_compose.presentation.home_screen.anime_popular_current.state.AnimeAiringPopularState
-import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeHorizontalContentState
+import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeHorizontalListContentState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -26,13 +26,13 @@ class HomeViewModel @Inject constructor(
     mutableStateOf(AnimeAiringPopularState())
   val animeAiringPopular : State<AnimeAiringPopularState> = _animeAiringPopular
 
-  private val _animeScheduleState : MutableState<AnimeHorizontalContentState> =
-    mutableStateOf(AnimeHorizontalContentState())
-  val animeScheduleState : State<AnimeHorizontalContentState> = _animeScheduleState
+  private val _animeScheduleState : MutableState<AnimeHorizontalListContentState> =
+    mutableStateOf(AnimeHorizontalListContentState())
+  val animeScheduleState : State<AnimeHorizontalListContentState> = _animeScheduleState
 
-  private val _animeTopState: MutableState<AnimeHorizontalContentState> =
-    mutableStateOf(AnimeHorizontalContentState())
-  val animeTopState: State<AnimeHorizontalContentState> = _animeTopState
+  private val _animeTopState: MutableState<AnimeHorizontalListContentState> =
+    mutableStateOf(AnimeHorizontalListContentState())
+  val animeTopState: State<AnimeHorizontalListContentState> = _animeTopState
 
   fun getAnimeAiringPopular() {
     getAnimeAiringPopularUseCase().onEach {
@@ -41,14 +41,14 @@ class HomeViewModel @Inject constructor(
   }
 
   fun getTodayAnimeSchedule() {
-    getAnimeScheduleUseCase().onEach {
-      _animeScheduleState.value = AnimeHorizontalContentState.from(it)
+    getAnimeScheduleUseCase.getAsAnimeHorizontalList().onEach {
+      _animeScheduleState.value = it
     }.launchIn(viewModelScope)
   }
 
   fun getTopAnimeList() {
-    getAnimeTopUseCase().onEach {
-      _animeTopState.value = AnimeHorizontalContentState.from(it)
+    getAnimeTopUseCase.getAsAnimeHorizontalList().onEach {
+      _animeTopState.value = it
     }.launchIn(viewModelScope)
   }
 

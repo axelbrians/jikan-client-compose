@@ -15,7 +15,7 @@ import com.machina.jikan_client_compose.presentation.extension.isScrolledToTheEn
 import com.machina.jikan_client_compose.presentation.home_screen.view_holder.ItemAnimeTopShimmer
 import com.machina.jikan_client_compose.presentation.home_screen.view_holder.ItemVerticalAnime
 import com.machina.jikan_client_compose.presentation.home_screen.view_holder.ItemVerticalAnimeConfig
-import com.machina.jikan_client_compose.ui.navigation.MainNavigation
+import com.machina.jikan_client_compose.ui.navigation.navigator.ContentViewAllScreenNavigation
 import com.machina.jikan_client_compose.ui.shimmer.onUpdateShimmerBounds
 import com.machina.jikan_client_compose.ui.shimmer.rememberShimmerCustomBounds
 import com.valentinilk.shimmer.Shimmer
@@ -25,13 +25,14 @@ import timber.log.Timber
 @Composable
 fun ContentViewAllListScreen(
   modifier: Modifier = Modifier,
-  navigation: MainNavigation.ContentViewAllScreenNavigation,
+  navigation: ContentViewAllScreenNavigation,
   viewModel: ContentViewAllViewModel
 ) {
 
   val shimmerInstance = rememberShimmerCustomBounds()
   val lazyGridState = rememberLazyListState()
   val contentState = viewModel.contentState.value
+  val dataSet = contentState.data.data
 
   LaunchedEffect(key1 = viewModel, block = { viewModel.getNextContentPart() })
 
@@ -43,7 +44,7 @@ fun ContentViewAllListScreen(
       contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
       verticalArrangement = Arrangement.spacedBy(0.dp)
     ) {
-      items(contentState.data) { data ->
+      items(dataSet) { data ->
         ItemVerticalAnime(
           modifier = ItemVerticalAnimeConfig.fillParentWidthModifier,
           data = data,
@@ -58,19 +59,17 @@ fun ContentViewAllListScreen(
     }
   }
 
-  if (lazyGridState.isScrolledToTheEnd()) { // fetch more item when scrolled to the end
-    Timber.d("scrolled to the end, size ${contentState.data.size}")
-    LaunchedEffect(key1 = contentState.data.size) {
-      Timber.d("fetch more item, size ${contentState.data.size}")
-      viewModel.getNextContentPart()
-    }
+  if (lazyGridState.isScrolledToTheEnd() && viewModel.hasNextContentPart()) { // fetch more item when scrolled to the end
+    Timber.d("scrolled to the end, size ${dataSet.size}")
+    Timber.d("fetch more item, size ${dataSet.size}")
+    viewModel.getNextContentPart()
   }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 private fun LazyGridScope.showItemVerticalAnimeShimmer(
   shimmerInstance: Shimmer,
-  count: Int = 5
+  count: Int = 9
 ) {
   items(count) {
     ItemAnimeTopShimmer(

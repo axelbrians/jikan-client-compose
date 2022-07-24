@@ -7,4 +7,8 @@ data class AnimeScheduleState(
   val data: List<AnimeSchedule> = listOf(),
   val isLoading: Boolean = false,
   val error: Event<String?> = Event(null)
-)
+) {
+  companion object {
+    val Loading = AnimeScheduleState(isLoading = true)
+  }
+}

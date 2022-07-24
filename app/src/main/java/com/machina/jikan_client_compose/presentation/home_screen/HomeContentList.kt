@@ -21,12 +21,12 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
 import com.machina.jikan_client_compose.presentation.home_screen.anime_popular_current.AnimeAiringPopularHorizontalPager
 import com.machina.jikan_client_compose.presentation.home_screen.anime_popular_current.state.AnimeAiringPopularState
-import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeHorizontalContentState
+import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeHorizontalListContentState
 import com.machina.jikan_client_compose.presentation.home_screen.view_holder.ItemAnimeTopShimmer
 import com.machina.jikan_client_compose.presentation.home_screen.view_holder.ItemVerticalAnime
 import com.machina.jikan_client_compose.presentation.home_screen.view_holder.ItemVerticalAnimeConfig
-import com.machina.jikan_client_compose.ui.navigation.MainNavigation
 import com.machina.jikan_client_compose.ui.navigation.content_view_all.ContentViewAllType
+import com.machina.jikan_client_compose.ui.navigation.navigator.HomeScreenNavigation
 import com.machina.jikan_client_compose.ui.shimmer.onUpdateShimmerBounds
 import com.machina.jikan_client_compose.ui.shimmer.rememberShimmerCustomBounds
 import com.machina.jikan_client_compose.ui.theme.MyColor
@@ -39,10 +39,10 @@ import com.valentinilk.shimmer.rememberShimmer
 @Composable
 fun HomeContentList(
   modifier: Modifier = Modifier,
-  navigation: MainNavigation.HomeScreenNavigation,
+  navigation: HomeScreenNavigation,
   animeAiringPopularState: AnimeAiringPopularState = AnimeAiringPopularState(),
-  animeScheduleState: AnimeHorizontalContentState = AnimeHorizontalContentState(),
-  animeTopState: AnimeHorizontalContentState = AnimeHorizontalContentState(),
+  animeScheduleState: AnimeHorizontalListContentState = AnimeHorizontalListContentState(),
+  animeTopState: AnimeHorizontalListContentState = AnimeHorizontalListContentState(),
   lazyColumnState: LazyListState = rememberLazyListState()
 ) {
 
@@ -86,7 +86,7 @@ fun HomeContentList(
         if (animeScheduleState.isLoading) {
           showItemAnimeTopShimmer(shimmerInstance)
         } else {
-          items(animeScheduleState.data, key = { it.malId }) { data ->
+          items(animeScheduleState.data.data, key = { it.malId }) { data ->
             ItemVerticalAnime(
               modifier = ItemVerticalAnimeConfig.defaultModifier,
               data = data,
@@ -115,10 +115,10 @@ fun HomeContentList(
         if (animeTopState.isLoading) {
           showItemAnimeTopShimmer(shimmerInstance)
         } else {
-          items(animeTopState.data, key = { item -> item.malId }) { data ->
+          items(animeTopState.data.data, key = { item -> item.malId }) { model ->
             ItemVerticalAnime(
               modifier = ItemVerticalAnimeConfig.defaultModifier,
-              data = data,
+              data = model,
               navigateToContentDetailsScreen = navigation::navigateToContentDetailsScreen
             )
           }

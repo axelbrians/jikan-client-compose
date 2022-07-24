@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class AnimeTopResponseV4(
   @SerialName("data")
-  val `data`: List<AnimeTopDtoV4> = listOf(),
+  val data: List<AnimeTopDtoV4> = listOf(),
   @SerialName("pagination")
   val pagination: Pagination = Pagination()
 )

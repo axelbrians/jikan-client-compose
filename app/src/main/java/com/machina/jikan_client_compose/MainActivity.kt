@@ -17,21 +17,19 @@ import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.machina.jikan_client_compose.core.DispatchersProvider
 import com.machina.jikan_client_compose.presentation.content_detail_screen.ContentDetailsScreen
-import com.machina.jikan_client_compose.presentation.content_detail_screen.data.ContentDetailsViewModel
 import com.machina.jikan_client_compose.presentation.content_search_screen.SearchScreen
-import com.machina.jikan_client_compose.presentation.content_search_screen.data.SearchScreenViewModel
 import com.machina.jikan_client_compose.presentation.content_view_all_screen.ContentViewAllListScreen
 import com.machina.jikan_client_compose.presentation.content_view_all_screen.viewmodel.ContentViewAllAnimeScheduleViewModel
 import com.machina.jikan_client_compose.presentation.content_view_all_screen.viewmodel.ContentViewAllAnimeTopViewModel
 import com.machina.jikan_client_compose.presentation.content_view_all_screen.viewmodel.ContentViewAllViewModel
 import com.machina.jikan_client_compose.presentation.home_screen.HomeScreen
-import com.machina.jikan_client_compose.presentation.home_screen.viewmodel.HomeViewModel
-import com.machina.jikan_client_compose.ui.navigation.MainNavigation
-import com.machina.jikan_client_compose.ui.navigation.MainNavigation.CONTENT_DETAILS_SCREEN
-import com.machina.jikan_client_compose.ui.navigation.MainNavigation.CONTENT_SEARCH_SCREEN
-import com.machina.jikan_client_compose.ui.navigation.MainNavigation.CONTENT_VIEW_ALL_SCREEN
-import com.machina.jikan_client_compose.ui.navigation.MainNavigation.HOME_SCREEN
+import com.machina.jikan_client_compose.ui.navigation.MainNavigationRoute.CONTENT_DETAILS_SCREEN
+import com.machina.jikan_client_compose.ui.navigation.MainNavigationRoute.CONTENT_SEARCH_SCREEN
+import com.machina.jikan_client_compose.ui.navigation.MainNavigationRoute.CONTENT_VIEW_ALL_SCREEN
+import com.machina.jikan_client_compose.ui.navigation.MainNavigationRoute.HOME_SCREEN
 import com.machina.jikan_client_compose.ui.navigation.content_view_all.ContentViewAllType
+import com.machina.jikan_client_compose.ui.navigation.navigator.ContentViewAllScreenNavigation
+import com.machina.jikan_client_compose.ui.navigation.navigator.HomeScreenNavigation
 import com.machina.jikan_client_compose.ui.theme.JikanClientComposeTheme
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import dagger.hilt.android.AndroidEntryPoint
@@ -95,11 +93,10 @@ fun MyApp(
         window = window,
       )
 
-      val homeViewModel = hiltViewModel<HomeViewModel>()
 
       HomeScreen(
-        navigation = MainNavigation.HomeScreenNavigation(navController),
-        viewModel = homeViewModel,
+        navigation = HomeScreenNavigation(navController),
+        viewModel = hiltViewModel(),
         lazyColumnState = homeScrollState,
         onSearchFieldClick = {
           navController.navigate(CONTENT_SEARCH_SCREEN)
@@ -115,10 +112,8 @@ fun MyApp(
         window = window,
       )
 
-      val searchViewModel = hiltViewModel<SearchScreenViewModel>()
-
       SearchScreen(
-        viewModel = searchViewModel,
+        viewModel = hiltViewModel(),
         dispatchers = dispatchers,
         onContentClick = { type, malId ->
           navController.navigate("${CONTENT_DETAILS_SCREEN}/$type/$malId".lowercase())
@@ -137,10 +132,8 @@ fun MyApp(
         window = window,
       )
 
-      val detailsViewModel = hiltViewModel<ContentDetailsViewModel>()
-
       ContentDetailsScreen(
-        viewModel = detailsViewModel,
+        viewModel = hiltViewModel(),
         backStack.arguments?.getString("contentType")?.replaceFirstChar { it.uppercase() },
         backStack.arguments?.getInt("malId"),
         onBackPressed = { navController.navigateUp() }
@@ -161,16 +154,18 @@ fun MyApp(
         backStack.arguments?.getString("content", "") ?: ""
       )
 
-      val contentViewAllViewModel = when(content) {
+      val viewModel = when(content) {
         ContentViewAllType.AnimeSchedule -> hiltViewModel<ContentViewAllAnimeScheduleViewModel>()
         ContentViewAllType.AnimeTop -> hiltViewModel<ContentViewAllAnimeTopViewModel>()
         else -> null
       } as? ContentViewAllViewModel
 
-      if (contentViewAllViewModel != null) {
+      Timber.d("viewModel: ${viewModel?.javaClass?.simpleName}")
+
+      if (viewModel != null) {
         ContentViewAllListScreen(
-          viewModel = contentViewAllViewModel,
-          navigation = MainNavigation.ContentViewAllScreenNavigation(navController)
+          navigation = ContentViewAllScreenNavigation(navController),
+          viewModel = viewModel
         )
       } else { // Close screen if content is not supported
         navController.popBackStack()

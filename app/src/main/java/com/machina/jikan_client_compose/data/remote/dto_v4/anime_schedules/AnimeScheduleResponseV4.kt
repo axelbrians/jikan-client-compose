@@ -7,8 +7,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class AnimeScheduleResponseV4(
-  @SerialName("data")
-  val `data`: List<AnimeScheduleDtoV4> = listOf(),
   @SerialName("pagination")
-  val pagination: Pagination = Pagination()
+  val pagination: Pagination = Pagination.Empty,
+  @SerialName("data")
+  val data: List<AnimeScheduleDtoV4> = listOf()
 )

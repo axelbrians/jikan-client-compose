@@ -19,7 +19,7 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
 import com.machina.jikan_client_compose.core.enums.ContentType
-import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalModel
+import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalDataModel
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
 import com.machina.jikan_client_compose.ui.theme.MyColor
 
@@ -38,7 +38,7 @@ object ItemVerticalAnimeConfig {
 @Composable
 fun ItemVerticalAnime(
   modifier: Modifier = Modifier,
-  data: AnimeVerticalModel,
+  data: AnimeVerticalDataModel,
   thumbnailHeight: Dp = 190.dp,
   navigateToContentDetailsScreen: (Int, ContentType) -> Unit
 ) {

@@ -8,8 +8,11 @@ import com.machina.jikan_client_compose.ui.navigation.content_view_all.ContentVi
 class HomeScreenNavigation(
   private val navController: NavController
 ) {
-  fun navigateToContentViewAllScreen(type: ContentViewAllType) {
-    navController.navigate("${MainNavigationRoute.CONTENT_VIEW_ALL_SCREEN}/${type.name}")
+  fun navigateToContentViewAllScreen(
+    type: ContentViewAllType,
+    title: String
+  ) {
+    navController.navigate("${MainNavigationRoute.CONTENT_VIEW_ALL_SCREEN}/${type.name}/${title}")
   }
 
   fun navigateToContentDetailsScreen(

@@ -13,4 +13,8 @@ class ContentViewAllScreenNavigation(
   ) {
     navController.navigate("${MainNavigationRoute.CONTENT_DETAILS_SCREEN}/${contentType.name}/$malId".lowercase())
   }
+
+  fun navigateUp() {
+    navController.navigateUp()
+  }
 }

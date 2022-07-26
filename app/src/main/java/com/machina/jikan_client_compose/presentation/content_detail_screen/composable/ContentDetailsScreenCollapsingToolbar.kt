@@ -63,8 +63,9 @@ fun CollapsingToolbarScope.ContentDetailsScreenToolbar(
   val headerCaptionIcon: ImageVector
   val headerCaptionDescription: String
 
-  if (contentDetailsState.data?.isAiring == true
-    || contentDetailsState.data?.isPublishing == true
+  if (
+    contentDetailsState.data?.isAiring == true ||
+    contentDetailsState.data?.isPublishing == true
   ) {
     headerCaptionIcon = ImageVector.vectorResource(id = MyIcons.Outlined.Clock4)
     headerCaptionDescription = "Ongoing"

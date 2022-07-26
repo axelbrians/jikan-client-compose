@@ -19,21 +19,5 @@ data class AnimeHorizontalListContentState(
     val Loading = AnimeHorizontalListContentState(
       isLoading = true
     )
-
-//    fun from(state: AnimeScheduleState): AnimeHorizontalListContentState {
-//      return AnimeHorizontalListContentState(
-//        data = state.data.map { AnimeVerticalDataModel.from(it) },
-//        isLoading = state.isLoading,
-//        error = state.error
-//      )
-//    }
-//
-//    fun from(state: AnimeTopState): AnimeHorizontalListContentState {
-//      return AnimeHorizontalListContentState(
-//        data = state.data.map { AnimeVerticalDataModel.from(it) },
-//        isLoading = state.isLoading,
-//        error = state.error
-//      )
-//    }
   }
 }

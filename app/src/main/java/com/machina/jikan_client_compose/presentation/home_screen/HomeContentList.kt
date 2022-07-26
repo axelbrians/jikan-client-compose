@@ -73,10 +73,12 @@ fun HomeContentList(
     /* Start of Anime Airing Today */
     item(key = "anime_schedule_list") {
       val shimmerInstance = rememberShimmerCustomBounds()
-
+      val title = "Airing today"
       HorizontalContentHeader(
-        title = "Airing today",
-        onButtonClick = { navigation.navigateToContentViewAllScreen(ContentViewAllType.AnimeSchedule) }
+        title = title,
+        onButtonClick = {
+          navigation.navigateToContentViewAllScreen(ContentViewAllType.AnimeSchedule, title)
+        }
       )
 
       LazyRow(
@@ -102,10 +104,12 @@ fun HomeContentList(
     // Start of Top Anime of All Times
     item(key = "anime_top_list") {
       val shimmerInstance = rememberShimmer(shimmerBounds = ShimmerBounds.Custom)
-
+      val title = "Top anime of all times"
       HorizontalContentHeader(
-        title = "Top Anime of All Times",
-        onButtonClick = { navigation.navigateToContentViewAllScreen(ContentViewAllType.AnimeTop) }
+        title = title,
+        onButtonClick = {
+          navigation.navigateToContentViewAllScreen(ContentViewAllType.AnimeTop, title)
+        }
       )
 
       LazyRow(

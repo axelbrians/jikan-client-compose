@@ -141,7 +141,7 @@ fun MyApp(
     }
 
     composable(
-      route = "$CONTENT_VIEW_ALL_SCREEN/{content}",
+      route = "$CONTENT_VIEW_ALL_SCREEN/{content}/{title}",
     ) { backStack ->
       OnDestinationChanged(
         systemUiController = systemUiController,
@@ -150,6 +150,7 @@ fun MyApp(
         window = window,
       )
 
+      val title = backStack.arguments?.getString("title", "") ?: ""
       val content = ContentViewAllType.valueOf(
         backStack.arguments?.getString("content", "") ?: ""
       )
@@ -160,12 +161,11 @@ fun MyApp(
         else -> null
       } as? ContentViewAllViewModel
 
-      Timber.d("viewModel: ${viewModel?.javaClass?.simpleName}")
-
       if (viewModel != null) {
         ContentViewAllListScreen(
           navigation = ContentViewAllScreenNavigation(navController),
-          viewModel = viewModel
+          viewModel = viewModel,
+          title = title
         )
       } else { // Close screen if content is not supported
         navController.popBackStack()

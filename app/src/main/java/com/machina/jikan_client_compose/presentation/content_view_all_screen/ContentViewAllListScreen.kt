@@ -8,7 +8,6 @@ import androidx.compose.foundation.lazy.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import coil.annotation.ExperimentalCoilApi
@@ -27,7 +26,6 @@ import com.machina.jikan_client_compose.ui.shimmer.onUpdateShimmerBounds
 import com.machina.jikan_client_compose.ui.shimmer.rememberShimmerCustomBounds
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.valentinilk.shimmer.Shimmer
-import timber.log.Timber
 
 @OptIn(ExperimentalCoilApi::class, ExperimentalFoundationApi::class)
 @Composable
@@ -38,7 +36,8 @@ fun ContentViewAllListScreen(
   title: String
 ) {
 
-  val localDensity = LocalDensity.current
+  val contentState = viewModel.contentState.value
+  val dataSet = contentState.data.data
   val shimmerInstance = rememberShimmerCustomBounds()
   val lazyGridState = rememberLazyListState()
   val scrollDirection = rememberLazyScrollDirection()
@@ -50,15 +49,10 @@ fun ContentViewAllListScreen(
     targetValue = if (direction == ScrollDirection.UP) 0.dp else (-56).dp,
     animationSpec = TweenSpec.defaultEasing()
   )
-//  val animateHeight = animateDpAsState(
-//    targetValue = if (direction == ScrollDirection.UP) 56.dp else 0.dp,
-//    animationSpec = TweenSpec.defaultEasing()
-//  )
-  val contentState = viewModel.contentState.value
-  val dataSet = contentState.data.data
+
 
   LaunchedEffect(key1 = viewModel, block = { viewModel.getNextContentPart() })
-//  Timber.d("toolbar height: ${toolbarHeight.value}")
+
   Box(
     modifier = Modifier
       .fillMaxSize()
@@ -66,7 +60,6 @@ fun ContentViewAllListScreen(
   ) {
     ContentViewAllListScreenToolbar(
       modifier = Modifier
-//        .height(animateHeight.value)
         .offset(y = animateToolbarOffset.value)
         .zIndex(2f),
       title = title,
@@ -101,12 +94,7 @@ fun ContentViewAllListScreen(
     }
   }
 
-//  Timber.d("first visible item offset: ${lazyGridState.firstVisibleItemScrollOffset}")
-//  Timber.d("first visible item index: ${lazyGridState.firstVisibleItemIndex}")
-
   if (lazyGridState.isScrolledToTheEnd() && viewModel.hasNextContentPart()) { // fetch more item when scrolled to the end
-    Timber.d("scrolled to the end, size ${dataSet.size}")
-    Timber.d("fetch more item, size ${dataSet.size}")
     viewModel.getNextContentPart()
   }
 }

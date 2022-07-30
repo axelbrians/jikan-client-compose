@@ -1,4 +1,4 @@
-package com.machina.jikan_client_compose.presentation.content_detail_screen.header
+package com.machina.jikan_client_compose.presentation.content_detail_screen.composable
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -41,7 +41,6 @@ import com.machina.jikan_client_compose.ui.theme.MySize
 import me.onebone.toolbar.*
 import kotlin.math.roundToInt
 
-@OptIn(ExperimentalAnimationApi::class)
 @ExperimentalCoilApi
 @Composable
 fun CollapsingToolbarScope.ContentDetailsScreenToolbar(

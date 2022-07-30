@@ -1,22 +1,21 @@
 package com.machina.jikan_client_compose.presentation.content_view_all_screen.composable
 
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.accompanist.insets.statusBarsPadding
 import com.machina.jikan_client_compose.ui.theme.MyColor
 
 @Composable
@@ -25,9 +24,10 @@ fun ContentViewAllListScreenToolbar(
   title: String,
   onClick: () -> Unit
 ) {
-  Row(
-    modifier = Modifier.fillMaxWidth().statusBarsPadding(),
-    verticalAlignment = Alignment.CenterVertically
+  TopAppBar(
+    modifier = modifier
+      .fillMaxWidth()
+      .background(MyColor.BlackLighterBackground)
   ) {
     IconButton(onClick = onClick) {
       Icon(
@@ -43,9 +43,11 @@ fun ContentViewAllListScreenToolbar(
       style = TextStyle(
         color = MyColor.OnDarkSurfaceLight,
         fontWeight = FontWeight.Bold,
-        fontSize = 20.sp
+        fontSize = 18.sp
       ),
-      modifier = Modifier.weight(1f).padding(start = 8.dp, end = 12.dp)
+      modifier = Modifier
+        .weight(1f)
+        .padding(start = 8.dp, end = 12.dp)
     )
   }
 }

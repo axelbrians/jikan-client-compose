@@ -26,7 +26,6 @@ import com.machina.jikan_client_compose.presentation.home_screen.view_holder.Ite
 import com.machina.jikan_client_compose.presentation.home_screen.view_holder.ItemVerticalAnime
 import com.machina.jikan_client_compose.presentation.home_screen.view_holder.ItemVerticalAnimeConfig
 import com.machina.jikan_client_compose.ui.navigation.content_view_all.ContentViewAllType
-import com.machina.jikan_client_compose.ui.navigation.navigator.HomeScreenNavigation
 import com.machina.jikan_client_compose.ui.shimmer.onUpdateShimmerBounds
 import com.machina.jikan_client_compose.ui.shimmer.rememberShimmerCustomBounds
 import com.machina.jikan_client_compose.ui.theme.MyColor
@@ -39,12 +38,12 @@ import com.valentinilk.shimmer.rememberShimmer
 @Composable
 fun HomeContentList(
   modifier: Modifier = Modifier,
-  navigation: HomeScreenNavigation,
+  navigation: HomeScreenNavigator,
   animeAiringPopularState: AnimeAiringPopularState = AnimeAiringPopularState(),
   animeScheduleState: AnimeHorizontalListContentState = AnimeHorizontalListContentState(),
-  animeTopState: AnimeHorizontalListContentState = AnimeHorizontalListContentState(),
-  lazyColumnState: LazyListState = rememberLazyListState()
+  animeTopState: AnimeHorizontalListContentState = AnimeHorizontalListContentState()
 ) {
+  val lazyColumnState = rememberLazyListState()
 
   LazyColumn(
     modifier = modifier,

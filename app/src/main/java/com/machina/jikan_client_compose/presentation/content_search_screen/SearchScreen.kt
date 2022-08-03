@@ -32,9 +32,9 @@ import timber.log.Timber
 @Composable
 fun SearchScreen(
   modifier: Modifier = Modifier,
+  navigator: SearchScreenNavigator,
   viewModel: SearchScreenViewModel,
-  dispatchers: DispatchersProvider,
-  onContentClick: ((String, Int) -> Unit) = { type, id -> },
+  dispatchers: DispatchersProvider
 ) {
 
   val listState = rememberLazyListState()
@@ -121,12 +121,12 @@ fun SearchScreen(
       ContentSearchList(
         listState = listState,
         state = contentSearchState,
-        onItemClick = onContentClick
+        onItemClick = navigator::navigateToContentDetailsScreen
       )
 
       if (listState.isScrolledToTheEnd()) {
         LaunchedEffect(searchQuery.value) {
-          Timber.d("query next page with $searchQuery.value")
+//          Timber.d("query next page with $searchQuery.value")
           viewModel.nextContentPageByQuery(searchQuery.value, selectedType.value)
         }
       }

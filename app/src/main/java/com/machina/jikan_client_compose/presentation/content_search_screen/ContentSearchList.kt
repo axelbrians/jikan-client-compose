@@ -4,7 +4,9 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -13,6 +15,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
+import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.core.enums.MangaSubType.DOUJIN
 import com.machina.jikan_client_compose.core.enums.MangaSubType.LIGHT_NOVEL
 import com.machina.jikan_client_compose.core.enums.MangaSubType.MANGA
@@ -33,7 +36,7 @@ import com.valentinilk.shimmer.unclippedBoundsInWindow
 fun ContentSearchList(
   listState: LazyListState,
   state: ContentSearchState,
-  onItemClick: (String, Int) -> Unit
+  onItemClick: (Int, ContentType) -> Unit
 ) {
   val shimmerInstance = rememberShimmer(shimmerBounds = ShimmerBounds.Custom)
 

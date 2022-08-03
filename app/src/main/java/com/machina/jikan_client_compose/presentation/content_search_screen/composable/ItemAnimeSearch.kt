@@ -27,7 +27,7 @@ import com.machina.jikan_client_compose.ui.theme.MyColor
 fun ItemAnimeSearch(
   modifier: Modifier = Modifier,
   data: ContentSearch,
-  onItemClick: (String, Int) -> Unit
+  onItemClick: (Int, ContentType) -> Unit
 ) {
 
   val painter = rememberImagePainter(
@@ -39,7 +39,7 @@ fun ItemAnimeSearch(
 
   Row(
     modifier = modifier
-      .clickable { onItemClick(ContentType.Anime.name, data.malId) }
+      .clickable { onItemClick(data.malId, ContentType.Anime) }
   ) {
     Box(
       modifier = Modifier

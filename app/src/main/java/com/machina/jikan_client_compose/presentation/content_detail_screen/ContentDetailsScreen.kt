@@ -34,10 +34,10 @@ import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
 @ExperimentalCoilApi
 @Composable
 fun ContentDetailsScreen(
+  navigator: ContentDetailsScreenNavigator,
   viewModel: ContentDetailsViewModel,
   contentType: String?,
-  malId: Int?,
-  onBackPressed: () -> Boolean = { false }
+  malId: Int?
 ) {
   val toolbarScaffoldState = rememberCollapsingToolbarScaffoldState()
   val contentDetailsState = viewModel.contentDetailsState.value
@@ -82,7 +82,7 @@ fun ContentDetailsScreen(
           smallCoil = smallImageCoil,
           contentDetailsState = contentDetailsState,
           toolbarScaffoldState = toolbarScaffoldState,
-          onArrowClick = onBackPressed
+          onArrowClick = navigator::navigateUp
         )
       }
     ) {

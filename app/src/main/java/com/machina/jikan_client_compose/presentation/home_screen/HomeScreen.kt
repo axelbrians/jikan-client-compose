@@ -3,8 +3,6 @@ package com.machina.jikan_client_compose.presentation.home_screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -18,21 +16,17 @@ import com.machina.jikan_client_compose.presentation.composable.CustomTextField
 import com.machina.jikan_client_compose.presentation.content_search_screen.composable.SearchLeadingIcon
 import com.machina.jikan_client_compose.presentation.home_screen.composable.SearchEditText
 import com.machina.jikan_client_compose.presentation.home_screen.viewmodel.HomeViewModel
-import com.machina.jikan_client_compose.ui.navigation.navigator.HomeScreenNavigation
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 
-@OptIn(ExperimentalMaterialApi::class)
 @InternalCoroutinesApi
 @ExperimentalCoilApi
 @Composable
 fun HomeScreen(
-  navigation: HomeScreenNavigation,
-  viewModel: HomeViewModel,
-  lazyColumnState: LazyListState = rememberLazyListState(),
-  onSearchFieldClick: (() -> Unit) = { }
+  navigator: HomeScreenNavigator,
+  viewModel: HomeViewModel
 ) {
 
   val animeAiringPopularState = viewModel.animeAiringPopular.value
@@ -66,9 +60,7 @@ fun HomeScreen(
             .fillMaxWidth()
             .padding(24.dp, 12.dp)
             .clip(RoundedCornerShape(8.dp))
-            .clickable {
-              onSearchFieldClick()
-            },
+            .clickable { navigator.navigateToSearchScreen() },
           padding = PaddingValues(12.dp),
           content = {
             SearchEditText(
@@ -90,11 +82,10 @@ fun HomeScreen(
       )
 
       HomeContentList(
-        navigation = navigation,
+        navigation = navigator,
         animeAiringPopularState = animeAiringPopularState,
         animeScheduleState = animeScheduleState,
-        animeTopState = animeTopState,
-        lazyColumnState = lazyColumnState
+        animeTopState = animeTopState
       )
     }
 

@@ -79,7 +79,7 @@ fun ItemVerticalAnime(
 
     Text(
       text = data.title,
-      modifier = Modifier.padding(0.dp, 6.dp, 0.dp, 0.dp),
+      modifier = Modifier.padding(vertical = 6.dp),
       maxLines = 2,
       overflow = TextOverflow.Ellipsis,
       style = TextStyle(
@@ -88,15 +88,15 @@ fun ItemVerticalAnime(
         fontWeight = FontWeight.Bold
       )
     )
-
-    Text(
-      text = "${data.score}",
-      modifier = Modifier.padding(bottom = 3.dp),
-      style = TextStyle(
-        color = MyColor.OnDarkSurface,
-        fontSize = 13.sp,
-        fontWeight = FontWeight.Normal
-      )
-    )
+//
+//    Text(
+//      text = "${data.score}",
+//      modifier = Modifier.padding(bottom = 3.dp),
+//      style = TextStyle(
+//        color = MyColor.OnDarkSurface,
+//        fontSize = 13.sp,
+//        fontWeight = FontWeight.Normal
+//      )
+//    )
   }
 }

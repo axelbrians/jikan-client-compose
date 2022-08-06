@@ -10,10 +10,10 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
 fun OnDestinationChanged(
+  window: Window,
   systemUiController: SystemUiController = rememberSystemUiController(),
   color: Color = Color.Transparent,
-  drawOverStatusBar: Boolean = false,
-  window: Window
+  drawOverStatusBar: Boolean = false
 ) {
   SideEffect {
     systemUiController.setSystemBarsColor(color = color)

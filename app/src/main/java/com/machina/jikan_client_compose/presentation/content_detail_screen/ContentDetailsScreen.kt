@@ -9,8 +9,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
@@ -19,11 +18,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
+import com.google.accompanist.flowlayout.FlowMainAxisAlignment
+import com.google.accompanist.flowlayout.FlowRow
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
 import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.ContentDetailsScreenToolbar
+import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.ContentDetailsSynopsis
 import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.ContentDetailsTrailerPlayer
 import com.machina.jikan_client_compose.presentation.content_detail_screen.data.ContentDetailsViewModel
-import com.machina.jikan_client_compose.presentation.content_detail_screen.synopsis.ContentDetailsSynopsis
 import com.machina.jikan_client_compose.presentation.content_detail_screen.three_column.ContentDetailsThreeColumnSection
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import me.onebone.toolbar.CollapsingToolbarScaffold
@@ -39,6 +40,7 @@ fun ContentDetailsScreen(
   contentType: String?,
   malId: Int?
 ) {
+  var isSynopsisExpanded by remember { mutableStateOf(false) }
   val toolbarScaffoldState = rememberCollapsingToolbarScaffoldState()
   val contentDetailsState = viewModel.contentDetailsState.value
   val genres = contentDetailsState.data?.genres ?: listOf()
@@ -102,47 +104,48 @@ fun ContentDetailsScreen(
 
         // Synopsis Composable
         item(key = "content_description_composable") {
-          ContentDetailsSynopsis(state = contentDetailsState)
+          ContentDetailsSynopsis(
+            state = contentDetailsState,
+            isExpanded = isSynopsisExpanded,
+            onClick = { isSynopsisExpanded = it }
+          )
         }
 
 
         // Genre FlowRow Chips
         item(key = "content_genre_chips") {
           if (genres.isNotEmpty()) {
-            LazyRow(
-              contentPadding = PaddingValues(horizontal = 10.dp),
-              horizontalArrangement = Arrangement.Start
-            ) {
-              this.items(genres) { genre ->
-                Surface(
-                  modifier = Modifier.padding(vertical = 4.dp, horizontal = 6.dp),
-                  shape = RoundedCornerShape(16.dp),
-                  color = MyColor.Yellow500,
-                ) {
-                  Text(
-                    text = genre.name,
-                    style = TextStyle(
-                      color = MyColor.BlackBackground,
-                      fontSize = 13.sp,
-                      fontWeight = FontWeight.SemiBold
-                    ),
-                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
-                  )
+            if (isSynopsisExpanded) {
+              FlowRow(
+                modifier = Modifier.padding(horizontal = 10.dp),
+                lastLineMainAxisAlignment = FlowMainAxisAlignment.Start
+              ) {
+                genres.forEach {
+                  GenreChip(text = it.name)
+                }
+              }
+            } else {
+              LazyRow(
+                contentPadding = PaddingValues(horizontal = 10.dp),
+                horizontalArrangement = Arrangement.Start
+              ) {
+                this.items(genres) { genre ->
+                  GenreChip(text = genre.name)
                 }
               }
             }
           }
         }
 
-        // Content Trailer (if any, like TV or Movies or Anime
-        contentDetailsState.data?.trailer?.embedUrl?.let {
+        // Content Trailer (if any, like TV or Movies or Anime)
+        if (contentDetailsState.data?.trailer?.embedUrl != null) {
           item(key = "content_trailer") {
             ContentDetailsTrailerPlayer(
               modifier = Modifier
                 .padding(top = 12.dp)
                 .height(240.dp)
                 .fillMaxWidth(),
-              it
+              trailerUrl = contentDetailsState.data.trailer.embedUrl
             )
           }
         }
@@ -160,5 +163,27 @@ fun ContentDetailsScreen(
         }
       }
     }
+  }
+}
+
+@Composable
+fun GenreChip(
+  modifier: Modifier = Modifier,
+  text: String = ""
+) {
+  Surface(
+    modifier = Modifier.padding(vertical = 4.dp, horizontal = 4.dp),
+    shape = RoundedCornerShape(16.dp),
+    color = MyColor.Yellow500,
+  ) {
+    Text(
+      text = text,
+      style = TextStyle(
+        color = MyColor.BlackBackground,
+        fontSize = 13.sp,
+        fontWeight = FontWeight.SemiBold
+      ),
+      modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
+    )
   }
 }

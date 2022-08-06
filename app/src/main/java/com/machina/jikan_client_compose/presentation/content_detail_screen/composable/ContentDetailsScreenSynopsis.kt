@@ -1,4 +1,4 @@
-package com.machina.jikan_client_compose.presentation.content_detail_screen.synopsis
+package com.machina.jikan_client_compose.presentation.content_detail_screen.composable
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
@@ -13,7 +13,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -29,16 +29,14 @@ import com.machina.jikan_client_compose.ui.theme.MyColor
 @ExperimentalAnimationApi
 @Composable
 fun ContentDetailsSynopsis(
-  state: ContentDetailsState?
+  state: ContentDetailsState?,
+  isExpanded: Boolean,
+  onClick: (Boolean) -> Unit,
 ) {
-  var expanded by remember { mutableStateOf(false) }
   val contentSynopsis = resolveContentDetailsSynopsis(state)
 
-
-
-
   AnimatedContent(
-    targetState = expanded,
+    targetState = isExpanded,
     transitionSpec = {
       expandVertically(animationSpec = tween(150, 150), initialHeight = { it }) with
         shrinkVertically(animationSpec = tween(150, 150), targetHeight = { it }) using
@@ -58,7 +56,7 @@ fun ContentDetailsSynopsis(
         )
 
         IconButton(
-          onClick = { expanded = !expanded },
+          onClick = { onClick(!isExpanded) },
           modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
           Icon(
@@ -97,7 +95,7 @@ fun ContentDetailsSynopsis(
             )
         ) {
           IconButton(
-            onClick = { expanded = !expanded },
+            onClick = { onClick(!isExpanded) },
             modifier = Modifier
               .align(Alignment.BottomCenter)
               .zIndex(2F)

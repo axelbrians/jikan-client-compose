@@ -21,7 +21,7 @@ fun NavGraphBuilder.searchNav(
   composable(route = MainNavigationRoute.CONTENT_SEARCH_SCREEN) { backstack ->
     OnDestinationChanged(
       systemUiController = systemUiController,
-      color = MyColor.BlackBackground,
+      color = MyColor.DarkBlueBackground,
       drawOverStatusBar = false,
       window = window,
     )

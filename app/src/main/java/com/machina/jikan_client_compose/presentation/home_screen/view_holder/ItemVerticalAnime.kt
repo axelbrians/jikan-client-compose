@@ -5,16 +5,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
@@ -22,6 +19,7 @@ import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalDataModel
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
 import com.machina.jikan_client_compose.ui.theme.MyColor
+import com.machina.jikan_client_compose.ui.theme.MyType
 
 object ItemVerticalAnimeConfig {
   val defaultModifier = Modifier
@@ -43,6 +41,7 @@ fun ItemVerticalAnime(
   navigateToContentDetailsScreen: (Int, ContentType) -> Unit
 ) {
 
+  var titleLineCount by remember { mutableStateOf(0) }
   val painter = rememberImagePainter(
     data = data.imageUrl,
     builder = {
@@ -82,12 +81,18 @@ fun ItemVerticalAnime(
       modifier = Modifier.padding(vertical = 6.dp),
       maxLines = 2,
       overflow = TextOverflow.Ellipsis,
-      style = TextStyle(
-        color = MyColor.OnDarkSurface,
-        fontSize = 13.sp,
-        fontWeight = FontWeight.Bold
-      )
+      style = MyType.Body2.Normal.OnDarkSurfaceLight,
+      onTextLayout = {
+        titleLineCount = it.lineCount
+      }
     )
+
+    repeat(2 - titleLineCount) {
+      Text(
+        text = "",
+        style = MyType.Body2.Bold.OnDarkSurface
+      )
+    }
 //
 //    Text(
 //      text = "${data.score}",

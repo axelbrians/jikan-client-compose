@@ -1,4 +1,4 @@
-package com.machina.jikan_client_compose.presentation.home_screen.view_holder
+package com.machina.jikan_client_compose.presentation.home_screen.composable.shimmer
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -13,7 +13,7 @@ import com.valentinilk.shimmer.Shimmer
 import com.valentinilk.shimmer.shimmer
 
 @Composable
-fun ItemAnimeTopShimmer(
+fun ItemVerticalAnimeShimmer(
   modifier: Modifier,
   thumbnailHeight: Dp = 190.dp,
   shimmerInstance: Shimmer

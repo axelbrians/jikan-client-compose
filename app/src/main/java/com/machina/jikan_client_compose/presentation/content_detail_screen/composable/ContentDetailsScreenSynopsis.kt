@@ -87,9 +87,9 @@ fun ContentDetailsSynopsis(
             .background(
               brush = Brush.verticalGradient(
                 colors = listOf(
-                  MyColor.BlackBackground.copy(alpha = 0F),
-                  MyColor.BlackBackground.copy(alpha = 0.9F),
-                  MyColor.BlackBackground
+                  MyColor.DarkBlueBackground.copy(alpha = 0F),
+                  MyColor.DarkBlueBackground.copy(alpha = 0.9F),
+                  MyColor.DarkBlueBackground
                 )
               )
             )

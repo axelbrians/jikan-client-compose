@@ -1,9 +1,8 @@
-package com.machina.jikan_client_compose.presentation.home_screen.anime_popular_current.composable
+package com.machina.jikan_client_compose.presentation.home_screen.composable.anime_popular_current.composable
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip

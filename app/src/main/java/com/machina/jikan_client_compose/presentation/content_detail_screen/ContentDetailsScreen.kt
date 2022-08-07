@@ -64,7 +64,7 @@ fun ContentDetailsScreen(
     Surface(
       modifier = Modifier
         .fillMaxSize()
-        .background(MyColor.BlackBackground)
+        .background(MyColor.DarkBlueBackground)
     ) {
       CenterCircularProgressIndicator(
         size = 40.dp,
@@ -75,7 +75,7 @@ fun ContentDetailsScreen(
     CollapsingToolbarScaffold(
       modifier = Modifier
         .fillMaxSize()
-        .background(MyColor.BlackBackground),
+        .background(MyColor.DarkBlueBackground),
       state = toolbarScaffoldState,
       scrollStrategy = ScrollStrategy.ExitUntilCollapsed,
       toolbar = {
@@ -150,7 +150,8 @@ fun ContentDetailsScreen(
           }
         }
 
-        items(7) {
+
+        items(6) {
           Text(
             text = "Anime Detail's",
             style = TextStyle(
@@ -179,7 +180,7 @@ fun GenreChip(
     Text(
       text = text,
       style = TextStyle(
-        color = MyColor.BlackBackground,
+        color = MyColor.DarkBlueBackground,
         fontSize = 13.sp,
         fontWeight = FontWeight.SemiBold
       ),

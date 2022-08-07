@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.machina.jikan_client_compose.domain.use_case.anime_airing_popular.GetAnimeAiringPopularUseCase
 import com.machina.jikan_client_compose.domain.use_case.anime_schedule.GetAnimeScheduleUseCase
 import com.machina.jikan_client_compose.domain.use_case.get_top_anime.GetAnimeTopUseCase
-import com.machina.jikan_client_compose.presentation.home_screen.anime_popular_current.state.AnimeAiringPopularState
+import com.machina.jikan_client_compose.presentation.home_screen.composable.anime_popular_current.state.AnimeAiringPopularState
 import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeHorizontalListContentState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn

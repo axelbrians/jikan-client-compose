@@ -28,7 +28,7 @@ fun CustomTextField(
   Surface(
     modifier = modifier,
     shape = RoundedCornerShape(8.dp),
-    color = MyColor.BlackLighterBackground,
+    color = MyColor.DarkGreyBackground,
     elevation = elevation
   ) {
     Row(

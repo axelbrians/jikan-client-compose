@@ -27,7 +27,7 @@ fun NavGraphBuilder.contentViewAllListNav(
   ) { backStack ->
     OnDestinationChanged(
       systemUiController = systemUiController,
-      color = MyColor.BlackLighterBackground,
+      color = MyColor.DarkGreyBackground,
       drawOverStatusBar = false,
       window = window,
     )

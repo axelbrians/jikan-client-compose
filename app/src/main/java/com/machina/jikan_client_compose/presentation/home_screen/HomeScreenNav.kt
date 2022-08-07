@@ -23,7 +23,7 @@ fun NavGraphBuilder.homeScreenNav(
   composable(route = MainNavigationRoute.HOME_SCREEN) {
     OnDestinationChanged(
       systemUiController = systemUiController,
-      color = MyColor.BlackBackground,
+      color = MyColor.DarkBlueBackground,
       drawOverStatusBar = false,
       window = window,
     )

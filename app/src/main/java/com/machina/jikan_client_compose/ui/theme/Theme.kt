@@ -11,7 +11,7 @@ private val DarkColorPalette = darkColors(
   primary = MyColor.Yellow500,
   primaryVariant = MyColor.Yellow500,
   secondary = MyColor.Yellow500,
-  background = MyColor.BlackBackground,
+  background = MyColor.DarkBlueBackground,
   onSurface = MyColor.OnDarkSurface
 )
 
@@ -19,7 +19,7 @@ private val LightColorPalette = lightColors(
   primary = MyColor.Yellow500,
   primaryVariant = MyColor.Yellow500,
   secondary = MyColor.Yellow500,
-  background = MyColor.BlackBackground,
+  background = MyColor.DarkBlueBackground,
   onSurface = MyColor.OnDarkSurface,
 
 
@@ -48,7 +48,7 @@ fun JikanClientComposeTheme(
   ProvideWindowInsets {
     MaterialTheme(
       colors = colors,
-      typography = Typography,
+      typography = Type.Typography,
       shapes = Shapes,
       content = content
     )

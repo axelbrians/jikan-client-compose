@@ -1,6 +1,5 @@
 package com.machina.jikan_client_compose.presentation.content_view_all_screen.composable
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
@@ -26,8 +25,8 @@ fun ContentViewAllListScreenToolbar(
 ) {
   TopAppBar(
     modifier = modifier
-      .fillMaxWidth()
-      .background(MyColor.BlackLighterBackground)
+      .fillMaxWidth(),
+    backgroundColor = MyColor.DarkGreyBackground
   ) {
     IconButton(onClick = onClick) {
       Icon(

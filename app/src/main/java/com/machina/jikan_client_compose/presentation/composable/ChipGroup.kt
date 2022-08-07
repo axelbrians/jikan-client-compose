@@ -56,7 +56,7 @@ fun Chip(
             width = 1.dp,
             color = when {
                 isSelected -> MyColor.Yellow500
-                else -> MyColor.BlackLighterBackground
+                else -> MyColor.DarkGreyBackground
             }
         )
     ) {

@@ -50,7 +50,7 @@ fun HomeScreen(
   Scaffold(
     modifier = Modifier
       .fillMaxSize()
-      .background(MyColor.BlackBackground),
+      .background(MyColor.DarkBlueBackground),
     scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
   ) {
     Column(modifier = Modifier.fillMaxWidth()) {
@@ -77,7 +77,7 @@ fun HomeScreen(
       }
 
       Divider(
-        color = MyColor.BlackLighterBackground,
+        color = MyColor.DarkGreyBackground,
         thickness = 1.dp
       )
 

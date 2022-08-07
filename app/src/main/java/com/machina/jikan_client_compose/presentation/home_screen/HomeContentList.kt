@@ -19,10 +19,10 @@ import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
-import com.machina.jikan_client_compose.presentation.home_screen.anime_popular_current.AnimeAiringPopularHorizontalPager
-import com.machina.jikan_client_compose.presentation.home_screen.anime_popular_current.state.AnimeAiringPopularState
+import com.machina.jikan_client_compose.presentation.home_screen.composable.anime_popular_current.AnimeAiringPopularHorizontalPager
+import com.machina.jikan_client_compose.presentation.home_screen.composable.anime_popular_current.state.AnimeAiringPopularState
+import com.machina.jikan_client_compose.presentation.home_screen.composable.shimmer.ItemVerticalAnimeShimmer
 import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeHorizontalListContentState
-import com.machina.jikan_client_compose.presentation.home_screen.view_holder.ItemAnimeTopShimmer
 import com.machina.jikan_client_compose.presentation.home_screen.view_holder.ItemVerticalAnime
 import com.machina.jikan_client_compose.presentation.home_screen.view_holder.ItemVerticalAnimeConfig
 import com.machina.jikan_client_compose.ui.navigation.content_view_all.ContentViewAllType
@@ -163,9 +163,13 @@ private fun HorizontalContentHeader(
   }
 }
 
+private fun LazyItemScope.showContentListHeaderShimmer(shimmerInstance: Shimmer) {
+
+}
+
 private fun LazyListScope.showItemAnimeTopShimmer(shimmerInstance: Shimmer, count: Int = 5) {
   items(count) {
-    ItemAnimeTopShimmer(
+    ItemVerticalAnimeShimmer(
       modifier = ItemVerticalAnimeConfig.defaultModifier,
       shimmerInstance = shimmerInstance
     )

@@ -51,9 +51,9 @@ fun CollapsingToolbarScope.ContentDetailsScreenToolbar(
   onArrowClick: () -> Boolean = { false }
 ) {
   val blockerColorGradients = listOf(
-    MyColor.BlackBackground.copy(alpha = 0.8F),
-    MyColor.BlackBackground.copy(alpha = 0.9F),
-    MyColor.BlackBackground
+    MyColor.DarkBlueBackground.copy(alpha = 0.8F),
+    MyColor.DarkBlueBackground.copy(alpha = 0.9F),
+    MyColor.DarkBlueBackground
   )
 
   val isTitleVisible = toolbarScaffoldState.toolbarState.progress <= 0.25
@@ -260,7 +260,7 @@ fun Preview_ContentDetailsScreenCollapsingToolbar() {
   CollapsingToolbarScaffold(
     modifier = Modifier
       .fillMaxSize()
-      .background(MyColor.BlackBackground),
+      .background(MyColor.DarkBlueBackground),
     state = rememberCollapsingToolbarScaffoldState(),
     scrollStrategy = ScrollStrategy.EnterAlwaysCollapsed,
     toolbar = {

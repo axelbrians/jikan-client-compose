@@ -1,4 +1,4 @@
-package com.machina.jikan_client_compose.presentation.home_screen.anime_popular_current.state
+package com.machina.jikan_client_compose.presentation.home_screen.composable.anime_popular_current.state
 
 import com.machina.jikan_client_compose.core.wrapper.Event
 import com.machina.jikan_client_compose.domain.model.anime.AnimeAiringPopular

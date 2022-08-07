@@ -1,4 +1,4 @@
-package com.machina.jikan_client_compose.presentation.home_screen.anime_popular_current
+package com.machina.jikan_client_compose.presentation.home_screen.composable.anime_popular_current
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearOutSlowInEasing
@@ -17,10 +17,10 @@ import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.domain.model.anime.AnimeAiringPopular
-import com.machina.jikan_client_compose.presentation.home_screen.anime_popular_current.composable.PagerItemAnimeAiringPopular
-import com.machina.jikan_client_compose.presentation.home_screen.anime_popular_current.composable.ShimmerHorizontalChipIndicator
-import com.machina.jikan_client_compose.presentation.home_screen.anime_popular_current.composable.ShimmerPagerItemAnimeAiringPopular
-import com.machina.jikan_client_compose.presentation.home_screen.anime_popular_current.state.AnimeAiringPopularState
+import com.machina.jikan_client_compose.presentation.home_screen.composable.anime_popular_current.composable.PagerItemAnimeAiringPopular
+import com.machina.jikan_client_compose.presentation.home_screen.composable.anime_popular_current.composable.ShimmerHorizontalChipIndicator
+import com.machina.jikan_client_compose.presentation.home_screen.composable.anime_popular_current.composable.ShimmerPagerItemAnimeAiringPopular
+import com.machina.jikan_client_compose.presentation.home_screen.composable.anime_popular_current.state.AnimeAiringPopularState
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.valentinilk.shimmer.Shimmer
 import kotlin.math.absoluteValue

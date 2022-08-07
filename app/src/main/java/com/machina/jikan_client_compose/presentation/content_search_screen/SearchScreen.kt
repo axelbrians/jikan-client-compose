@@ -60,7 +60,7 @@ fun SearchScreen(
   Scaffold(
     modifier = Modifier
       .fillMaxSize()
-      .background(MyColor.BlackBackground),
+      .background(MyColor.DarkBlueBackground),
     scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
   ) {
     Column(modifier = Modifier.fillMaxWidth()) {
@@ -109,7 +109,7 @@ fun SearchScreen(
       }
 
       Divider(
-        color = MyColor.BlackLighterBackground,
+        color = MyColor.DarkGreyBackground,
         thickness = 1.dp,
         modifier = Modifier.padding(bottom = 8.dp)
       )

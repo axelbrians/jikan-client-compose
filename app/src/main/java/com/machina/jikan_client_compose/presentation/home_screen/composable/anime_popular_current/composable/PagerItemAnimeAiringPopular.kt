@@ -1,9 +1,12 @@
-package com.machina.jikan_client_compose.presentation.home_screen.anime_popular_current.composable
+package com.machina.jikan_client_compose.presentation.home_screen.composable.anime_popular_current.composable
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -99,7 +102,7 @@ fun PagerScope.PagerItemAnimeAiringPopular(
           .align(Alignment.BottomCenter)
           .padding(horizontal = 12.dp, vertical = 6.dp)
           .background(
-            color = MyColor.BlackBlueBackground,
+            color = MyColor.DarkBlueBackground,
             shape = RoundedCornerShape(8.dp),
           )
           .zIndex(2f)

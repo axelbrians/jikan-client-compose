@@ -23,7 +23,7 @@ import com.machina.jikan_client_compose.core.enums.MangaSubType.MANHUA
 import com.machina.jikan_client_compose.core.enums.MangaSubType.MANHWA
 import com.machina.jikan_client_compose.core.enums.MangaSubType.ONE_SHOT
 import com.machina.jikan_client_compose.presentation.content_search_screen.composable.ItemAnimeSearch
-import com.machina.jikan_client_compose.presentation.content_search_screen.composable.ItemAnimeSearchShimmer
+import com.machina.jikan_client_compose.presentation.content_search_screen.composable.shimmer.ItemAnimeSearchShimmer
 import com.machina.jikan_client_compose.presentation.content_search_screen.composable.ItemMangaSearch
 import com.machina.jikan_client_compose.presentation.home_screen.data.ContentSearchState
 import com.machina.jikan_client_compose.ui.theme.MyColor

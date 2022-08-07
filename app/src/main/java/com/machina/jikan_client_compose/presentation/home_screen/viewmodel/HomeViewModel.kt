@@ -27,11 +27,11 @@ class HomeViewModel @Inject constructor(
   val animeAiringPopular : State<AnimeAiringPopularState> = _animeAiringPopular
 
   private val _animeScheduleState : MutableState<AnimeHorizontalListContentState> =
-    mutableStateOf(AnimeHorizontalListContentState())
+    mutableStateOf(AnimeHorizontalListContentState.Loading)
   val animeScheduleState : State<AnimeHorizontalListContentState> = _animeScheduleState
 
   private val _animeTopState: MutableState<AnimeHorizontalListContentState> =
-    mutableStateOf(AnimeHorizontalListContentState())
+    mutableStateOf(AnimeHorizontalListContentState.Loading)
   val animeTopState: State<AnimeHorizontalListContentState> = _animeTopState
 
   fun getAnimeAiringPopular() {

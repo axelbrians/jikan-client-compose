@@ -21,6 +21,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
 import com.machina.jikan_client_compose.presentation.home_screen.composable.anime_popular_current.AnimeAiringPopularHorizontalPager
 import com.machina.jikan_client_compose.presentation.home_screen.composable.anime_popular_current.state.AnimeAiringPopularState
+import com.machina.jikan_client_compose.presentation.home_screen.composable.shimmer.ContentListHeaderWithButtonShimmer
 import com.machina.jikan_client_compose.presentation.home_screen.composable.shimmer.ItemVerticalAnimeShimmer
 import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeHorizontalListContentState
 import com.machina.jikan_client_compose.presentation.home_screen.view_holder.ItemVerticalAnime
@@ -73,12 +74,17 @@ fun HomeContentList(
     item(key = "anime_schedule_list") {
       val shimmerInstance = rememberShimmerCustomBounds()
       val title = "Airing today"
-      HorizontalContentHeader(
-        title = title,
-        onButtonClick = {
-          navigation.navigateToContentViewAllScreen(ContentViewAllType.AnimeSchedule, title)
-        }
-      )
+
+      if (animeScheduleState.isLoading) {
+        ContentListHeaderWithButtonShimmer(shimmerInstance = shimmerInstance)
+      } else {
+        HorizontalContentHeader(
+          title = title,
+          onButtonClick = {
+            navigation.navigateToContentViewAllScreen(ContentViewAllType.AnimeSchedule, title)
+          }
+        )
+      }
 
       LazyRow(
         contentPadding = PaddingValues(12.dp, 0.dp, 12.dp, 0.dp),
@@ -104,12 +110,17 @@ fun HomeContentList(
     item(key = "anime_top_list") {
       val shimmerInstance = rememberShimmer(shimmerBounds = ShimmerBounds.Custom)
       val title = "Top anime of all times"
-      HorizontalContentHeader(
-        title = title,
-        onButtonClick = {
-          navigation.navigateToContentViewAllScreen(ContentViewAllType.AnimeTop, title)
-        }
-      )
+
+      if (animeTopState.isLoading) {
+        ContentListHeaderWithButtonShimmer(shimmerInstance = shimmerInstance)
+      } else {
+        HorizontalContentHeader(
+          title = title,
+          onButtonClick = {
+            navigation.navigateToContentViewAllScreen(ContentViewAllType.AnimeTop, title)
+          }
+        )
+      }
 
       LazyRow(
         contentPadding = PaddingValues(12.dp, 0.dp, 12.dp, 0.dp),
@@ -161,10 +172,6 @@ private fun HorizontalContentHeader(
       )
     }
   }
-}
-
-private fun LazyItemScope.showContentListHeaderShimmer(shimmerInstance: Shimmer) {
-
 }
 
 private fun LazyListScope.showItemAnimeTopShimmer(shimmerInstance: Shimmer, count: Int = 5) {

@@ -19,18 +19,9 @@ class ContentDetailsViewModel @Inject constructor(
   private val _contentDetailsState : MutableState<ContentDetailsState> = mutableStateOf(ContentDetailsState())
   val contentDetailsState : State<ContentDetailsState> = _contentDetailsState
 
-  private val _isRefreshing : MutableState<Boolean> = mutableStateOf(false)
-  val isRefreshing : State<Boolean> = _isRefreshing
-
-
-  fun getContentDetails(contentType: String?, malId: Int?, refresh: Boolean = false) {
+  fun getContentDetails(contentType: String?, malId: Int?) {
     getContentDetailsUseCase(contentType, malId).onEach { state ->
       _contentDetailsState.value = state
-      if (state.isLoading) {
-        _isRefreshing.value = refresh
-      } else {
-        _isRefreshing.value = false
-      }
     }.launchIn(viewModelScope)
   }
 }

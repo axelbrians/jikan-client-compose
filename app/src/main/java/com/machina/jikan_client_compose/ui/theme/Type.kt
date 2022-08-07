@@ -3,6 +3,7 @@ package com.machina.jikan_client_compose.ui.theme
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 
 // Set of Material typography styles to start with
 object Type {
@@ -21,27 +22,27 @@ object Type {
     ),
     h4 = TextStyle(
       fontWeight = FontWeight.SemiBold,
-      fontSize = MySize.Text24
+      fontSize = MySize.Text22
     ),
     h5 = TextStyle(
       fontWeight = FontWeight.Medium,
-      fontSize = MySize.Text22
+      fontSize = MySize.Text20
     ),
     h6 = TextStyle(
       fontWeight = FontWeight.Medium,
-      fontSize = MySize.Text20
+      fontSize = MySize.Text18
     ),
     subtitle1 = TextStyle(
       fontWeight = FontWeight.Medium,
-      fontSize = MySize.Text18
+      fontSize = MySize.Text16
     ),
     subtitle2 = TextStyle(
       fontWeight = FontWeight.Medium,
-      fontSize = MySize.Text16
+      fontSize = MySize.Text14
     ),
     body1 = TextStyle(
       fontWeight = FontWeight.Normal,
-      fontSize = MySize.Text14
+      fontSize = MySize.Text13
     ),
     body2 = TextStyle(
       fontWeight = FontWeight.Normal,
@@ -70,39 +71,55 @@ object Type {
     */
   )
 
-  internal fun TextStyle.extraBold(): TextStyle = this.merge(
+  fun TextStyle.extraBold(): TextStyle = this.merge(
     TextStyle(fontWeight = FontWeight.ExtraBold)
   )
 
-  internal fun TextStyle.bold(): TextStyle = this.merge(
+  fun TextStyle.bold(): TextStyle = this.merge(
     TextStyle(fontWeight = FontWeight.Bold)
   )
 
-  internal fun TextStyle.semiBold(): TextStyle = this.merge(
+  fun TextStyle.semiBold(): TextStyle = this.merge(
     TextStyle(fontWeight = FontWeight.SemiBold)
   )
 
-  internal fun TextStyle.medium(): TextStyle = this.merge(
+  fun TextStyle.medium(): TextStyle = this.merge(
     TextStyle(fontWeight = FontWeight.Medium)
   )
 
-  internal fun TextStyle.normal(): TextStyle = this.merge(
+  fun TextStyle.normal(): TextStyle = this.merge(
     TextStyle(fontWeight = FontWeight.Normal)
   )
 
-  internal fun TextStyle.light(): TextStyle = this.merge(
+  fun TextStyle.light(): TextStyle = this.merge(
     TextStyle(fontWeight = FontWeight.Light)
   )
 
-  internal fun TextStyle.extraLight(): TextStyle = this.merge(
+  fun TextStyle.extraLight(): TextStyle = this.merge(
     TextStyle(fontWeight = FontWeight.ExtraLight)
   )
 
-  internal fun TextStyle.onDarkSurface(): TextStyle = this.merge(
+  fun TextStyle.onDarkSurface(): TextStyle = this.merge(
     TextStyle(color = MyColor.OnDarkSurface)
   )
 
-  internal fun TextStyle.onDarkSurfaceLight(): TextStyle = this.merge(
+  fun TextStyle.onDarkSurfaceLight(): TextStyle = this.merge(
     TextStyle(color = MyColor.OnDarkSurfaceLight)
+  )
+
+  fun TextStyle.justify(): TextStyle = this.merge(
+    TextStyle(textAlign = TextAlign.Justify)
+  )
+
+  fun TextStyle.center(): TextStyle = this.merge(
+    TextStyle(textAlign = TextAlign.Center)
+  )
+
+  fun TextStyle.left(): TextStyle = this.merge(
+    TextStyle(textAlign = TextAlign.Left)
+  )
+
+  fun TextStyle.right(): TextStyle = this.merge(
+    TextStyle(textAlign = TextAlign.Right)
   )
 }

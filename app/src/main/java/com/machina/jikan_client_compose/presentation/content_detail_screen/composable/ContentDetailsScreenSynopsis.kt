@@ -17,14 +17,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.machina.jikan_client_compose.presentation.content_detail_screen.data.ContentDetailsState
 import com.machina.jikan_client_compose.ui.theme.MyColor
+import com.machina.jikan_client_compose.ui.theme.Type
+import com.machina.jikan_client_compose.ui.theme.Type.justify
+import com.machina.jikan_client_compose.ui.theme.Type.onDarkSurface
 
 @ExperimentalAnimationApi
 @Composable
@@ -47,11 +47,7 @@ fun ContentDetailsSynopsis(
       Column {
         Text(
           text = if (state?.data?.synopsis != null) contentSynopsis else "",
-          style = TextStyle(
-            color = MyColor.OnDarkSurface,
-            fontSize = 13.sp,
-            textAlign = TextAlign.Justify
-          ),
+          style = Type.Typography.body1.onDarkSurface().justify(),
           modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp)
         )
 
@@ -72,11 +68,7 @@ fun ContentDetailsSynopsis(
           text = if (state?.data?.synopsis != null) contentSynopsis else "",
           maxLines = 5,
           overflow = TextOverflow.Ellipsis,
-          style = TextStyle(
-            color = MyColor.OnDarkSurface,
-            fontSize = 13.sp,
-            textAlign = TextAlign.Justify
-          ),
+          style = Type.Typography.body1.onDarkSurface().justify(),
           modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 4.dp)
         )
         Box(

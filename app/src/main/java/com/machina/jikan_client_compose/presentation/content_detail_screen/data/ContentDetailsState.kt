@@ -6,4 +6,8 @@ data class ContentDetailsState(
   val data: ContentDetails? = null,
   val isLoading: Boolean = false,
   val error: String? = null
-)
+) {
+  companion object {
+    val Loading = ContentDetailsState(isLoading = true)
+  }
+}

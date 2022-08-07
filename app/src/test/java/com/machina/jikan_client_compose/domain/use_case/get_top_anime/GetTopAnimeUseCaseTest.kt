@@ -9,15 +9,16 @@ import com.machina.jikan_client_compose.data.remote.dto_v4.anime_top.AnimeTopRes
 import com.machina.jikan_client_compose.data.repository.AnimeRepository
 import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeTopState
 import io.mockk.coEvery
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
 
 
 @RunWith(JUnit4::class)
@@ -48,7 +49,7 @@ class GetTopAnimeUseCaseTest {
     val expectedResult = AnimeTopState(emptyList(), false, Event(null))
 
     coEvery {
-      animeRepository.getTopAnimeOfAllTime(0)
+      animeRepository.getAnimeTopOfAllTime(0)
     } returns Resource.Success(
       AnimeTopResponseV4()
     )
@@ -67,7 +68,7 @@ class GetTopAnimeUseCaseTest {
     val errorMessage = "Something went wrong"
     val expectedResult = AnimeTopState(emptyList(), false, Event(errorMessage))
 
-    coEvery { animeRepository.getTopAnimeOfAllTime(0) } returns Resource.Error(errorMessage)
+    coEvery { animeRepository.getAnimeTopOfAllTime(0) } returns Resource.Error(errorMessage)
 
     // Execute
     val result = topAnimeUseCaseKtor().drop(1).first()

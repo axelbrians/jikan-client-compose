@@ -12,4 +12,17 @@ data class Jpg(
   val smallImageUrl: String = "",
   @SerialName("large_image_url")
   val largeImageUrl: String = ""
-)
+) {
+  companion object {
+    fun Jpg.getValidLargestImgUrl(): String {
+      return if (largeImageUrl.isNotEmpty()) {
+        largeImageUrl
+      } else if (imageUrl.isNotEmpty()) {
+        imageUrl
+      } else {
+        smallImageUrl
+      }
+    }
+  }
+
+}

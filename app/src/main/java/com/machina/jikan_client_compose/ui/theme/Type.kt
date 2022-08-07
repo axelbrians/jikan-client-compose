@@ -107,19 +107,19 @@ object Type {
     TextStyle(color = MyColor.OnDarkSurfaceLight)
   )
 
-  fun TextStyle.justify(): TextStyle = this.merge(
+  fun TextStyle.alignJustify(): TextStyle = this.merge(
     TextStyle(textAlign = TextAlign.Justify)
   )
 
-  fun TextStyle.center(): TextStyle = this.merge(
+  fun TextStyle.alignCenter(): TextStyle = this.merge(
     TextStyle(textAlign = TextAlign.Center)
   )
 
-  fun TextStyle.left(): TextStyle = this.merge(
+  fun TextStyle.alignLeft(): TextStyle = this.merge(
     TextStyle(textAlign = TextAlign.Left)
   )
 
-  fun TextStyle.right(): TextStyle = this.merge(
+  fun TextStyle.alignRight(): TextStyle = this.merge(
     TextStyle(textAlign = TextAlign.Right)
   )
 }

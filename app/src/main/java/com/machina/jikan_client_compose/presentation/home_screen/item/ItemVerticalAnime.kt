@@ -1,4 +1,4 @@
-package com.machina.jikan_client_compose.presentation.home_screen.view_holder
+package com.machina.jikan_client_compose.presentation.home_screen.item
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable

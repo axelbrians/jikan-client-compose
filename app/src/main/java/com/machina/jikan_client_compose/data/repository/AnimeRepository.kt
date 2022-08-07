@@ -9,11 +9,14 @@ import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.data.remote.AnimeService
 import com.machina.jikan_client_compose.data.remote.dto.content_search.ContentSearchResponse
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_airing_popular.AnimeAiringPopularResponseV4
+import com.machina.jikan_client_compose.data.remote.dto_v4.anime_characters.AnimeCharacterResponse
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.AnimeDetailsDtoV4
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.AnimeDetailsResponseV4
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_schedules.AnimeScheduleResponseV4
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_top.AnimeTopResponseV4
+import com.machina.jikan_client_compose.data.remote.dto_v4.common.ResponseDataListWrapper
 import com.machina.jikan_client_compose.di.AndroidKtorClient
+import com.machina.jikan_client_compose.domain.model.anime.AnimeCharacterModel
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
@@ -27,7 +30,7 @@ class AnimeRepository @Inject constructor(
   private val safeCall: SafeCall
 ) : AnimeService {
 
-  override suspend fun getTopAnimeOfAllTime(page: Int): Resource<AnimeTopResponseV4> {
+  override suspend fun getAnimeTopOfAllTime(page: Int): Resource<AnimeTopResponseV4> {
     val request = HttpRequestBuilder().apply {
       method = HttpMethod.Get
       url {
@@ -41,7 +44,7 @@ class AnimeRepository @Inject constructor(
     return safeCall<AnimeTopResponseV4, GeneralError>(client, request)
   }
 
-  override suspend fun getAiringPopularAnime(): Resource<AnimeAiringPopularResponseV4> {
+  override suspend fun getAnimeAiringPopular(): Resource<AnimeAiringPopularResponseV4> {
     val request = HttpRequestBuilder().apply {
       method = HttpMethod.Get
       url {
@@ -75,25 +78,6 @@ class AnimeRepository @Inject constructor(
     }
 
     return safeCall<ContentSearchResponse, GeneralError>(client, request)
-  }
-
-  override suspend fun getAnimeDetails(malId: Int): Resource<AnimeDetailsDtoV4> {
-    val request = HttpRequestBuilder().apply {
-      method = HttpMethod.Get
-      url {
-        protocol = URLProtocol.HTTPS
-        host = Endpoints.HOST_V4
-        encodedPath = Endpoints.ANIME_DETAILS + "/$malId"
-      }
-    }
-
-    val res = safeCall<AnimeDetailsResponseV4, GeneralError>(client, request)
-
-    return if (res is Resource.Success && res.data != null) {
-      Resource.Success(res.data.data)
-    } else {
-      Resource.Error(res.message ?: MyError.UNKNOWN_ERROR)
-    }
   }
 
   override suspend fun getAnimeSchedule(day: Int): Resource<AnimeScheduleResponseV4> {
@@ -135,4 +119,46 @@ class AnimeRepository @Inject constructor(
     }
   }
 
+  override suspend fun getAnimeDetails(malId: Int): Resource<AnimeDetailsDtoV4> {
+    val request = HttpRequestBuilder().apply {
+      method = HttpMethod.Get
+      url {
+        protocol = URLProtocol.HTTPS
+        host = Endpoints.HOST_V4
+        encodedPath = Endpoints.ANIME_DETAILS + "/$malId"
+      }
+    }
+
+    val res = safeCall<AnimeDetailsResponseV4, GeneralError>(client, request)
+
+    return if (res is Resource.Success && res.data != null) {
+      Resource.Success(res.data.data)
+    } else {
+      Resource.Error(res.message ?: MyError.UNKNOWN_ERROR)
+    }
+  }
+
+  override suspend fun getAnimeCharacters(malId: Int): Resource<List<AnimeCharacterModel>> {
+    val request = HttpRequestBuilder().apply {
+      method = HttpMethod.Get
+      url {
+        protocol = URLProtocol.HTTPS
+        host = Endpoints.HOST_V4
+        encodedPath = Endpoints.ANIME_DETAILS + "/$malId" + Endpoints.ANIME_CHARACTERS
+      }
+    }
+
+    val res = safeCall<ResponseDataListWrapper<AnimeCharacterResponse>, GeneralError>(client, request)
+
+    Timber.tag("AnimeCharacter").d(res.message)
+    return if (res is Resource.Success && res.data != null) {
+      Resource.Success(
+        res.data.data.map {
+          AnimeCharacterModel.from(it)
+        }
+      )
+    } else {
+      Resource.Error(res.message ?: MyError.UNKNOWN_ERROR)
+    }
+  }
 }

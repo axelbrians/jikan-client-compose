@@ -10,6 +10,7 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.network.sockets.*
+import timber.log.Timber
 
 class SafeCall {
   suspend inline operator fun <reified T: Any, reified U: Any> invoke(
@@ -27,9 +28,9 @@ class SafeCall {
           is GeneralError -> Resource.Error(error.message)
           else -> Resource.Error(MyError.UNKNOWN_ERROR)
         }
-
       }
     } catch (e: Exception) {
+      Timber.d(e.message)
       when (e) {
         is ClientRequestException -> Resource.Error(e.message)
         is ConnectTimeoutException -> Resource.Error(e.message ?: MyError.UNKNOWN_ERROR)

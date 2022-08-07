@@ -23,7 +23,7 @@ class GetAnimeTopUseCase @Inject constructor(
     return flow {
       emit(AnimeTopState(isLoading = true))
 
-      val state = when (val res = repository.getTopAnimeOfAllTime(page)) {
+      val state = when (val res = repository.getAnimeTopOfAllTime(page)) {
         is Resource.Success -> {
           val data = res.data?.data?.map { it.toAnimeTop() }.orEmpty()
           AnimeTopState(data)
@@ -40,7 +40,7 @@ class GetAnimeTopUseCase @Inject constructor(
     return flow {
       emit(AnimeHorizontalListContentState.Loading)
 
-      val state = when (val res = repository.getTopAnimeOfAllTime(page)) {
+      val state = when (val res = repository.getAnimeTopOfAllTime(page)) {
         is Resource.Success -> {
           Timber.d(res.data?.pagination.toString())
           AnimeHorizontalListContentState(

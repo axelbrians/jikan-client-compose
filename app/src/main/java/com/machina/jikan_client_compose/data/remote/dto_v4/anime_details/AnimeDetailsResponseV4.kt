@@ -7,5 +7,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class AnimeDetailsResponseV4(
   @SerialName("data")
-  val `data`: AnimeDetailsDtoV4 = AnimeDetailsDtoV4()
+  val data: AnimeDetailsDtoV4 = AnimeDetailsDtoV4()
 )

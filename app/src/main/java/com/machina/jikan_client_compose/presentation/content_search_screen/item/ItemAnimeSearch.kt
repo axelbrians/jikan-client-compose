@@ -1,4 +1,4 @@
-package com.machina.jikan_client_compose.presentation.content_search_screen.composable
+package com.machina.jikan_client_compose.presentation.content_search_screen.item
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -24,7 +24,7 @@ import com.machina.jikan_client_compose.ui.theme.MyColor
 
 @ExperimentalCoilApi
 @Composable
-fun ItemMangaSearch(
+fun ItemAnimeSearch(
   modifier: Modifier = Modifier,
   data: ContentSearch,
   onItemClick: (Int, ContentType) -> Unit
@@ -39,7 +39,7 @@ fun ItemMangaSearch(
 
   Row(
     modifier = modifier
-      .clickable { onItemClick(data.malId, ContentType.Manga) }
+      .clickable { onItemClick(data.malId, ContentType.Anime) }
   ) {
     Box(
       modifier = Modifier
@@ -103,40 +103,21 @@ fun ItemMangaSearch(
             fontSize = 13.sp,
             fontWeight = FontWeight.Normal
           ),
+        )
+        val episodes = if (data.episodesCount == 0) {
+          "airing"
+        } else {
+          "${data.episodesCount} episodes"
+        }
+        Text(
+          text = episodes,
+          style = TextStyle(
+            color = MyColor.OnDarkSurface,
+            fontSize = 13.sp,
+            fontWeight = FontWeight.Normal
+          ),
           modifier = Modifier.padding(bottom = 2.dp)
         )
-
-        if (data.chapters != null && data.chapters > 0) {
-          Text(
-            text = "${data.chapters} chapters",
-            style = TextStyle(
-              color = MyColor.OnDarkSurface,
-              fontSize = 13.sp,
-              fontWeight = FontWeight.Normal
-            ),
-//                        modifier = Modifier.padding(bottom = 2.dp)
-          )
-
-          Text(
-            text = "${data.volumes} volumes",
-            style = TextStyle(
-              color = MyColor.OnDarkSurface,
-              fontSize = 13.sp,
-              fontWeight = FontWeight.Normal
-            ),
-//                        modifier = Modifier.padding(bottom = 2.dp)
-          )
-        } else {
-          Text(
-            text = "publishing",
-            style = TextStyle(
-              color = MyColor.OnDarkSurface,
-              fontSize = 13.sp,
-              fontWeight = FontWeight.Normal
-            ),
-            modifier = Modifier.padding(bottom = 2.dp)
-          )
-        }
       }
     }
   }

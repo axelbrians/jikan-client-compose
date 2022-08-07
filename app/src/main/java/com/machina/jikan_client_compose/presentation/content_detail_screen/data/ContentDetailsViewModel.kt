@@ -5,6 +5,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.machina.jikan_client_compose.domain.use_case.anime_characters.GetAnimeCharactersUseCase
 import com.machina.jikan_client_compose.domain.use_case.get_content_details.GetContentDetailsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -13,15 +14,26 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ContentDetailsViewModel @Inject constructor(
-  private val getContentDetailsUseCase: GetContentDetailsUseCase
+  private val getContentDetailsUseCase: GetContentDetailsUseCase,
+  private val getAnimeCharactersUseCase: GetAnimeCharactersUseCase
 ): ViewModel() {
 
-  private val _contentDetailsState : MutableState<ContentDetailsState> = mutableStateOf(ContentDetailsState())
+  private val _contentDetailsState : MutableState<ContentDetailsState> = mutableStateOf(ContentDetailsState.Loading)
   val contentDetailsState : State<ContentDetailsState> = _contentDetailsState
+
+  private val _animeCharactersListState : MutableState<AnimeCharacterListState> = mutableStateOf(AnimeCharacterListState.Loading)
+  val animeCharactersListState : State<AnimeCharacterListState> = _animeCharactersListState
+
 
   fun getContentDetails(contentType: String?, malId: Int?) {
     getContentDetailsUseCase(contentType, malId).onEach { state ->
       _contentDetailsState.value = state
+    }.launchIn(viewModelScope)
+  }
+
+  fun getAnimeCharacters(malId: Int) {
+    getAnimeCharactersUseCase(malId).onEach { state ->
+      _animeCharactersListState.value = state
     }.launchIn(viewModelScope)
   }
 }

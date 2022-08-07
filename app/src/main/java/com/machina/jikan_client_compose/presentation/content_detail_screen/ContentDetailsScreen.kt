@@ -21,11 +21,16 @@ import coil.compose.rememberImagePainter
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
+import com.machina.jikan_client_compose.presentation.composable.HorizontalContentHeader
 import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.ContentDetailsScreenToolbar
 import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.ContentDetailsSynopsis
 import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.ContentDetailsTrailerPlayer
 import com.machina.jikan_client_compose.presentation.content_detail_screen.data.ContentDetailsViewModel
+import com.machina.jikan_client_compose.presentation.content_detail_screen.item.ItemAnimeCharacter
+import com.machina.jikan_client_compose.presentation.content_detail_screen.item.ItemAnimeCharacterConfig
 import com.machina.jikan_client_compose.presentation.content_detail_screen.three_column.ContentDetailsThreeColumnSection
+import com.machina.jikan_client_compose.ui.shimmer.onUpdateShimmerBounds
+import com.machina.jikan_client_compose.ui.shimmer.rememberShimmerCustomBounds
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
@@ -43,6 +48,7 @@ fun ContentDetailsScreen(
   var isSynopsisExpanded by remember { mutableStateOf(false) }
   val toolbarScaffoldState = rememberCollapsingToolbarScaffoldState()
   val contentDetailsState = viewModel.contentDetailsState.value
+  val animeCharacterListState = viewModel.animeCharactersListState
   val genres = contentDetailsState.data?.genres ?: listOf()
 
   val largeImageCoil = rememberImagePainter(
@@ -57,7 +63,10 @@ fun ContentDetailsScreen(
 
   LaunchedEffect(
     key1 = contentType + malId,
-    block = { viewModel.getContentDetails(contentType, malId) }
+    block = {
+      viewModel.getContentDetails(contentType, malId)
+      viewModel.getAnimeCharacters(malId ?: 0)
+    }
   )
 
   if (contentDetailsState.isLoading) {
@@ -150,8 +159,31 @@ fun ContentDetailsScreen(
           }
         }
 
+        // Anime Characters List
+        item(key = "anime_characters_list") {
+          val shimmerInstance = rememberShimmerCustomBounds()
 
-        items(6) {
+          HorizontalContentHeader(
+            modifier = Modifier.fillMaxWidth().padding(start = 18.dp, end = 12.dp, top = 8.dp, bottom = 4.dp),
+            title = "Characters",
+            onButtonClick = { }
+          )
+
+          LazyRow(
+            modifier = Modifier.onUpdateShimmerBounds(shimmerInstance),
+            contentPadding = PaddingValues(12.dp, 0.dp, 12.dp, 0.dp)
+          ) {
+            items(items = animeCharacterListState.value.data, key = { it.malId }) {
+              ItemAnimeCharacter(
+                modifier = ItemAnimeCharacterConfig.default,
+                data = it
+              )
+            }
+          }
+        }
+
+
+        items(animeCharacterListState.value.data.size) {
           Text(
             text = "Anime Detail's",
             style = TextStyle(

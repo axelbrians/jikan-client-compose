@@ -23,7 +23,7 @@ import androidx.compose.ui.zIndex
 import com.machina.jikan_client_compose.presentation.content_detail_screen.data.ContentDetailsState
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.machina.jikan_client_compose.ui.theme.Type
-import com.machina.jikan_client_compose.ui.theme.Type.justify
+import com.machina.jikan_client_compose.ui.theme.Type.alignJustify
 import com.machina.jikan_client_compose.ui.theme.Type.onDarkSurface
 
 @ExperimentalAnimationApi
@@ -47,7 +47,7 @@ fun ContentDetailsSynopsis(
       Column {
         Text(
           text = if (state?.data?.synopsis != null) contentSynopsis else "",
-          style = Type.Typography.body1.onDarkSurface().justify(),
+          style = Type.Typography.body1.onDarkSurface().alignJustify(),
           modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp)
         )
 
@@ -68,7 +68,7 @@ fun ContentDetailsSynopsis(
           text = if (state?.data?.synopsis != null) contentSynopsis else "",
           maxLines = 5,
           overflow = TextOverflow.Ellipsis,
-          style = Type.Typography.body1.onDarkSurface().justify(),
+          style = Type.Typography.body1.onDarkSurface().alignJustify(),
           modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 4.dp)
         )
         Box(

@@ -21,7 +21,7 @@ class GetAnimeAiringPopularUseCase @Inject constructor(
     return flow {
       emit(AnimeAiringPopularState(isLoading = true))
 
-      val state = when (val res = repository.getAiringPopularAnime()) {
+      val state = when (val res = repository.getAnimeAiringPopular()) {
         is Resource.Success -> {
           val data = res.data?.data?.map {
             it.toAnimeAiringPopular()

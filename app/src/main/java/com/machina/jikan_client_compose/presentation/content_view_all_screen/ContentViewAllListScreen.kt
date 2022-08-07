@@ -18,8 +18,8 @@ import com.machina.jikan_client_compose.presentation.content_view_all_screen.dat
 import com.machina.jikan_client_compose.presentation.content_view_all_screen.viewmodel.ContentViewAllViewModel
 import com.machina.jikan_client_compose.presentation.extension.isScrolledToTheEnd
 import com.machina.jikan_client_compose.presentation.home_screen.composable.shimmer.ItemVerticalAnimeShimmer
-import com.machina.jikan_client_compose.presentation.home_screen.view_holder.ItemVerticalAnime
-import com.machina.jikan_client_compose.presentation.home_screen.view_holder.ItemVerticalAnimeConfig
+import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnime
+import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnimeConfig
 import com.machina.jikan_client_compose.ui.animation_spec.TweenSpec
 import com.machina.jikan_client_compose.ui.shimmer.onUpdateShimmerBounds
 import com.machina.jikan_client_compose.ui.shimmer.rememberShimmerCustomBounds

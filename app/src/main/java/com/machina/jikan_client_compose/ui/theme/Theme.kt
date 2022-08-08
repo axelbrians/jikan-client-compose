@@ -49,7 +49,7 @@ fun JikanClientComposeTheme(
     MaterialTheme(
       colors = colors,
       typography = Type.Typography,
-      shapes = Shapes,
+      shapes = MyShape.ThemeShapes,
       content = content
     )
   }

@@ -14,7 +14,7 @@ import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.AnimeDe
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.AnimeDetailsResponseV4
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_schedules.AnimeScheduleResponseV4
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_top.AnimeTopResponseV4
-import com.machina.jikan_client_compose.data.remote.dto_v4.common.ResponseDataListWrapper
+import com.machina.jikan_client_compose.core.wrapper.ResponseDataListWrapper
 import com.machina.jikan_client_compose.di.AndroidKtorClient
 import com.machina.jikan_client_compose.domain.model.anime.AnimeCharacterModel
 import io.ktor.client.*

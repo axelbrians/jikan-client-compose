@@ -3,7 +3,6 @@ package com.machina.jikan_client_compose.presentation.home_screen.item
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -19,6 +18,7 @@ import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalDataModel
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
 import com.machina.jikan_client_compose.ui.theme.MyColor
+import com.machina.jikan_client_compose.ui.theme.MyShape
 import com.machina.jikan_client_compose.ui.theme.MyType
 
 object ItemVerticalAnimeConfig {
@@ -52,7 +52,7 @@ fun ItemVerticalAnime(
 
   Column(
     modifier = modifier
-      .clip(RoundedCornerShape(12.dp))
+      .clip(MyShape.Rounded12)
       .clickable { navigateToContentDetailsScreen(data.malId, ContentType.Anime) }
   ) {
     Box(
@@ -72,7 +72,7 @@ fun ItemVerticalAnime(
         contentScale = ContentScale.Crop,
         modifier = Modifier
           .fillMaxSize()
-          .clip(RoundedCornerShape(12.dp))
+          .clip(MyShape.Rounded12)
       )
     }
 

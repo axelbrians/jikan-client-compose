@@ -1,6 +1,7 @@
 package com.machina.jikan_client_compose.domain.use_case.get_top_anime
 
 import com.machina.jikan_client_compose.core.DispatchersProvider
+import com.machina.jikan_client_compose.core.constant.Constant
 import com.machina.jikan_client_compose.core.wrapper.Event
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_top.toAnimeTop
@@ -47,7 +48,7 @@ class GetAnimeTopUseCase @Inject constructor(
             data = AnimeVerticalModel(
               data = res.data!!.data.map {
                 AnimeVerticalDataModel.from(it)
-              },
+              }.take(Constant.HORIZONTAL_CONTENT_LIMIT),
               pagination = res.data.pagination
             )
           )

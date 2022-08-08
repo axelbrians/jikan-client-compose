@@ -2,6 +2,7 @@ package com.machina.jikan_client_compose.domain.use_case.anime_schedule
 
 import android.icu.util.Calendar
 import com.machina.jikan_client_compose.core.DispatchersProvider
+import com.machina.jikan_client_compose.core.constant.Constant
 import com.machina.jikan_client_compose.core.wrapper.Event
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_schedules.toAnimeSchedule
@@ -53,13 +54,11 @@ class GetAnimeScheduleUseCase @Inject constructor(
 
       val state = when (val res = repository.getAnimeSchedule(dayInCalendar)) {
         is Resource.Success -> {
-          val data = res.data!!.data.map {
-            AnimeVerticalDataModel.from(it)
-          }
-
           AnimeHorizontalListContentState(
             data = AnimeVerticalModel(
-              data = data,
+              data = res.data!!.data.map {
+                AnimeVerticalDataModel.from(it)
+              }.take(Constant.HORIZONTAL_CONTENT_LIMIT),
               pagination = res.data.pagination
             )
           )

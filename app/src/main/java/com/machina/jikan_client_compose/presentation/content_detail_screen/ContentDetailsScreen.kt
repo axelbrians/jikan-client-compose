@@ -183,7 +183,7 @@ fun ContentDetailsScreen(
         }
 
 
-        items(animeCharacterListState.value.data.size) {
+        items(4) {
           Text(
             text = "Anime Detail's",
             style = TextStyle(

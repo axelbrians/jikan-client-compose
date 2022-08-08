@@ -18,6 +18,7 @@ import com.machina.jikan_client_compose.presentation.home_screen.composable.shim
 import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeHorizontalListContentState
 import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnime
 import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnimeConfig
+import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnimeMore
 import com.machina.jikan_client_compose.ui.navigation.content_view_all.ContentViewAllType
 import com.machina.jikan_client_compose.ui.shimmer.onUpdateShimmerBounds
 import com.machina.jikan_client_compose.ui.shimmer.rememberShimmerCustomBounds
@@ -92,6 +93,14 @@ fun HomeContentList(
               navigateToContentDetailsScreen = navigation::navigateToContentDetailsScreen
             )
           }
+          item {
+            ItemVerticalAnimeMore(
+              modifier = ItemVerticalAnimeConfig.defaultModifier,
+              onClick = {
+                navigation.navigateToContentViewAllScreen(ContentViewAllType.AnimeSchedule, title)
+              }
+            )
+          }
         }
       }
     }
@@ -110,7 +119,9 @@ fun HomeContentList(
           modifier = HorizontalContentHeaderConfig.default,
           title = title,
           onButtonClick = {
-            navigation.navigateToContentViewAllScreen(ContentViewAllType.AnimeTop, title)
+            navigation.navigateToContentViewAllScreen(
+              ContentViewAllType.AnimeTop, title
+            )
           }
         )
       }
@@ -127,6 +138,16 @@ fun HomeContentList(
               modifier = ItemVerticalAnimeConfig.defaultModifier,
               data = model,
               navigateToContentDetailsScreen = navigation::navigateToContentDetailsScreen
+            )
+          }
+          item {
+            ItemVerticalAnimeMore(
+              modifier = ItemVerticalAnimeConfig.defaultModifier,
+              onClick = {
+                navigation.navigateToContentViewAllScreen(
+                  ContentViewAllType.AnimeTop, title
+                )
+              }
             )
           }
         }

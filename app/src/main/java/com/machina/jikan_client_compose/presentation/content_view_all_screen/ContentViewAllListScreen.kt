@@ -88,6 +88,11 @@ fun ContentViewAllListScreen(
       }
 
       if (contentState.isLoading) {
+        if (dataSet.isEmpty()) {
+          items(3) {
+            Box(modifier = Modifier.height(56.dp - 12.dp))
+          }
+        }
         showItemVerticalAnimeShimmer(shimmerInstance)
       }
     }

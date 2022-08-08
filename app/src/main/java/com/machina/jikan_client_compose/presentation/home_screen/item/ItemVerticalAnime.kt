@@ -3,6 +3,7 @@ package com.machina.jikan_client_compose.presentation.home_screen.item
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -17,20 +18,11 @@ import coil.compose.rememberImagePainter
 import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalDataModel
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
+import com.machina.jikan_client_compose.presentation.home_screen.composable.shimmer.ItemVerticalAnimeShimmer
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.machina.jikan_client_compose.ui.theme.MyShape
 import com.machina.jikan_client_compose.ui.theme.MyType
-
-object ItemVerticalAnimeConfig {
-  val defaultModifier = Modifier
-    .width(140.dp)
-    .padding(6.dp, 4.dp)
-
-  val fillParentWidthModifier = Modifier
-    .fillMaxWidth()
-    .padding(6.dp, 4.dp)
-
-}
+import com.valentinilk.shimmer.Shimmer
 
 @ExperimentalCoilApi
 @Composable
@@ -38,7 +30,7 @@ fun ItemVerticalAnime(
   modifier: Modifier = Modifier,
   data: AnimeVerticalDataModel,
   thumbnailHeight: Dp = 190.dp,
-  navigateToContentDetailsScreen: (Int, ContentType) -> Unit
+  onClick: (Int, ContentType) -> Unit
 ) {
 
   var titleLineCount by remember { mutableStateOf(0) }
@@ -53,7 +45,7 @@ fun ItemVerticalAnime(
   Column(
     modifier = modifier
       .clip(MyShape.Rounded12)
-      .clickable { navigateToContentDetailsScreen(data.malId, ContentType.Anime) }
+      .clickable { onClick(data.malId, ContentType.Anime) }
   ) {
     Box(
       modifier = Modifier
@@ -103,5 +95,14 @@ fun ItemVerticalAnime(
 //        fontWeight = FontWeight.Normal
 //      )
 //    )
+  }
+}
+
+fun LazyListScope.showItemVerticalAnimeShimmer(shimmerInstance: Shimmer, count: Int = 5) {
+  items(count) {
+    ItemVerticalAnimeShimmer(
+      modifier = ItemVerticalAnimeModifier.default,
+      shimmerInstance = shimmerInstance
+    )
   }
 }

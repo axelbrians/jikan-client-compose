@@ -6,6 +6,7 @@ import com.machina.jikan_client_compose.core.SafeCall
 import com.machina.jikan_client_compose.core.error.GeneralError
 import com.machina.jikan_client_compose.core.exception.MyError
 import com.machina.jikan_client_compose.core.wrapper.Resource
+import com.machina.jikan_client_compose.core.wrapper.ResponseDataListWrapper
 import com.machina.jikan_client_compose.data.remote.AnimeService
 import com.machina.jikan_client_compose.data.remote.dto.content_search.ContentSearchResponse
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_airing_popular.AnimeAiringPopularResponseV4
@@ -14,7 +15,6 @@ import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.AnimeDe
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.AnimeDetailsResponseV4
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_schedules.AnimeScheduleResponseV4
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_top.AnimeTopResponseV4
-import com.machina.jikan_client_compose.core.wrapper.ResponseDataListWrapper
 import com.machina.jikan_client_compose.di.AndroidKtorClient
 import com.machina.jikan_client_compose.domain.model.anime.AnimeCharacterModel
 import io.ktor.client.*
@@ -158,7 +158,7 @@ class AnimeRepository @Inject constructor(
         }
       )
     } else {
-      Resource.Error(res.message ?: MyError.UNKNOWN_ERROR)
+      Resource.Error(res.message)
     }
   }
 }

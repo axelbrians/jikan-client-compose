@@ -19,7 +19,7 @@ import com.machina.jikan_client_compose.presentation.content_view_all_screen.vie
 import com.machina.jikan_client_compose.presentation.extension.isScrolledToTheEnd
 import com.machina.jikan_client_compose.presentation.home_screen.composable.shimmer.ItemVerticalAnimeShimmer
 import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnime
-import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnimeConfig
+import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnimeModifier
 import com.machina.jikan_client_compose.ui.animation_spec.TweenSpec
 import com.machina.jikan_client_compose.ui.shimmer.onUpdateShimmerBounds
 import com.machina.jikan_client_compose.ui.shimmer.rememberShimmerCustomBounds
@@ -74,7 +74,7 @@ fun ContentViewAllListScreen(
       verticalArrangement = Arrangement.spacedBy(0.dp)
     ) {
       itemsIndexed(dataSet) { index: Int, data: AnimeVerticalDataModel ->
-        var itemModifier = ItemVerticalAnimeConfig.fillParentWidthModifier
+        var itemModifier = ItemVerticalAnimeModifier.fillParentWidth
 
         if (index in 0 until 3) {
           itemModifier = itemModifier.padding(top = 56.dp - 12.dp)
@@ -83,7 +83,7 @@ fun ContentViewAllListScreen(
           modifier = itemModifier,
           data = data,
           thumbnailHeight = 160.dp,
-          navigateToContentDetailsScreen = navigator::navigateToContentDetailsScreen
+          onClick = navigator::navigateToContentDetailsScreen
         )
       }
 
@@ -110,7 +110,7 @@ private fun LazyGridScope.showItemVerticalAnimeShimmer(
 ) {
   items(count) {
     ItemVerticalAnimeShimmer(
-      modifier = ItemVerticalAnimeConfig.fillParentWidthModifier,
+      modifier = ItemVerticalAnimeModifier.fillParentWidth,
       shimmerInstance = shimmerInstance,
       thumbnailHeight = 160.dp
     )

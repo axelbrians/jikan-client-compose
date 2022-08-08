@@ -1,7 +1,9 @@
 package com.machina.jikan_client_compose.domain.model.anime
 
+import com.machina.jikan_client_compose.data.remote.dto_v4.anime_recommendations.AnimeRecommendationsResponse
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_schedules.AnimeScheduleDtoV4
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_top.AnimeTopDtoV4
+import com.machina.jikan_client_compose.data.remote.dto_v4.common.Jpg.Companion.getValidLargestImgUrl
 
 data class AnimeVerticalDataModel(
   val malId: Int,
@@ -44,6 +46,15 @@ data class AnimeVerticalDataModel(
         title = data.title,
         score = data.score,
         imageUrl = data.imageUrl
+      )
+    }
+
+    fun from(data: AnimeRecommendationsResponse): AnimeVerticalDataModel {
+      return AnimeVerticalDataModel(
+        malId = data.entry.malId,
+        title = data.entry.title,
+        score = 0.0,
+        imageUrl = data.entry.images.jpg.getValidLargestImgUrl()
       )
     }
   }

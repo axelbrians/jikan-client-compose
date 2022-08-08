@@ -3,10 +3,9 @@ package com.machina.jikan_client_compose.di
 import android.content.Context
 import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
-import com.machina.jikan_client_compose.core.SafeCall
 import com.machina.jikan_client_compose.core.DefaultDispatchers
 import com.machina.jikan_client_compose.core.DispatchersProvider
-import com.machina.jikan_client_compose.data.repository.AnimeRepository
+import com.machina.jikan_client_compose.core.SafeCall
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,7 +18,6 @@ import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.features.logging.*
 import kotlinx.coroutines.Dispatchers
-import okhttp3.OkHttpClient
 import javax.inject.Singleton
 
 @Module
@@ -62,7 +60,7 @@ class AppModule {
 
   @Provides
   @Singleton
-  @AndroidKtorClient
+  @AndroidKtorClient // @AndroidOkHttpClient
   fun provideOkHttpClient(@ApplicationContext context: Context): HttpClient {
     return HttpClient(OkHttp) {
       engine {

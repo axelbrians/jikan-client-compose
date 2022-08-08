@@ -2,7 +2,10 @@ package com.machina.jikan_client_compose.presentation.home_screen
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -14,15 +17,14 @@ import com.machina.jikan_client_compose.presentation.composable.HorizontalConten
 import com.machina.jikan_client_compose.presentation.home_screen.composable.anime_popular_current.AnimeAiringPopularHorizontalPager
 import com.machina.jikan_client_compose.presentation.home_screen.composable.anime_popular_current.state.AnimeAiringPopularState
 import com.machina.jikan_client_compose.presentation.home_screen.composable.shimmer.ContentListHeaderWithButtonShimmer
-import com.machina.jikan_client_compose.presentation.home_screen.composable.shimmer.ItemVerticalAnimeShimmer
 import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeHorizontalListContentState
 import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnime
-import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnimeConfig
+import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnimeModifier
 import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnimeMore
+import com.machina.jikan_client_compose.presentation.home_screen.item.showItemVerticalAnimeShimmer
 import com.machina.jikan_client_compose.ui.navigation.content_view_all.ContentViewAllType
 import com.machina.jikan_client_compose.ui.shimmer.onUpdateShimmerBounds
 import com.machina.jikan_client_compose.ui.shimmer.rememberShimmerCustomBounds
-import com.valentinilk.shimmer.Shimmer
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
 
@@ -80,22 +82,22 @@ fun HomeContentList(
       }
 
       LazyRow(
-        contentPadding = PaddingValues(12.dp, 0.dp, 12.dp, 0.dp),
+        contentPadding = PaddingValues(horizontal = 12.dp),
         modifier = Modifier.onUpdateShimmerBounds(shimmerInstance)
       ) {
         if (animeScheduleState.isLoading) {
-          showItemAnimeTopShimmer(shimmerInstance)
+          showItemVerticalAnimeShimmer(shimmerInstance)
         } else {
           items(animeScheduleState.data.data, key = { it.malId }) { data ->
             ItemVerticalAnime(
-              modifier = ItemVerticalAnimeConfig.defaultModifier,
+              modifier = ItemVerticalAnimeModifier.default,
               data = data,
-              navigateToContentDetailsScreen = navigation::navigateToContentDetailsScreen
+              onClick = navigation::navigateToContentDetailsScreen
             )
           }
           item {
             ItemVerticalAnimeMore(
-              modifier = ItemVerticalAnimeConfig.defaultModifier,
+              modifier = ItemVerticalAnimeModifier.default,
               onClick = {
                 navigation.navigateToContentViewAllScreen(ContentViewAllType.AnimeSchedule, title)
               }
@@ -127,22 +129,22 @@ fun HomeContentList(
       }
 
       LazyRow(
-        contentPadding = PaddingValues(12.dp, 0.dp, 12.dp, 0.dp),
+        contentPadding = PaddingValues(horizontal = 12.dp),
         modifier = Modifier.onUpdateShimmerBounds(shimmerInstance)
       ) {
         if (animeTopState.isLoading) {
-          showItemAnimeTopShimmer(shimmerInstance)
+          showItemVerticalAnimeShimmer(shimmerInstance)
         } else {
           items(animeTopState.data.data, key = { item -> item.malId }) { model ->
             ItemVerticalAnime(
-              modifier = ItemVerticalAnimeConfig.defaultModifier,
+              modifier = ItemVerticalAnimeModifier.default,
               data = model,
-              navigateToContentDetailsScreen = navigation::navigateToContentDetailsScreen
+              onClick = navigation::navigateToContentDetailsScreen
             )
           }
           item {
             ItemVerticalAnimeMore(
-              modifier = ItemVerticalAnimeConfig.defaultModifier,
+              modifier = ItemVerticalAnimeModifier.default,
               onClick = {
                 navigation.navigateToContentViewAllScreen(
                   ContentViewAllType.AnimeTop, title
@@ -156,14 +158,5 @@ fun HomeContentList(
     // End of Top Anime of All Times
 
 
-  }
-}
-
-private fun LazyListScope.showItemAnimeTopShimmer(shimmerInstance: Shimmer, count: Int = 5) {
-  items(count) {
-    ItemVerticalAnimeShimmer(
-      modifier = ItemVerticalAnimeConfig.defaultModifier,
-      shimmerInstance = shimmerInstance
-    )
   }
 }

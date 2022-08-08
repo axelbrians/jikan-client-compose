@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.machina.jikan_client_compose.domain.use_case.anime_characters.GetAnimeCharactersUseCase
+import com.machina.jikan_client_compose.domain.use_case.anime_recommendations.GetAnimeRecommendationsUseCase
 import com.machina.jikan_client_compose.domain.use_case.get_content_details.GetContentDetailsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -15,7 +16,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ContentDetailsViewModel @Inject constructor(
   private val getContentDetailsUseCase: GetContentDetailsUseCase,
-  private val getAnimeCharactersUseCase: GetAnimeCharactersUseCase
+  private val getAnimeCharactersUseCase: GetAnimeCharactersUseCase,
+  private val getAnimeRecommendationsUseCase: GetAnimeRecommendationsUseCase
 ): ViewModel() {
 
   private val _contentDetailsState : MutableState<ContentDetailsState> = mutableStateOf(ContentDetailsState.Loading)
@@ -23,6 +25,9 @@ class ContentDetailsViewModel @Inject constructor(
 
   private val _animeCharactersListState : MutableState<AnimeCharacterListState> = mutableStateOf(AnimeCharacterListState.Loading)
   val animeCharactersListState : State<AnimeCharacterListState> = _animeCharactersListState
+
+  private val _animeRecommendationsListState : MutableState<AnimeRecommendationsListState> = mutableStateOf(AnimeRecommendationsListState.Loading)
+  val animeRecommendationsListState : State<AnimeRecommendationsListState> = _animeRecommendationsListState
 
 
   fun getContentDetails(contentType: String?, malId: Int?) {
@@ -34,6 +39,12 @@ class ContentDetailsViewModel @Inject constructor(
   fun getAnimeCharacters(malId: Int) {
     getAnimeCharactersUseCase(malId).onEach { state ->
       _animeCharactersListState.value = state
+    }.launchIn(viewModelScope)
+  }
+
+  fun getAnimeRecommendations(malId: Int) {
+    getAnimeRecommendationsUseCase(malId).onEach { state ->
+      _animeRecommendationsListState.value = state
     }.launchIn(viewModelScope)
   }
 }

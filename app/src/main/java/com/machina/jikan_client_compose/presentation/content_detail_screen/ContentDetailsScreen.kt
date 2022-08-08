@@ -29,6 +29,8 @@ import com.machina.jikan_client_compose.presentation.content_detail_screen.data.
 import com.machina.jikan_client_compose.presentation.content_detail_screen.item.ItemAnimeCharacter
 import com.machina.jikan_client_compose.presentation.content_detail_screen.item.ItemAnimeCharacterConfig
 import com.machina.jikan_client_compose.presentation.content_detail_screen.three_column.ContentDetailsThreeColumnSection
+import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnime
+import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnimeModifier
 import com.machina.jikan_client_compose.ui.shimmer.onUpdateShimmerBounds
 import com.machina.jikan_client_compose.ui.shimmer.rememberShimmerCustomBounds
 import com.machina.jikan_client_compose.ui.theme.MyColor
@@ -48,8 +50,9 @@ fun ContentDetailsScreen(
   var isSynopsisExpanded by remember { mutableStateOf(false) }
   val toolbarScaffoldState = rememberCollapsingToolbarScaffoldState()
   val contentDetailsState = viewModel.contentDetailsState.value
-  val animeCharacterListState = viewModel.animeCharactersListState
   val genres = contentDetailsState.data?.genres ?: listOf()
+  val animeCharacterListState = viewModel.animeCharactersListState
+  val animeRecommendationsListState = viewModel.animeRecommendationsListState
 
   val largeImageCoil = rememberImagePainter(
     data = contentDetailsState.data?.images?.jpg?.largeImageUrl,
@@ -66,6 +69,7 @@ fun ContentDetailsScreen(
     block = {
       viewModel.getContentDetails(contentType, malId)
       viewModel.getAnimeCharacters(malId ?: 0)
+      viewModel.getAnimeRecommendations(malId ?: 0)
     }
   )
 
@@ -177,6 +181,29 @@ fun ContentDetailsScreen(
               ItemAnimeCharacter(
                 modifier = ItemAnimeCharacterConfig.default,
                 data = it
+              )
+            }
+          }
+        }
+
+        item(key = "anime_see_also") {
+          val shimmerInstance = rememberShimmerCustomBounds()
+
+          HorizontalContentHeader(
+            modifier = Modifier.fillMaxWidth().padding(start = 18.dp, end = 12.dp, top = 8.dp, bottom = 4.dp),
+            title = "See also",
+            onButtonClick = { }
+          )
+
+          LazyRow(
+            modifier = Modifier.onUpdateShimmerBounds(shimmerInstance),
+            contentPadding = PaddingValues(12.dp, 0.dp, 12.dp, 0.dp)
+          ) {
+            items(items = animeRecommendationsListState.value.data, key = { it.malId }) {
+              ItemVerticalAnime(
+                modifier = ItemVerticalAnimeModifier.default,
+                data = it,
+                onClick = { malId, type -> }
               )
             }
           }

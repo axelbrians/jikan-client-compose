@@ -2,7 +2,6 @@ package com.machina.jikan_client_compose.domain.use_case.anime_schedule
 
 import android.icu.util.Calendar
 import com.machina.jikan_client_compose.core.DispatchersProvider
-import com.machina.jikan_client_compose.core.constant.Constant
 import com.machina.jikan_client_compose.core.wrapper.Event
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_schedules.toAnimeSchedule
@@ -22,12 +21,13 @@ class GetAnimeScheduleUseCase @Inject constructor(
 ) {
 
   operator fun invoke(
-    dayInCalendar: Int = Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
+    dayInCalendar: Int = Calendar.getInstance().get(Calendar.DAY_OF_WEEK),
+    page: Int = 1
   ): Flow<AnimeScheduleState> {
     return flow {
       emit(AnimeScheduleState.Loading)
 
-      val state = when (val res = repository.getAnimeSchedule(dayInCalendar)) {
+      val state = when (val res = repository.getAnimeSchedule(dayInCalendar, page)) {
         is Resource.Success -> {
           val data = res.data?.data?.map {
             it.toAnimeSchedule()
@@ -47,18 +47,19 @@ class GetAnimeScheduleUseCase @Inject constructor(
   }
 
   fun getAsAnimeHorizontalList(
-    dayInCalendar: Int = Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
+    dayInCalendar: Int = Calendar.getInstance().get(Calendar.DAY_OF_WEEK),
+    page: Int = 1
   ): Flow<AnimeHorizontalListContentState> {
     return flow {
       emit(AnimeHorizontalListContentState.Loading)
 
-      val state = when (val res = repository.getAnimeSchedule(dayInCalendar)) {
+      val state = when (val res = repository.getAnimeSchedule(dayInCalendar, page)) {
         is Resource.Success -> {
           AnimeHorizontalListContentState(
             data = AnimeVerticalModel(
               data = res.data!!.data.map {
                 AnimeVerticalDataModel.from(it)
-              }.take(Constant.HORIZONTAL_CONTENT_LIMIT),
+              },
               pagination = res.data.pagination
             )
           )
@@ -68,6 +69,6 @@ class GetAnimeScheduleUseCase @Inject constructor(
       }
 
       emit(state)
-    }
+    }.flowOn(dispatchers.io)
   }
 }

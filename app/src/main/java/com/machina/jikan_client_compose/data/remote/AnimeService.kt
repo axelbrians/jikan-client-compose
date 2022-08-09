@@ -19,7 +19,7 @@ interface AnimeService {
   suspend fun searchAnime(query: String, page: Int):
     Resource<ContentSearchResponse>
 
-  suspend fun getAnimeSchedule(day: Int):
+  suspend fun getAnimeSchedule(day: Int, page: Int):
     Resource<AnimeScheduleResponseV4>
 
   suspend fun getAnimeDetails(malId: Int):

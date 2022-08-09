@@ -3,6 +3,7 @@ package com.machina.jikan_client_compose.presentation.home_screen.item
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -14,6 +15,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.machina.jikan_client_compose.core.constant.Constant
 import com.machina.jikan_client_compose.ui.theme.*
 import com.machina.jikan_client_compose.ui.theme.Type.alignCenter
 import com.machina.jikan_client_compose.ui.theme.Type.bold
@@ -69,5 +71,22 @@ fun ItemVerticalAnimeMore(
 //        fontWeight = FontWeight.Normal
 //      )
 //    )
+  }
+}
+
+fun LazyListScope.showItemVerticalAnimeMoreWhenPastLimit(
+  modifier: Modifier = Modifier,
+  thumbnailHeight: Dp = 190.dp,
+  limit: Int = Constant.HORIZONTAL_CONTENT_LIMIT,
+  size: Int = 0,
+  onClick: () -> Unit
+) {
+  if (size > limit) {
+    item {
+      ItemVerticalAnimeMore(
+        modifier = ItemVerticalAnimeModifier.default,
+        onClick = onClick
+      )
+    }
   }
 }

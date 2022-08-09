@@ -80,7 +80,7 @@ class AnimeRepository @Inject constructor(
     return safeCall<ContentSearchResponse, GeneralError>(client, request)
   }
 
-  override suspend fun getAnimeSchedule(day: Int): Resource<AnimeScheduleResponseV4> {
+  override suspend fun getAnimeSchedule(day: Int, page: Int): Resource<AnimeScheduleResponseV4> {
     val dayInString = when (day) {
       Calendar.MONDAY -> "monday"
       Calendar.TUESDAY -> "tuesday"
@@ -97,6 +97,7 @@ class AnimeRepository @Inject constructor(
         protocol = URLProtocol.HTTPS
         host = Endpoints.HOST_V4
         encodedPath = Endpoints.ANIME_SCHEDULES + "/$dayInString"
+        parameter("page", page)
       }
     }
 

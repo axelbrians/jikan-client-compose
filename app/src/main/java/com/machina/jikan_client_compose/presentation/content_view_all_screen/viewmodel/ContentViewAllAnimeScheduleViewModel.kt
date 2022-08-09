@@ -33,7 +33,7 @@ class ContentViewAllAnimeScheduleViewModel @Inject constructor(
     // Ensure that only one instance of HTTP call is running on specific page
     if (jobs[currentPage] != null) return
 
-    jobs[currentPage] = getAnimeScheduleUseCase.getAsAnimeHorizontalList(currentPage).onEach {
+    jobs[currentPage] = getAnimeScheduleUseCase.getAsAnimeHorizontalList(page = currentPage).onEach {
       if (it.isLoading) {
         _contentState.value = _contentState.value.copy(isLoading = true)
         return@onEach

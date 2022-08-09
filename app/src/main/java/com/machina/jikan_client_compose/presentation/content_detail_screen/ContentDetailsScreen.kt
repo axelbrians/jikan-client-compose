@@ -20,6 +20,7 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
+import com.machina.jikan_client_compose.core.constant.Constant
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
 import com.machina.jikan_client_compose.presentation.composable.HorizontalContentHeader
 import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.ContentDetailsScreenToolbar
@@ -29,8 +30,11 @@ import com.machina.jikan_client_compose.presentation.content_detail_screen.data.
 import com.machina.jikan_client_compose.presentation.content_detail_screen.item.ItemAnimeCharacter
 import com.machina.jikan_client_compose.presentation.content_detail_screen.item.ItemAnimeCharacterConfig
 import com.machina.jikan_client_compose.presentation.content_detail_screen.three_column.ContentDetailsThreeColumnSection
+import com.machina.jikan_client_compose.presentation.home_screen.composable.shimmer.ContentListHeaderWithButtonShimmer
 import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnime
 import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnimeModifier
+import com.machina.jikan_client_compose.presentation.home_screen.item.showItemVerticalAnimeMoreWhenPastLimit
+import com.machina.jikan_client_compose.presentation.home_screen.item.showItemVerticalAnimeShimmer
 import com.machina.jikan_client_compose.ui.shimmer.onUpdateShimmerBounds
 import com.machina.jikan_client_compose.ui.shimmer.rememberShimmerCustomBounds
 import com.machina.jikan_client_compose.ui.theme.MyColor
@@ -51,8 +55,8 @@ fun ContentDetailsScreen(
   val toolbarScaffoldState = rememberCollapsingToolbarScaffoldState()
   val contentDetailsState = viewModel.contentDetailsState.value
   val genres = contentDetailsState.data?.genres ?: listOf()
-  val animeCharacterListState = viewModel.animeCharactersListState
-  val animeRecommendationsListState = viewModel.animeRecommendationsListState
+  val animeCharacterListState = viewModel.animeCharactersListState.value
+  val animeRecommendationsListState = viewModel.animeRecommendationsListState.value
 
   val largeImageCoil = rememberImagePainter(
     data = contentDetailsState.data?.images?.jpg?.largeImageUrl,
@@ -168,7 +172,9 @@ fun ContentDetailsScreen(
           val shimmerInstance = rememberShimmerCustomBounds()
 
           HorizontalContentHeader(
-            modifier = Modifier.fillMaxWidth().padding(start = 18.dp, end = 12.dp, top = 8.dp, bottom = 4.dp),
+            modifier = Modifier
+              .fillMaxWidth()
+              .padding(start = 18.dp, end = 12.dp, top = 8.dp, bottom = 4.dp),
             title = "Characters",
             onButtonClick = { }
           )
@@ -177,7 +183,7 @@ fun ContentDetailsScreen(
             modifier = Modifier.onUpdateShimmerBounds(shimmerInstance),
             contentPadding = PaddingValues(12.dp, 0.dp, 12.dp, 0.dp)
           ) {
-            items(items = animeCharacterListState.value.data, key = { it.malId }) {
+            items(items = animeCharacterListState.data, key = { it.malId }) {
               ItemAnimeCharacter(
                 modifier = ItemAnimeCharacterConfig.default,
                 data = it
@@ -188,22 +194,40 @@ fun ContentDetailsScreen(
 
         item(key = "anime_see_also") {
           val shimmerInstance = rememberShimmerCustomBounds()
-
-          HorizontalContentHeader(
-            modifier = Modifier.fillMaxWidth().padding(start = 18.dp, end = 12.dp, top = 8.dp, bottom = 4.dp),
-            title = "See also",
-            onButtonClick = { }
-          )
+          val title = "See also"
+          if (animeRecommendationsListState.isLoading) {
+            ContentListHeaderWithButtonShimmer(shimmerInstance)
+          } else {
+            HorizontalContentHeader(
+              modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 18.dp, end = 12.dp, top = 8.dp, bottom = 4.dp),
+              title = title,
+              onButtonClick = { }
+            )
+          }
 
           LazyRow(
             modifier = Modifier.onUpdateShimmerBounds(shimmerInstance),
             contentPadding = PaddingValues(12.dp, 0.dp, 12.dp, 0.dp)
           ) {
-            items(items = animeRecommendationsListState.value.data, key = { it.malId }) {
-              ItemVerticalAnime(
+            if (animeRecommendationsListState.isLoading) {
+              showItemVerticalAnimeShimmer(shimmerInstance)
+            } else {
+              items(
+                items = animeRecommendationsListState.data.take(Constant.HORIZONTAL_CONTENT_LIMIT),
+                key = { it.malId }
+              ) {
+                ItemVerticalAnime(
+                  modifier = ItemVerticalAnimeModifier.default,
+                  data = it,
+                  onClick = navigator::navigateToContentDetailsScreen
+                )
+              }
+              showItemVerticalAnimeMoreWhenPastLimit(
                 modifier = ItemVerticalAnimeModifier.default,
-                data = it,
-                onClick = { malId, type -> }
+                size = animeRecommendationsListState.data.size,
+                onClick = { }
               )
             }
           }

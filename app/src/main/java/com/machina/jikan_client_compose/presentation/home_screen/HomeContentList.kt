@@ -19,7 +19,7 @@ import com.machina.jikan_client_compose.presentation.home_screen.composable.shim
 import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeHorizontalListContentState
 import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnime
 import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnimeModifier
-import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnimeMore
+import com.machina.jikan_client_compose.presentation.home_screen.item.showItemVerticalAnimeMoreWhenPastLimit
 import com.machina.jikan_client_compose.presentation.home_screen.item.showItemVerticalAnimeShimmer
 import com.machina.jikan_client_compose.ui.navigation.content_view_all.ContentViewAllType
 import com.machina.jikan_client_compose.ui.shimmer.onUpdateShimmerBounds
@@ -49,8 +49,7 @@ fun HomeContentList(
       val shimmerInstance = rememberShimmer(shimmerBounds = ShimmerBounds.Custom)
       val pagerState = rememberPagerState()
       AnimeAiringPopularHorizontalPager(
-        modifier = Modifier
-          .onUpdateShimmerBounds(shimmerInstance),
+        modifier = Modifier.onUpdateShimmerBounds(shimmerInstance),
         pagerState = pagerState,
         animeAiringPopularState = animeAiringPopularState,
         data = animeAiringPopularState.data.take(7),
@@ -92,14 +91,15 @@ fun HomeContentList(
               onClick = navigation::navigateToContentDetailsScreen
             )
           }
-          item {
-            ItemVerticalAnimeMore(
-              modifier = ItemVerticalAnimeModifier.default,
-              onClick = {
-                navigation.navigateToContentViewAllScreen(ContentViewAllType.AnimeSchedule, title)
-              }
-            )
-          }
+          showItemVerticalAnimeMoreWhenPastLimit(
+            modifier = ItemVerticalAnimeModifier.default,
+            size = animeScheduleState.data.data.size,
+            onClick = {
+              navigation.navigateToContentViewAllScreen(
+                ContentViewAllType.AnimeSchedule, title
+              )
+            }
+          )
         }
       }
     }
@@ -139,16 +139,15 @@ fun HomeContentList(
               onClick = navigation::navigateToContentDetailsScreen
             )
           }
-          item {
-            ItemVerticalAnimeMore(
-              modifier = ItemVerticalAnimeModifier.default,
-              onClick = {
-                navigation.navigateToContentViewAllScreen(
-                  ContentViewAllType.AnimeTop, title
-                )
-              }
-            )
-          }
+          showItemVerticalAnimeMoreWhenPastLimit(
+            modifier = ItemVerticalAnimeModifier.default,
+            size = animeTopState.data.data.size,
+            onClick = {
+              navigation.navigateToContentViewAllScreen(
+                ContentViewAllType.AnimeTop, title
+              )
+            }
+          )
         }
       }
     }

@@ -7,4 +7,8 @@ data class AnimeAiringPopularState(
   val data: List<AnimeAiringPopular> = listOf(),
   val isLoading: Boolean = false,
   val error: Event<String?> = Event(null)
-)
+) {
+  companion object {
+    val Loading = AnimeAiringPopularState(isLoading = true)
+  }
+}

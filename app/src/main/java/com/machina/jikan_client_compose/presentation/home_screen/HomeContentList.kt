@@ -1,7 +1,6 @@
 package com.machina.jikan_client_compose.presentation.home_screen
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -49,14 +48,12 @@ fun HomeContentList(
     item(key = "horizontal_pager_demo") {
       val shimmerInstance = rememberShimmer(shimmerBounds = ShimmerBounds.Custom)
       val pagerState = rememberPagerState()
-      val itemCount = animeAiringPopularState.data.size.coerceAtMost(7)
       AnimeAiringPopularHorizontalPager(
         modifier = Modifier
-          .padding(top = 8.dp)
           .onUpdateShimmerBounds(shimmerInstance),
         pagerState = pagerState,
         animeAiringPopularState = animeAiringPopularState,
-        data = animeAiringPopularState.data.slice(0 until itemCount),
+        data = animeAiringPopularState.data.take(7),
         shimmerInstance = shimmerInstance,
         navigateToContentDetailsScreen = navigation::navigateToContentDetailsScreen
       )

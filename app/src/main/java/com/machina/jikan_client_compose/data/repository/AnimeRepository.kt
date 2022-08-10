@@ -138,28 +138,4 @@ class AnimeRepository @Inject constructor(
       Resource.Error(res.message ?: MyError.UNKNOWN_ERROR)
     }
   }
-
-  override suspend fun getAnimeCharacters(malId: Int): Resource<List<AnimeCharacterModel>> {
-    val request = HttpRequestBuilder().apply {
-      method = HttpMethod.Get
-      url {
-        protocol = URLProtocol.HTTPS
-        host = Endpoints.HOST_V4
-        encodedPath = Endpoints.ANIME_DETAILS + "/$malId" + Endpoints.ANIME_CHARACTERS
-      }
-    }
-
-    val res = safeCall<ResponseDataListWrapper<AnimeCharacterResponse>, GeneralError>(client, request)
-
-    Timber.tag("AnimeCharacter").d(res.message)
-    return if (res is Resource.Success && res.data != null) {
-      Resource.Success(
-        res.data.data.map {
-          AnimeCharacterModel.from(it)
-        }
-      )
-    } else {
-      Resource.Error(res.message)
-    }
-  }
 }

@@ -26,7 +26,7 @@ fun ContentListHeaderWithButtonShimmer(
         .width(110.dp)
         .height(32.dp)
         .padding(0.dp, 6.dp, 0.dp, 0.dp)
-        .clip(RoundedCornerShape(12.dp))
+        .clip(RoundedCornerShape(4.dp))
         .background(color = MyColor.Grey)
     )
 
@@ -34,7 +34,7 @@ fun ContentListHeaderWithButtonShimmer(
       modifier = Modifier
         .size(32.dp)
         .padding(0.dp, 6.dp, 0.dp, 0.dp)
-        .clip(RoundedCornerShape(12.dp))
+        .clip(RoundedCornerShape(4.dp))
         .background(color = MyColor.Grey)
     )
   }

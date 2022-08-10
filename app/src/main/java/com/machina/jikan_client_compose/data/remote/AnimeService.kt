@@ -6,7 +6,6 @@ import com.machina.jikan_client_compose.data.remote.dto_v4.anime_airing_popular.
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.AnimeDetailsDtoV4
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_schedules.AnimeScheduleResponseV4
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_top.AnimeTopResponseV4
-import com.machina.jikan_client_compose.domain.model.anime.AnimeCharacterModel
 
 interface AnimeService {
 
@@ -24,7 +23,4 @@ interface AnimeService {
 
   suspend fun getAnimeDetails(malId: Int):
     Resource<AnimeDetailsDtoV4>
-
-  suspend fun getAnimeCharacters(malId: Int):
-    Resource<List<AnimeCharacterModel>>
 }

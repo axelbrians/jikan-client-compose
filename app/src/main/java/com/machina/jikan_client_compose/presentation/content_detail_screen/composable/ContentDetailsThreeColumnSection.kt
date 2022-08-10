@@ -1,4 +1,4 @@
-package com.machina.jikan_client_compose.presentation.content_detail_screen.three_column
+package com.machina.jikan_client_compose.presentation.content_detail_screen.composable
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
@@ -21,7 +21,7 @@ fun ContentDetailsThreeColumnSection(
 ) {
 
   val first = (state.data?.score ?: "-").toString()
-  val second = (state.data?.episodes ?: "-").toString()
+  val second = (state.data?.episodes ?: "TBD").toString()
   val third = (state.data?.duration ?: "-").toString()
 
   Row(

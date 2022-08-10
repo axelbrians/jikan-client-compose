@@ -8,19 +8,15 @@ import com.machina.jikan_client_compose.core.exception.MyError
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.core.wrapper.ResponseDataListWrapper
 import com.machina.jikan_client_compose.data.remote.AnimeService
-import com.machina.jikan_client_compose.data.remote.dto.content_search.ContentSearchResponse
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_airing_popular.AnimeAiringPopularResponseV4
-import com.machina.jikan_client_compose.data.remote.dto_v4.anime_characters.AnimeCharacterResponse
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.AnimeDetailsDtoV4
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.AnimeDetailsResponseV4
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_schedules.AnimeScheduleResponseV4
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_top.AnimeTopResponseV4
 import com.machina.jikan_client_compose.di.AndroidKtorClient
-import com.machina.jikan_client_compose.domain.model.anime.AnimeCharacterModel
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
-import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -60,24 +56,21 @@ class AnimeRepository @Inject constructor(
 
     val res = safeCall<AnimeAiringPopularResponseV4, GeneralError>(client, request)
 
-    Timber.d(res.data?.toString())
-    Timber.d(res.message)
     return res
   }
 
-  override suspend fun searchAnime(query: String, page: Int): Resource<ContentSearchResponse> {
+  override suspend fun searchAnime(query: String, page: Int): Resource<ResponseDataListWrapper<AnimeDetailsDtoV4>> {
     val request = HttpRequestBuilder().apply {
       method = HttpMethod.Get
       url {
         protocol = URLProtocol.HTTPS
-        host = Endpoints.HOST_V3
+        host = Endpoints.HOST_V4
         encodedPath = Endpoints.ANIME_SEARCH
         parameter("q", query)
         parameter("page", page)
       }
     }
-
-    return safeCall<ContentSearchResponse, GeneralError>(client, request)
+    return safeCall<ResponseDataListWrapper<AnimeDetailsDtoV4>, GeneralError>(client, request)
   }
 
   override suspend fun getAnimeSchedule(day: Int, page: Int): Resource<AnimeScheduleResponseV4> {

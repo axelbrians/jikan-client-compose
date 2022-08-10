@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.core.wrapper.Event
+import com.machina.jikan_client_compose.domain.model.anime.AnimeHorizontalModel
 import com.machina.jikan_client_compose.domain.use_case.search_content.SearchContentUseCase
-import com.machina.jikan_client_compose.presentation.home_screen.data.ContentSearchState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -22,7 +22,7 @@ class SearchScreenViewModel @Inject constructor(
 
 
   private val _contentSearchState: MutableState<ContentSearchState> =
-    mutableStateOf(ContentSearchState())
+    mutableStateOf(ContentSearchState.Loading)
   val contentSearchState: State<ContentSearchState> = _contentSearchState
 
 
@@ -43,7 +43,7 @@ class SearchScreenViewModel @Inject constructor(
   }
 
   fun nextContentPageByQuery(query: String, contentType: ContentType) {
-    if (contentSearchState.value.data.isEmpty()) {
+    if (contentSearchState.value.data.data.isEmpty()) {
       return
     }
 
@@ -57,9 +57,11 @@ class SearchScreenViewModel @Inject constructor(
 
         if (res.error.peekContent() != null) {
           currentPage++
-          val temp = _contentSearchState.value.data.toMutableList()
-          temp.addAll(res.data)
-          _contentSearchState.value = ContentSearchState(temp)
+          val temp = _contentSearchState.value.data.data.toMutableList()
+          temp.addAll(res.data.data)
+          _contentSearchState.value = ContentSearchState(
+            AnimeHorizontalModel(data = temp, pagination = res.data.pagination)
+          )
         } else {
           _contentSearchState.value = _contentSearchState.value.copy(error = res.error)
         }

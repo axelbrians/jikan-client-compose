@@ -25,11 +25,11 @@ import com.machina.jikan_client_compose.presentation.composable.CenterCircularPr
 import com.machina.jikan_client_compose.presentation.composable.HorizontalContentHeader
 import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.ContentDetailsScreenToolbar
 import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.ContentDetailsSynopsis
+import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.ContentDetailsThreeColumnSection
 import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.ContentDetailsTrailerPlayer
 import com.machina.jikan_client_compose.presentation.content_detail_screen.data.ContentDetailsViewModel
 import com.machina.jikan_client_compose.presentation.content_detail_screen.item.ItemAnimeCharacter
 import com.machina.jikan_client_compose.presentation.content_detail_screen.item.ItemAnimeCharacterConfig
-import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.ContentDetailsThreeColumnSection
 import com.machina.jikan_client_compose.presentation.home_screen.composable.shimmer.ContentListHeaderWithButtonShimmer
 import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnime
 import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnimeModifier
@@ -81,7 +81,7 @@ fun ContentDetailsScreen(
     Surface(
       modifier = Modifier
         .fillMaxSize()
-        .background(MyColor.DarkBlueBackground)
+        .background(MyColor.DarkBlueBackground),
     ) {
       CenterCircularProgressIndicator(
         size = 40.dp,

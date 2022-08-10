@@ -57,6 +57,10 @@ fun SearchScreen(
     focusRequester.requestFocus()
   }
 
+  BackHandler(enabled = true) {
+    navigator.navigateUp()
+  }
+
   Scaffold(
     modifier = Modifier
       .fillMaxSize()
@@ -101,11 +105,6 @@ fun SearchScreen(
             }
           }
         )
-
-      }
-
-      BackHandler(enabled = (searchQuery.value.isNotEmpty())) {
-        searchQuery.value = ""
       }
 
       Divider(

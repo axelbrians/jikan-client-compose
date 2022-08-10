@@ -25,7 +25,7 @@ import com.machina.jikan_client_compose.core.enums.MangaSubType.ONE_SHOT
 import com.machina.jikan_client_compose.presentation.content_search_screen.item.ItemAnimeSearch
 import com.machina.jikan_client_compose.presentation.content_search_screen.composable.shimmer.ItemAnimeSearchShimmer
 import com.machina.jikan_client_compose.presentation.content_search_screen.item.ItemMangaSearch
-import com.machina.jikan_client_compose.presentation.home_screen.data.ContentSearchState
+import com.machina.jikan_client_compose.presentation.content_search_screen.data.ContentSearchState
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
@@ -48,20 +48,20 @@ fun ContentSearchList(
       shimmerInstance.updateBounds(position)
     }
   ) {
-    itemsIndexed(state.data, key = { index, data ->
+    itemsIndexed(state.data.data, key = { index, data ->
       "${data.malId}-$index"
     }) { _, data ->
-      when (data.type) {
-        MANGA, MANHUA, MANHWA, DOUJIN, ONE_SHOT, LIGHT_NOVEL -> {
-          ItemMangaSearch(
-            modifier = Modifier
-              .fillMaxWidth()
-              .padding(12.dp, 8.dp),
-            data = data,
-            onItemClick = onItemClick
-          )
-        }
-        else -> {
+//      when (data.type) {
+//        MANGA, MANHUA, MANHWA, DOUJIN, ONE_SHOT, LIGHT_NOVEL -> {
+//          ItemMangaSearch(
+//            modifier = Modifier
+//              .fillMaxWidth()
+//              .padding(12.dp, 8.dp),
+//            data = data,
+//            onItemClick = onItemClick
+//          )
+//        }
+//        else -> {
           ItemAnimeSearch(
             modifier = Modifier
               .fillMaxWidth()
@@ -69,8 +69,8 @@ fun ContentSearchList(
             data = data,
             onItemClick = onItemClick
           )
-        }
-      }
+//        }
+//      }
 
     }
 

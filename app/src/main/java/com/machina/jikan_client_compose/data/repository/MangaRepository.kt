@@ -6,16 +6,13 @@ import com.machina.jikan_client_compose.core.error.GeneralError
 import com.machina.jikan_client_compose.core.exception.MyError
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.data.remote.MangaService
-import com.machina.jikan_client_compose.data.remote.dto.content_details.ContentDetailsDto
 import com.machina.jikan_client_compose.data.remote.dto.content_search.ContentSearchResponse
 import com.machina.jikan_client_compose.data.remote.dto_v4.manga_details.MangaDetailsDtoV4
 import com.machina.jikan_client_compose.data.remote.dto_v4.manga_details.MangaDetailsResponseV4
 import com.machina.jikan_client_compose.di.AndroidKtorClient
-import com.machina.jikan_client_compose.di.OkHttpKtorClient
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
-import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -30,7 +27,7 @@ class MangaRepository @Inject constructor(
       method = HttpMethod.Get
       url {
         protocol = URLProtocol.HTTPS
-        host = Endpoints.HOST_V3
+        host = Endpoints.HOST_V4
         encodedPath = Endpoints.MANGA_SEARCH
         parameter("q", query)
         parameter("page", page)

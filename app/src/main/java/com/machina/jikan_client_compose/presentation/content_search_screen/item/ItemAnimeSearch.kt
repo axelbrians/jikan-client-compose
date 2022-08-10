@@ -19,6 +19,8 @@ import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
 import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.domain.model.ContentSearch
+import com.machina.jikan_client_compose.domain.model.anime.AnimeHorizontalDataModel
+import com.machina.jikan_client_compose.domain.model.anime.AnimeHorizontalModel
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
 import com.machina.jikan_client_compose.ui.theme.MyColor
 
@@ -26,7 +28,7 @@ import com.machina.jikan_client_compose.ui.theme.MyColor
 @Composable
 fun ItemAnimeSearch(
   modifier: Modifier = Modifier,
-  data: ContentSearch,
+  data: AnimeHorizontalDataModel,
   onItemClick: (Int, ContentType) -> Unit
 ) {
 

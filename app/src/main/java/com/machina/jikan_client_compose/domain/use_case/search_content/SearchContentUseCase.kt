@@ -5,13 +5,12 @@ import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.core.exception.MyError.UNKNOWN_ERROR
 import com.machina.jikan_client_compose.core.wrapper.Event
 import com.machina.jikan_client_compose.core.wrapper.Resource
-import com.machina.jikan_client_compose.data.remote.dto.content_search.ContentSearchDtoKtor
-import com.machina.jikan_client_compose.data.remote.dto.content_search.toAnimeModel
-import com.machina.jikan_client_compose.data.remote.dto.content_search.toMangaModel
+import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.AnimeDetailsDtoV4
 import com.machina.jikan_client_compose.data.repository.AnimeRepository
 import com.machina.jikan_client_compose.data.repository.MangaRepository
-import com.machina.jikan_client_compose.domain.model.ContentSearch
-import com.machina.jikan_client_compose.presentation.home_screen.data.ContentSearchState
+import com.machina.jikan_client_compose.domain.model.anime.AnimeHorizontalDataModel
+import com.machina.jikan_client_compose.domain.model.anime.AnimeHorizontalModel
+import com.machina.jikan_client_compose.presentation.content_search_screen.data.ContentSearchState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -25,16 +24,22 @@ class SearchContentUseCase @Inject constructor(
 
   operator fun invoke(contentType: ContentType, query: String, page: Int): Flow<ContentSearchState> {
     return flow {
-      emit(ContentSearchState(isLoading = true))
+      emit(ContentSearchState.Loading)
 
       val res = when(contentType) {
         ContentType.Anime -> animeRepository.searchAnime(query, page)
-        ContentType.Manga -> mangaRepository.searchManga(query, page)
+//        ContentType.Manga -> mangaRepository.searchManga(query, page)
+        ContentType.Manga -> Resource.Error(UNKNOWN_ERROR)
         else -> Resource.Error(UNKNOWN_ERROR)
       }
 
       val state = when (res) {
-        is Resource.Success -> ContentSearchState(resolveContentType(contentType, res.data?.results))
+        is Resource.Success -> {
+          val dataSet = resolveContentType(contentType, res.data!!.data)
+          ContentSearchState(
+            AnimeHorizontalModel(data = dataSet, pagination = res.data.pagination)
+          )
+        }
         is Resource.Error -> ContentSearchState(error = Event(res.message))
         is Resource.Loading -> ContentSearchState(isLoading = true)
       }
@@ -43,13 +48,16 @@ class SearchContentUseCase @Inject constructor(
     }.flowOn(dispatchers.io)
   }
 
-  private fun resolveContentType(contentType: ContentType, contentList: List<ContentSearchDtoKtor>?): List<ContentSearch> {
+  private fun resolveContentType(
+    contentType: ContentType,
+    contentList: List<AnimeDetailsDtoV4>?
+  ): List<AnimeHorizontalDataModel> {
     val result = when (contentType) {
-      ContentType.Anime -> contentList?.map { it.toAnimeModel() }
-      ContentType.Manga -> contentList?.map { it.toMangaModel() }
+      ContentType.Anime -> contentList?.map { AnimeHorizontalDataModel.from(it) }
+//      ContentType.Manga -> contentList?.map { it.toMangaModel() }
       else -> null
-    }
+    }.orEmpty()
 
-    return result ?: emptyList()
+    return result
   }
 }

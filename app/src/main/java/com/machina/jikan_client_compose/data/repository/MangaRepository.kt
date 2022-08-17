@@ -3,7 +3,7 @@ package com.machina.jikan_client_compose.data.repository
 import com.machina.jikan_client_compose.core.Endpoints
 import com.machina.jikan_client_compose.core.SafeCall
 import com.machina.jikan_client_compose.core.error.GeneralError
-import com.machina.jikan_client_compose.core.exception.MyError
+import com.machina.jikan_client_compose.core.error.MyError
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.data.remote.MangaService
 import com.machina.jikan_client_compose.data.remote.dto.content_search.ContentSearchResponse

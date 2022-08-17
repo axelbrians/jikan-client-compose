@@ -20,7 +20,4 @@ interface AnimeService {
 
   suspend fun getAnimeSchedule(day: Int, page: Int):
     Resource<AnimeScheduleResponseV4>
-
-  suspend fun getAnimeDetails(malId: Int):
-    Resource<AnimeDetailsDtoV4>
 }

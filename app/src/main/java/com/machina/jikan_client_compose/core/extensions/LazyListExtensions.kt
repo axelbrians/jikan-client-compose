@@ -15,16 +15,19 @@ fun LazyListState.isScrolledToTheEnd(): Boolean {
 fun LazyListState.isScrollingUp(): Boolean {
   var previousIndex by remember(this) { mutableStateOf(firstVisibleItemIndex) }
   var previousScrollOffset by remember(this) { mutableStateOf(firstVisibleItemScrollOffset) }
+  var isScrollingUpPreviously by remember(this) { mutableStateOf(true) }
   return remember(this) {
     derivedStateOf {
-      if (previousIndex != firstVisibleItemIndex) {
-        previousIndex > firstVisibleItemIndex
-      } else {
-        previousScrollOffset >= firstVisibleItemScrollOffset
-      }.also {
-        previousIndex = firstVisibleItemIndex
-        previousScrollOffset = firstVisibleItemScrollOffset
+      isScrollingUpPreviously = when {
+        firstVisibleItemIndex > previousIndex -> false
+        firstVisibleItemIndex < previousIndex -> true
+        firstVisibleItemScrollOffset > previousScrollOffset -> false
+        firstVisibleItemScrollOffset < previousScrollOffset -> true
+        else -> isScrollingUpPreviously
       }
+      previousIndex = firstVisibleItemIndex
+      previousScrollOffset = firstVisibleItemScrollOffset
+      isScrollingUpPreviously
     }
   }.value
 }

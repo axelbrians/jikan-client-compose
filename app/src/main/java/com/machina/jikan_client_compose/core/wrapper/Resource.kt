@@ -1,6 +1,6 @@
 package com.machina.jikan_client_compose.core.wrapper
 
-import com.machina.jikan_client_compose.core.exception.MyError
+import com.machina.jikan_client_compose.core.error.MyError
 
 sealed class Resource<T>(val data: T? = null, val message: String? = null) {
     class Success<T>(

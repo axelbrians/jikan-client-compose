@@ -20,6 +20,7 @@ import com.machina.jikan_client_compose.presentation.home_screen.homeScreenNav
 import com.machina.jikan_client_compose.ui.navigation.MainNavigationRoute.HOME_SCREEN
 import com.machina.jikan_client_compose.ui.theme.JikanClientComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -30,7 +31,7 @@ class MainActivity : ComponentActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-
+    Timber.d("Hello main activity")
     setContent {
       JikanClientComposeTheme {
         MyApp(

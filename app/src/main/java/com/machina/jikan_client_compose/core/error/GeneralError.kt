@@ -6,14 +6,14 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class GeneralError(
     @SerialName("status")
-    val status: Int,
+    val status: Int = 0,
 
     @SerialName("type")
-    val type: String,
+    val type: String = "",
 
     @SerialName("message")
-    val message: String,
+    val message: String = "",
 
     @SerialName("error")
-    val error: String
+    val error: String? = null
 )

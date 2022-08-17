@@ -2,13 +2,13 @@ package com.machina.jikan_client_compose.domain.use_case.get_content_details
 
 import com.machina.jikan_client_compose.core.DispatchersProvider
 import com.machina.jikan_client_compose.core.enums.ContentType
-import com.machina.jikan_client_compose.core.exception.MyError
+import com.machina.jikan_client_compose.core.error.MyError
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.AnimeDetailsDtoV4
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.toContentDetails
 import com.machina.jikan_client_compose.data.remote.dto_v4.manga_details.MangaDetailsDtoV4
 import com.machina.jikan_client_compose.data.remote.dto_v4.manga_details.toContentDetails
-import com.machina.jikan_client_compose.data.repository.AnimeRepository
+import com.machina.jikan_client_compose.data.repository.AnimeDetailsRepository
 import com.machina.jikan_client_compose.data.repository.MangaRepository
 import com.machina.jikan_client_compose.domain.model.ContentDetails
 import com.machina.jikan_client_compose.presentation.content_detail_screen.data.ContentDetailsState
@@ -19,7 +19,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class GetContentDetailsUseCase @Inject constructor(
-  private val animeRepository: AnimeRepository,
+  private val animeRepository: AnimeDetailsRepository,
   private val mangaRepository: MangaRepository,
   private val dispatchers: DispatchersProvider
 ) {
@@ -33,18 +33,15 @@ class GetContentDetailsUseCase @Inject constructor(
         ContentType.Manga -> mangaRepository.getMangaDetails(malId ?: 0)
         else -> Resource.Error(MyError.UNKNOWN_ERROR)
       }
+      Timber.d(res.message)
 
       val state = when (res) {
-        is Resource.Success -> {
-          val data = resolveContentType(res.data)
-          ContentDetailsState(data)
-        }
+        is Resource.Success -> ContentDetailsState(resolveContentType(res.data))
         is Resource.Error -> ContentDetailsState(error = res.message)
         is Resource.Loading -> ContentDetailsState(isLoading = true)
       }
 
       emit(state)
-
     }.flowOn(dispatchers.io)
   }
 

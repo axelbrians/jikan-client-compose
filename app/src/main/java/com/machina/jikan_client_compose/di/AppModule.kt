@@ -41,6 +41,7 @@ class AppModule {
 //  @AndroidKtorClient
   fun provideKtorClient(): HttpClient {
     return HttpClient(Android) {
+      expectSuccess = false
       engine {
         connectTimeout = 15_000
         socketTimeout = 100_000
@@ -63,6 +64,7 @@ class AppModule {
   @AndroidKtorClient // @AndroidOkHttpClient
   fun provideOkHttpClient(@ApplicationContext context: Context): HttpClient {
     return HttpClient(OkHttp) {
+      expectSuccess = false
       engine {
         addInterceptor(
           ChuckerInterceptor.Builder(context)
@@ -79,6 +81,7 @@ class AppModule {
         serializer = KotlinxSerializer(kotlinx.serialization.json.Json {
           ignoreUnknownKeys = true
           coerceInputValues = true
+          prettyPrint = true
         })
       }
     }

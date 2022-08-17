@@ -7,6 +7,8 @@ import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.core.wrapper.ResponseDataListWrapper
 import com.machina.jikan_client_compose.data.remote.anime_details.AnimeDetailsService
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_characters.AnimeCharacterResponse
+import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.AnimeDetailsDtoV4
+import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.AnimeDetailsResponseV4
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_recommendations.AnimeRecommendationsResponse
 import com.machina.jikan_client_compose.di.AndroidKtorClient
 import com.machina.jikan_client_compose.domain.model.anime.AnimeCharacterModel
@@ -24,6 +26,24 @@ class AnimeDetailsRepository @Inject constructor(
   private val safeCall: SafeCall
 ): AnimeDetailsService {
 
+  override suspend fun getAnimeDetails(malId: Int): Resource<AnimeDetailsDtoV4> {
+    val request = HttpRequestBuilder().apply {
+      method = HttpMethod.Get
+      url {
+        protocol = URLProtocol.HTTPS
+        host = Endpoints.HOST_V4
+        encodedPath = Endpoints.ANIME_DETAILS + "/$malId"
+      }
+    }
+
+    val res = safeCall.invokeWithRetry<AnimeDetailsResponseV4, GeneralError>(client, request)
+    return if (res is Resource.Success && res.data != null) {
+      Resource.Success(res.data.data)
+    } else {
+      Resource.Error(res.message)
+    }
+  }
+
   override suspend fun getAnimeCharacters(malId: Int): Resource<List<AnimeCharacterModel>> {
     val request = HttpRequestBuilder().apply {
       method = HttpMethod.Get
@@ -34,7 +54,7 @@ class AnimeDetailsRepository @Inject constructor(
       }
     }
 
-    val res = safeCall<ResponseDataListWrapper<AnimeCharacterResponse>, GeneralError>(client, request)
+    val res = safeCall.invokeWithRetry<ResponseDataListWrapper<AnimeCharacterResponse>, GeneralError>(client, request)
 
     Timber.tag("AnimeCharacter").d(res.message)
     return if (res is Resource.Success && res.data != null) {
@@ -59,7 +79,7 @@ class AnimeDetailsRepository @Inject constructor(
       }
     }
 
-    val res = safeCall<ResponseDataListWrapper<AnimeRecommendationsResponse>, GeneralError>(client, request)
+    val res = safeCall.invokeWithRetry<ResponseDataListWrapper<AnimeRecommendationsResponse>, GeneralError>(client, request)
 
     return if (res is Resource.Success && res.data != null) {
       Resource.Success(

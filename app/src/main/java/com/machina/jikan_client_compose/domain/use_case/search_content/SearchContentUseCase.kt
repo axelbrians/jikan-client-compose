@@ -2,7 +2,7 @@ package com.machina.jikan_client_compose.domain.use_case.search_content
 
 import com.machina.jikan_client_compose.core.DispatchersProvider
 import com.machina.jikan_client_compose.core.enums.ContentType
-import com.machina.jikan_client_compose.core.exception.MyError.UNKNOWN_ERROR
+import com.machina.jikan_client_compose.core.error.MyError.UNKNOWN_ERROR
 import com.machina.jikan_client_compose.core.wrapper.Event
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.AnimeDetailsDtoV4

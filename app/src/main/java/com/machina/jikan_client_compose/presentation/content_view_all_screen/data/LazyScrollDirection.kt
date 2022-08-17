@@ -8,7 +8,7 @@ enum class ScrollDirection {
   DOWN
 }
 
-data class LazyScrollDirection(
+private data class LazyScrollDirection(
   private var lastScrollValue: Int,
   private var currentItemIndex: Int,
   private var lastDirection: ScrollDirection
@@ -31,7 +31,7 @@ data class LazyScrollDirection(
 }
 
 @Composable
-fun rememberLazyScrollDirection(
+private fun rememberLazyScrollDirection(
   lastScrollValue: Int = 0,
   currentItemIndex: Int = 0
 ) = remember {

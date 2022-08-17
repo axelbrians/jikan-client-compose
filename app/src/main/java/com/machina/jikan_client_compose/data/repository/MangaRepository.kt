@@ -22,6 +22,7 @@ class MangaRepository @Inject constructor(
   private val safeCall: SafeCall
 ): MangaService {
 
+  // TODO: Need regulated class for manga and anime search, currently just focus on anime
   override suspend fun searchManga(query: String, page: Int): Resource<ContentSearchResponse> {
     val request = HttpRequestBuilder().apply {
       method = HttpMethod.Get

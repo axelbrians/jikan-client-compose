@@ -107,6 +107,18 @@ object Type {
     TextStyle(color = MyColor.OnDarkSurfaceLight)
   )
 
+  fun TextStyle.darkBlue(): TextStyle = this.merge(
+    TextStyle(color = MyColor.DarkBlueBackground)
+  )
+
+  fun TextStyle.darkGrey(): TextStyle = this.merge(
+    TextStyle(color = MyColor.DarkGreyBackground)
+  )
+
+  fun TextStyle.grey(): TextStyle = this.merge(
+    TextStyle(color = MyColor.Grey)
+  )
+
   fun TextStyle.alignJustify(): TextStyle = this.merge(
     TextStyle(textAlign = TextAlign.Justify)
   )

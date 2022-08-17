@@ -11,12 +11,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import coil.annotation.ExperimentalCoilApi
+import com.machina.jikan_client_compose.core.extensions.isScrolledToTheEnd
+import com.machina.jikan_client_compose.core.extensions.scrollDirection
 import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalDataModel
 import com.machina.jikan_client_compose.presentation.content_view_all_screen.composable.ContentViewAllListScreenToolbar
 import com.machina.jikan_client_compose.presentation.content_view_all_screen.data.ScrollDirection
-import com.machina.jikan_client_compose.presentation.content_view_all_screen.data.rememberLazyScrollDirection
 import com.machina.jikan_client_compose.presentation.content_view_all_screen.viewmodel.ContentViewAllViewModel
-import com.machina.jikan_client_compose.presentation.extension.isScrolledToTheEnd
 import com.machina.jikan_client_compose.presentation.home_screen.composable.shimmer.ItemVerticalAnimeShimmer
 import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnime
 import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnimeModifier
@@ -39,16 +39,10 @@ fun ContentViewAllListScreen(
   val dataSet = contentState.data.data
   val shimmerInstance = rememberShimmerCustomBounds()
   val lazyGridState = rememberLazyListState()
-  val scrollDirection = rememberLazyScrollDirection()
-  val direction = scrollDirection.getScrollDirection(
-      lazyGridState.firstVisibleItemScrollOffset,
-      lazyGridState.firstVisibleItemIndex
-    )
   val animateToolbarOffset = animateDpAsState(
-    targetValue = if (direction == ScrollDirection.UP) 0.dp else (-56).dp,
+    targetValue = if (lazyGridState.scrollDirection() == ScrollDirection.UP) 0.dp else (-56).dp,
     animationSpec = TweenSpec.defaultEasing()
   )
-
 
   LaunchedEffect(key1 = viewModel, block = { viewModel.getNextContentPart() })
 

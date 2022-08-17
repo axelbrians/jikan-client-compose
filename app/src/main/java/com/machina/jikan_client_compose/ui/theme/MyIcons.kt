@@ -13,4 +13,8 @@ object MyIcons {
     const val ChevronDown = R.drawable.ic_circle_chevron_down_filled
   }
 
+  object Solid {
+    const val Filter = R.drawable.ic_filter_solid
+  }
+
 }

@@ -16,34 +16,64 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.machina.jikan_client_compose.R
+import com.machina.jikan_client_compose.core.constant.Constant
+import com.machina.jikan_client_compose.presentation.composable.CustomTextField
 import com.machina.jikan_client_compose.ui.theme.MyColor
+import com.machina.jikan_client_compose.ui.theme.Type
+import com.machina.jikan_client_compose.ui.theme.Type.grey
+import com.machina.jikan_client_compose.ui.theme.Type.onDarkSurface
 
 @Composable
-fun SearchEditText(
-  value: String = "",
-  placeholder: String = "",
+fun SearchBoxSearchScreen(
+  modifier: Modifier = Modifier,
+  isEnabled: Boolean = true,
+  searchQuery: String = "",
+  placeholder: String = Constant.SEARCH_FIELD_PLACEHOLDER,
   focusRequester: FocusRequester = FocusRequester(),
-  onValueChange: (String) -> Unit = { }
+  onSearchQueryChanged: (String) -> Unit = { },
+  onSearchQueryCleared: () -> Unit = { }
 ) {
-  BasicTextField(
-    value = value,
-    onValueChange = onValueChange,
-    singleLine = true,
-    cursorBrush = SolidColor(MyColor.Yellow500),
-    textStyle = TextStyle(color = MyColor.OnDarkSurface, fontSize = 16.sp),
-    modifier = Modifier.fillMaxWidth().focusRequester(focusRequester)
-  )
+  CustomTextField(
+    modifier = modifier,
+    padding = PaddingValues(12.dp),
+    leadingIcon = {
+      SearchLeadingIcon(
+        size = 16.dp,
+        padding = PaddingValues(end = 8.dp)
+      )
+    },
+    trailingIcon = {
+      if (searchQuery.isNotEmpty()) {
+        SearchTrailingIcon(
+          size = 16.dp,
+          padding = PaddingValues(start = 8.dp),
+          onClick = onSearchQueryCleared
+        )
+      }
+    }
+  ) {
+    if (isEnabled) {
+      BasicTextField(
+        modifier = Modifier
+          .fillMaxWidth()
+          .focusRequester(focusRequester),
+        value = searchQuery,
+        textStyle = Type.Typography.subtitle1.onDarkSurface(),
+        singleLine = true,
+        cursorBrush = SolidColor(MyColor.Yellow500),
+        onValueChange = { onSearchQueryChanged(it) },
+      )
+    }
 
-  if (value.isEmpty()) {
-    Text(
-      text = placeholder,
-      style = TextStyle(color = MyColor.Grey, fontSize = 16.sp)
-    )
+    if (searchQuery.isEmpty()) {
+      Text(
+        text = placeholder,
+        style = Type.Typography.subtitle1.grey()
+      )
+    }
   }
 }
 

@@ -22,6 +22,8 @@ class SearchContentUseCase @Inject constructor(
   private val dispatchers: DispatchersProvider
 ) {
 
+  // TODO: Handle different type of content in the future
+  // TODO: Handle applied filter
   operator fun invoke(contentType: ContentType, query: String, page: Int): Flow<ContentSearchState> {
     return flow {
       emit(ContentSearchState.Loading)

@@ -24,58 +24,58 @@ import com.machina.jikan_client_compose.ui.theme.MyColor
 @Preview(showBackground = true)
 @Composable
 fun ChipGroup(
-    modifier: Modifier = Modifier,
-    types: List<ContentType> = listOf(Anime, Manga),
-    selectedType: ContentType? = null,
-    onSelectedChanged: (String) -> Unit = {},
+  modifier: Modifier = Modifier,
+  types: List<ContentType> = listOf(Anime, Manga),
+  selectedType: ContentType? = null,
+  onSelectedChanged: (String) -> Unit = {},
 ) {
-    Column(modifier = Modifier.padding(8.dp)) {
-        LazyRow {
-            items(types) { type ->
-                Chip(
-                    name = type.name,
-                    isSelected = selectedType == type,
-                    onSelectionChanged = { onSelectedChanged(it) },
-                )
-            }
-        }
+  Column(modifier = Modifier.padding(8.dp)) {
+    LazyRow {
+      items(types) { type ->
+        Chip(
+          name = type.name,
+          isSelected = selectedType == type,
+          onSelectionChanged = { onSelectedChanged(it) },
+        )
+      }
     }
+  }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun Chip(
-    name: String = "Chip",
-    isSelected: Boolean = false,
-    onSelectionChanged: (String) -> Unit = { },
+  name: String = "Chip",
+  isSelected: Boolean = false,
+  onSelectionChanged: (String) -> Unit = { },
 ) {
-    Surface(
-        modifier = Modifier.padding(horizontal = 4.dp),
-        shape = RoundedCornerShape(50),
-        border = BorderStroke(
-            width = 1.dp,
-            color = when {
-                isSelected -> MyColor.Yellow500
-                else -> MyColor.DarkGreyBackground
-            }
-        )
+  Surface(
+    modifier = Modifier.padding(horizontal = 4.dp),
+    shape = RoundedCornerShape(50),
+    border = BorderStroke(
+      width = 1.dp,
+      color = when {
+        isSelected -> MyColor.Yellow500
+        else -> MyColor.DarkGreyBackground
+      }
+    )
+  ) {
+    Row(modifier = Modifier
+      .toggleable(
+        value = isSelected,
+        onValueChange = { onSelectionChanged(name) }
+      )
     ) {
-        Row(modifier = Modifier
-            .toggleable(
-                value = isSelected,
-                onValueChange = { onSelectionChanged(name) }
-            )
-        ) {
-            val styleSelected = if (isSelected)  {
-                TextStyle(color = MyColor.Yellow500, fontWeight = FontWeight.Bold )
-            } else {
-                TextStyle(color = MyColor.OnDarkSurface, fontWeight = FontWeight.Normal)
-            }
-            Text (
-                text = name,
-                style = styleSelected,
-                modifier = Modifier.padding(16.dp, 8.dp)
-            )
-        }
+      val styleSelected = if (isSelected)  {
+        TextStyle(color = MyColor.Yellow500, fontWeight = FontWeight.Bold )
+      } else {
+        TextStyle(color = MyColor.OnDarkSurface, fontWeight = FontWeight.Normal)
+      }
+      Text (
+        text = name,
+        style = styleSelected,
+        modifier = Modifier.padding(16.dp, 8.dp)
+      )
     }
+  }
 }

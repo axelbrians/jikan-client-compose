@@ -12,9 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
-import com.machina.jikan_client_compose.presentation.composable.CustomTextField
-import com.machina.jikan_client_compose.presentation.content_search_screen.composable.SearchLeadingIcon
-import com.machina.jikan_client_compose.presentation.home_screen.composable.SearchEditText
+import com.machina.jikan_client_compose.presentation.composable.MyDivider
+import com.machina.jikan_client_compose.presentation.content_search_screen.composable.SearchBoxSearchScreen
 import com.machina.jikan_client_compose.presentation.home_screen.viewmodel.HomeViewModel
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -54,32 +53,16 @@ fun HomeScreen(
     scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
   ) {
     Column(modifier = Modifier.fillMaxWidth()) {
-      Box(modifier = Modifier.fillMaxWidth()) {
-        CustomTextField(
-          modifier = Modifier
-            .fillMaxWidth()
-            .padding(24.dp, 12.dp)
-            .clip(RoundedCornerShape(8.dp))
-            .clickable { navigator.navigateToSearchScreen() },
-          padding = PaddingValues(12.dp),
-          content = {
-            SearchEditText(
-              fieldPlaceholder = "Try 'One Piece'",
-            )
-          },
-          leadingIcon = {
-            SearchLeadingIcon(
-              size = 16.dp,
-              padding = PaddingValues(end = 8.dp)
-            )
-          }
-        )
-      }
-
-      Divider(
-        color = MyColor.DarkGreyBackground,
-        thickness = 1.dp
+      SearchBoxSearchScreen(
+        modifier = Modifier
+          .fillMaxWidth()
+          .padding(12.dp)
+          .clip(RoundedCornerShape(8.dp))
+          .clickable { navigator.navigateToSearchScreen() },
+        isEnabled = false
       )
+
+      MyDivider.Horizontal.DarkGreyBackground(PaddingValues(bottom = 8.dp))
 
       HomeContentList(
         navigation = navigator,

@@ -119,6 +119,10 @@ object Type {
     TextStyle(color = MyColor.Grey)
   )
 
+  fun TextStyle.yellow500(): TextStyle = this.merge(
+    TextStyle(color = MyColor.Yellow500)
+  )
+
   fun TextStyle.alignJustify(): TextStyle = this.merge(
     TextStyle(textAlign = TextAlign.Justify)
   )

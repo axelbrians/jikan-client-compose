@@ -11,6 +11,7 @@ object MyColor {
   val Transparent = Color.Transparent
 
   val Yellow500 = Color(0xFFFEC501)
+  val Yellow500Ripple = Color(0xFF4b3900)
   val DarkBlueBackground = Color(0xFF20202A)
   val DarkGreyBackground = Color(0xFF2B2B2B)
 

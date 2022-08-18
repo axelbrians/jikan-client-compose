@@ -12,4 +12,5 @@ object MyShape {
     )
 
     val Rounded12 = RoundedCornerShape(12.dp)
+    val RoundedAllPercent50 = RoundedCornerShape(50)
 }

@@ -8,6 +8,10 @@ fun LazyListState.isScrolledToTheEnd(): Boolean {
   return layoutInfo.visibleItemsInfo.lastOrNull()?.index == layoutInfo.totalItemsCount - 1
 }
 
+fun LazyListState.isScrolledToTheStart(): Boolean {
+  return layoutInfo.visibleItemsInfo.firstOrNull()?.index == 0
+}
+
 /**
  * Returns whether the lazy list is currently scrolling up.
  */

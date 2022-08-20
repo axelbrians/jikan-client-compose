@@ -10,26 +10,18 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
 import com.machina.jikan_client_compose.core.enums.ContentType
-import com.machina.jikan_client_compose.core.enums.MangaSubType.DOUJIN
-import com.machina.jikan_client_compose.core.enums.MangaSubType.LIGHT_NOVEL
-import com.machina.jikan_client_compose.core.enums.MangaSubType.MANGA
-import com.machina.jikan_client_compose.core.enums.MangaSubType.MANHUA
-import com.machina.jikan_client_compose.core.enums.MangaSubType.MANHWA
-import com.machina.jikan_client_compose.core.enums.MangaSubType.ONE_SHOT
-import com.machina.jikan_client_compose.presentation.content_search_screen.item.ItemAnimeSearch
 import com.machina.jikan_client_compose.presentation.content_search_screen.composable.shimmer.ItemAnimeSearchShimmer
-import com.machina.jikan_client_compose.presentation.content_search_screen.item.ItemMangaSearch
 import com.machina.jikan_client_compose.presentation.content_search_screen.data.ContentSearchState
+import com.machina.jikan_client_compose.presentation.content_search_screen.item.ItemAnimeSearch
+import com.machina.jikan_client_compose.ui.shimmer.onUpdateShimmerBounds
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
-import com.valentinilk.shimmer.unclippedBoundsInWindow
 
 @ExperimentalCoilApi
 @Composable
@@ -43,10 +35,7 @@ fun ContentSearchList(
   LazyColumn(
     state = listState,
     contentPadding = PaddingValues(12.dp, 0.dp, 12.dp, 0.dp),
-    modifier = Modifier.onGloballyPositioned { layoutCoordinates ->
-      val position = layoutCoordinates.unclippedBoundsInWindow()
-      shimmerInstance.updateBounds(position)
-    }
+    modifier = Modifier.onUpdateShimmerBounds(shimmerInstance)
   ) {
     itemsIndexed(state.data.data, key = { index, data ->
       "${data.malId}-$index"

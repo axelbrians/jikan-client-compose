@@ -10,5 +10,6 @@ data class ContentSearchState(
 ) {
   companion object {
     val Loading = ContentSearchState(isLoading = true)
+    val Initial = ContentSearchState()
   }
 }

@@ -3,26 +3,16 @@ package com.machina.jikan_client_compose.presentation.content_search_screen
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import com.machina.jikan_client_compose.core.DispatchersProvider
@@ -31,15 +21,10 @@ import com.machina.jikan_client_compose.core.extensions.isScrolledToTheEnd
 import com.machina.jikan_client_compose.core.extensions.isScrollingUp
 import com.machina.jikan_client_compose.presentation.composable.MyDivider
 import com.machina.jikan_client_compose.presentation.content_search_screen.composable.ExpandableFloatingButtonSearchScreen
+import com.machina.jikan_client_compose.presentation.content_search_screen.composable.FilterBottomSheetSearchScreen
 import com.machina.jikan_client_compose.presentation.content_search_screen.composable.SearchBoxSearchScreen
 import com.machina.jikan_client_compose.presentation.content_search_screen.data.SearchScreenViewModel
 import com.machina.jikan_client_compose.ui.theme.MyColor
-import com.machina.jikan_client_compose.ui.theme.MyShape
-import com.machina.jikan_client_compose.ui.theme.Type
-import com.machina.jikan_client_compose.ui.theme.Type.darkBlue
-import com.machina.jikan_client_compose.ui.theme.Type.onDarkSurface
-import com.machina.jikan_client_compose.ui.theme.Type.semiBold
-import com.machina.jikan_client_compose.ui.theme.Type.yellow500
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
@@ -60,7 +45,6 @@ fun SearchScreen(
   val searchQuery = rememberSaveable { mutableStateOf("") }
 
   val listState = rememberLazyListState()
-  val bottomSheetListState = rememberLazyListState()
   val coroutineScope = rememberCoroutineScope()
   val scaffoldState = rememberModalBottomSheetState(
     initialValue = ModalBottomSheetValue.Hidden
@@ -70,11 +54,6 @@ fun SearchScreen(
   val focusRequester = remember { (FocusRequester()) }
   val snackbarHostState = remember { SnackbarHostState() }
   val snackbarChannel = remember { Channel<String?>(Channel.CONFLATED) }
-  val bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
-//  val scaffoldState = rememberBottomSheetScaffoldState(
-//    bottomSheetState = bottomSheetState,
-//    snackbarHostState = snackbarHostState
-//  )
 
 
   val contentSearchState = viewModel.contentSearchState.value
@@ -92,6 +71,27 @@ fun SearchScreen(
       navigator.navigateUp()
     }
   }
+//  rating: g pg pg13 r17 r rx
+//  g all ages
+//  pg children
+//  pg13 teens older 13
+//  r17 violence
+//  r mild nudity
+//  rx hentai
+//
+//  status: airing complete upcoming
+//
+//  order_by: al_id title type rating start_date end_date episodes score scored_by rank popularity members favorites
+//
+//  sort: desc asc
+//
+//  type: tv movie ova special ona music
+//
+//  sfw: boolean (filter adult entries)
+//
+//  genres: id of genre with comma as delimitter 1,2,3 etc
+//
+//  genres_exclude: id of genre with comma as delimitter 1,2,3 etc
   // TODO: Create filter UI BottomSheet
   // TODO: Create ViewModel for fetching available filter options
   ModalBottomSheetLayout(
@@ -101,7 +101,7 @@ fun SearchScreen(
     scrimColor = Color(0, 0, 0, 150),
     sheetState = scaffoldState,
     sheetShape = RoundedCornerShape(topEnd = 12.dp, topStart = 12.dp),
-    sheetContent = { FilterBottomSheetSearchScreen(lazyListState = bottomSheetListState) }
+    sheetContent = { FilterBottomSheetSearchScreen() }
   ) {
     Box(modifier = Modifier.fillMaxSize()) {
       Column(modifier = Modifier.fillMaxWidth()) {
@@ -180,94 +180,6 @@ fun SearchScreen(
             /* dismissed, no action needed */
           }
         }
-      }
-    }
-  }
-}
-
-@Composable
-fun ColumnScope.FilterBottomSheetSearchScreen(
-  modifier: Modifier = Modifier,
-  lazyListState: LazyListState = rememberLazyListState()
-) {
-  val localDensity = LocalDensity.current
-  val screenHeight = LocalConfiguration.current.screenHeightDp.dp / 3 * 2
-  val interactionSource = remember { MutableInteractionSource() }
-  val scrollableHeight = remember { mutableStateOf(0.dp) }
-
-  with(localDensity) {
-    Timber.d("ScreenHeight: $screenHeight")
-    Timber.d("ScrollableHeight: ${scrollableHeight.value}")
-  }
-  Column(
-    modifier = if (scrollableHeight.value > screenHeight) {
-      Modifier
-        .height(screenHeight)
-    } else {
-      Modifier
-    }
-  ) {
-    Box(
-      modifier = Modifier
-        .align(Alignment.CenterHorizontally)
-        .padding(top = 8.dp)
-        .width(48.dp)
-        .height(6.dp)
-        .clip(MyShape.RoundedAllPercent50)
-        .background(MyColor.Grey)
-    )
-
-    Row(
-      modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 16.dp),
-      verticalAlignment = Alignment.CenterVertically,
-      horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-      Surface(
-        modifier = Modifier
-          .clip(MyShape.RoundedAllPercent50)
-          .clickable { },
-        color = Color.Transparent,
-      ) {
-        Text(
-          text = "Reset",
-          style = Type.Typography.subtitle1.semiBold().yellow500(),
-          modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
-        )
-      }
-
-      Surface(
-        modifier = Modifier
-          .clip(MyShape.RoundedAllPercent50)
-          .clickable(
-            interactionSource = interactionSource,
-            indication = rememberRipple(color = MyColor.Yellow500Ripple),
-            onClick = { }
-          ),
-        color = MyColor.Yellow500,
-      ) {
-        Text(
-          text = "Apply",
-          style = Type.Typography.subtitle1.semiBold().darkBlue(),
-          modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
-        )
-      }
-    }
-
-    Column(
-      modifier = Modifier
-        .fillMaxWidth()
-        .verticalScroll(rememberScrollState())
-        .onGloballyPositioned {
-          with(localDensity) {
-            scrollableHeight.value = it.size.height.toDp()
-          }
-        }
-    ) {
-      repeat(10) {
-        Text(text = "Filter $it", style = Type.Typography.subtitle1.onDarkSurface())
-        Spacer(modifier = Modifier.size(48.dp))
       }
     }
   }

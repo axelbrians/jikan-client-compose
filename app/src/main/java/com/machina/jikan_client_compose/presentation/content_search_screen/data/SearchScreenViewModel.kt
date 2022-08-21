@@ -22,7 +22,7 @@ class SearchScreenViewModel @Inject constructor(
 
 
   private val _contentSearchState: MutableState<ContentSearchState> =
-    mutableStateOf(ContentSearchState.Loading)
+    mutableStateOf(ContentSearchState.Initial)
   val contentSearchState: State<ContentSearchState> = _contentSearchState
 
 

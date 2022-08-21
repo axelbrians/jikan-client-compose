@@ -1,6 +1,7 @@
 package com.machina.jikan_client_compose
 
 import android.animation.ObjectAnimator
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.Window
@@ -41,6 +42,7 @@ class MainActivity : ComponentActivity() {
       }
     }
 
+    if (BuildConfig.VERSION_CODE >= Build.VERSION_CODES.S)
     splashScreen.setOnExitAnimationListener { splashScreenView ->
       val slideUp = ObjectAnimator.ofFloat(
         splashScreenView,

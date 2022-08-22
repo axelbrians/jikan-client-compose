@@ -21,7 +21,7 @@ import com.machina.jikan_client_compose.core.extensions.isScrolledToTheEnd
 import com.machina.jikan_client_compose.core.extensions.isScrollingUp
 import com.machina.jikan_client_compose.presentation.composable.MyDivider
 import com.machina.jikan_client_compose.presentation.content_search_screen.composable.ExpandableFloatingButtonSearchScreen
-import com.machina.jikan_client_compose.presentation.content_search_screen.composable.FilterBottomSheetSearchScreen
+import com.machina.jikan_client_compose.presentation.content_search_screen.composable.FilterModalBottomSheet
 import com.machina.jikan_client_compose.presentation.content_search_screen.composable.SearchBoxSearchScreen
 import com.machina.jikan_client_compose.presentation.content_search_screen.data.SearchScreenViewModel
 import com.machina.jikan_client_compose.ui.theme.MyColor
@@ -101,7 +101,7 @@ fun SearchScreen(
     scrimColor = Color(0, 0, 0, 150),
     sheetState = scaffoldState,
     sheetShape = RoundedCornerShape(topEnd = 12.dp, topStart = 12.dp),
-    sheetContent = { FilterBottomSheetSearchScreen() }
+    sheetContent = { FilterModalBottomSheet() }
   ) {
     Box(modifier = Modifier.fillMaxSize()) {
       Column(modifier = Modifier.fillMaxWidth()) {

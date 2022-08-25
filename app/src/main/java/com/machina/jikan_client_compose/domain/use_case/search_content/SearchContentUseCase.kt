@@ -11,6 +11,7 @@ import com.machina.jikan_client_compose.data.repository.MangaRepository
 import com.machina.jikan_client_compose.domain.model.anime.AnimeHorizontalDataModel
 import com.machina.jikan_client_compose.domain.model.anime.AnimeHorizontalModel
 import com.machina.jikan_client_compose.presentation.content_search_screen.data.ContentSearchState
+import com.machina.jikan_client_compose.presentation.content_search_screen.data.filter.FilterGroupData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -24,12 +25,17 @@ class SearchContentUseCase @Inject constructor(
 
   // TODO: Handle different type of content in the future
   // TODO: Handle applied filter
-  operator fun invoke(contentType: ContentType, query: String, page: Int): Flow<ContentSearchState> {
+  operator fun invoke(
+    contentType: ContentType,
+    query: String,
+    page: Int = 1,
+    filterGroupData: FilterGroupData
+  ): Flow<ContentSearchState> {
     return flow {
       emit(ContentSearchState.Loading)
 
       val res = when(contentType) {
-        ContentType.Anime -> animeRepository.searchAnime(query, page)
+        ContentType.Anime -> animeRepository.searchAnime(query, page, filterGroupData)
 //        ContentType.Manga -> mangaRepository.searchManga(query, page)
         ContentType.Manga -> Resource.Error(UNKNOWN_ERROR)
         else -> Resource.Error(UNKNOWN_ERROR)

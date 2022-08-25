@@ -6,6 +6,7 @@ import com.machina.jikan_client_compose.data.remote.dto_v4.anime_airing_popular.
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.AnimeDetailsDtoV4
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_schedules.AnimeScheduleResponseV4
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_top.AnimeTopResponseV4
+import com.machina.jikan_client_compose.presentation.content_search_screen.data.filter.FilterGroupData
 
 interface AnimeService {
 
@@ -15,7 +16,7 @@ interface AnimeService {
   suspend fun getAnimeAiringPopular():
     Resource<AnimeAiringPopularResponseV4>
 
-  suspend fun searchAnime(query: String, page: Int):
+  suspend fun searchAnime(query: String, page: Int, filterGroupData: FilterGroupData):
     Resource<ResponseDataListWrapper<AnimeDetailsDtoV4>>
 
   suspend fun getAnimeSchedule(day: Int, page: Int):

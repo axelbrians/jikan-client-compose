@@ -23,7 +23,9 @@ import com.machina.jikan_client_compose.ui.theme.Type.yellow500
 
 @Composable
 fun ColumnScope.FilterModalBottomSheetPanButtonControl(
-  modifier: Modifier = Modifier
+  modifier: Modifier = Modifier,
+  onReset: () -> Unit,
+  onApply: () -> Unit
 ) {
   Box(
     modifier = Modifier
@@ -45,7 +47,7 @@ fun ColumnScope.FilterModalBottomSheetPanButtonControl(
     Surface(
       modifier = Modifier
         .clip(MyShape.RoundedAllPercent50)
-        .clickable { },
+        .clickable { onReset() },
       color = Color.Transparent,
     ) {
       Text(
@@ -61,7 +63,7 @@ fun ColumnScope.FilterModalBottomSheetPanButtonControl(
         .clickable(
           interactionSource = remember { MutableInteractionSource() },
           indication = rememberRipple(color = MyColor.Yellow500Ripple),
-          onClick = { }
+          onClick = onApply
         ),
       color = MyColor.Yellow500,
     ) {

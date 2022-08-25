@@ -30,7 +30,6 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @OptIn(ExperimentalCoilApi::class, ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
 @Composable
@@ -46,7 +45,7 @@ fun SearchScreen(
 
   val listState = rememberLazyListState()
   val coroutineScope = rememberCoroutineScope()
-  val scaffoldState = rememberModalBottomSheetState(
+  val sheetState = rememberModalBottomSheetState(
     initialValue = ModalBottomSheetValue.Hidden
   )
 
@@ -57,15 +56,16 @@ fun SearchScreen(
 
 
   val contentSearchState = viewModel.contentSearchState.value
+  val filterSearchState = viewModel.searchFilterState.value
 
   LaunchedEffect(key1 = viewModel.hashCode()) {
 //    focusRequester.requestFocus()
   }
 
   BackHandler(enabled = true) {
-    if (scaffoldState.isVisible) {
+    if (sheetState.isVisible) {
       coroutineScope.launch {
-        scaffoldState.hide()
+        sheetState.hide()
       }
     } else {
       navigator.navigateUp()
@@ -99,9 +99,23 @@ fun SearchScreen(
       .fillMaxSize()
       .background(MyColor.DarkBlueBackground),
     scrimColor = Color(0, 0, 0, 150),
-    sheetState = scaffoldState,
+    sheetState = sheetState,
     sheetShape = RoundedCornerShape(topEnd = 12.dp, topStart = 12.dp),
-    sheetContent = { FilterModalBottomSheet() }
+    sheetContent = {
+      FilterModalBottomSheet(
+        filterData = filterSearchState,
+        onFilterChanged = { viewModel.setSearchFilter(it) },
+        onFilterReset = {
+          coroutineScope.launch { sheetState.hide() }
+          viewModel.resetSearchFilter()
+          viewModel.searchContentByQuery(selectedType.value, searchQuery.value)
+        },
+        onFilterApplied = {
+          coroutineScope.launch { sheetState.hide() }
+          viewModel.searchContentByQuery(selectedType.value, searchQuery.value)
+        }
+      )
+    }
   ) {
     Box(modifier = Modifier.fillMaxSize()) {
       Column(modifier = Modifier.fillMaxWidth()) {
@@ -116,7 +130,6 @@ fun SearchScreen(
             job.value = coroutineScope.launch(dispatchers.default) {
               delay(1000L)
               viewModel.searchContentByQuery(selectedType.value, searchQuery.value)
-              Timber.d("query $searchQuery.value type ${selectedType.value.name.lowercase()}")
             }
           }
         )
@@ -141,7 +154,7 @@ fun SearchScreen(
         isExpanded = listState.isScrollingUp(),
         onClick = {
           coroutineScope.launch {
-            scaffoldState.show()
+            sheetState.show()
           }
         }
       )

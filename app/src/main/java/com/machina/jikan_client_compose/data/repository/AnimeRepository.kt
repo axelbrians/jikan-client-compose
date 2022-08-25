@@ -1,9 +1,11 @@
 package com.machina.jikan_client_compose.data.repository
 
 import android.icu.util.Calendar
-import com.machina.jikan_client_compose.core.Endpoints
 import com.machina.jikan_client_compose.core.SafeCall
+import com.machina.jikan_client_compose.core.constant.AnimeConstant
+import com.machina.jikan_client_compose.core.constant.Endpoints
 import com.machina.jikan_client_compose.core.error.GeneralError
+import com.machina.jikan_client_compose.core.helper.ParamHelper
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.core.wrapper.ResponseDataListWrapper
 import com.machina.jikan_client_compose.data.remote.AnimeService
@@ -12,6 +14,7 @@ import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.AnimeDe
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_schedules.AnimeScheduleResponseV4
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_top.AnimeTopResponseV4
 import com.machina.jikan_client_compose.di.AndroidKtorClient
+import com.machina.jikan_client_compose.presentation.content_search_screen.data.filter.FilterGroupData
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
@@ -31,7 +34,7 @@ class AnimeRepository @Inject constructor(
         protocol = URLProtocol.HTTPS
         host = Endpoints.HOST_V4
         encodedPath = Endpoints.ANIME_TOP
-        parameter("page", page)
+        parameter(AnimeConstant.Page, page)
       }
     }
 
@@ -45,27 +48,34 @@ class AnimeRepository @Inject constructor(
         protocol = URLProtocol.HTTPS
         host = Endpoints.HOST_V4
         encodedPath = Endpoints.ANIME_DETAILS
-        parameter("page", 1)
-        parameter("status", "airing")
-        parameter("order_by", "score")
-        parameter("sort", "desc")
+        parameter(AnimeConstant.Page, 1)
+        parameter(AnimeConstant.Status, "airing")
+        parameter(AnimeConstant.OrderBy, "score")
+        parameter(AnimeConstant.Sort, "desc")
       }
     }
 
-    val res = safeCall<AnimeAiringPopularResponseV4, GeneralError>(client, request)
-
-    return res
+    return safeCall<AnimeAiringPopularResponseV4, GeneralError>(client, request)
   }
 
-  override suspend fun searchAnime(query: String, page: Int): Resource<ResponseDataListWrapper<AnimeDetailsDtoV4>> {
+  override suspend fun searchAnime(
+    query: String,
+    page: Int,
+    filterGroupData: FilterGroupData
+  ): Resource<ResponseDataListWrapper<AnimeDetailsDtoV4>> {
+    val contentRatingParam = ParamHelper.parseFilterGroupDataToParamString(filterGroupData)
+
     val request = HttpRequestBuilder().apply {
       method = HttpMethod.Get
       url {
         protocol = URLProtocol.HTTPS
         host = Endpoints.HOST_V4
         encodedPath = Endpoints.ANIME_SEARCH
-        parameter("q", query)
-        parameter("page", page)
+        parameter(AnimeConstant.Query, query)
+        parameter(AnimeConstant.Page, page)
+        if (contentRatingParam.isNotBlank()) {
+          parameter(filterGroupData.groupKey, contentRatingParam)
+        }
       }
     }
     return safeCall<ResponseDataListWrapper<AnimeDetailsDtoV4>, GeneralError>(client, request)
@@ -88,7 +98,7 @@ class AnimeRepository @Inject constructor(
         protocol = URLProtocol.HTTPS
         host = Endpoints.HOST_V4
         encodedPath = Endpoints.ANIME_SCHEDULES + "/$dayInString"
-        parameter("page", page)
+        parameter(AnimeConstant.Page, page)
       }
     }
 

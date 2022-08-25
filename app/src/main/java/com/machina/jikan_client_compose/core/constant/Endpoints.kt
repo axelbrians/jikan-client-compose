@@ -1,4 +1,4 @@
-package com.machina.jikan_client_compose.core
+package com.machina.jikan_client_compose.core.constant
 
 object Endpoints {
 

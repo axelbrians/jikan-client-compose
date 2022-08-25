@@ -1,6 +1,6 @@
 package com.machina.jikan_client_compose.data.repository
 
-import com.machina.jikan_client_compose.core.Endpoints
+import com.machina.jikan_client_compose.core.constant.Endpoints
 import com.machina.jikan_client_compose.core.SafeCall
 import com.machina.jikan_client_compose.core.error.GeneralError
 import com.machina.jikan_client_compose.core.error.MyError

@@ -16,25 +16,19 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.machina.jikan_client_compose.presentation.content_search_screen.data.filter.ContentRating
-import com.machina.jikan_client_compose.presentation.content_search_screen.data.filter.rememberFilterContentRatingList
+import com.machina.jikan_client_compose.presentation.content_search_screen.data.filter.FilterGroupData
+import com.machina.jikan_client_compose.presentation.content_search_screen.data.filter.FilterGroupType
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.machina.jikan_client_compose.ui.theme.Type
 import com.machina.jikan_client_compose.ui.theme.Type.bold
 import com.machina.jikan_client_compose.ui.theme.Type.onDarkSurface
 
-enum class FilterGroupHeader {
-  Selectable,
-  Checkable,
-  Sortable
-}
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun FilterGroupHeader(
   modifier: Modifier = Modifier,
-  filterData: State<List<ContentRating>> = rememberFilterContentRatingList(),
-  filterGroup: FilterGroupHeader,
+  data: FilterGroupData,
   onItemClicked: (Int) -> Unit = { }
 ) {
   var isExpanded by remember { mutableStateOf(false) }
@@ -75,27 +69,26 @@ fun FilterGroupHeader(
         )
       }
       if (targetExpanded) {
-        filterData.value.mapIndexed { index, contentRating ->
-          when (filterGroup) {
-            FilterGroupHeader.Checkable -> {
+        data.filterData.mapIndexed { index, contentRating ->
+          when (data.type) {
+            FilterGroupType.Checkable -> {
               FilterCheckable(
                 text = "${contentRating.name} - ${contentRating.description}",
                 isChecked = contentRating.isChecked,
                 onCheck = { onItemClicked(index) }
               )
             }
-            FilterGroupHeader.Selectable -> {
+            FilterGroupType.Selectable -> {
               FilterSelectable(
                 text = "${contentRating.name} - ${contentRating.description}",
                 isSelected = contentRating.isChecked,
                 onSelect = { onItemClicked(index) }
               )
             }
-            FilterGroupHeader.Sortable -> {
+            FilterGroupType.Sortable -> {
 
             }
           }
-
         }
       }
     }

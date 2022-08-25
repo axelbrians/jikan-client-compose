@@ -2,11 +2,11 @@ package com.machina.jikan_client_compose.presentation.content_search_screen.comp
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -16,18 +16,21 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import com.machina.jikan_client_compose.presentation.content_search_screen.composable.item.FilterGroupHeader
-import com.machina.jikan_client_compose.presentation.content_search_screen.data.filter.rememberFilterContentRatingList
+import com.machina.jikan_client_compose.presentation.content_search_screen.data.filter.FilterGroupData
+import com.machina.jikan_client_compose.presentation.content_search_screen.data.filter.FilterItemData
 
-@OptIn(ExperimentalAnimationApi::class)
+@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
 @Composable
-fun ColumnScope.FilterModalBottomSheet(
-  modifier: Modifier = Modifier
+fun FilterModalBottomSheet(
+  modifier: Modifier = Modifier,
+  filterData: FilterGroupData,
+  onFilterChanged: (FilterGroupData) -> Unit,
+  onFilterReset: () -> Unit,
+  onFilterApplied: () -> Unit
 ) {
   val localDensity = LocalDensity.current
   val screenHeight = LocalConfiguration.current.screenHeightDp.dp / 3 * 2
   val scrollableHeight = remember { mutableStateOf(0.dp) }
-  val ratingData = rememberFilterContentRatingList()
-  val selectRatingData = rememberFilterContentRatingList()
 
   Column(
     modifier = if (scrollableHeight.value > screenHeight) {
@@ -37,7 +40,10 @@ fun ColumnScope.FilterModalBottomSheet(
       Modifier
     }
   ) {
-    FilterModalBottomSheetPanButtonControl()
+    FilterModalBottomSheetPanButtonControl(
+      onReset = onFilterReset,
+      onApply = onFilterApplied
+    )
 
     Column(
       modifier = Modifier
@@ -50,26 +56,39 @@ fun ColumnScope.FilterModalBottomSheet(
         }
     ) {
       FilterGroupHeader(
-        filterData = ratingData,
-        filterGroup = FilterGroupHeader.Checkable,
+        data = filterData,
         onItemClicked = { index: Int ->
-          val temp = ratingData.value.toMutableList()
-          val newRating = temp[index].copy(isChecked = !temp[index].isChecked)
-          temp[index] = newRating
-          ratingData.value = temp
+          val newFilterGroup = filterData.copy(filterData = calculateSelectable(filterData.filterData, index))
+          onFilterChanged(newFilterGroup)
         }
       )
 
-      FilterGroupHeader(
-        filterData = selectRatingData,
-        filterGroup = FilterGroupHeader.Selectable,
-        onItemClicked = { index: Int ->
-          val temp = selectRatingData.value.mapIndexed { i, contentRating ->
-            contentRating.copy(isChecked = index == i)
-          }
-          selectRatingData.value = temp
-        }
-      )
+//      FilterGroupHeader(
+//        filterData = ratingData,
+//        filterGroup = FilterGroupHeader.Checkable,
+//        onItemClicked = { index: Int ->
+//          val temp = ratingData.value.toMutableList()
+//          val prevFilter = temp[index]
+//          temp[index] = prevFilter.copy(isChecked = !prevFilter.isChecked)
+//          ratingData.value = temp
+//        }
+//      )
+    }
+  }
+}
+
+private fun calculateSelectable(data: List<FilterItemData>, index: Int): List<FilterItemData> {
+  return data.mapIndexed { i, contentRating ->
+    contentRating.copy(isChecked = index == i)
+  }
+}
+
+private fun calculateCheckable(data: List<FilterItemData>, index: Int): List<FilterItemData> {
+  return data.mapIndexed { i, filterItemData ->
+    if (i == index) {
+      filterItemData.copy(isChecked = !filterItemData.isChecked)
+    } else {
+      filterItemData
     }
   }
 }

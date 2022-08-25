@@ -9,6 +9,7 @@ import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.core.wrapper.Event
 import com.machina.jikan_client_compose.domain.model.anime.AnimeHorizontalModel
 import com.machina.jikan_client_compose.domain.use_case.search_content.SearchContentUseCase
+import com.machina.jikan_client_compose.presentation.content_search_screen.data.filter.FilterGroupData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -25,12 +26,16 @@ class SearchScreenViewModel @Inject constructor(
     mutableStateOf(ContentSearchState.Initial)
   val contentSearchState: State<ContentSearchState> = _contentSearchState
 
+  private val _searchFilterState : MutableState<FilterGroupData> =
+    mutableStateOf(FilterGroupData.ContentRatingFilterGroup)
+  val searchFilterState : State<FilterGroupData> = _searchFilterState
+
 
   private var currentPage: Int = 1
 
   fun searchContentByQuery(contentType: ContentType, query: String) {
     if (query.length >= 3) {
-      searchContentUseCase(contentType, query, 1).onEach { res ->
+      searchContentUseCase(contentType, query, 1, _searchFilterState.value).onEach { res ->
         _contentSearchState.value = res
         if (res.error.peekContent() != null) currentPage = 2
       }.launchIn(viewModelScope)
@@ -48,7 +53,7 @@ class SearchScreenViewModel @Inject constructor(
     }
 
     if (query.length >= 3) {
-      searchContentUseCase(contentType, query, currentPage).onEach { res ->
+      searchContentUseCase(contentType, query, currentPage, _searchFilterState.value).onEach { res ->
 
         if (res.isLoading) {
           _contentSearchState.value = _contentSearchState.value.copy(isLoading = true)
@@ -67,5 +72,13 @@ class SearchScreenViewModel @Inject constructor(
         }
       }.launchIn(viewModelScope)
     }
+  }
+
+  fun setSearchFilter(filterGroupData: FilterGroupData) {
+    _searchFilterState.value = filterGroupData
+  }
+
+  fun resetSearchFilter() {
+    _searchFilterState.value = FilterGroupData.ContentRatingFilterGroup
   }
 }

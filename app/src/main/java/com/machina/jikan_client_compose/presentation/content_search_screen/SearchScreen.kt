@@ -24,6 +24,7 @@ import com.machina.jikan_client_compose.presentation.content_search_screen.compo
 import com.machina.jikan_client_compose.presentation.content_search_screen.composable.FilterModalBottomSheet
 import com.machina.jikan_client_compose.presentation.content_search_screen.composable.SearchBoxSearchScreen
 import com.machina.jikan_client_compose.presentation.content_search_screen.data.SearchScreenViewModel
+import com.machina.jikan_client_compose.presentation.content_search_screen.data.filter.FilterGroupData
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -60,6 +61,7 @@ fun SearchScreen(
 
   LaunchedEffect(key1 = viewModel.hashCode()) {
 //    focusRequester.requestFocus()
+    viewModel.getFilterData()
   }
 
   BackHandler(enabled = true) {
@@ -103,8 +105,10 @@ fun SearchScreen(
     sheetShape = RoundedCornerShape(topEnd = 12.dp, topStart = 12.dp),
     sheetContent = {
       FilterModalBottomSheet(
-        filterData = filterSearchState,
-        onFilterChanged = { viewModel.setSearchFilter(it) },
+        mapFilter = filterSearchState.data,
+        onFilterChanged = { data: FilterGroupData ->
+          viewModel.setSearchFilter(data)
+        },
         onFilterReset = {
           coroutineScope.launch { sheetState.hide() }
           viewModel.resetSearchFilter()

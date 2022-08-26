@@ -29,13 +29,13 @@ class SearchContentUseCase @Inject constructor(
     contentType: ContentType,
     query: String,
     page: Int = 1,
-    filterGroupData: FilterGroupData
+    mapFilter: Map<String, FilterGroupData>
   ): Flow<ContentSearchState> {
     return flow {
       emit(ContentSearchState.Loading)
 
       val res = when(contentType) {
-        ContentType.Anime -> animeRepository.searchAnime(query, page, filterGroupData)
+        ContentType.Anime -> animeRepository.searchAnime(query, page, mapFilter)
 //        ContentType.Manga -> mangaRepository.searchManga(query, page)
         ContentType.Manga -> Resource.Error(UNKNOWN_ERROR)
         else -> Resource.Error(UNKNOWN_ERROR)

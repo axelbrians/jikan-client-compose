@@ -5,20 +5,21 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.machina.jikan_client_compose.core.constant.Constant
 import com.machina.jikan_client_compose.core.enums.ContentType
-import com.machina.jikan_client_compose.core.wrapper.Event
 import com.machina.jikan_client_compose.domain.model.anime.AnimeHorizontalModel
 import com.machina.jikan_client_compose.domain.use_case.search_content.SearchContentUseCase
+import com.machina.jikan_client_compose.domain.use_case.search_content.SearchFilterUseCase
 import com.machina.jikan_client_compose.presentation.content_search_screen.data.filter.FilterGroupData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class SearchScreenViewModel @Inject constructor(
   private val searchContentUseCase: SearchContentUseCase,
+  private val searchFilterUseCase: SearchFilterUseCase
 ): ViewModel() {
 
 
@@ -26,24 +27,27 @@ class SearchScreenViewModel @Inject constructor(
     mutableStateOf(ContentSearchState.Initial)
   val contentSearchState: State<ContentSearchState> = _contentSearchState
 
-  private val _searchFilterState : MutableState<FilterGroupData> =
-    mutableStateOf(FilterGroupData.ContentRatingFilterGroup)
-  val searchFilterState : State<FilterGroupData> = _searchFilterState
+  private val _searchFilterState : MutableState<FilterSearchState> =
+    mutableStateOf(FilterSearchState.Loading)
+  val searchFilterState : State<FilterSearchState> = _searchFilterState
 
-
+  private var defaultFilterMap: Map<String, FilterGroupData> = mapOf()
   private var currentPage: Int = 1
 
   fun searchContentByQuery(contentType: ContentType, query: String) {
     if (query.length >= 3) {
-      searchContentUseCase(contentType, query, 1, _searchFilterState.value).onEach { res ->
+      searchContentUseCase(
+        contentType = contentType,
+        query = query,
+        page = 1,
+        mapFilter = _searchFilterState.value.data
+      ).onEach { res ->
         _contentSearchState.value = res
         if (res.error.peekContent() != null) currentPage = 2
       }.launchIn(viewModelScope)
     } else {
-      Timber.d("search query must longer")
       currentPage = 1
-      _contentSearchState.value =
-        ContentSearchState(error = Event("Search query must be at least 3 characters long"))
+      _contentSearchState.value = ContentSearchState.error(Constant.SEARCH_QUERY_TOO_SHORT)
     }
   }
 
@@ -53,8 +57,7 @@ class SearchScreenViewModel @Inject constructor(
     }
 
     if (query.length >= 3) {
-      searchContentUseCase(contentType, query, currentPage, _searchFilterState.value).onEach { res ->
-
+      searchContentUseCase(contentType, query, currentPage, _searchFilterState.value.data).onEach { res ->
         if (res.isLoading) {
           _contentSearchState.value = _contentSearchState.value.copy(isLoading = true)
           return@onEach
@@ -74,11 +77,20 @@ class SearchScreenViewModel @Inject constructor(
     }
   }
 
-  fun setSearchFilter(filterGroupData: FilterGroupData) {
-    _searchFilterState.value = filterGroupData
+  fun getFilterData() {
+    searchFilterUseCase().onEach {
+      defaultFilterMap = it.data
+      _searchFilterState.value = it
+    }.launchIn(viewModelScope)
+  }
+
+  fun setSearchFilter(filterGroup: FilterGroupData) {
+    val mapFilter = _searchFilterState.value.data.toMutableMap()
+    mapFilter[filterGroup.groupKey] = filterGroup
+    _searchFilterState.value = _searchFilterState.value.copy(data = mapFilter)
   }
 
   fun resetSearchFilter() {
-    _searchFilterState.value = FilterGroupData.ContentRatingFilterGroup
+    _searchFilterState.value = _searchFilterState.value.copy(data = defaultFilterMap)
   }
 }

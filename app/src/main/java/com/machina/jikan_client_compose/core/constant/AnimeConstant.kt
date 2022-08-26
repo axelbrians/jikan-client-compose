@@ -2,11 +2,25 @@ package com.machina.jikan_client_compose.core.constant
 
 object AnimeConstant {
 
-	const val Query = "q"
-	const val Page = "page"
-	const val Status = "status"
-	const val OrderBy = "order_by"
-	const val Sort = "sort"
-	const val Rating = "rating"
+	const val QueryKey = "q"
+	const val PageKey = "page"
+	const val StatusKey = "status"
+	const val OrderByKey = "order_by"
+	const val SortKey = "sort"
+	const val RatingKey = "rating"
+	const val FilterKey = "filter"
 
+
+	const val Genres = "Genres"
+	const val ContentRating = "Content Rating"
+
+
+}
+
+object AnimeGenres {
+	//		"genres" "explicit_genres" "themes" "demographics"
+	const val GenreKey = "genres"
+	const val ExplicitKey = "explicit_genres"
+	const val ThemesKey = "themes"
+	const val DemographicsKey = "demographics"
 }

@@ -18,20 +18,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.machina.jikan_client_compose.presentation.content_search_screen.data.filter.FilterGroupData
 import com.machina.jikan_client_compose.presentation.content_search_screen.data.filter.FilterGroupType
+import com.machina.jikan_client_compose.presentation.content_search_screen.data.filter.FilterItemData
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.machina.jikan_client_compose.ui.theme.Type
 import com.machina.jikan_client_compose.ui.theme.Type.bold
 import com.machina.jikan_client_compose.ui.theme.Type.onDarkSurface
 
-
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun FilterGroupHeader(
   modifier: Modifier = Modifier,
-  data: FilterGroupData,
-  onItemClicked: (Int) -> Unit = { }
+  filterGroupData: FilterGroupData,
+  onItemClicked: (FilterGroupData) -> Unit
 ) {
   var isExpanded by remember { mutableStateOf(false) }
+  val groupKey = filterGroupData.groupKey
+  val filterData = filterGroupData.filterData
 
   AnimatedContent(
     targetState = isExpanded,
@@ -45,14 +47,12 @@ fun FilterGroupHeader(
       Row(
         modifier = Modifier
           .fillMaxWidth()
-          .clickable {
-            isExpanded = !isExpanded
-          }
+          .clickable { isExpanded = !isExpanded }
           .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
       ) {
         Text(
-          text = "Rating",
+          text = filterGroupData.groupName,
           style = Type.Typography.subtitle1.onDarkSurface().bold(),
           modifier = Modifier
             .weight(1f)
@@ -69,23 +69,27 @@ fun FilterGroupHeader(
         )
       }
       if (targetExpanded) {
-        data.filterData.mapIndexed { index, contentRating ->
-          when (data.type) {
+        filterData.mapIndexed { index: Int, data: FilterItemData ->
+          when (filterGroupData.type) {
             FilterGroupType.Checkable -> {
               FilterCheckable(
-                text = "${contentRating.name} - ${contentRating.description}",
-                isChecked = contentRating.isChecked,
-                onCheck = { onItemClicked(index) }
+                text = data.name,
+                isChecked = data.isChecked,
+                onCheck = {
+                  onItemClicked(calculateCheckable(filterGroupData, index))
+                }
               )
             }
             FilterGroupType.Selectable -> {
               FilterSelectable(
-                text = "${contentRating.name} - ${contentRating.description}",
-                isSelected = contentRating.isChecked,
-                onSelect = { onItemClicked(index) }
+                text = data.name,
+                isSelected = data.isChecked,
+                onSelect = {
+                  onItemClicked(calculateSelectable(filterGroupData, index))
+                }
               )
             }
-            FilterGroupType.Sortable -> {
+            FilterGroupType.Switchable -> {
 
             }
           }
@@ -93,4 +97,24 @@ fun FilterGroupHeader(
       }
     }
   }
+}
+
+private fun calculateSelectable(data: FilterGroupData, index: Int): FilterGroupData {
+  val newFilter = data.filterData.mapIndexed { i, filterItem ->
+    filterItem.copy(isChecked = index == i)
+  }
+
+  return data.copy(filterData = newFilter)
+}
+
+private fun calculateCheckable(data: FilterGroupData, index: Int): FilterGroupData {
+  val newFilter = data.filterData.mapIndexed { i, filterItem ->
+    if (i == index) {
+      filterItem.copy(isChecked = !filterItem.isChecked)
+    } else {
+      filterItem
+    }
+  }
+
+  return data.copy(filterData = newFilter)
 }

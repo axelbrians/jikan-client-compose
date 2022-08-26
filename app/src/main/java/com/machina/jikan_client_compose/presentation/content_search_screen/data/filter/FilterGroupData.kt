@@ -15,8 +15,8 @@ data class FilterGroupData(
     }
 
     val ContentRatingFilterGroup = FilterGroupData(
-      groupKey = AnimeConstant.Rating,
-      groupName = "Content Rating",
+      groupKey = AnimeConstant.RatingKey,
+      groupName = AnimeConstant.ContentRating,
       isExpanded = true,
       type = FilterGroupType.Selectable,
       filterData = FilterItemData.getContentRatingList()
@@ -28,5 +28,5 @@ data class FilterGroupData(
 enum class FilterGroupType {
   Selectable,
   Checkable,
-  Sortable
+  Switchable
 }

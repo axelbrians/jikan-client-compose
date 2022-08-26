@@ -10,6 +10,7 @@ object Endpoints {
     const val ANIME_SCHEDULES = "/schedules"
     const val ANIME_CHARACTERS = "/characters"
     const val ANIME_RECOMMENDATIONS = "/recommendations"
+    const val ANIME_GENRES = "genres/anime"
 
     const val MANGA_SEARCH = "/manga"
     const val MANGA_DETAILS = "/manga"

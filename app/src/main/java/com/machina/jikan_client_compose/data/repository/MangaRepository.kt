@@ -1,12 +1,13 @@
 package com.machina.jikan_client_compose.data.repository
 
-import com.machina.jikan_client_compose.core.constant.Endpoints
 import com.machina.jikan_client_compose.core.SafeCall
+import com.machina.jikan_client_compose.core.constant.Endpoints
 import com.machina.jikan_client_compose.core.error.GeneralError
 import com.machina.jikan_client_compose.core.error.MyError
 import com.machina.jikan_client_compose.core.wrapper.Resource
+import com.machina.jikan_client_compose.core.wrapper.ResponseDataListWrapper
 import com.machina.jikan_client_compose.data.remote.MangaService
-import com.machina.jikan_client_compose.data.remote.dto.content_search.ContentSearchResponse
+import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.AnimeDetailsDtoV4
 import com.machina.jikan_client_compose.data.remote.dto_v4.manga_details.MangaDetailsDtoV4
 import com.machina.jikan_client_compose.data.remote.dto_v4.manga_details.MangaDetailsResponseV4
 import com.machina.jikan_client_compose.di.AndroidKtorClient
@@ -23,7 +24,7 @@ class MangaRepository @Inject constructor(
 ): MangaService {
 
   // TODO: Need regulated class for manga and anime search, currently just focus on anime
-  override suspend fun searchManga(query: String, page: Int): Resource<ContentSearchResponse> {
+  suspend fun searchManga(query: String, page: Int): Resource<ResponseDataListWrapper<AnimeDetailsDtoV4>> {
     val request = HttpRequestBuilder().apply {
       method = HttpMethod.Get
       url {
@@ -35,7 +36,7 @@ class MangaRepository @Inject constructor(
       }
     }
 
-    return safeCall<ContentSearchResponse, GeneralError>(client, request)
+    return safeCall<ResponseDataListWrapper<AnimeDetailsDtoV4>, GeneralError>(client, request)
   }
 
   override suspend fun getMangaDetails(malId: Int): Resource<MangaDetailsDtoV4> {

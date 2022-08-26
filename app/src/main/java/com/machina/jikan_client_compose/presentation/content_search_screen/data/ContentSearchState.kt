@@ -11,5 +11,9 @@ data class ContentSearchState(
   companion object {
     val Loading = ContentSearchState(isLoading = true)
     val Initial = ContentSearchState()
+
+    fun error(message: String): ContentSearchState {
+      return ContentSearchState(error = Event(message))
+    }
   }
 }

@@ -17,9 +17,17 @@ data class FilterGroupData(
     val ContentRatingFilterGroup = FilterGroupData(
       groupKey = AnimeConstant.RatingKey,
       groupName = AnimeConstant.ContentRating,
-      isExpanded = true,
+      isExpanded = false,
       type = FilterGroupType.Selectable,
       filterData = FilterItemData.getContentRatingList()
+    )
+
+    val StatusFilterGroup = FilterGroupData(
+      groupKey = AnimeConstant.StatusKey,
+      groupName = AnimeConstant.Status,
+      isExpanded = false,
+      type = FilterGroupType.Selectable,
+      filterData = FilterItemData.getStatusList()
     )
   }
 }

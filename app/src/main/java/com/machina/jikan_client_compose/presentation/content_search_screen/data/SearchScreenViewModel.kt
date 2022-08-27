@@ -35,7 +35,7 @@ class SearchScreenViewModel @Inject constructor(
   private var currentPage: Int = 1
 
   fun searchContentByQuery(contentType: ContentType, query: String) {
-    if (query.length >= 3) {
+    if (query.length >= 3 || query.isEmpty()) {
       searchContentUseCase(
         contentType = contentType,
         query = query,

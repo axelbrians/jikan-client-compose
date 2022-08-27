@@ -31,5 +31,13 @@ data class FilterItemData(
         FilterItemData("rx", "Hentai - Rx")
       )
     }
+
+    fun getStatusList(): List<FilterItemData> {
+      return listOf(
+        FilterItemData("airing", "Airing"),
+        FilterItemData("complete", "Complete"),
+        FilterItemData("upcoming", "Upcoming")
+      )
+    }
   }
 }

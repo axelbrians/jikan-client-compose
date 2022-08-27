@@ -1,7 +1,6 @@
 package com.machina.jikan_client_compose.presentation.content_search_screen
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -32,7 +31,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalCoilApi::class, ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalCoilApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun SearchScreen(
   modifier: Modifier = Modifier,
@@ -81,9 +80,12 @@ fun SearchScreen(
 //  r mild nudity
 //  rx hentai
 //
+//  Publication demographic
+//  shounen, shojo, etc
+//
 //  status: airing complete upcoming
 //
-//  order_by: al_id title type rating start_date end_date episodes score scored_by rank popularity members favorites
+//  order_by: mal_id title type rating start_date end_date episodes score scored_by rank popularity members favorites
 //
 //  sort: desc asc
 //
@@ -93,9 +95,9 @@ fun SearchScreen(
 //
 //  genres: id of genre with comma as delimitter 1,2,3 etc
 //
+//  themes:
+//
 //  genres_exclude: id of genre with comma as delimitter 1,2,3 etc
-  // TODO: Create filter UI BottomSheet
-  // TODO: Create ViewModel for fetching available filter options
   ModalBottomSheetLayout(
     modifier = Modifier
       .fillMaxSize()
@@ -104,6 +106,7 @@ fun SearchScreen(
     sheetState = sheetState,
     sheetShape = RoundedCornerShape(topEnd = 12.dp, topStart = 12.dp),
     sheetContent = {
+      // TODO: Revert filter data to previous state if only dismissed
       FilterModalBottomSheet(
         mapFilter = filterSearchState.data,
         onFilterChanged = { data: FilterGroupData ->
@@ -166,7 +169,6 @@ fun SearchScreen(
 
     if (listState.isScrolledToTheEnd()) {
       LaunchedEffect(searchQuery.value) {
-//          Timber.d("query next page with $searchQuery.value")
         viewModel.nextContentPageByQuery(searchQuery.value, selectedType.value)
       }
     }

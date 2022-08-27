@@ -22,14 +22,13 @@ import com.machina.jikan_client_compose.ui.theme.Type.semiBold
 import com.machina.jikan_client_compose.ui.theme.Type.yellow500
 
 @Composable
-fun ColumnScope.FilterModalBottomSheetPanButtonControl(
+fun FilterModalBottomSheetPanButtonControl(
   modifier: Modifier = Modifier,
   onReset: () -> Unit,
   onApply: () -> Unit
 ) {
   Box(
-    modifier = Modifier
-      .align(Alignment.CenterHorizontally)
+    modifier = modifier
       .padding(top = 8.dp)
       .width(48.dp)
       .height(6.dp)

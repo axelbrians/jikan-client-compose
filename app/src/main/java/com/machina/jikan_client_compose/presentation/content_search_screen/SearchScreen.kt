@@ -23,11 +23,11 @@ import com.machina.jikan_client_compose.presentation.content_search_screen.compo
 import com.machina.jikan_client_compose.presentation.content_search_screen.composable.FilterModalBottomSheet
 import com.machina.jikan_client_compose.presentation.content_search_screen.composable.SearchBoxSearchScreen
 import com.machina.jikan_client_compose.presentation.content_search_screen.data.SearchScreenViewModel
+import com.machina.jikan_client_compose.presentation.content_search_screen.data.event.FilterEvent
+import com.machina.jikan_client_compose.presentation.content_search_screen.data.event.SearchEvent
 import com.machina.jikan_client_compose.presentation.content_search_screen.data.filter.FilterGroupData
 import com.machina.jikan_client_compose.ui.theme.MyColor
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
@@ -49,17 +49,15 @@ fun SearchScreen(
     initialValue = ModalBottomSheetValue.Hidden
   )
 
-  val job = remember { mutableStateOf<Job?>(null) }
   val focusRequester = remember { (FocusRequester()) }
   val snackbarHostState = remember { SnackbarHostState() }
   val snackbarChannel = remember { Channel<String?>(Channel.CONFLATED) }
-
 
   val contentSearchState = viewModel.contentSearchState.value
   val filterSearchState = viewModel.searchFilterState.value
 
   LaunchedEffect(key1 = viewModel.hashCode()) {
-//    focusRequester.requestFocus()
+    focusRequester.requestFocus()
     viewModel.getFilterData()
   }
 
@@ -72,37 +70,12 @@ fun SearchScreen(
       navigator.navigateUp()
     }
   }
-//  rating: g pg pg13 r17 r rx
-//  g all ages
-//  pg children
-//  pg13 teens older 13
-//  r17 violence
-//  r mild nudity
-//  rx hentai
-//
-//  Publication demographic
-//  shounen, shojo, etc
-//
-//  status: airing complete upcoming
-//
-//  order_by: mal_id title type rating start_date end_date episodes score scored_by rank popularity members favorites
-//
-//  sort: desc asc
-//
-//  type: tv movie ova special ona music
-//
-//  sfw: boolean (filter adult entries)
-//
-//  genres: id of genre with comma as delimitter 1,2,3 etc
-//
-//  themes:
-//
-//  genres_exclude: id of genre with comma as delimitter 1,2,3 etc
+
   ModalBottomSheetLayout(
     modifier = Modifier
       .fillMaxSize()
       .background(MyColor.DarkBlueBackground),
-    scrimColor = Color(0, 0, 0, 150),
+    scrimColor = Color.Black.copy(alpha = 0.6f),
     sheetState = sheetState,
     sheetShape = RoundedCornerShape(topEnd = 12.dp, topStart = 12.dp),
     sheetContent = {
@@ -110,16 +83,21 @@ fun SearchScreen(
       FilterModalBottomSheet(
         mapFilter = filterSearchState.data,
         onFilterChanged = { data: FilterGroupData ->
-          viewModel.setSearchFilter(data)
+          viewModel.onFilterEvent(
+            FilterEvent.FilterChanged(data)
+          )
         },
         onFilterReset = {
+          viewModel.onFilterEvent(
+            FilterEvent.FilterReset(selectedType.value, searchQuery.value)
+          )
           coroutineScope.launch { sheetState.hide() }
-          viewModel.resetSearchFilter()
-          viewModel.searchContentByQuery(selectedType.value, searchQuery.value)
         },
         onFilterApplied = {
+          viewModel.onFilterEvent(
+            FilterEvent.FilterReset(selectedType.value, searchQuery.value)
+          )
           coroutineScope.launch { sheetState.hide() }
-          viewModel.searchContentByQuery(selectedType.value, searchQuery.value)
         }
       )
     }
@@ -133,11 +111,9 @@ fun SearchScreen(
           onSearchQueryCleared = { searchQuery.value = "" },
           onSearchQueryChanged = {
             searchQuery.value = it
-            job.value?.cancel()
-            job.value = coroutineScope.launch(dispatchers.default) {
-              delay(1000L)
-              viewModel.searchContentByQuery(selectedType.value, searchQuery.value)
-            }
+            viewModel.onSearchEvent(
+              SearchEvent.SearchFirstPage(selectedType.value, searchQuery.value)
+            )
           }
         )
 
@@ -168,9 +144,9 @@ fun SearchScreen(
     }
 
     if (listState.isScrolledToTheEnd()) {
-      LaunchedEffect(searchQuery.value) {
-        viewModel.nextContentPageByQuery(searchQuery.value, selectedType.value)
-      }
+      viewModel.onSearchEvent(
+        SearchEvent.SearchNextPage(selectedType.value, searchQuery.value)
+      )
     }
 
     // Try to emmit error message to snackbarChannel if not have been handled before.

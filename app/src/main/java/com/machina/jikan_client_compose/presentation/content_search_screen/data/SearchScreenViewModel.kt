@@ -10,10 +10,15 @@ import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.domain.model.anime.AnimeHorizontalModel
 import com.machina.jikan_client_compose.domain.use_case.search_content.SearchContentUseCase
 import com.machina.jikan_client_compose.domain.use_case.search_content.SearchFilterUseCase
+import com.machina.jikan_client_compose.presentation.content_search_screen.data.event.FilterEvent
+import com.machina.jikan_client_compose.presentation.content_search_screen.data.event.SearchEvent
 import com.machina.jikan_client_compose.presentation.content_search_screen.data.filter.FilterGroupData
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -34,9 +39,16 @@ class SearchScreenViewModel @Inject constructor(
   private var defaultFilterMap: Map<String, FilterGroupData> = mapOf()
   private var currentPage: Int = 1
 
-  fun searchContentByQuery(contentType: ContentType, query: String) {
+  private var delayJob: Job = Job()
+  private var searchJob: Job = Job()
+
+  // TODO: Improve pagination on SearchContent
+  private fun searchContentByQuery(contentType: ContentType, query: String) {
     if (query.length >= 3 || query.isEmpty()) {
-      searchContentUseCase(
+      if (searchJob.isActive) {
+        searchJob.cancel()
+      }
+      searchJob = searchContentUseCase(
         contentType = contentType,
         query = query,
         page = 1,
@@ -51,12 +63,12 @@ class SearchScreenViewModel @Inject constructor(
     }
   }
 
-  fun nextContentPageByQuery(query: String, contentType: ContentType) {
+  private fun nextContentPageByQuery(contentType: ContentType, query: String) {
     if (contentSearchState.value.data.data.isEmpty()) {
       return
     }
 
-    if (query.length >= 3) {
+    if (query.length >= 3 && !searchJob.isActive) {
       searchContentUseCase(contentType, query, currentPage, _searchFilterState.value.data).onEach { res ->
         if (res.isLoading) {
           _contentSearchState.value = _contentSearchState.value.copy(isLoading = true)
@@ -84,13 +96,35 @@ class SearchScreenViewModel @Inject constructor(
     }.launchIn(viewModelScope)
   }
 
-  fun setSearchFilter(filterGroup: FilterGroupData) {
-    val mapFilter = _searchFilterState.value.data.toMutableMap()
-    mapFilter[filterGroup.groupKey] = filterGroup
-    _searchFilterState.value = _searchFilterState.value.copy(data = mapFilter)
+  fun onSearchEvent(event: SearchEvent) {
+    when (event) {
+      is SearchEvent.SearchFirstPage -> {
+        delayJob.cancel()
+        delayJob = viewModelScope.launch {
+          delay(1_500)
+          searchContentByQuery(event.contentType, event.query)
+        }
+      }
+      is SearchEvent.SearchNextPage -> {
+        nextContentPageByQuery(event.contentType, event.query)
+      }
+    }
   }
 
-  fun resetSearchFilter() {
-    _searchFilterState.value = _searchFilterState.value.copy(data = defaultFilterMap)
+  fun onFilterEvent(event: FilterEvent) {
+    when (event) {
+      is FilterEvent.FilterChanged -> {
+        val mapFilter = _searchFilterState.value.data.toMutableMap()
+        mapFilter[event.filter.groupKey] = event.filter
+        _searchFilterState.value = _searchFilterState.value.copy(data = mapFilter)
+      }
+      is FilterEvent.FilterApplied -> {
+        searchContentByQuery(event.contentType, event.query)
+      }
+      is FilterEvent.FilterReset -> {
+        _searchFilterState.value = _searchFilterState.value.copy(data = defaultFilterMap)
+        searchContentByQuery(event.contentType, event.query)
+      }
+    }
   }
 }

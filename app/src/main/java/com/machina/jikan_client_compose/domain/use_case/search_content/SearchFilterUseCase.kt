@@ -15,28 +15,59 @@ class SearchFilterUseCase @Inject constructor(
 	private val dispatchers: DispatchersProvider
 ) {
 
+//  rating: g pg pg13 r17 r rx
+//  g all ages
+//  pg children
+//  pg13 teens older 13
+//  r17 violence
+//  r mild nudity
+//  rx hentai
+//
+//  Publication demographic
+//  shounen, shojo, etc
+//
+//  status: airing complete upcoming
+//
+//  order_by: mal_id title type rating start_date end_date episodes score scored_by rank popularity members favorites
+//
+//  sort: desc asc
+//
+//  type: tv movie ova special ona music
+//
+//  sfw: boolean (filter adult entries)
+//
+//  genres: id of genre with comma as delimitter 1,2,3 etc
+//
+//  themes:
+//
+//  genres_exclude: id of genre with comma as delimitter 1,2,3 etc
+
 	operator fun invoke(): Flow<FilterSearchState> {
 		return flow {
 			emit(FilterSearchState.Loading)
 
 			val hashMapFilter = hashMapOf<String, FilterGroupData>()
 
+			// Fetch available genre filter
 			with(repository.getAnimeGenresFilter()) {
 				if (this is Resource.Success) {
 					hashMapFilter[data!!.groupKey] = data
 				}
 			}
 
+			// Fetch available Airing Status from local
 			with(FilterGroupData.StatusFilterGroup) {
 				hashMapFilter[groupKey] = this
 			}
 
+			// Fetch available demographics filter
 			with(repository.getAnimeDemographicFilter()) {
 				if (this is Resource.Success) {
 					hashMapFilter[data!!.groupKey] = data
 				}
 			}
 
+			// Fetch available ContentRating from local
 			with(FilterGroupData.ContentRatingFilterGroup) {
 				hashMapFilter[groupKey] = this
 			}

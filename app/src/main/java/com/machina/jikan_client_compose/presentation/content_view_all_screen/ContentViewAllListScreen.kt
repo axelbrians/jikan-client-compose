@@ -67,14 +67,17 @@ fun ContentViewAllListScreen(
       contentPadding = PaddingValues(horizontal = 12.dp, vertical = 12.dp),
       verticalArrangement = Arrangement.spacedBy(0.dp)
     ) {
-      itemsIndexed(dataSet) { index: Int, data: AnimeVerticalDataModel ->
-        var itemModifier = ItemVerticalAnimeModifier.fillParentWidth
+      val itemModifier = ItemVerticalAnimeModifier.fillParentWidth
+      val topPadding = 64.dp - 12.dp
 
-        if (index in 0 until 3) {
-          itemModifier = itemModifier.padding(top = 56.dp - 12.dp)
-        }
+      itemsIndexed(dataSet) { index: Int, data: AnimeVerticalDataModel ->
         ItemVerticalAnime(
-          modifier = itemModifier,
+          modifier = if (index in 0 until 3) {
+            // Add extra padding for AppBar height
+            itemModifier.padding(top = topPadding)
+          } else {
+            itemModifier
+          },
           data = data,
           thumbnailHeight = 160.dp,
           onClick = navigator::navigateToContentDetailsScreen
@@ -84,7 +87,7 @@ fun ContentViewAllListScreen(
       if (contentState.isLoading) {
         if (dataSet.isEmpty()) {
           items(3) {
-            Box(modifier = Modifier.height(56.dp - 12.dp))
+            Box(modifier = Modifier.height(topPadding))
           }
         }
         showItemVerticalAnimeShimmer(shimmerInstance)

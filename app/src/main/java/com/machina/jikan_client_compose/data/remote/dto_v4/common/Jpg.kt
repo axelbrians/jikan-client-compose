@@ -14,7 +14,7 @@ data class Jpg(
   val largeImageUrl: String = ""
 ) {
   companion object {
-    fun Jpg.getValidLargestImgUrl(): String {
+    fun Jpg.getHighestResImgUrl(): String {
       return if (largeImageUrl.isNotEmpty()) {
         largeImageUrl
       } else if (imageUrl.isNotEmpty()) {

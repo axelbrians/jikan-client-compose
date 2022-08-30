@@ -3,10 +3,7 @@ package com.machina.jikan_client_compose.presentation.content_detail_screen.comp
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -39,14 +36,14 @@ fun ContentDetailsSynopsis(
     targetState = isExpanded,
     transitionSpec = {
       expandVertically(animationSpec = tween(150, 150), initialHeight = { it }) with
-        shrinkVertically(animationSpec = tween(150, 150), targetHeight = { it }) using
+        shrinkVertically(animationSpec = tween(150, 0), targetHeight = { it }) using
         SizeTransform(clip = true)
     }
   ) { targetExpanded ->
     if (targetExpanded) {
-      Column {
+      Column(modifier = Modifier.fillMaxWidth()) {
         Text(
-          text = if (state?.data?.synopsis != null) contentSynopsis else "",
+          text = contentSynopsis,
           style = Type.Typography.body1.onDarkSurface().alignJustify(),
           modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp)
         )
@@ -65,7 +62,7 @@ fun ContentDetailsSynopsis(
     } else {
       Box {
         Text(
-          text = if (state?.data?.synopsis != null) contentSynopsis else "",
+          text = contentSynopsis,
           maxLines = 5,
           overflow = TextOverflow.Ellipsis,
           style = Type.Typography.body1.onDarkSurface().alignJustify(),
@@ -99,14 +96,13 @@ fun ContentDetailsSynopsis(
             )
           }
         }
-
       }
     }
   }
 }
 
 private fun resolveContentDetailsSynopsis(state: ContentDetailsState?): String {
-  var synopsis = "${state?.data?.synopsis}"
+  var synopsis = state?.data?.synopsis.orEmpty()
   with(state?.data) {
     if (this == null) {
       return@with

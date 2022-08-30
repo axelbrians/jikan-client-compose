@@ -14,9 +14,11 @@ import dagger.hilt.components.SingletonComponent
 import io.ktor.client.*
 import io.ktor.client.engine.android.*
 import io.ktor.client.engine.okhttp.*
+import io.ktor.client.features.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.features.logging.*
+import io.ktor.http.*
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Singleton
 
@@ -56,6 +58,9 @@ class AppModule {
         logger = Logger.DEFAULT
         level = LogLevel.HEADERS
       }
+      install(DefaultRequest) {
+        method = HttpMethod.Get
+      }
     }
   }
 
@@ -74,7 +79,6 @@ class AppModule {
             .alwaysReadResponseBody(true)
             .build()
         )
-
       }
 
       install(JsonFeature) {

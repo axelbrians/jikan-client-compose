@@ -5,6 +5,7 @@ import com.machina.jikan_client_compose.core.SafeCall
 import com.machina.jikan_client_compose.core.constant.AnimeConstant
 import com.machina.jikan_client_compose.core.constant.Endpoints
 import com.machina.jikan_client_compose.core.error.GeneralError
+import com.machina.jikan_client_compose.core.extensions.defaultUrl
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.data.remote.AnimeService
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime_airing_popular.AnimeAiringPopularResponseV4
@@ -13,7 +14,6 @@ import com.machina.jikan_client_compose.data.remote.dto_v4.anime_top.AnimeTopRes
 import com.machina.jikan_client_compose.di.AndroidKtorClient
 import io.ktor.client.*
 import io.ktor.client.request.*
-import io.ktor.http.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -25,10 +25,7 @@ class AnimeRepository @Inject constructor(
 
   override suspend fun getAnimeTopOfAllTime(page: Int): Resource<AnimeTopResponseV4> {
     val request = HttpRequestBuilder().apply {
-      method = HttpMethod.Get
-      url {
-        protocol = URLProtocol.HTTPS
-        host = Endpoints.HOST_V4
+      defaultUrl {
         encodedPath = Endpoints.ANIME_TOP
         parameter(AnimeConstant.PageKey, page)
       }
@@ -39,16 +36,14 @@ class AnimeRepository @Inject constructor(
 
   override suspend fun getAnimeAiringPopular(): Resource<AnimeAiringPopularResponseV4> {
     val request = HttpRequestBuilder().apply {
-      method = HttpMethod.Get
-      url {
-        protocol = URLProtocol.HTTPS
-        host = Endpoints.HOST_V4
+      defaultUrl {
         encodedPath = Endpoints.ANIME_DETAILS
-        parameter(AnimeConstant.PageKey, 1)
-        parameter(AnimeConstant.StatusKey, "airing")
-        parameter(AnimeConstant.OrderByKey, "score")
-        parameter(AnimeConstant.SortKey, "desc")
       }
+
+      parameter(AnimeConstant.PageKey, 1)
+      parameter(AnimeConstant.StatusKey, "airing")
+      parameter(AnimeConstant.OrderByKey, "score")
+      parameter(AnimeConstant.SortKey, "desc")
     }
 
     return safeCall<AnimeAiringPopularResponseV4, GeneralError>(client, request)
@@ -66,10 +61,7 @@ class AnimeRepository @Inject constructor(
       else -> "other"
     }
     val request = HttpRequestBuilder().apply {
-      method = HttpMethod.Get
-      url {
-        protocol = URLProtocol.HTTPS
-        host = Endpoints.HOST_V4
+      defaultUrl {
         encodedPath = Endpoints.ANIME_SCHEDULES + "/$dayInString"
         parameter(AnimeConstant.PageKey, page)
       }

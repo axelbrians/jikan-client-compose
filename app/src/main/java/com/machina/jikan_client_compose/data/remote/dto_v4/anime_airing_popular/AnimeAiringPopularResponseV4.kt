@@ -2,7 +2,7 @@ package com.machina.jikan_client_compose.data.remote.dto_v4.anime_airing_popular
 
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime.AnimeGeneralDtoV4
 import com.machina.jikan_client_compose.data.remote.dto_v4.anime.Pagination
-import com.machina.jikan_client_compose.data.remote.dto_v4.common.Jpg.Companion.getValidLargestImgUrl
+import com.machina.jikan_client_compose.data.remote.dto_v4.common.Jpg.Companion.getHighestResImgUrl
 import com.machina.jikan_client_compose.domain.model.anime.AnimeAiringPopular
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -18,7 +18,7 @@ data class AnimeAiringPopularResponseV4(
 fun AnimeGeneralDtoV4.toAnimeAiringPopular(): AnimeAiringPopular {
   return AnimeAiringPopular(
     malId, rank, title,
-    url, images.jpg.getValidLargestImgUrl(), type,
+    url, images.jpg.getHighestResImgUrl(), type,
     episodes,
     members, score ?: 0.0
   )

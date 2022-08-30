@@ -21,6 +21,7 @@ import coil.compose.rememberImagePainter
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.machina.jikan_client_compose.core.constant.Constant
+import com.machina.jikan_client_compose.data.remote.dto_v4.common.Jpg.Companion.getHighestResImgUrl
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
 import com.machina.jikan_client_compose.presentation.composable.HorizontalContentHeader
 import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.ContentDetailsScreenToolbar
@@ -54,17 +55,17 @@ fun ContentDetailsScreen(
   var isSynopsisExpanded by remember { mutableStateOf(false) }
   val toolbarScaffoldState = rememberCollapsingToolbarScaffoldState()
   val contentDetailsState = viewModel.contentDetailsState.value
-  val genres = contentDetailsState.data?.genres ?: listOf()
   val animeCharacterListState = viewModel.animeCharactersListState.value
   val animeRecommendationsListState = viewModel.animeRecommendationsListState.value
+  val genres = contentDetailsState.data?.genres ?: listOf()
 
   val largeImageCoil = rememberImagePainter(
-    data = contentDetailsState.data?.images?.jpg?.largeImageUrl,
+    data = contentDetailsState.data?.images?.jpg?.getHighestResImgUrl(),
     builder = { crossfade(true) }
   )
 
   val smallImageCoil = rememberImagePainter(
-    data = contentDetailsState.data?.images?.jpg?.imageUrl,
+    data = contentDetailsState.data?.images?.jpg?.getHighestResImgUrl(),
     builder = { crossfade(true) }
   )
 
@@ -77,175 +78,170 @@ fun ContentDetailsScreen(
     }
   )
 
-  if (contentDetailsState.isLoading) {
-    Surface(
-      modifier = Modifier
-        .fillMaxSize()
-        .background(MyColor.DarkBlueBackground),
-    ) {
+  CollapsingToolbarScaffold(
+    modifier = Modifier
+      .fillMaxSize()
+      .background(MyColor.DarkBlueBackground),
+    state = toolbarScaffoldState,
+    scrollStrategy = ScrollStrategy.ExitUntilCollapsed,
+    toolbar = {
+      ContentDetailsScreenToolbar(
+        largeCoil = largeImageCoil,
+        smallCoil = smallImageCoil,
+        contentDetailsState = contentDetailsState,
+        toolbarScaffoldState = toolbarScaffoldState,
+        onArrowClick = navigator::navigateUp
+      )
+    }
+  ) {
+
+    if (contentDetailsState.isLoading) {
       CenterCircularProgressIndicator(
         size = 40.dp,
         color = MyColor.Yellow500
       )
     }
-  } else {
-    CollapsingToolbarScaffold(
+
+    LazyColumn(
       modifier = Modifier
-        .fillMaxSize()
-        .background(MyColor.DarkBlueBackground),
-      state = toolbarScaffoldState,
-      scrollStrategy = ScrollStrategy.ExitUntilCollapsed,
-      toolbar = {
-        ContentDetailsScreenToolbar(
-          largeCoil = largeImageCoil,
-          smallCoil = smallImageCoil,
-          contentDetailsState = contentDetailsState,
-          toolbarScaffoldState = toolbarScaffoldState,
-          onArrowClick = navigator::navigateUp
+        .fillMaxWidth(),
+      horizontalAlignment = Alignment.Start,
+    ) {
+
+      // Three Column Section
+      item(key = "three_column_section") {
+        ContentDetailsThreeColumnSection(
+          modifier = Modifier.padding(top = 12.dp, bottom = 4.dp),
+          state = contentDetailsState)
+      }
+
+
+      // Synopsis Composable
+      item(key = "content_description_composable") {
+        ContentDetailsSynopsis(
+          state = contentDetailsState,
+          isExpanded = isSynopsisExpanded,
+          onClick = { isSynopsisExpanded = it }
         )
       }
-    ) {
-      LazyColumn(
-        modifier = Modifier
-          .fillMaxWidth(),
-        horizontalAlignment = Alignment.Start,
-      ) {
-
-        // Three Column Section
-        item(key = "three_column_section") {
-          ContentDetailsThreeColumnSection(
-            modifier = Modifier.padding(top = 12.dp, bottom = 4.dp),
-            state = contentDetailsState)
-        }
 
 
-        // Synopsis Composable
-        item(key = "content_description_composable") {
-          ContentDetailsSynopsis(
-            state = contentDetailsState,
-            isExpanded = isSynopsisExpanded,
-            onClick = { isSynopsisExpanded = it }
-          )
-        }
-
-
-        // Genre FlowRow Chips
-        item(key = "content_genre_chips") {
-          if (genres.isNotEmpty()) {
-            if (isSynopsisExpanded) {
-              FlowRow(
-                modifier = Modifier.padding(horizontal = 10.dp),
-                lastLineMainAxisAlignment = FlowMainAxisAlignment.Start
-              ) {
-                genres.forEach {
-                  GenreChip(text = it.name)
-                }
+      // Genre FlowRow Chips
+      item(key = "content_genre_chips") {
+        if (genres.isNotEmpty()) {
+          if (isSynopsisExpanded) {
+            FlowRow(
+              modifier = Modifier.padding(horizontal = 10.dp),
+              lastLineMainAxisAlignment = FlowMainAxisAlignment.Start
+            ) {
+              genres.forEach {
+                GenreChip(text = it.name)
               }
-            } else {
-              LazyRow(
-                contentPadding = PaddingValues(horizontal = 10.dp),
-                horizontalArrangement = Arrangement.Start
-              ) {
-                this.items(genres) { genre ->
-                  GenreChip(text = genre.name)
-                }
+            }
+          } else {
+            LazyRow(
+              contentPadding = PaddingValues(horizontal = 10.dp),
+              horizontalArrangement = Arrangement.Start
+            ) {
+              this.items(genres) { genre ->
+                GenreChip(text = genre.name)
               }
             }
           }
         }
+      }
 
-        // Content Trailer (if any, like TV or Movies or Anime)
-        if (contentDetailsState.data?.trailer?.embedUrl != null) {
-          item(key = "content_trailer") {
-            ContentDetailsTrailerPlayer(
-              modifier = Modifier
-                .padding(top = 12.dp)
-                .height(240.dp)
-                .fillMaxWidth(),
-              trailerUrl = contentDetailsState.data.trailer.embedUrl
+      // Content Trailer (if any, like TV or Movies or Anime)
+      if (contentDetailsState.data?.trailer?.embedUrl?.isNotEmpty() == true) {
+        item(key = "content_trailer") {
+          ContentDetailsTrailerPlayer(
+            modifier = Modifier
+              .padding(top = 12.dp)
+              .height(240.dp)
+              .fillMaxWidth(),
+            trailerUrl = contentDetailsState.data.trailer.embedUrl
+          )
+        }
+      }
+
+      // Anime Characters List
+      item(key = "anime_characters_list") {
+        val shimmerInstance = rememberShimmerCustomBounds()
+
+        HorizontalContentHeader(
+          modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 18.dp, end = 12.dp, top = 8.dp, bottom = 4.dp),
+          title = "Characters",
+          onButtonClick = { }
+        )
+
+        LazyRow(
+          modifier = Modifier.onUpdateShimmerBounds(shimmerInstance),
+          contentPadding = PaddingValues(12.dp, 0.dp, 12.dp, 0.dp)
+        ) {
+          items(items = animeCharacterListState.data, key = { it.malId }) {
+            ItemAnimeCharacter(
+              modifier = ItemAnimeCharacterConfig.default,
+              data = it
             )
           }
         }
+      }
 
-        // Anime Characters List
-        item(key = "anime_characters_list") {
-          val shimmerInstance = rememberShimmerCustomBounds()
-
+      item(key = "anime_see_also") {
+        val shimmerInstance = rememberShimmerCustomBounds()
+        val title = "See also"
+        if (animeRecommendationsListState.isLoading) {
+          ContentListHeaderWithButtonShimmer(shimmerInstance)
+        } else {
           HorizontalContentHeader(
             modifier = Modifier
               .fillMaxWidth()
               .padding(start = 18.dp, end = 12.dp, top = 8.dp, bottom = 4.dp),
-            title = "Characters",
+            title = title,
             onButtonClick = { }
           )
-
-          LazyRow(
-            modifier = Modifier.onUpdateShimmerBounds(shimmerInstance),
-            contentPadding = PaddingValues(12.dp, 0.dp, 12.dp, 0.dp)
-          ) {
-            items(items = animeCharacterListState.data, key = { it.malId }) {
-              ItemAnimeCharacter(
-                modifier = ItemAnimeCharacterConfig.default,
-                data = it
-              )
-            }
-          }
         }
 
-        item(key = "anime_see_also") {
-          val shimmerInstance = rememberShimmerCustomBounds()
-          val title = "See also"
+        LazyRow(
+          modifier = Modifier.onUpdateShimmerBounds(shimmerInstance),
+          contentPadding = PaddingValues(12.dp, 0.dp, 12.dp, 0.dp)
+        ) {
           if (animeRecommendationsListState.isLoading) {
-            ContentListHeaderWithButtonShimmer(shimmerInstance)
+            showItemVerticalAnimeShimmer(shimmerInstance)
           } else {
-            HorizontalContentHeader(
-              modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 18.dp, end = 12.dp, top = 8.dp, bottom = 4.dp),
-              title = title,
-              onButtonClick = { }
+            items(
+              items = animeRecommendationsListState.data.take(Constant.HORIZONTAL_CONTENT_LIMIT),
+              key = { it.malId }
+            ) {
+              ItemVerticalAnime(
+                modifier = ItemVerticalAnimeModifier.default,
+                data = it,
+                onClick = navigator::navigateToContentDetailsScreen
+              )
+            }
+            showItemVerticalAnimeMoreWhenPastLimit(
+              modifier = ItemVerticalAnimeModifier.default,
+              size = animeRecommendationsListState.data.size,
+              onClick = { }
             )
           }
-
-          LazyRow(
-            modifier = Modifier.onUpdateShimmerBounds(shimmerInstance),
-            contentPadding = PaddingValues(12.dp, 0.dp, 12.dp, 0.dp)
-          ) {
-            if (animeRecommendationsListState.isLoading) {
-              showItemVerticalAnimeShimmer(shimmerInstance)
-            } else {
-              items(
-                items = animeRecommendationsListState.data.take(Constant.HORIZONTAL_CONTENT_LIMIT),
-                key = { it.malId }
-              ) {
-                ItemVerticalAnime(
-                  modifier = ItemVerticalAnimeModifier.default,
-                  data = it,
-                  onClick = navigator::navigateToContentDetailsScreen
-                )
-              }
-              showItemVerticalAnimeMoreWhenPastLimit(
-                modifier = ItemVerticalAnimeModifier.default,
-                size = animeRecommendationsListState.data.size,
-                onClick = { }
-              )
-            }
-          }
-        }
-
-
-        items(4) {
-          Text(
-            text = "Anime Detail's",
-            style = TextStyle(
-              color = MyColor.OnDarkSurface,
-              fontWeight = FontWeight.Bold,
-              fontSize = 20.sp
-            ),
-            modifier = Modifier.height(220.dp)
-          )
         }
       }
+
+
+//        items(4) {
+//          Text(
+//            text = "Anime Detail's",
+//            style = TextStyle(
+//              color = MyColor.OnDarkSurface,
+//              fontWeight = FontWeight.Bold,
+//              fontSize = 20.sp
+//            ),
+//            modifier = Modifier.height(220.dp)
+//          )
+//        }
     }
   }
 }

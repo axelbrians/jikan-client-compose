@@ -17,7 +17,6 @@ import com.machina.jikan_client_compose.presentation.content_search_screen.data.
 import com.machina.jikan_client_compose.presentation.content_search_screen.data.filter.FilterItemData
 import io.ktor.client.*
 import io.ktor.client.request.*
-import io.ktor.http.*
 import javax.inject.Inject
 
 class AnimeSearchRepository @Inject constructor(
@@ -31,10 +30,7 @@ class AnimeSearchRepository @Inject constructor(
 		mapFilter: Map<String, FilterGroupData>
 	): Resource<ResponseDataListWrapper<AnimeDetailsDtoV4>> {
 		val request = HttpRequestBuilder().apply {
-			method = HttpMethod.Get
 			url {
-				protocol = URLProtocol.HTTPS
-				host = Endpoints.HOST_V4
 				encodedPath = Endpoints.ANIME_SEARCH
 				parameter(AnimeConstant.QueryKey, query)
 				parameter(AnimeConstant.PageKey, page)
@@ -62,10 +58,7 @@ class AnimeSearchRepository @Inject constructor(
 
 	override suspend fun getAnimeGenresFilter(): Resource<FilterGroupData> {
 		val request = HttpRequestBuilder().apply {
-			method = HttpMethod.Get
 			url {
-				protocol = URLProtocol.HTTPS
-				host = Endpoints.HOST_V4
 				encodedPath = Endpoints.ANIME_GENRES
 				parameter(AnimeConstant.FilterKey, AnimeGenres.GenreKey)
 			}
@@ -88,10 +81,7 @@ class AnimeSearchRepository @Inject constructor(
 
 	override suspend fun getAnimeDemographicFilter(): Resource<FilterGroupData> {
 		val request = HttpRequestBuilder().apply {
-			method = HttpMethod.Get
 			url {
-				protocol = URLProtocol.HTTPS
-				host = Endpoints.HOST_V4
 				encodedPath = Endpoints.ANIME_GENRES
 				parameter(AnimeConstant.FilterKey, AnimeGenres.DemographicsKey)
 			}

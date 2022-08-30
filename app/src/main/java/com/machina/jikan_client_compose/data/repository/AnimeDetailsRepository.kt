@@ -1,8 +1,9 @@
 package com.machina.jikan_client_compose.data.repository
 
-import com.machina.jikan_client_compose.core.constant.Endpoints
 import com.machina.jikan_client_compose.core.SafeCall
+import com.machina.jikan_client_compose.core.constant.Endpoints
 import com.machina.jikan_client_compose.core.error.GeneralError
+import com.machina.jikan_client_compose.core.extensions.defaultUrl
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.core.wrapper.ResponseDataListWrapper
 import com.machina.jikan_client_compose.data.remote.anime_details.AnimeDetailsService
@@ -15,7 +16,6 @@ import com.machina.jikan_client_compose.domain.model.anime.AnimeCharacterModel
 import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalDataModel
 import io.ktor.client.*
 import io.ktor.client.request.*
-import io.ktor.http.*
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -28,10 +28,7 @@ class AnimeDetailsRepository @Inject constructor(
 
   override suspend fun getAnimeDetails(malId: Int): Resource<AnimeDetailsDtoV4> {
     val request = HttpRequestBuilder().apply {
-      method = HttpMethod.Get
-      url {
-        protocol = URLProtocol.HTTPS
-        host = Endpoints.HOST_V4
+      defaultUrl {
         encodedPath = Endpoints.ANIME_DETAILS + "/$malId"
       }
     }
@@ -46,10 +43,7 @@ class AnimeDetailsRepository @Inject constructor(
 
   override suspend fun getAnimeCharacters(malId: Int): Resource<List<AnimeCharacterModel>> {
     val request = HttpRequestBuilder().apply {
-      method = HttpMethod.Get
-      url {
-        protocol = URLProtocol.HTTPS
-        host = Endpoints.HOST_V4
+      defaultUrl {
         encodedPath = Endpoints.ANIME_DETAILS + "/$malId" + Endpoints.ANIME_CHARACTERS
       }
     }
@@ -71,10 +65,7 @@ class AnimeDetailsRepository @Inject constructor(
 
   override suspend fun getAnimeRecommendations(malId: Int): Resource<List<AnimeVerticalDataModel>> {
     val request = HttpRequestBuilder().apply {
-      method = HttpMethod.Get
-      url {
-        protocol = URLProtocol.HTTPS
-        host = Endpoints.HOST_V4
+      defaultUrl {
         encodedPath = Endpoints.ANIME_DETAILS + "/$malId" + Endpoints.ANIME_RECOMMENDATIONS
       }
     }

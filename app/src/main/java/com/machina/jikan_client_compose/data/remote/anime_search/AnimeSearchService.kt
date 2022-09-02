@@ -17,4 +17,11 @@ interface AnimeSearchService {
 	suspend fun getAnimeGenresFilter(): Resource<FilterGroupData>
 
 	suspend fun getAnimeDemographicFilter(): Resource<FilterGroupData>
+
+
+	suspend fun getAnimeViewAll(
+		url: String,
+		page: Int,
+		params: Map<String, String>
+	): Resource<ResponseDataListWrapper<AnimeDetailsDtoV4>>
 }

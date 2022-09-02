@@ -16,10 +16,16 @@ import timber.log.Timber
 class SafeCall {
   suspend inline operator fun <reified T: Any, reified U: Any> invoke(
     client: HttpClient,
-    request: HttpRequestBuilder
+    request: HttpRequestBuilder,
+    retry: Boolean = false,
+    retryLimit: Int = 5
   ): Resource<T> {
     return try {
-      val res = client.request<HttpResponse>(request)
+      val res = if (retry) {
+        callWithRetry(client, request, retryLimit)
+      } else {
+        client.request(request)
+      }
 
       if (res.status.isSuccess()) {
         val body = res.receive<T>()
@@ -40,33 +46,33 @@ class SafeCall {
     }
   }
 
-  suspend inline fun <reified T: Any, reified U: Any> invokeWithRetry(
-    client: HttpClient,
-    request: HttpRequestBuilder,
-    retryCount: Int = 5
-  ): Resource<T> {
-    return try {
-      val res = callWithRetry(client, request, retryCount)
-
-      if (res.status.isSuccess()) {
-        val body = res.receive<T>()
-        Resource.Success(body)
-      } else {
-        when (val error = res.receive<U>()) {
-          is GeneralError -> Resource.Error(error.message)
-          else -> Resource.Error(MyError.UNKNOWN_ERROR)
-        }
-      }
-    } catch (e: Exception) {
-      Timber.e("Error class:\n${e.javaClass.name}")
-      Timber.e("${e.message}")
-      when (e) {
-        is ClientRequestException -> Resource.Error(e.message)
-        is ConnectTimeoutException -> Resource.Error(e.message ?: MyError.UNKNOWN_ERROR)
-        else -> Resource.Error(MyError.UNKNOWN_ERROR)
-      }
-    }
-  }
+//  suspend inline fun <reified T: Any, reified U: Any> invokeWithRetry(
+//    client: HttpClient,
+//    request: HttpRequestBuilder,
+//    retryCount: Int = 5
+//  ): Resource<T> {
+//    return try {
+//      val res = callWithRetry(client, request, retryCount)
+//
+//      if (res.status.isSuccess()) {
+//        val body = res.receive<T>()
+//        Resource.Success(body)
+//      } else {
+//        when (val error = res.receive<U>()) {
+//          is GeneralError -> Resource.Error(error.message)
+//          else -> Resource.Error(MyError.UNKNOWN_ERROR)
+//        }
+//      }
+//    } catch (e: Exception) {
+//      Timber.e("Error class:\n${e.javaClass.name}")
+//      Timber.e("${e.message}")
+//      when (e) {
+//        is ClientRequestException -> Resource.Error(e.message)
+//        is ConnectTimeoutException -> Resource.Error(e.message ?: MyError.UNKNOWN_ERROR)
+//        else -> Resource.Error(MyError.UNKNOWN_ERROR)
+//      }
+//    }
+//  }
 
   /**
    * Function to retry HttpCalls if the server responded with a 429
@@ -84,9 +90,9 @@ class SafeCall {
     times: Int
   ): HttpResponse {
     var res = client.request<HttpResponse>(request)
-    Timber.v(res.call.response.toString())
-    Timber.v(res.status.toString())
-    Timber.v(res.status.value.toString())
+//    Timber.v(res.call.response.toString())
+//    Timber.v(res.status.toString())
+//    Timber.v(res.status.value.toString())
     repeat(times) {
       if (res.status.value != HttpStatusCode.TooManyRequests.value) {
         return res

@@ -11,6 +11,8 @@ import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
+import com.machina.jikan_client_compose.core.constant.Endpoints
+import com.machina.jikan_client_compose.core.helper.DateHelper
 import com.machina.jikan_client_compose.presentation.composable.HorizontalContentHeader
 import com.machina.jikan_client_compose.presentation.composable.HorizontalContentHeaderConfig
 import com.machina.jikan_client_compose.presentation.home_screen.composable.anime_popular_current.AnimeAiringPopularHorizontalPager
@@ -21,7 +23,6 @@ import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVertic
 import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnimeModifier
 import com.machina.jikan_client_compose.presentation.home_screen.item.showItemVerticalAnimeMoreWhenPastLimit
 import com.machina.jikan_client_compose.presentation.home_screen.item.showItemVerticalAnimeShimmer
-import com.machina.jikan_client_compose.ui.navigation.content_view_all.ContentViewAllType
 import com.machina.jikan_client_compose.ui.shimmer.onUpdateShimmerBounds
 import com.machina.jikan_client_compose.ui.shimmer.rememberShimmerCustomBounds
 import com.valentinilk.shimmer.ShimmerBounds
@@ -64,6 +65,12 @@ fun HomeContentList(
     item(key = "anime_schedule_list") {
       val shimmerInstance = rememberShimmerCustomBounds()
       val title = "Airing today"
+      val direction = {
+        navigator.navigateToContentViewAllScreen(
+          title,
+          Endpoints.ANIME_SCHEDULES + "/" + DateHelper.getTodayDayNameInString()
+        )
+      }
 
       if (animeScheduleState.isLoading) {
         ContentListHeaderWithButtonShimmer(shimmerInstance = shimmerInstance)
@@ -71,11 +78,7 @@ fun HomeContentList(
         HorizontalContentHeader(
           modifier = HorizontalContentHeaderConfig.default,
           title = title,
-          onButtonClick = {
-            navigator.navigateToContentViewAllScreen(
-              ContentViewAllType.AnimeSchedule, title
-            )
-          }
+          onButtonClick = direction
         )
       }
 
@@ -96,11 +99,7 @@ fun HomeContentList(
           showItemVerticalAnimeMoreWhenPastLimit(
             modifier = ItemVerticalAnimeModifier.default,
             size = animeScheduleState.data.data.size,
-            onClick = {
-              navigator.navigateToContentViewAllScreen(
-                ContentViewAllType.AnimeSchedule, title
-              )
-            }
+            onClick = direction
           )
         }
       }
@@ -112,6 +111,9 @@ fun HomeContentList(
     item(key = "anime_top_list") {
       val shimmerInstance = rememberShimmer(shimmerBounds = ShimmerBounds.Custom)
       val title = "Top anime of all times"
+      val direction = {
+        navigator.navigateToContentViewAllScreen(title, Endpoints.ANIME_TOP)
+      }
 
       if (animeTopState.isLoading) {
         ContentListHeaderWithButtonShimmer(shimmerInstance = shimmerInstance)
@@ -119,11 +121,7 @@ fun HomeContentList(
         HorizontalContentHeader(
           modifier = HorizontalContentHeaderConfig.default,
           title = title,
-          onButtonClick = {
-            navigator.navigateToContentViewAllScreen(
-              ContentViewAllType.AnimeTop, title
-            )
-          }
+          onButtonClick = direction
         )
       }
 
@@ -144,11 +142,7 @@ fun HomeContentList(
           showItemVerticalAnimeMoreWhenPastLimit(
             modifier = ItemVerticalAnimeModifier.default,
             size = animeTopState.data.data.size,
-            onClick = {
-              navigator.navigateToContentViewAllScreen(
-                ContentViewAllType.AnimeTop, title
-              )
-            }
+            onClick = direction
           )
         }
       }

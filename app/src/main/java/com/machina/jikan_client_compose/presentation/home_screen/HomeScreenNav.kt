@@ -8,9 +8,10 @@ import com.google.accompanist.systemuicontroller.SystemUiController
 import com.machina.jikan_client_compose.OnDestinationChanged
 import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.presentation.content_detail_screen.nav.ContentDetailsNavArgs
+import com.machina.jikan_client_compose.presentation.content_view_all_screen.nav.ContentViewAllListNavArgs
 import com.machina.jikan_client_compose.presentation.destinations.ContentDetailsNavDestination
+import com.machina.jikan_client_compose.presentation.destinations.ContentViewAllListNavDestination
 import com.machina.jikan_client_compose.presentation.destinations.SearchNavDestination
-import com.machina.jikan_client_compose.ui.navigation.content_view_all.ContentViewAllType
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -47,9 +48,14 @@ class HomeScreenNavigator(
   }
 
   fun navigateToContentViewAllScreen(
-    type: ContentViewAllType,
-    title: String
+    title: String,
+    url: String,
+    params: Map<String, String> = mapOf()
   ) {
+    val destination = ContentViewAllListNavDestination(
+      ContentViewAllListNavArgs(title, url, params)
+    )
+    navigator.navigate(destination)
 //    navController.navigate("${MainNavigationRoute.CONTENT_VIEW_ALL_SCREEN}/${type.name}/${title}")
   }
 

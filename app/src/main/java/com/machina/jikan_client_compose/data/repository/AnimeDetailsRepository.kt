@@ -16,7 +16,6 @@ import com.machina.jikan_client_compose.domain.model.anime.AnimeCharacterModel
 import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalDataModel
 import io.ktor.client.*
 import io.ktor.client.request.*
-import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -28,12 +27,12 @@ class AnimeDetailsRepository @Inject constructor(
 
   override suspend fun getAnimeDetails(malId: Int): Resource<AnimeDetailsDtoV4> {
     val request = HttpRequestBuilder().apply {
-      defaultUrl {
-        encodedPath = Endpoints.ANIME_DETAILS + "/$malId"
-      }
+      defaultUrl { encodedPath = Endpoints.ANIME_DETAILS + "/$malId" }
     }
 
-    val res = safeCall.invokeWithRetry<AnimeDetailsResponseV4, GeneralError>(client, request)
+    val res = safeCall<AnimeDetailsResponseV4, GeneralError>(
+      client, request, true
+    )
     return if (res is Resource.Success && res.data != null) {
       Resource.Success(res.data.data)
     } else {
@@ -44,13 +43,13 @@ class AnimeDetailsRepository @Inject constructor(
   override suspend fun getAnimeCharacters(malId: Int): Resource<List<AnimeCharacterModel>> {
     val request = HttpRequestBuilder().apply {
       defaultUrl {
-        encodedPath = Endpoints.ANIME_DETAILS + "/$malId" + Endpoints.ANIME_CHARACTERS
+        encodedPath = Endpoints.getAnimeCharactersEndpoint(malId)
       }
     }
 
-    val res = safeCall.invokeWithRetry<ResponseDataListWrapper<AnimeCharacterResponse>, GeneralError>(client, request)
-
-    Timber.tag("AnimeCharacter").d(res.message)
+    val res = safeCall<ResponseDataListWrapper<AnimeCharacterResponse>, GeneralError>(
+      client, request, true
+    )
     return if (res is Resource.Success && res.data != null) {
       val orderedCharacters = res.data.data.sortedByDescending { it.favoritesCount }
       Resource.Success(
@@ -65,12 +64,12 @@ class AnimeDetailsRepository @Inject constructor(
 
   override suspend fun getAnimeRecommendations(malId: Int): Resource<List<AnimeVerticalDataModel>> {
     val request = HttpRequestBuilder().apply {
-      defaultUrl {
-        encodedPath = Endpoints.ANIME_DETAILS + "/$malId" + Endpoints.ANIME_RECOMMENDATIONS
-      }
+      defaultUrl { encodedPath = Endpoints.getAnimeRecommendationEndpoint(malId) }
     }
 
-    val res = safeCall.invokeWithRetry<ResponseDataListWrapper<AnimeRecommendationsResponse>, GeneralError>(client, request)
+    val res = safeCall<ResponseDataListWrapper<AnimeRecommendationsResponse>, GeneralError>(
+      client, request, true
+    )
 
     return if (res is Resource.Success && res.data != null) {
       Resource.Success(

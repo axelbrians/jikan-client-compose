@@ -1,4 +1,4 @@
-package com.machina.jikan_client_compose.presentation.content_search_screen.composable
+package com.machina.jikan_client_compose.presentation.content_search_screen.composable.bottom_sheet
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween

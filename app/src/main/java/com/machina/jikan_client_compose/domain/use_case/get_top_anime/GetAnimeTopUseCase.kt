@@ -12,7 +12,6 @@ import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeTopSt
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import timber.log.Timber
 import javax.inject.Inject
 
 class GetAnimeTopUseCase @Inject constructor(
@@ -21,7 +20,7 @@ class GetAnimeTopUseCase @Inject constructor(
 ) {
   operator fun invoke(page: Int = 1): Flow<AnimeTopState> {
     return flow {
-      emit(AnimeTopState(isLoading = true))
+      emit(AnimeTopState.Loading)
 
       val state = when (val res = repository.getAnimeTopOfAllTime(page)) {
         is Resource.Success -> {
@@ -42,7 +41,6 @@ class GetAnimeTopUseCase @Inject constructor(
 
       val state = when (val res = repository.getAnimeTopOfAllTime(page)) {
         is Resource.Success -> {
-          Timber.d(res.data?.pagination.toString())
           AnimeHorizontalListContentState(
             data = AnimeVerticalModel(
               data = res.data!!.data.map {

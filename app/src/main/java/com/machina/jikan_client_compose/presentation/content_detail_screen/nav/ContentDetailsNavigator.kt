@@ -1,8 +1,9 @@
 package com.machina.jikan_client_compose.presentation.content_detail_screen.nav
 
 import com.machina.jikan_client_compose.core.enums.ContentType
+import com.machina.jikan_client_compose.presentation.content_view_all_screen.nav.ContentViewAllListNavArgs
 import com.machina.jikan_client_compose.presentation.destinations.ContentDetailsNavDestination
-import com.machina.jikan_client_compose.ui.navigation.content_view_all.ContentViewAllType
+import com.machina.jikan_client_compose.presentation.destinations.ContentViewAllListNavDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 class ContentDetailsScreenNavigator(
@@ -10,10 +11,14 @@ class ContentDetailsScreenNavigator(
 ) {
 
 	fun navigateToContentViewAllScreen(
-		type: ContentViewAllType,
-		title: String
+		title: String,
+		url: String,
+		params: Map<String, String> = mapOf()
 	) {
-//    navigator.navigate("${MainNavigationRoute.CONTENT_VIEW_ALL_SCREEN}/${type.name}/${title}")
+		val destination = ContentViewAllListNavDestination(
+			ContentViewAllListNavArgs(title, url, params)
+		)
+		navigator.navigate(destination)
 	}
 
 	fun navigateToContentDetailsScreen(

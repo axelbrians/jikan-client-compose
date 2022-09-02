@@ -17,4 +17,13 @@ object Endpoints {
 
     const val HOST_V3 = "api.jikan.moe/v3"
     const val HOST_V4 = "api.jikan.moe/v4"
+
+    fun getAnimeCharactersEndpoint(malId: Int): String {
+        return "$ANIME_DETAILS/$malId$ANIME_CHARACTERS"
+    }
+
+    fun getAnimeRecommendationEndpoint(malId: Int): String {
+        return "$ANIME_DETAILS/$malId$ANIME_RECOMMENDATIONS"
+    }
+
 }

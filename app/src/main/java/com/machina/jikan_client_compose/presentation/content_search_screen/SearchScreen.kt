@@ -18,15 +18,16 @@ import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.core.extensions.isScrolledToTheEnd
 import com.machina.jikan_client_compose.core.extensions.isScrollingUp
 import com.machina.jikan_client_compose.presentation.composable.MyDivider
-import com.machina.jikan_client_compose.presentation.content_search_screen.composable.ExpandableFloatingButtonSearchScreen
-import com.machina.jikan_client_compose.presentation.content_search_screen.composable.FilterModalBottomSheet
+import com.machina.jikan_client_compose.presentation.content_search_screen.composable.ContentSearchList
 import com.machina.jikan_client_compose.presentation.content_search_screen.composable.SearchBoxSearchScreen
+import com.machina.jikan_client_compose.presentation.content_search_screen.composable.bottom_sheet.ExpandableFloatingButtonSearchScreen
+import com.machina.jikan_client_compose.presentation.content_search_screen.composable.bottom_sheet.FilterModalBottomSheet
 import com.machina.jikan_client_compose.presentation.content_search_screen.data.SearchScreenViewModel
 import com.machina.jikan_client_compose.presentation.content_search_screen.data.event.FilterEvent
 import com.machina.jikan_client_compose.presentation.content_search_screen.data.event.SearchEvent
 import com.machina.jikan_client_compose.presentation.content_search_screen.data.filter.FilterGroupData
+import com.machina.jikan_client_compose.presentation.content_search_screen.nav.SearchScreenNavigator
 import com.machina.jikan_client_compose.ui.theme.MyColor
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -34,7 +35,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalCoilApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun SearchScreen(
-  navigator: DestinationsNavigator,
+  navigator: SearchScreenNavigator,
   viewModel: SearchScreenViewModel
 ) {
 
@@ -77,7 +78,6 @@ fun SearchScreen(
     sheetState = sheetState,
     sheetShape = RoundedCornerShape(topEnd = 12.dp, topStart = 12.dp),
     sheetContent = {
-      // TODO: Revert filter data to previous state if only dismissed
       FilterModalBottomSheet(
         mapFilter = filterSearchState.data,
         onFilterChanged = { data: FilterGroupData ->
@@ -124,7 +124,7 @@ fun SearchScreen(
         ContentSearchList(
           listState = listState,
           state = contentSearchState,
-          onItemClick = { _, _ -> }
+          onItemClick = navigator::navigateToContentDetailsScreen
         )
       }
 

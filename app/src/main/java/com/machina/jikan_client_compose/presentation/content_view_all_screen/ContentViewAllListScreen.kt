@@ -16,7 +16,9 @@ import com.machina.jikan_client_compose.core.extensions.scrollDirection
 import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalDataModel
 import com.machina.jikan_client_compose.presentation.content_view_all_screen.composable.ContentViewAllListScreenToolbar
 import com.machina.jikan_client_compose.presentation.content_view_all_screen.data.ScrollDirection
-import com.machina.jikan_client_compose.presentation.content_view_all_screen.viewmodel.ContentViewAllViewModel
+import com.machina.jikan_client_compose.presentation.content_view_all_screen.nav.ContentViewAllListNavArgs
+import com.machina.jikan_client_compose.presentation.content_view_all_screen.nav.ContentViewAllScreenNavigator
+import com.machina.jikan_client_compose.presentation.content_view_all_screen.viewmodel.ContentViewAllAnimeViewModel
 import com.machina.jikan_client_compose.presentation.home_screen.composable.shimmer.ItemVerticalAnimeShimmer
 import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnime
 import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnimeModifier
@@ -31,8 +33,8 @@ import com.valentinilk.shimmer.Shimmer
 fun ContentViewAllListScreen(
   modifier: Modifier = Modifier,
   navigator: ContentViewAllScreenNavigator,
-  viewModel: ContentViewAllViewModel,
-  title: String
+  viewModel: ContentViewAllAnimeViewModel,
+  navArgs: ContentViewAllListNavArgs
 ) {
 
   val contentState = viewModel.contentState.value
@@ -44,7 +46,9 @@ fun ContentViewAllListScreen(
     animationSpec = TweenSpec.defaultEasing()
   )
 
-  LaunchedEffect(key1 = viewModel, block = { viewModel.getNextContentPart() })
+  LaunchedEffect(key1 = viewModel) {
+    viewModel.getNextContentPart(navArgs.url, navArgs.params)
+  }
 
   Box(
     modifier = Modifier
@@ -55,7 +59,7 @@ fun ContentViewAllListScreen(
       modifier = Modifier
         .offset(y = animateToolbarOffset.value)
         .zIndex(2f),
-      title = title,
+      title = navArgs.title,
       onClick = navigator::navigateUp
     )
     LazyVerticalGrid(
@@ -64,20 +68,15 @@ fun ContentViewAllListScreen(
         .onUpdateShimmerBounds(shimmerInstance),
       cells = GridCells.Fixed(3),
       state = lazyGridState,
-      contentPadding = PaddingValues(horizontal = 12.dp, vertical = 12.dp),
+      contentPadding = PaddingValues(horizontal = 12.dp, vertical = 64.dp),
       verticalArrangement = Arrangement.spacedBy(0.dp)
     ) {
       val itemModifier = ItemVerticalAnimeModifier.fillParentWidth
       val topPadding = 64.dp - 12.dp
 
-      itemsIndexed(dataSet) { index: Int, data: AnimeVerticalDataModel ->
+      items(dataSet) { data: AnimeVerticalDataModel ->
         ItemVerticalAnime(
-          modifier = if (index in 0 until 3) {
-            // Add extra padding for AppBar height
-            itemModifier.padding(top = topPadding)
-          } else {
-            itemModifier
-          },
+          modifier = ItemVerticalAnimeModifier.fillParentWidth,
           data = data,
           thumbnailHeight = 160.dp,
           onClick = navigator::navigateToContentDetailsScreen
@@ -85,18 +84,18 @@ fun ContentViewAllListScreen(
       }
 
       if (contentState.isLoading) {
-        if (dataSet.isEmpty()) {
-          items(3) {
-            Box(modifier = Modifier.height(topPadding))
-          }
-        }
+//        if (dataSet.isEmpty()) {
+//          items(3) {
+//            Box(modifier = Modifier.height(topPadding))
+//          }
+//        }
         showItemVerticalAnimeShimmer(shimmerInstance)
       }
     }
   }
 
   if (lazyGridState.isScrolledToTheEnd() && viewModel.hasNextContentPart()) { // fetch more item when scrolled to the end
-    viewModel.getNextContentPart()
+    viewModel.getNextContentPart(navArgs.url, navArgs.params)
   }
 }
 

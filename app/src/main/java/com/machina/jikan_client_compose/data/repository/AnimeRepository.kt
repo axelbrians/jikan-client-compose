@@ -26,24 +26,35 @@ class AnimeRepository @Inject constructor(
   override suspend fun getAnimeTopOfAllTime(page: Int): Resource<AnimeTopResponseV4> {
     val request = HttpRequestBuilder().apply {
       defaultUrl {
+//        encodedPath = "/top/anime?${AnimeConstant.PageKey}=$page"
         encodedPath = Endpoints.ANIME_TOP
-        parameter(AnimeConstant.PageKey, page)
       }
+      parameter(AnimeConstant.PageKey, page)
     }
 
     return safeCall<AnimeTopResponseV4, GeneralError>(client, request)
   }
 
   override suspend fun getAnimeAiringPopular(): Resource<AnimeAiringPopularResponseV4> {
+    val params = mapOf(
+      Pair(AnimeConstant.PageKey, 1),
+      Pair(AnimeConstant.StatusKey, "airing"),
+      Pair(AnimeConstant.OrderByKey, "score"),
+      Pair(AnimeConstant.SortKey, "desc"),
+    )
+
     val request = HttpRequestBuilder().apply {
       defaultUrl {
         encodedPath = Endpoints.ANIME_DETAILS
       }
+      params.forEach { (key, value) ->
+        parameter(key, value)
+      }
 
-      parameter(AnimeConstant.PageKey, 1)
-      parameter(AnimeConstant.StatusKey, "airing")
-      parameter(AnimeConstant.OrderByKey, "score")
-      parameter(AnimeConstant.SortKey, "desc")
+//      parameter(AnimeConstant.PageKey, 1)
+//      parameter(AnimeConstant.StatusKey, "airing")
+//      parameter(AnimeConstant.OrderByKey, "score")
+//      parameter(AnimeConstant.SortKey, "desc")
     }
 
     return safeCall<AnimeAiringPopularResponseV4, GeneralError>(client, request)

@@ -1,51 +1,51 @@
 package com.machina.jikan_client_compose.presentation.content_search_screen
 
 import android.view.Window
+import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.machina.jikan_client_compose.OnDestinationChanged
-import com.machina.jikan_client_compose.core.DispatchersProvider
 import com.machina.jikan_client_compose.core.enums.ContentType
-import com.machina.jikan_client_compose.ui.navigation.MainNavigationRoute
+import com.machina.jikan_client_compose.presentation.content_detail_screen.nav.ContentDetailsNavArgs
+import com.machina.jikan_client_compose.presentation.destinations.ContentDetailsNavDestination
 import com.machina.jikan_client_compose.ui.theme.MyColor
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
-fun NavGraphBuilder.searchNav(
+@Destination
+@Composable
+fun SearchNav(
   systemUiController: SystemUiController,
   window: Window,
-  navController: NavController,
-  dispatchers: DispatchersProvider
+  navigator: DestinationsNavigator
 ) {
-  composable(route = MainNavigationRoute.CONTENT_SEARCH_SCREEN) { backstack ->
-    OnDestinationChanged(
-      systemUiController = systemUiController,
-      color = MyColor.DarkBlueBackground,
-      drawOverStatusBar = false,
-      window = window,
-    )
+  OnDestinationChanged(
+    systemUiController = systemUiController,
+    color = MyColor.DarkBlueBackground,
+    drawOverStatusBar = false,
+    window = window,
+  )
 
-    SearchScreen(
-      navigator = SearchScreenNavigator(navController),
-      viewModel = hiltViewModel(),
-      dispatchers = dispatchers
-    )
-  }
+  SearchScreen(
+    navigator = navigator,
+    viewModel = hiltViewModel()
+  )
 }
 
 class SearchScreenNavigator(
-  private val navController: NavController
+  private val navigator: DestinationsNavigator
 ) {
 
   fun navigateToContentDetailsScreen(
     malId: Int,
     contentType: ContentType
   ) {
-    navController.navigate("${MainNavigationRoute.CONTENT_DETAILS_SCREEN}/${contentType.name}/$malId".lowercase())
+    val direction = ContentDetailsNavDestination(ContentDetailsNavArgs(malId, contentType))
+    navigator.navigate(direction)
+//    navController.navigate("${MainNavigationRoute.CONTENT_DETAILS_SCREEN}/${contentType.name}/$malId".lowercase())
   }
 
   fun navigateUp() {
-    navController.navigateUp()
+    navigator.navigateUp()
   }
 }

@@ -61,14 +61,16 @@ fun HomeScreen(
           .fillMaxWidth()
           .padding(12.dp)
           .clip(RoundedCornerShape(8.dp))
-          .clickable { navigator.navigateToSearchScreen() },
+          .clickable(
+            onClick = { navigator.navigateToSearchScreen() }
+          ),
         isEnabled = false
       )
 
       MyDivider.Horizontal.DarkGreyBackground()
 
       HomeContentList(
-        navigation = navigator,
+        navigator = navigator,
         animeAiringPopularState = animeAiringPopularState,
         animeScheduleState = animeScheduleState,
         animeTopState = animeTopState

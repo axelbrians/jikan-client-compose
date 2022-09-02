@@ -14,7 +14,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
-import com.machina.jikan_client_compose.core.DispatchersProvider
 import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.core.extensions.isScrolledToTheEnd
 import com.machina.jikan_client_compose.core.extensions.isScrollingUp
@@ -27,6 +26,7 @@ import com.machina.jikan_client_compose.presentation.content_search_screen.data.
 import com.machina.jikan_client_compose.presentation.content_search_screen.data.event.SearchEvent
 import com.machina.jikan_client_compose.presentation.content_search_screen.data.filter.FilterGroupData
 import com.machina.jikan_client_compose.ui.theme.MyColor
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -34,10 +34,8 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalCoilApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun SearchScreen(
-  modifier: Modifier = Modifier,
-  navigator: SearchScreenNavigator,
-  viewModel: SearchScreenViewModel,
-  dispatchers: DispatchersProvider
+  navigator: DestinationsNavigator,
+  viewModel: SearchScreenViewModel
 ) {
 
   val selectedType = rememberSaveable { mutableStateOf(ContentType.Anime) }
@@ -126,7 +124,7 @@ fun SearchScreen(
         ContentSearchList(
           listState = listState,
           state = contentSearchState,
-          onItemClick = navigator::navigateToContentDetailsScreen
+          onItemClick = { _, _ -> }
         )
       }
 

@@ -32,7 +32,7 @@ import com.valentinilk.shimmer.rememberShimmer
 @Composable
 fun HomeContentList(
   modifier: Modifier = Modifier,
-  navigation: HomeScreenNavigator,
+  navigator: HomeScreenNavigator,
   animeAiringPopularState: AnimeAiringPopularState = AnimeAiringPopularState(),
   animeScheduleState: AnimeHorizontalListContentState = AnimeHorizontalListContentState(),
   animeTopState: AnimeHorizontalListContentState = AnimeHorizontalListContentState()
@@ -54,7 +54,7 @@ fun HomeContentList(
         animeAiringPopularState = animeAiringPopularState,
         data = animeAiringPopularState.data.take(7),
         shimmerInstance = shimmerInstance,
-        navigateToContentDetailsScreen = navigation::navigateToContentDetailsScreen
+        navigateToContentDetailsScreen = navigator::navigateToContentDetailsScreen
       )
     }
     /* End of Currently Popular Anime */
@@ -72,7 +72,9 @@ fun HomeContentList(
           modifier = HorizontalContentHeaderConfig.default,
           title = title,
           onButtonClick = {
-            navigation.navigateToContentViewAllScreen(ContentViewAllType.AnimeSchedule, title)
+            navigator.navigateToContentViewAllScreen(
+              ContentViewAllType.AnimeSchedule, title
+            )
           }
         )
       }
@@ -88,14 +90,14 @@ fun HomeContentList(
             ItemVerticalAnime(
               modifier = ItemVerticalAnimeModifier.default,
               data = data,
-              onClick = navigation::navigateToContentDetailsScreen
+              onClick = navigator::navigateToContentDetailsScreen
             )
           }
           showItemVerticalAnimeMoreWhenPastLimit(
             modifier = ItemVerticalAnimeModifier.default,
             size = animeScheduleState.data.data.size,
             onClick = {
-              navigation.navigateToContentViewAllScreen(
+              navigator.navigateToContentViewAllScreen(
                 ContentViewAllType.AnimeSchedule, title
               )
             }
@@ -118,7 +120,7 @@ fun HomeContentList(
           modifier = HorizontalContentHeaderConfig.default,
           title = title,
           onButtonClick = {
-            navigation.navigateToContentViewAllScreen(
+            navigator.navigateToContentViewAllScreen(
               ContentViewAllType.AnimeTop, title
             )
           }
@@ -136,14 +138,14 @@ fun HomeContentList(
             ItemVerticalAnime(
               modifier = ItemVerticalAnimeModifier.default,
               data = model,
-              onClick = navigation::navigateToContentDetailsScreen
+              onClick = navigator::navigateToContentDetailsScreen
             )
           }
           showItemVerticalAnimeMoreWhenPastLimit(
             modifier = ItemVerticalAnimeModifier.default,
             size = animeTopState.data.data.size,
             onClick = {
-              navigation.navigateToContentViewAllScreen(
+              navigator.navigateToContentViewAllScreen(
                 ContentViewAllType.AnimeTop, title
               )
             }

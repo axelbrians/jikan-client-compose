@@ -31,6 +31,8 @@ import com.machina.jikan_client_compose.presentation.content_detail_screen.compo
 import com.machina.jikan_client_compose.presentation.content_detail_screen.data.ContentDetailsViewModel
 import com.machina.jikan_client_compose.presentation.content_detail_screen.item.ItemAnimeCharacter
 import com.machina.jikan_client_compose.presentation.content_detail_screen.item.ItemAnimeCharacterConfig
+import com.machina.jikan_client_compose.presentation.content_detail_screen.nav.ContentDetailsNavArgs
+import com.machina.jikan_client_compose.presentation.content_detail_screen.nav.ContentDetailsScreenNavigator
 import com.machina.jikan_client_compose.presentation.home_screen.composable.shimmer.ContentListHeaderWithButtonShimmer
 import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnime
 import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnimeModifier
@@ -49,8 +51,9 @@ import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
 fun ContentDetailsScreen(
   navigator: ContentDetailsScreenNavigator,
   viewModel: ContentDetailsViewModel,
-  contentType: String?,
-  malId: Int?
+  navArgs: ContentDetailsNavArgs
+//  contentType: String?,
+//  malId: Int?
 ) {
   var isSynopsisExpanded by remember { mutableStateOf(false) }
   val toolbarScaffoldState = rememberCollapsingToolbarScaffoldState()
@@ -70,11 +73,11 @@ fun ContentDetailsScreen(
   )
 
   LaunchedEffect(
-    key1 = contentType + malId,
+    key1 = navArgs.malId,
     block = {
-      viewModel.getContentDetails(contentType, malId)
-      viewModel.getAnimeCharacters(malId ?: 0)
-      viewModel.getAnimeRecommendations(malId ?: 0)
+      viewModel.getContentDetails(navArgs.contentType.name, navArgs.malId)
+      viewModel.getAnimeCharacters(navArgs.malId)
+      viewModel.getAnimeRecommendations(navArgs.malId)
     }
   )
 

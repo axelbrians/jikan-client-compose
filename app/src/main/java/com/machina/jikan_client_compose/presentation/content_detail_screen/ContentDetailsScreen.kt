@@ -68,7 +68,7 @@ fun ContentDetailsScreen(
   val contentDetailsState = viewModel.contentDetailsState.value
   val animeCharacterListState = viewModel.animeCharactersListState.value
   val animeRecommendationsListState = viewModel.animeRecommendationsListState.value
-  val genres = contentDetailsState.data?.genres ?: listOf()
+  val genres = contentDetailsState.data?.genres.orEmpty()
 
   val largeImageCoil = rememberImagePainter(
     data = contentDetailsState.data?.images?.jpg?.getHighestResImgUrl(),
@@ -89,29 +89,28 @@ fun ContentDetailsScreen(
     }
   )
 
-  CollapsingToolbarScaffold(
-    modifier = Modifier
-      .fillMaxSize()
-      .background(MyColor.DarkBlueBackground),
-    state = toolbarScaffoldState,
-    scrollStrategy = ScrollStrategy.ExitUntilCollapsed,
-    toolbar = {
-      ContentDetailsScreenToolbar(
-        largeCoil = largeImageCoil,
-        smallCoil = smallImageCoil,
-        contentDetailsState = contentDetailsState,
-        toolbarScaffoldState = toolbarScaffoldState,
-        onArrowClick = navigator::navigateUp
-      )
-    }
-  ) {
-
-    if (contentDetailsState.isLoading) {
-      CenterCircularProgressIndicator(
-        size = 40.dp,
-        color = MyColor.Yellow500
-      )
-    } else {
+  if (contentDetailsState.isLoading) {
+    CenterCircularProgressIndicator(
+      size = 40.dp,
+      color = MyColor.Yellow500
+    )
+  } else {
+    CollapsingToolbarScaffold(
+      modifier = Modifier
+        .fillMaxSize()
+        .background(MyColor.DarkBlueBackground),
+      state = toolbarScaffoldState,
+      scrollStrategy = ScrollStrategy.ExitUntilCollapsed,
+      toolbar = {
+        ContentDetailsScreenToolbar(
+          largeCoil = largeImageCoil,
+          smallCoil = smallImageCoil,
+          contentDetailsState = contentDetailsState,
+          toolbarScaffoldState = toolbarScaffoldState,
+          onArrowClick = navigator::navigateUp
+        )
+      }
+    ) {
       LazyColumn(
         modifier = Modifier
           .fillMaxWidth(),
@@ -184,7 +183,7 @@ fun ContentDetailsScreen(
               .fillMaxWidth()
               .padding(start = 18.dp, end = 12.dp, top = 8.dp, bottom = 4.dp),
             title = Constant.CHARACTERS,
-            onButtonClick = { }
+            onButtonClick = navigator::navigateToContentSmallViewAllScreen
           )
 
           LazyRow(
@@ -206,7 +205,6 @@ fun ContentDetailsScreen(
         item(key = Component.ContentSimilar) {
           val shimmerInstance = rememberShimmerCustomBounds()
           val action = {
-            // TODO: Return item schema is different from AnimeDetailsDtoV4
             navigator.navigateToContentViewAllScreen(
               "${Constant.SIMILAR} to ${contentDetailsState.data?.title}",
               Endpoints.getAnimeRecommendationEndpoint(contentDetailsState.data?.malId ?: 0)

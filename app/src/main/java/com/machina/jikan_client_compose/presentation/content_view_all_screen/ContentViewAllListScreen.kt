@@ -31,7 +31,6 @@ import com.valentinilk.shimmer.Shimmer
 @OptIn(ExperimentalCoilApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun ContentViewAllListScreen(
-  modifier: Modifier = Modifier,
   navigator: ContentViewAllScreenNavigator,
   viewModel: ContentViewAllAnimeViewModel,
   navArgs: ContentViewAllListNavArgs
@@ -71,9 +70,6 @@ fun ContentViewAllListScreen(
       contentPadding = PaddingValues(start = 12.dp, end = 12.dp, top = 64.dp, bottom = 12.dp),
       verticalArrangement = Arrangement.spacedBy(0.dp)
     ) {
-      val itemModifier = ItemVerticalAnimeModifier.fillParentWidth
-      val topPadding = 64.dp - 12.dp
-
       items(dataSet) { data: AnimeVerticalDataModel ->
         ItemVerticalAnime(
           modifier = ItemVerticalAnimeModifier.fillParentWidth,
@@ -84,11 +80,6 @@ fun ContentViewAllListScreen(
       }
 
       if (contentState.isLoading) {
-//        if (dataSet.isEmpty()) {
-//          items(3) {
-//            Box(modifier = Modifier.height(topPadding))
-//          }
-//        }
         showItemVerticalAnimeShimmer(shimmerInstance)
       }
     }

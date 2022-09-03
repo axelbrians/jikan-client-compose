@@ -5,7 +5,7 @@ import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.core.error.MyError.UNKNOWN_ERROR
 import com.machina.jikan_client_compose.core.wrapper.Event
 import com.machina.jikan_client_compose.core.wrapper.Resource
-import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.AnimeDetailsDtoV4
+import com.machina.jikan_client_compose.data.remote.dto.anime_details.AnimeDetailsDtoV4
 import com.machina.jikan_client_compose.data.repository.AnimeSearchRepository
 import com.machina.jikan_client_compose.data.repository.MangaRepository
 import com.machina.jikan_client_compose.domain.model.anime.AnimeHorizontalDataModel

@@ -22,7 +22,7 @@ import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.machina.jikan_client_compose.core.constant.Constant
 import com.machina.jikan_client_compose.core.constant.Endpoints
-import com.machina.jikan_client_compose.data.remote.dto_v4.common.Jpg.Companion.getHighestResImgUrl
+import com.machina.jikan_client_compose.data.remote.dto.common.Jpg.Companion.getHighestResImgUrl
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
 import com.machina.jikan_client_compose.presentation.composable.HorizontalContentHeader
 import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.ContentDetailsScreenToolbar
@@ -206,6 +206,7 @@ fun ContentDetailsScreen(
         item(key = Component.ContentSimilar) {
           val shimmerInstance = rememberShimmerCustomBounds()
           val action = {
+            // TODO: Return item schema is different from AnimeDetailsDtoV4
             navigator.navigateToContentViewAllScreen(
               "${Constant.SIMILAR} to ${contentDetailsState.data?.title}",
               Endpoints.getAnimeRecommendationEndpoint(contentDetailsState.data?.malId ?: 0)

@@ -5,7 +5,7 @@ import com.google.common.truth.Truth.assertThat
 import com.machina.jikan_client_compose.core.DefaultDispatchers
 import com.machina.jikan_client_compose.core.wrapper.Event
 import com.machina.jikan_client_compose.core.wrapper.Resource
-import com.machina.jikan_client_compose.data.remote.dto_v4.anime_top.AnimeTopResponseV4
+import com.machina.jikan_client_compose.data.remote.dto.anime_top.AnimeTopResponseV4
 import com.machina.jikan_client_compose.data.repository.AnimeRepository
 import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeTopState
 import io.mockk.coEvery

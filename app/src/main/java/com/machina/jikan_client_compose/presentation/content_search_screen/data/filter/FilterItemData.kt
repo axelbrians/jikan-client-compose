@@ -1,6 +1,6 @@
 package com.machina.jikan_client_compose.presentation.content_search_screen.data.filter
 
-import com.machina.jikan_client_compose.data.remote.dto_v4.common.Genre
+import com.machina.jikan_client_compose.data.remote.dto.common.Genre
 
 data class FilterItemData(
   val key: String,

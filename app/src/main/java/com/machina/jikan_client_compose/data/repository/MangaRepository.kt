@@ -6,10 +6,10 @@ import com.machina.jikan_client_compose.core.error.GeneralError
 import com.machina.jikan_client_compose.core.error.MyError
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.core.wrapper.ResponseDataListWrapper
-import com.machina.jikan_client_compose.data.remote.MangaService
-import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.AnimeDetailsDtoV4
-import com.machina.jikan_client_compose.data.remote.dto_v4.manga_details.MangaDetailsDtoV4
-import com.machina.jikan_client_compose.data.remote.dto_v4.manga_details.MangaDetailsResponseV4
+import com.machina.jikan_client_compose.data.remote.anime.MangaService
+import com.machina.jikan_client_compose.data.remote.dto.anime_details.AnimeDetailsDtoV4
+import com.machina.jikan_client_compose.data.remote.dto.manga_details.MangaDetailsDtoV4
+import com.machina.jikan_client_compose.data.remote.dto.manga_details.MangaDetailsResponseV4
 import com.machina.jikan_client_compose.di.AndroidKtorClient
 import io.ktor.client.*
 import io.ktor.client.request.*

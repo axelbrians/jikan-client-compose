@@ -1,10 +1,10 @@
 package com.machina.jikan_client_compose.domain.model
 
-import com.machina.jikan_client_compose.data.remote.dto_v4.anime.*
-import com.machina.jikan_client_compose.data.remote.dto_v4.common.*
-import com.machina.jikan_client_compose.data.remote.dto_v4.manga.Author
-import com.machina.jikan_client_compose.data.remote.dto_v4.manga.Published
-import com.machina.jikan_client_compose.data.remote.dto_v4.manga.Serialization
+import com.machina.jikan_client_compose.data.remote.dto.anime_common.*
+import com.machina.jikan_client_compose.data.remote.dto.common.*
+import com.machina.jikan_client_compose.data.remote.dto.manga_common.Author
+import com.machina.jikan_client_compose.data.remote.dto.manga_common.Published
+import com.machina.jikan_client_compose.data.remote.dto.manga_common.Serialization
 
 data class ContentDetails(
   val malId: Int,

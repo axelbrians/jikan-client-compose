@@ -7,10 +7,10 @@ import com.machina.jikan_client_compose.core.error.GeneralError
 import com.machina.jikan_client_compose.core.extensions.defaultUrl
 import com.machina.jikan_client_compose.core.helper.DateHelper
 import com.machina.jikan_client_compose.core.wrapper.Resource
-import com.machina.jikan_client_compose.data.remote.AnimeService
-import com.machina.jikan_client_compose.data.remote.dto_v4.anime_airing_popular.AnimeAiringPopularResponseV4
-import com.machina.jikan_client_compose.data.remote.dto_v4.anime_schedules.AnimeScheduleResponseV4
-import com.machina.jikan_client_compose.data.remote.dto_v4.anime_top.AnimeTopResponseV4
+import com.machina.jikan_client_compose.data.remote.anime.AnimeService
+import com.machina.jikan_client_compose.data.remote.dto.anime_airing_popular.AnimeAiringPopularResponseV4
+import com.machina.jikan_client_compose.data.remote.dto.anime_schedules.AnimeScheduleResponseV4
+import com.machina.jikan_client_compose.data.remote.dto.anime_top.AnimeTopResponseV4
 import com.machina.jikan_client_compose.di.AndroidKtorClient
 import io.ktor.client.*
 import io.ktor.client.request.*
@@ -29,32 +29,19 @@ class AnimeRepository @Inject constructor(
       parameter(AnimeConstant.PageKey, page)
     }
 
-    return safeCall<AnimeTopResponseV4, GeneralError>(client, request)
+    return safeCall<AnimeTopResponseV4, GeneralError>(client, request, true)
   }
 
   override suspend fun getAnimeAiringPopular(): Resource<AnimeAiringPopularResponseV4> {
-//    val params = mapOf(
-//      Pair(AnimeConstant.PageKey, 1),
-//      Pair(AnimeConstant.StatusKey, "airing"),
-//      Pair(AnimeConstant.OrderByKey, "score"),
-//      Pair(AnimeConstant.SortKey, "desc"),
-//    )
-
     val request = HttpRequestBuilder().apply {
-      defaultUrl {
-        encodedPath = Endpoints.ANIME_DETAILS
-      }
-//      params.forEach { (key, value) ->
-//        parameter(key, value)
-//      }
-
+      defaultUrl { encodedPath = Endpoints.ANIME_DETAILS }
       parameter(AnimeConstant.PageKey, 1)
       parameter(AnimeConstant.StatusKey, "airing")
       parameter(AnimeConstant.OrderByKey, "score")
       parameter(AnimeConstant.SortKey, "desc")
     }
 
-    return safeCall<AnimeAiringPopularResponseV4, GeneralError>(client, request)
+    return safeCall<AnimeAiringPopularResponseV4, GeneralError>(client, request, true)
   }
 
   override suspend fun getAnimeSchedule(day: Int, page: Int): Resource<AnimeScheduleResponseV4> {
@@ -66,7 +53,7 @@ class AnimeRepository @Inject constructor(
       parameter(AnimeConstant.PageKey, page)
     }
 
-    val res = safeCall<AnimeScheduleResponseV4, GeneralError>(client, request)
+    val res = safeCall<AnimeScheduleResponseV4, GeneralError>(client, request, true)
 
     // Sort the result by Rank, and move the 0 rank value to last
     return if (res is Resource.Success && res.data != null) {

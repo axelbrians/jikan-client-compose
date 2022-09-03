@@ -4,10 +4,10 @@ import com.machina.jikan_client_compose.core.DispatchersProvider
 import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.core.error.MyError
 import com.machina.jikan_client_compose.core.wrapper.Resource
-import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.AnimeDetailsDtoV4
-import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.toContentDetails
-import com.machina.jikan_client_compose.data.remote.dto_v4.manga_details.MangaDetailsDtoV4
-import com.machina.jikan_client_compose.data.remote.dto_v4.manga_details.toContentDetails
+import com.machina.jikan_client_compose.data.remote.dto.anime_details.AnimeDetailsDtoV4
+import com.machina.jikan_client_compose.data.remote.dto.anime_details.toContentDetails
+import com.machina.jikan_client_compose.data.remote.dto.manga_details.MangaDetailsDtoV4
+import com.machina.jikan_client_compose.data.remote.dto.manga_details.toContentDetails
 import com.machina.jikan_client_compose.data.repository.AnimeDetailsRepository
 import com.machina.jikan_client_compose.data.repository.MangaRepository
 import com.machina.jikan_client_compose.domain.model.ContentDetails
@@ -58,9 +58,6 @@ class GetContentDetailsUseCase @Inject constructor(
       is MangaDetailsDtoV4 -> data.toContentDetails()
       else -> null
     }
-
-
-    Timber.d("res resolveContent $res")
 
     return res
   }

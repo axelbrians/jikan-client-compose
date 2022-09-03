@@ -68,7 +68,7 @@ fun ContentViewAllListScreen(
         .onUpdateShimmerBounds(shimmerInstance),
       cells = GridCells.Fixed(3),
       state = lazyGridState,
-      contentPadding = PaddingValues(horizontal = 12.dp, vertical = 64.dp),
+      contentPadding = PaddingValues(start = 12.dp, end = 12.dp, top = 64.dp, bottom = 12.dp),
       verticalArrangement = Arrangement.spacedBy(0.dp)
     ) {
       val itemModifier = ItemVerticalAnimeModifier.fillParentWidth

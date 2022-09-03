@@ -10,10 +10,8 @@ import com.machina.jikan_client_compose.domain.use_case.content_view_all.GetCont
 import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeHorizontalListContentState
 import com.machina.jikan_client_compose.presentation.home_screen.data.copyKeepData
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,19 +23,21 @@ class ContentViewAllAnimeViewModel @Inject constructor(
     mutableStateOf(AnimeHorizontalListContentState())
   val contentState: State<AnimeHorizontalListContentState> = _contentState
 
-  private val jobs: MutableMap<Int, Job?> = mutableMapOf()
+  private var isWaiting: Boolean = false
 
   fun getNextContentPart(url: String, params: Map<String, String>) {
-    val currentPage = _contentState.value.data.pagination.currentPage + 1
+    if (isWaiting) return
 
     // Ensure that only one instance of HTTP call is running on specific page
-    if (jobs[currentPage] != null) return
-
-    jobs[currentPage] = getContentViewAllUseCase(url, currentPage, params)
+    val currentPage = _contentState.value.data.pagination.currentPage + 1
+    isWaiting = true
+    getContentViewAllUseCase(url, currentPage, params)
       .onEach { newState: AnimeHorizontalListContentState ->
         if (newState.isLoading) {
           _contentState.value = _contentState.value.copy(isLoading = true)
           return@onEach
+        } else {
+          isWaiting = false
         }
 
         // If CURRENT call was failed, only take error and loading
@@ -55,15 +55,13 @@ class ContentViewAllAnimeViewModel @Inject constructor(
         }
 
         // Normal case (Success), append new fetched data
-        val newData = (_contentState.value.data.data.toSet() + newState.data.data.toSet()).toList()
+        val newData = _contentState.value.data.data + newState.data.data
         _contentState.value = AnimeHorizontalListContentState(
           data = AnimeVerticalModel(
             data = newData,
             pagination = newState.data.pagination
           )
         )
-        Timber.d(_contentState.value.data.pagination.toString())
-        jobs[currentPage] = null
       }.launchIn(viewModelScope)
   }
 

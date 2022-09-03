@@ -7,10 +7,10 @@ import com.machina.jikan_client_compose.core.extensions.defaultUrl
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.core.wrapper.ResponseDataListWrapper
 import com.machina.jikan_client_compose.data.remote.anime_details.AnimeDetailsService
-import com.machina.jikan_client_compose.data.remote.dto_v4.anime_characters.AnimeCharacterResponse
-import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.AnimeDetailsDtoV4
-import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.AnimeDetailsResponseV4
-import com.machina.jikan_client_compose.data.remote.dto_v4.anime_recommendations.AnimeRecommendationsResponse
+import com.machina.jikan_client_compose.data.remote.dto.anime_characters.AnimeCharacterResponse
+import com.machina.jikan_client_compose.data.remote.dto.anime_details.AnimeDetailsDtoV4
+import com.machina.jikan_client_compose.data.remote.dto.anime_details.AnimeDetailsResponseV4
+import com.machina.jikan_client_compose.data.remote.dto.anime_recommendations.AnimeRecommendationResponse
 import com.machina.jikan_client_compose.di.AndroidKtorClient
 import com.machina.jikan_client_compose.domain.model.anime.AnimeCharacterModel
 import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalDataModel
@@ -67,7 +67,7 @@ class AnimeDetailsRepository @Inject constructor(
       defaultUrl { encodedPath = Endpoints.getAnimeRecommendationEndpoint(malId) }
     }
 
-    val res = safeCall<ResponseDataListWrapper<AnimeRecommendationsResponse>, GeneralError>(
+    val res = safeCall<ResponseDataListWrapper<AnimeRecommendationResponse>, GeneralError>(
       client, request, true
     )
 

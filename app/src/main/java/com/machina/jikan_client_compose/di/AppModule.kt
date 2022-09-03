@@ -12,6 +12,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import io.ktor.client.*
+import io.ktor.client.engine.*
 import io.ktor.client.engine.android.*
 import io.ktor.client.engine.okhttp.*
 import io.ktor.client.features.*
@@ -48,12 +49,7 @@ class AppModule {
         connectTimeout = 15_000
         socketTimeout = 100_000
       }
-      install(JsonFeature) {
-        serializer = KotlinxSerializer(kotlinx.serialization.json.Json {
-          ignoreUnknownKeys = true
-          coerceInputValues = true
-        })
-      }
+      installJsonFeature()
       install(Logging) {
         logger = Logger.DEFAULT
         level = LogLevel.HEADERS
@@ -81,13 +77,17 @@ class AppModule {
         )
       }
 
-      install(JsonFeature) {
-        serializer = KotlinxSerializer(kotlinx.serialization.json.Json {
-          ignoreUnknownKeys = true
-          coerceInputValues = true
-          prettyPrint = true
-        })
-      }
+      installJsonFeature()
+    }
+  }
+
+  private fun<T : HttpClientEngineConfig> HttpClientConfig<T>.installJsonFeature() {
+    install(JsonFeature) {
+      serializer = KotlinxSerializer(kotlinx.serialization.json.Json {
+        ignoreUnknownKeys = true
+        coerceInputValues = true
+        prettyPrint = true
+      })
     }
   }
 

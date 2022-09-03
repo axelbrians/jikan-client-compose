@@ -1,7 +1,7 @@
 package com.machina.jikan_client_compose.domain.model.anime
 
-import com.machina.jikan_client_compose.data.remote.dto_v4.anime_details.AnimeDetailsDtoV4
-import com.machina.jikan_client_compose.data.remote.dto_v4.common.Jpg.Companion.getHighestResImgUrl
+import com.machina.jikan_client_compose.data.remote.dto.anime_details.AnimeDetailsDtoV4
+import com.machina.jikan_client_compose.data.remote.dto.common.Jpg.Companion.getHighestResImgUrl
 
 data class AnimeHorizontalDataModel(
   val malId: Int,

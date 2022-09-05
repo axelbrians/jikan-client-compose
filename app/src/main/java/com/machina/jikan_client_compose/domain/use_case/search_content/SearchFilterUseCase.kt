@@ -46,33 +46,40 @@ class SearchFilterUseCase @Inject constructor(
 		return flow {
 			emit(FilterSearchState.Loading)
 
-			val hashMapFilter = hashMapOf<String, FilterGroupData>()
+			val mapFilter = mutableMapOf<String, FilterGroupData>()
 
-			// Fetch available genre filter
-			with(repository.getAnimeGenresFilter()) {
-				if (this is Resource.Success) {
-					hashMapFilter[data!!.groupKey] = data
-				}
-			}
-
-			// Fetch available Airing Status from local
-			with(FilterGroupData.StatusFilterGroup) {
-				hashMapFilter[groupKey] = this
+			// Fetch available ContentRating from local
+			with(FilterGroupData.ContentRatingFilterGroup) {
+				mapFilter[groupKey] = this
 			}
 
 			// Fetch available demographics filter
 			with(repository.getAnimeDemographicFilter()) {
 				if (this is Resource.Success) {
-					hashMapFilter[data!!.groupKey] = data
+					mapFilter[data!!.groupKey] = data
 				}
 			}
 
-			// Fetch available ContentRating from local
-			with(FilterGroupData.ContentRatingFilterGroup) {
-				hashMapFilter[groupKey] = this
+			// Fetch available Airing Status from local
+			with(FilterGroupData.StatusFilterGroup) {
+				mapFilter[groupKey] = this
 			}
 
-			emit(FilterSearchState(data = hashMapFilter))
+			// Fetch available genre filter
+			with(repository.getAnimeGenresFilter()) {
+				if (this is Resource.Success) {
+					mapFilter[data!!.groupKey] = data
+				}
+			}
+
+			// Fetch available themes filter
+			with(repository.getAnimeThemesFilter()) {
+				if (this is Resource.Success) {
+					mapFilter[data!!.groupKey] = data
+				}
+			}
+
+			emit(FilterSearchState(data = mapFilter.toMap()))
 		}.flowOn(dispatchers.io)
 	}
 }

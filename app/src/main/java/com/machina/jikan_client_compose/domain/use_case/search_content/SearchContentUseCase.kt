@@ -14,7 +14,6 @@ import com.machina.jikan_client_compose.presentation.content_search_screen.data.
 import com.machina.jikan_client_compose.presentation.content_search_screen.data.filter.FilterGroupData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class SearchContentUseCase @Inject constructor(
@@ -53,7 +52,7 @@ class SearchContentUseCase @Inject constructor(
       }
 
       emit(state)
-    }.flowOn(dispatchers.io)
+    }
   }
 
   private fun resolveContentType(

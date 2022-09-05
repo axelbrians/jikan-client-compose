@@ -69,7 +69,12 @@ class SearchScreenViewModel @Inject constructor(
     }
 
     if (query.length >= 3 && !searchJob.isActive) {
-      searchContentUseCase(contentType, query, currentPage, _searchFilterState.value.data).onEach { res ->
+      searchContentUseCase(
+        contentType,
+        query,
+        currentPage,
+        _searchFilterState.value.data
+      ).onEach { res ->
         if (res.isLoading) {
           _contentSearchState.value = _contentSearchState.value.copy(isLoading = true)
           return@onEach

@@ -93,7 +93,7 @@ fun SearchScreen(
         },
         onFilterApplied = {
           viewModel.onFilterEvent(
-            FilterEvent.FilterReset(selectedType.value, searchQuery.value)
+            FilterEvent.FilterApplied(selectedType.value, searchQuery.value)
           )
           coroutineScope.launch { sheetState.hide() }
         }

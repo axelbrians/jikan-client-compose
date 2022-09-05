@@ -19,6 +19,8 @@ interface AnimeSearchService {
 
 	suspend fun getAnimeDemographicFilter(): Resource<FilterGroupData>
 
+	suspend fun getAnimeThemesFilter(): Resource<FilterGroupData>
+
 
 	suspend fun getAnimeViewAll(
 		url: String,

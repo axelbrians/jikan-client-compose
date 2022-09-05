@@ -11,10 +11,11 @@ object AnimeConstant {
 	const val FilterKey = "filter"
 
 
-	const val Genres = "Genres"
-	const val Demographic = "Demographic"
 	const val ContentRating = "Content Rating"
+	const val Demographic = "Demographic"
 	const val Status = "Status"
+	const val Genres = "Genres"
+	const val Themes = "Themes"
 
 
 }

@@ -21,7 +21,8 @@ import com.machina.jikan_client_compose.ui.theme.MyColor
 fun ContentViewAllListScreenToolbar(
   modifier: Modifier = Modifier,
   title: String,
-  onClick: () -> Unit
+  onClick: () -> Unit,
+  trailingIcon: (@Composable () -> Unit)? = null
 ) {
   TopAppBar(
     modifier = modifier
@@ -46,7 +47,11 @@ fun ContentViewAllListScreenToolbar(
       ),
       modifier = Modifier
         .weight(1f)
-        .padding(start = 8.dp, end = 12.dp)
+        .padding(horizontal = 8.dp)
     )
+
+    if (trailingIcon != null) {
+      trailingIcon()
+    }
   }
 }

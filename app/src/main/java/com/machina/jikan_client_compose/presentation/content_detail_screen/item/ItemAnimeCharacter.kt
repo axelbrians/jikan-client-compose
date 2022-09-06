@@ -25,7 +25,11 @@ import com.machina.jikan_client_compose.ui.theme.Type.onDarkSurface
 object ItemAnimeCharacterConfig {
   val default = Modifier
     .width(100.dp)
+    .height(150.dp)
     .padding(6.dp, 4.dp)
+
+  val threeColumn = Modifier.height(190.dp)
+  val fourColumn = Modifier.height(140.dp)
 }
 
 @ExperimentalCoilApi
@@ -49,7 +53,7 @@ fun ItemAnimeCharacter(
   ) {
     Box(
       modifier = Modifier
-        .height(120.dp)
+        .weight(1f)
     ) {
       if (painter.state is ImagePainter.State.Loading) {
         CenterCircularProgressIndicator(

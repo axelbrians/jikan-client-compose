@@ -184,4 +184,27 @@ class AnimeSearchRepository @Inject constructor(
 			Resource.Error(res.message)
 		}
 	}
+
+	override suspend fun getAnimeExplicitGenresFilter(): Resource<FilterGroupData> {
+		val request = HttpRequestBuilder().apply {
+			defaultUrl { encodedPath = Endpoints.ANIME_GENRES }
+			parameter(AnimeConstant.FilterKey, AnimeGenres.ExplicitKey)
+		}
+
+		val res = safeCall<ResponseDataListWrapper<Genre>, GeneralError>(
+			client, request, true
+		)
+
+		return if (res is Resource.Success) {
+			Resource.Success(data = FilterGroupData(
+				groupKey = AnimeGenres.GenreKey + "_explicit",
+				groupName = AnimeConstant.ExplicitGenre,
+				isExpanded = false,
+				type = FilterGroupType.Checkable,
+				filterData = res.data?.data?.map { FilterItemData.from(it) }.orEmpty()
+			))
+		} else {
+			Resource.Error(res.message)
+		}
+	}
 }

@@ -15,8 +15,8 @@ object AnimeConstant {
 	const val Demographic = "Demographic"
 	const val Status = "Status"
 	const val Genres = "Genres"
+	const val ExplicitGenre = "Explicit Genre"
 	const val Themes = "Themes"
-
 
 }
 

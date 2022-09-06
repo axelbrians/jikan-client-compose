@@ -72,6 +72,13 @@ class SearchFilterUseCase @Inject constructor(
 				}
 			}
 
+			// Fetch available explicit_genre filter
+			with(repository.getAnimeExplicitGenresFilter()) {
+				if (this is Resource.Success) {
+					mapFilter[data!!.groupKey] = data
+				}
+			}
+
 			// Fetch available themes filter
 			with(repository.getAnimeThemesFilter()) {
 				if (this is Resource.Success) {

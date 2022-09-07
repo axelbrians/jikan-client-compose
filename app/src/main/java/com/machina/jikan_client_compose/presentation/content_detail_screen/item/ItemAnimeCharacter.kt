@@ -14,7 +14,6 @@ import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
-import com.machina.jikan_client_compose.domain.model.anime.AnimeCharacterModel
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.machina.jikan_client_compose.ui.theme.Type
@@ -36,11 +35,12 @@ object ItemAnimeCharacterConfig {
 @Composable
 fun ItemAnimeCharacter(
   modifier: Modifier = Modifier,
-  data: AnimeCharacterModel
+  title: String = "",
+  imageUrl: String = ""
 ) {
 
   val painter = rememberImagePainter(
-    data = data.imageUrl,
+    data = imageUrl,
     builder = {
       crossfade(true)
     }
@@ -73,7 +73,7 @@ fun ItemAnimeCharacter(
     }
 
     Text(
-      text = data.name,
+      text = title,
       modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp),
       maxLines = 1,
       overflow = TextOverflow.Ellipsis,

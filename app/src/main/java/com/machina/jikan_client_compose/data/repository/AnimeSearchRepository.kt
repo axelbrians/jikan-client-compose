@@ -10,6 +10,7 @@ import com.machina.jikan_client_compose.core.helper.ParamHelper
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.core.wrapper.ResponseDataListWrapper
 import com.machina.jikan_client_compose.data.remote.anime_search.AnimeSearchService
+import com.machina.jikan_client_compose.data.remote.dto.anime_characters.AnimeCharacterResponse
 import com.machina.jikan_client_compose.data.remote.dto.anime_details.AnimeDetailsDtoV4
 import com.machina.jikan_client_compose.data.remote.dto.anime_minimal.AnimeMinimalDataResponse
 import com.machina.jikan_client_compose.data.remote.dto.anime_recommendations.AnimeRecommendationResponse
@@ -76,43 +77,76 @@ class AnimeSearchRepository @Inject constructor(
 
 		return when {
 			url.contains(Endpoints.ANIME_RECOMMENDATIONS) -> {
-				val res = safeCall<ResponseDataListWrapper<AnimeRecommendationResponse>, GeneralError>(
-					client, request, true
-				)
-
-				if (res is Resource.Success && res.data != null) {
-					Resource.Success(
-						ResponseDataListWrapper(
-							res.data.pagination,
-							res.data.data.map { AnimeMinimalDataResponse.from(it) }
-						)
-					)
-				} else {
-					Resource.Error(res.message)
-				}
+				handleAnimeRecommendationCall(request)
+			}
+			url.contains(Endpoints.ANIME_CHARACTERS) -> {
+				handleAnimeCharactersCall(request)
 			}
 			else -> {
-				val res = safeCall<ResponseDataListWrapper<AnimeDetailsDtoV4>, GeneralError>(
-					client, request, true
-				)
-				if (res is Resource.Success && res.data != null) {
-					val sortedSchedule = res.data.data.sortedBy { it.rank }.toMutableList()
-					val zeroRankCount = sortedSchedule.count { it.rank < 1 }
-
-					for (i in 0 until zeroRankCount) {
-						val temp = sortedSchedule.removeFirst()
-						sortedSchedule.add(temp)
-					}
-					Resource.Success(
-						ResponseDataListWrapper(
-							res.data.pagination,
-							sortedSchedule.map { AnimeMinimalDataResponse.from(it) }
-						)
-					)
-				} else {
-					Resource.Error(res.message)
-				}
+				handleDefaultAnimeViewAllCall(request)
 			}
+		}
+	}
+
+	private suspend fun handleAnimeRecommendationCall(
+		request: HttpRequestBuilder
+	): Resource<ResponseDataListWrapper<AnimeMinimalDataResponse>> {
+		val res = safeCall<ResponseDataListWrapper<AnimeRecommendationResponse>, GeneralError>(
+			client, request, true
+		)
+		return if (res is Resource.Success && res.data != null) {
+			Resource.Success(
+				ResponseDataListWrapper(
+					res.data.pagination,
+					res.data.data.map { AnimeMinimalDataResponse.from(it) }
+				)
+			)
+		} else {
+			Resource.Error(res.message)
+		}
+	}
+
+	private suspend fun handleAnimeCharactersCall(
+		request: HttpRequestBuilder
+	): Resource<ResponseDataListWrapper<AnimeMinimalDataResponse>> {
+		val res = safeCall<ResponseDataListWrapper<AnimeCharacterResponse>, GeneralError>(
+			client, request, true
+		)
+		return if (res is Resource.Success && res.data != null) {
+			val orderedCharacters = res.data.data.sortedByDescending { it.favoritesCount }
+			Resource.Success(
+				ResponseDataListWrapper(
+					res.data.pagination,
+					orderedCharacters.map { AnimeMinimalDataResponse.from(it) }
+				)
+			)
+		} else {
+			Resource.Error(res.message)
+		}
+	}
+
+	private suspend fun handleDefaultAnimeViewAllCall(
+		request: HttpRequestBuilder
+	): Resource<ResponseDataListWrapper<AnimeMinimalDataResponse>> {
+		val res = safeCall<ResponseDataListWrapper<AnimeDetailsDtoV4>, GeneralError>(
+			client, request, true
+		)
+		return if (res is Resource.Success && res.data != null) {
+			val sortedSchedule = res.data.data.sortedBy { it.rank }.toMutableList()
+			val zeroRankCount = sortedSchedule.count { it.rank < 1 }
+
+			for (i in 0 until zeroRankCount) {
+				val temp = sortedSchedule.removeFirst()
+				sortedSchedule.add(temp)
+			}
+			Resource.Success(
+				ResponseDataListWrapper(
+					res.data.pagination,
+					sortedSchedule.map { AnimeMinimalDataResponse.from(it) }
+				)
+			)
+		} else {
+			Resource.Error(res.message)
 		}
 	}
 

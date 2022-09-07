@@ -177,13 +177,19 @@ fun ContentDetailsScreen(
         // Anime Characters List
         item(key = Component.ContentCharacters) {
           val shimmerInstance = rememberShimmerCustomBounds()
+          val action = {
+            navigator.navigateToContentSmallViewAllScreen(
+              Constant.CHARACTERS,
+              Endpoints.getAnimeCharactersEndpoint(contentDetailsState.data?.malId ?: 0)
+            )
+          }
 
           HorizontalContentHeader(
             modifier = Modifier
               .fillMaxWidth()
               .padding(start = 18.dp, end = 12.dp, top = 8.dp, bottom = 4.dp),
             title = Constant.CHARACTERS,
-            onButtonClick = navigator::navigateToContentSmallViewAllScreen
+            onButtonClick = action
           )
 
           LazyRow(
@@ -196,7 +202,8 @@ fun ContentDetailsScreen(
             ) {
               ItemAnimeCharacter(
                 modifier = ItemAnimeCharacterConfig.default,
-                data = it
+                title = it.name,
+                imageUrl = it.imageUrl
               )
             }
           }

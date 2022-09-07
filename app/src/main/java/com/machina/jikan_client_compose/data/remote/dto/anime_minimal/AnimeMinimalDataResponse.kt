@@ -1,5 +1,6 @@
 package com.machina.jikan_client_compose.data.remote.dto.anime_minimal
 
+import com.machina.jikan_client_compose.data.remote.dto.anime_characters.AnimeCharacterResponse
 import com.machina.jikan_client_compose.data.remote.dto.anime_details.AnimeDetailsDtoV4
 import com.machina.jikan_client_compose.data.remote.dto.anime_recommendations.AnimeRecommendationResponse
 import com.machina.jikan_client_compose.data.remote.dto.common.Images
@@ -24,6 +25,15 @@ data class AnimeMinimalDataResponse(
 				title = data.title,
 				url = data.url,
 				images = data.images
+			)
+		}
+
+		fun from(data: AnimeCharacterResponse): AnimeMinimalDataResponse {
+			return AnimeMinimalDataResponse(
+				malId = data.character.malId,
+				title = data.character.name,
+				url = data.character.url,
+				images = data.character.images
 			)
 		}
 

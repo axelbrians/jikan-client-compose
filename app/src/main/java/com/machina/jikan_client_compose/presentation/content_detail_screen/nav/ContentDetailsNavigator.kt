@@ -1,7 +1,6 @@
 package com.machina.jikan_client_compose.presentation.content_detail_screen.nav
 
 import com.machina.jikan_client_compose.core.enums.ContentType
-import com.machina.jikan_client_compose.presentation.content_small_view_all.nav.ContentSmallViewAllNavArgs
 import com.machina.jikan_client_compose.presentation.content_view_all_screen.nav.ContentViewAllListNavArgs
 import com.machina.jikan_client_compose.presentation.destinations.ContentDetailsNavDestination
 import com.machina.jikan_client_compose.presentation.destinations.ContentSmallViewAllNavDestination
@@ -24,9 +23,13 @@ class ContentDetailsScreenNavigator(
 	}
 
 	fun navigateToContentSmallViewAllScreen(
-
+		title: String,
+		url: String,
+		params: Map<String, String> = mapOf()
 	) {
-		val destination = ContentSmallViewAllNavDestination(ContentSmallViewAllNavArgs(0))
+		val destination = ContentSmallViewAllNavDestination(
+			ContentViewAllListNavArgs(title, url, params)
+		)
 		navigator.navigate(destination)
 	}
 

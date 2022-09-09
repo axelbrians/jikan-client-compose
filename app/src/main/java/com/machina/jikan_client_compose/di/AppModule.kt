@@ -6,6 +6,9 @@ import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.machina.jikan_client_compose.core.DefaultDispatchers
 import com.machina.jikan_client_compose.core.DispatchersProvider
 import com.machina.jikan_client_compose.core.SafeCall
+import com.machina.jikan_client_compose.data.local.shared_pref.SharedPrefsAccess
+import com.machina.jikan_client_compose.data.local.shared_pref.SharedPrefsContract
+import com.machina.jikan_client_compose.data.local.shared_pref.SharedPrefsKey
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -95,5 +98,15 @@ class AppModule {
   @Singleton
   fun provideCall(): SafeCall {
     return SafeCall()
+  }
+
+  @Provides
+  @Singleton
+  fun provideSharedPrefsContract(
+    @ApplicationContext context: Context
+  ): SharedPrefsContract {
+    return SharedPrefsAccess(
+      context.getSharedPreferences(SharedPrefsKey.Group.General, 0)
+    )
   }
 }

@@ -29,6 +29,7 @@ fun ContentSmallViewAllNav(
 	ContentSmallViewAllScreen(
 		navigator = ContentSmallViewAllNavigator(navigator),
 		viewModel = hiltViewModel(),
+		gridSizeViewModel = hiltViewModel(),
 		navArgs = navArgs
 	)
 }

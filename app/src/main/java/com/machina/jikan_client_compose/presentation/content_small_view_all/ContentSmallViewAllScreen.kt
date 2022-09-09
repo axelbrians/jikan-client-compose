@@ -12,7 +12,8 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -22,6 +23,7 @@ import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalDataMode
 import com.machina.jikan_client_compose.presentation.content_detail_screen.item.ItemAnimeCharacter
 import com.machina.jikan_client_compose.presentation.content_detail_screen.item.ItemAnimeCharacterConfig
 import com.machina.jikan_client_compose.presentation.content_small_view_all.nav.ContentSmallViewAllNavigator
+import com.machina.jikan_client_compose.presentation.content_small_view_all.view_model.ContentSmallGridSizeViewModel
 import com.machina.jikan_client_compose.presentation.content_view_all_screen.composable.ContentViewAllListScreenToolbar
 import com.machina.jikan_client_compose.presentation.content_view_all_screen.data.ScrollDirection
 import com.machina.jikan_client_compose.presentation.content_view_all_screen.nav.ContentViewAllListNavArgs
@@ -37,9 +39,9 @@ import com.machina.jikan_client_compose.ui.theme.MyIcons
 fun ContentSmallViewAllScreen(
 	navigator: ContentSmallViewAllNavigator,
 	viewModel: ContentViewAllAnimeViewModel,
+	gridSizeViewModel: ContentSmallGridSizeViewModel,
 	navArgs: ContentViewAllListNavArgs
 ) {
-	var gridCount by remember { mutableStateOf(4) }
 	val shimmerInstance = rememberShimmerCustomBounds()
 	val lazyGridState = rememberLazyListState()
 	val animateToolbarOffset = animateDpAsState(
@@ -47,6 +49,7 @@ fun ContentSmallViewAllScreen(
 		animationSpec = TweenSpec.defaultEasing()
 	)
 
+	val gridCount = gridSizeViewModel.gridSize.value
 	val contentState = viewModel.contentState.value
 
 	// TODO: Save grid setting to Shared Preference
@@ -69,6 +72,7 @@ fun ContentSmallViewAllScreen(
 	}
 
 	LaunchedEffect(key1 = viewModel) {
+//		gridSizeViewModel.setGridSize()
 		viewModel.getNextContentPart(navArgs.url, navArgs.params)
 	}
 
@@ -85,7 +89,7 @@ fun ContentSmallViewAllScreen(
 			title = navArgs.title,
 			onClick = navigator::navigateUp,
 			trailingIcon = {
-				IconButton(onClick = { gridCount = if (gridCount == 3) 4 else 3 }) {
+				IconButton(onClick = { gridSizeViewModel.setGridSize() }) {
 					Icon(
 						painter = appBarPainter,
 						contentDescription = "Back",
@@ -102,7 +106,7 @@ fun ContentSmallViewAllScreen(
 			cells = GridCells.Fixed(gridCount),
 			state = lazyGridState,
 			contentPadding = PaddingValues(start = 12.dp, end = 12.dp, top = 64.dp, bottom = 12.dp),
-			verticalArrangement = Arrangement.spacedBy(0.dp),
+			verticalArrangement = Arrangement.spacedBy(6.dp),
 			horizontalArrangement = Arrangement.spacedBy(gridHorizontalPadding)
 		) {
 			items(contentState.data.data) { character: AnimeVerticalDataModel ->

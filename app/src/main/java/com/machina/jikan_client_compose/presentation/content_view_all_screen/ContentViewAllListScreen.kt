@@ -4,7 +4,10 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -19,14 +22,13 @@ import com.machina.jikan_client_compose.presentation.content_view_all_screen.dat
 import com.machina.jikan_client_compose.presentation.content_view_all_screen.nav.ContentViewAllListNavArgs
 import com.machina.jikan_client_compose.presentation.content_view_all_screen.nav.ContentViewAllScreenNavigator
 import com.machina.jikan_client_compose.presentation.content_view_all_screen.viewmodel.ContentViewAllAnimeViewModel
-import com.machina.jikan_client_compose.presentation.home_screen.composable.shimmer.ItemVerticalAnimeShimmer
+import com.machina.jikan_client_compose.presentation.home_screen.composable.shimmer.showItemVerticalAnimeShimmer
 import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnime
 import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnimeModifier
 import com.machina.jikan_client_compose.ui.animation_spec.TweenSpec
 import com.machina.jikan_client_compose.ui.shimmer.onUpdateShimmerBounds
 import com.machina.jikan_client_compose.ui.shimmer.rememberShimmerCustomBounds
 import com.machina.jikan_client_compose.ui.theme.MyColor
-import com.valentinilk.shimmer.Shimmer
 
 @OptIn(ExperimentalCoilApi::class, ExperimentalFoundationApi::class)
 @Composable
@@ -68,38 +70,28 @@ fun ContentViewAllListScreen(
       cells = GridCells.Fixed(3),
       state = lazyGridState,
       contentPadding = PaddingValues(start = 12.dp, end = 12.dp, top = 64.dp, bottom = 12.dp),
-      verticalArrangement = Arrangement.spacedBy(0.dp)
+      verticalArrangement = Arrangement.spacedBy(4.dp),
+      horizontalArrangement = Arrangement.spacedBy(6.dp)
     ) {
       items(dataSet) { data: AnimeVerticalDataModel ->
         ItemVerticalAnime(
           modifier = ItemVerticalAnimeModifier.fillParentWidth,
           data = data,
-          thumbnailHeight = 160.dp,
+          thumbnailHeight = ItemVerticalAnimeModifier.ThumbnailHeightGrid,
           onClick = navigator::navigateToContentDetailsScreen
         )
       }
 
       if (contentState.isLoading) {
-        showItemVerticalAnimeShimmer(shimmerInstance)
+        showItemVerticalAnimeShimmer(
+          shimmerInstance = shimmerInstance,
+          thumbnailHeight = ItemVerticalAnimeModifier.ThumbnailHeightGrid
+        )
       }
     }
   }
 
   if (lazyGridState.isScrolledToTheEnd() && viewModel.hasNextContentPart()) { // fetch more item when scrolled to the end
     viewModel.getNextContentPart(navArgs.url, navArgs.params)
-  }
-}
-
-@OptIn(ExperimentalFoundationApi::class)
-private fun LazyGridScope.showItemVerticalAnimeShimmer(
-  shimmerInstance: Shimmer,
-  count: Int = 9
-) {
-  items(count) {
-    ItemVerticalAnimeShimmer(
-      modifier = ItemVerticalAnimeModifier.fillParentWidth,
-      shimmerInstance = shimmerInstance,
-      thumbnailHeight = 160.dp
-    )
   }
 }

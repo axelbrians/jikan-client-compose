@@ -22,6 +22,7 @@ import com.machina.jikan_client_compose.core.extensions.scrollDirection
 import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalDataModel
 import com.machina.jikan_client_compose.presentation.content_detail_screen.item.ItemAnimeCharacter
 import com.machina.jikan_client_compose.presentation.content_detail_screen.item.ItemAnimeCharacterConfig
+import com.machina.jikan_client_compose.presentation.content_detail_screen.item.showItemContentSmallShimmer
 import com.machina.jikan_client_compose.presentation.content_small_view_all.nav.ContentSmallViewAllNavigator
 import com.machina.jikan_client_compose.presentation.content_small_view_all.view_model.ContentSmallGridSizeViewModel
 import com.machina.jikan_client_compose.presentation.content_view_all_screen.composable.ContentViewAllListScreenToolbar
@@ -59,10 +60,10 @@ fun ContentSmallViewAllScreen(
 		MyIcons.Filled.grid4()
 	}
 
-	val itemModifier = if (gridCount == 3) {
-		ItemAnimeCharacterConfig.threeColumn
+	val thumbnailHeight = if (gridCount == 3) {
+		ItemAnimeCharacterConfig.ThumbnailHeightThree
 	} else {
-		ItemAnimeCharacterConfig.fourColumn
+		ItemAnimeCharacterConfig.ThumbnailHeightFour
 	}
 
 	val gridHorizontalPadding = if (gridCount == 3) {
@@ -111,9 +112,16 @@ fun ContentSmallViewAllScreen(
 		) {
 			items(contentState.data.data) { character: AnimeVerticalDataModel ->
 				ItemAnimeCharacter(
-					modifier = itemModifier,
+					thumbnailHeight = thumbnailHeight,
 					title = character.title,
 					imageUrl = character.imageUrl
+				)
+			}
+
+			if (contentState.isLoading) {
+				showItemContentSmallShimmer(
+					thumbnailHeight = thumbnailHeight,
+					shimmerInstance = shimmerInstance
 				)
 			}
 		}

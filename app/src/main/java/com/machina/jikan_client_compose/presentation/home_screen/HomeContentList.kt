@@ -13,16 +13,16 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
 import com.machina.jikan_client_compose.core.constant.Endpoints
 import com.machina.jikan_client_compose.core.helper.DateHelper
-import com.machina.jikan_client_compose.presentation.composable.HorizontalContentHeader
-import com.machina.jikan_client_compose.presentation.composable.HorizontalContentHeaderConfig
+import com.machina.jikan_client_compose.presentation.composable.content_horizontal.HorizontalContentHeader
+import com.machina.jikan_client_compose.presentation.composable.content_horizontal.HorizontalContentHeaderConfig
 import com.machina.jikan_client_compose.presentation.home_screen.composable.anime_popular_current.AnimeAiringPopularHorizontalPager
 import com.machina.jikan_client_compose.presentation.home_screen.composable.anime_popular_current.state.AnimeAiringPopularState
 import com.machina.jikan_client_compose.presentation.home_screen.composable.shimmer.ContentListHeaderWithButtonShimmer
+import com.machina.jikan_client_compose.presentation.home_screen.composable.shimmer.showItemVerticalAnimeShimmer
 import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeHorizontalListContentState
 import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnime
 import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnimeModifier
 import com.machina.jikan_client_compose.presentation.home_screen.item.showItemVerticalAnimeMoreWhenPastLimit
-import com.machina.jikan_client_compose.presentation.home_screen.item.showItemVerticalAnimeShimmer
 import com.machina.jikan_client_compose.ui.shimmer.onUpdateShimmerBounds
 import com.machina.jikan_client_compose.ui.shimmer.rememberShimmerCustomBounds
 import com.valentinilk.shimmer.ShimmerBounds
@@ -84,7 +84,8 @@ fun HomeContentList(
 
       LazyRow(
         contentPadding = PaddingValues(horizontal = 12.dp),
-        modifier = Modifier.onUpdateShimmerBounds(shimmerInstance)
+        modifier = Modifier.onUpdateShimmerBounds(shimmerInstance),
+        horizontalArrangement = ItemVerticalAnimeModifier.HorizontalArrangement.Default
       ) {
         if (animeScheduleState.isLoading) {
           showItemVerticalAnimeShimmer(shimmerInstance)
@@ -98,6 +99,7 @@ fun HomeContentList(
           }
           showItemVerticalAnimeMoreWhenPastLimit(
             modifier = ItemVerticalAnimeModifier.default,
+            thumbnailHeight = ItemVerticalAnimeModifier.ThumbnailHeightDefault,
             size = animeScheduleState.data.data.size,
             onClick = direction
           )
@@ -127,7 +129,8 @@ fun HomeContentList(
 
       LazyRow(
         contentPadding = PaddingValues(horizontal = 12.dp),
-        modifier = Modifier.onUpdateShimmerBounds(shimmerInstance)
+        modifier = Modifier.onUpdateShimmerBounds(shimmerInstance),
+        horizontalArrangement = ItemVerticalAnimeModifier.HorizontalArrangement.Default
       ) {
         if (animeTopState.isLoading) {
           showItemVerticalAnimeShimmer(shimmerInstance)
@@ -141,6 +144,7 @@ fun HomeContentList(
           }
           showItemVerticalAnimeMoreWhenPastLimit(
             modifier = ItemVerticalAnimeModifier.default,
+            thumbnailHeight = ItemVerticalAnimeModifier.ThumbnailHeightDefault,
             size = animeTopState.data.data.size,
             onClick = direction
           )

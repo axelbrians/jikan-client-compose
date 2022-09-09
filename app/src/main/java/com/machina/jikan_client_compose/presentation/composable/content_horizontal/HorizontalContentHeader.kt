@@ -1,4 +1,4 @@
-package com.machina.jikan_client_compose.presentation.composable
+package com.machina.jikan_client_compose.presentation.composable.content_horizontal
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

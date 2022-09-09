@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.ImagePainter
@@ -24,9 +25,9 @@ import com.machina.jikan_client_compose.ui.theme.Type.onDarkSurface
 object ItemAnimeCharacterConfig {
   val default = Modifier
     .width(100.dp)
-    .height(150.dp)
-    .padding(6.dp, 4.dp)
 
+  val ThumbnailHeightThree = 190.dp
+  val ThumbnailHeightFour = 140.dp
   val threeColumn = Modifier.height(190.dp)
   val fourColumn = Modifier.height(140.dp)
 }
@@ -35,6 +36,7 @@ object ItemAnimeCharacterConfig {
 @Composable
 fun ItemAnimeCharacter(
   modifier: Modifier = Modifier,
+  thumbnailHeight: Dp = 150.dp,
   title: String = "",
   imageUrl: String = ""
 ) {
@@ -53,7 +55,8 @@ fun ItemAnimeCharacter(
   ) {
     Box(
       modifier = Modifier
-        .weight(1f)
+        .fillMaxWidth()
+        .height(thumbnailHeight)
     ) {
       if (painter.state is ImagePainter.State.Loading) {
         CenterCircularProgressIndicator(

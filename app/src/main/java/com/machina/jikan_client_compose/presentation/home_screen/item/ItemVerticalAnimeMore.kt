@@ -24,20 +24,21 @@ import com.machina.jikan_client_compose.ui.theme.Type.onDarkSurface
 @Composable
 fun ItemVerticalAnimeMore(
   modifier: Modifier = Modifier,
-  thumbnailHeight: Dp = 190.dp,
+  thumbnailHeight: Dp = ItemVerticalAnimeModifier.ThumbnailHeightDefault,
   onClick: () -> Unit
 ) {
 
   Column(
     modifier = modifier
       .clip(MyShape.Rounded12)
-      .clickable { onClick() }
   ) {
     Column(
       modifier = Modifier
-        .clip(MyShape.Rounded12)
+        .fillMaxWidth()
         .height(thumbnailHeight)
-        .background(MyColor.DarkGreyBackground),
+        .clip(MyShape.Rounded12)
+        .background(MyColor.DarkGreyBackground)
+        .clickable { onClick() },
       horizontalAlignment = Alignment.CenterHorizontally,
       verticalArrangement = Arrangement.Center,
     ) {
@@ -61,22 +62,12 @@ fun ItemVerticalAnimeMore(
       text = "\n",
       style = MyType.Body2.Bold.OnDarkSurface
     )
-//
-//    Text(
-//      text = "${data.score}",
-//      modifier = Modifier.padding(bottom = 3.dp),
-//      style = TextStyle(
-//        color = MyColor.OnDarkSurface,
-//        fontSize = 13.sp,
-//        fontWeight = FontWeight.Normal
-//      )
-//    )
   }
 }
 
 fun LazyListScope.showItemVerticalAnimeMoreWhenPastLimit(
-  modifier: Modifier = Modifier,
-  thumbnailHeight: Dp = 190.dp,
+  modifier: Modifier = ItemVerticalAnimeModifier.default,
+  thumbnailHeight: Dp = ItemVerticalAnimeModifier.ThumbnailHeightDefault,
   limit: Int = Constant.HORIZONTAL_CONTENT_LIMIT,
   size: Int = 0,
   onClick: () -> Unit
@@ -84,7 +75,8 @@ fun LazyListScope.showItemVerticalAnimeMoreWhenPastLimit(
   if (size > limit) {
     item {
       ItemVerticalAnimeMore(
-        modifier = ItemVerticalAnimeModifier.default,
+        modifier = modifier,
+        thumbnailHeight = thumbnailHeight,
         onClick = onClick
       )
     }

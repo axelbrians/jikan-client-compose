@@ -24,7 +24,7 @@ import com.machina.jikan_client_compose.core.constant.Constant
 import com.machina.jikan_client_compose.core.constant.Endpoints
 import com.machina.jikan_client_compose.data.remote.dto.common.Jpg.Companion.getHighestResImgUrl
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
-import com.machina.jikan_client_compose.presentation.composable.HorizontalContentHeader
+import com.machina.jikan_client_compose.presentation.composable.content_horizontal.HorizontalContentHeader
 import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.ContentDetailsScreenToolbar
 import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.ContentDetailsSynopsis
 import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.ContentDetailsThreeColumnSection
@@ -35,10 +35,10 @@ import com.machina.jikan_client_compose.presentation.content_detail_screen.item.
 import com.machina.jikan_client_compose.presentation.content_detail_screen.nav.ContentDetailsNavArgs
 import com.machina.jikan_client_compose.presentation.content_detail_screen.nav.ContentDetailsScreenNavigator
 import com.machina.jikan_client_compose.presentation.home_screen.composable.shimmer.ContentListHeaderWithButtonShimmer
+import com.machina.jikan_client_compose.presentation.home_screen.composable.shimmer.showItemVerticalAnimeShimmer
 import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnime
 import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnimeModifier
 import com.machina.jikan_client_compose.presentation.home_screen.item.showItemVerticalAnimeMoreWhenPastLimit
-import com.machina.jikan_client_compose.presentation.home_screen.item.showItemVerticalAnimeShimmer
 import com.machina.jikan_client_compose.ui.shimmer.onUpdateShimmerBounds
 import com.machina.jikan_client_compose.ui.shimmer.rememberShimmerCustomBounds
 import com.machina.jikan_client_compose.ui.theme.MyColor
@@ -194,16 +194,31 @@ fun ContentDetailsScreen(
 
           LazyRow(
             modifier = Modifier.onUpdateShimmerBounds(shimmerInstance),
-            contentPadding = PaddingValues(12.dp, 0.dp, 12.dp, 0.dp)
+            contentPadding = PaddingValues(12.dp, 0.dp, 12.dp, 0.dp),
+            horizontalArrangement = ItemVerticalAnimeModifier.HorizontalArrangement.Default
           ) {
-            items(
-              items = animeCharacterListState.data.take(Constant.HORIZONTAL_CHARACTERS_LIMIT),
-              key = { it.malId }
-            ) {
-              ItemAnimeCharacter(
+            if (animeCharacterListState.isLoading) {
+              showItemVerticalAnimeShimmer(
+                shimmerInstance = shimmerInstance,
+                thumbnailHeight = ItemVerticalAnimeModifier.ThumbnailHeightSmall
+              )
+            } else {
+              items(
+                items = animeCharacterListState.data.take(Constant.HORIZONTAL_CHARACTERS_LIMIT),
+                key = { it.malId }
+              ) {
+                ItemAnimeCharacter(
+                  modifier = ItemAnimeCharacterConfig.default,
+                  thumbnailHeight = ItemAnimeCharacterConfig.ThumbnailHeightFour,
+                  title = it.name,
+                  imageUrl = it.imageUrl
+                )
+              }
+              showItemVerticalAnimeMoreWhenPastLimit(
                 modifier = ItemAnimeCharacterConfig.default,
-                title = it.name,
-                imageUrl = it.imageUrl
+                thumbnailHeight = ItemAnimeCharacterConfig.ThumbnailHeightFour,
+                size = animeCharacterListState.data.size,
+                onClick = action
               )
             }
           }
@@ -232,7 +247,8 @@ fun ContentDetailsScreen(
 
           LazyRow(
             modifier = Modifier.onUpdateShimmerBounds(shimmerInstance),
-            contentPadding = PaddingValues(12.dp, 0.dp, 12.dp, 0.dp)
+            contentPadding = PaddingValues(12.dp, 0.dp, 12.dp, 0.dp),
+            horizontalArrangement = ItemVerticalAnimeModifier.HorizontalArrangement.Default
           ) {
             if (animeRecommendationsListState.isLoading) {
               showItemVerticalAnimeShimmer(shimmerInstance)
@@ -249,6 +265,7 @@ fun ContentDetailsScreen(
               }
               showItemVerticalAnimeMoreWhenPastLimit(
                 modifier = ItemVerticalAnimeModifier.default,
+                thumbnailHeight = ItemVerticalAnimeModifier.ThumbnailHeightDefault,
                 size = animeRecommendationsListState.data.size,
                 onClick = action
               )

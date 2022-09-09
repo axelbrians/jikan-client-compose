@@ -3,7 +3,6 @@ package com.machina.jikan_client_compose.presentation.home_screen.item
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -18,18 +17,16 @@ import coil.compose.rememberImagePainter
 import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalDataModel
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
-import com.machina.jikan_client_compose.presentation.home_screen.composable.shimmer.ItemVerticalAnimeShimmer
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.machina.jikan_client_compose.ui.theme.MyShape
 import com.machina.jikan_client_compose.ui.theme.MyType
-import com.valentinilk.shimmer.Shimmer
 
 @ExperimentalCoilApi
 @Composable
 fun ItemVerticalAnime(
   modifier: Modifier = Modifier,
   data: AnimeVerticalDataModel,
-  thumbnailHeight: Dp = 190.dp,
+  thumbnailHeight: Dp = ItemVerticalAnimeModifier.ThumbnailHeightDefault,
   onClick: (Int, ContentType) -> Unit
 ) {
 
@@ -95,14 +92,5 @@ fun ItemVerticalAnime(
 //        fontWeight = FontWeight.Normal
 //      )
 //    )
-  }
-}
-
-fun LazyListScope.showItemVerticalAnimeShimmer(shimmerInstance: Shimmer, count: Int = 5) {
-  items(count) {
-    ItemVerticalAnimeShimmer(
-      modifier = ItemVerticalAnimeModifier.default,
-      shimmerInstance = shimmerInstance
-    )
   }
 }

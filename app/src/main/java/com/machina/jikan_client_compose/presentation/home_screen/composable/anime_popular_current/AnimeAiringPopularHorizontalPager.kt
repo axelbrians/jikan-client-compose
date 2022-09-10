@@ -1,27 +1,17 @@
 package com.machina.jikan_client_compose.presentation.home_screen.composable.anime_popular_current
 
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberImagePainter
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.domain.model.anime.AnimeAiringPopular
-import com.machina.jikan_client_compose.presentation.home_screen.composable.anime_popular_current.composable.PagerItemAnimeAiringPopular
-import com.machina.jikan_client_compose.presentation.home_screen.composable.anime_popular_current.composable.ShimmerHorizontalChipIndicator
-import com.machina.jikan_client_compose.presentation.home_screen.composable.anime_popular_current.composable.ShimmerPagerItemAnimeAiringPopular
-import com.machina.jikan_client_compose.presentation.home_screen.composable.anime_popular_current.state.AnimeAiringPopularState
-import com.machina.jikan_client_compose.ui.theme.MyColor
+import com.machina.jikan_client_compose.presentation.data.DataListStateWrapper
 import com.valentinilk.shimmer.Shimmer
 import kotlin.math.absoluteValue
 
@@ -29,13 +19,12 @@ import kotlin.math.absoluteValue
 @Composable
 fun AnimeAiringPopularHorizontalPager(
   modifier: Modifier = Modifier,
-  animeAiringPopularState: AnimeAiringPopularState = AnimeAiringPopularState(),
+  animeAiringPopularState: DataListStateWrapper<AnimeAiringPopular> = DataListStateWrapper(),
   pagerState: PagerState = rememberPagerState(),
-  data: List<AnimeAiringPopular> = emptyList(),
   shimmerInstance: Shimmer,
   navigateToContentDetailsScreen: (Int, ContentType) -> Unit
 ) {
-  val isLoading = animeAiringPopularState.isLoading
+  val (data, isLoading, error) = animeAiringPopularState
   val shownCount = if (isLoading) 3 else data.size
 
   Box(
@@ -52,13 +41,15 @@ fun AnimeAiringPopularHorizontalPager(
       key = { page -> if (isLoading) page else data[page].malId }
     ) { page ->
       if (isLoading) {
-        ShimmerPagerItemAnimeAiringPopular(shimmerInstance = shimmerInstance, currentPage = page)
+        PagerItemAnimeAiringPopularShimmer(
+          shimmerInstance = shimmerInstance,
+          currentPage = page
+        )
       } else {
         PagerItemAnimeAiringPopular(
           modifier = Modifier,
           data = data[page],
           currentPage = page,
-          painter = rememberImagePainter(data = data[page].imageUrl),
           onClick = { navigateToContentDetailsScreen(data[page].malId, ContentType.Anime) }
         )
       }
@@ -71,42 +62,20 @@ fun AnimeAiringPopularHorizontalPager(
       verticalAlignment = Alignment.CenterVertically
     ) {
       if (isLoading) {
-        ShimmerHorizontalChipIndicator(shimmerInstance)
+        HorizontalPagerChipIndicatorShimmer(shimmerInstance)
       } else {
         repeat(data.size) {
+          val targetPageOffset = (
+            pagerState.currentPage + pagerState.currentPageOffset - pagerState.targetPage
+          ).absoluteValue
 
-          val minWidth = 8.dp
-          val maxWidth = 24.dp
-          val rangeWidth = maxWidth - minWidth
-          val targetPage = pagerState.targetPage
-          val currentPage = pagerState.currentPage
-          val currentPageOffset = pagerState.currentPageOffset.absoluteValue
-          val targetPageOffset = ((currentPage + pagerState.currentPageOffset) - targetPage).absoluteValue
-
-          val animateWidth = when(it) {
-            currentPage -> minWidth + (rangeWidth * (1f - currentPageOffset.coerceIn(0f, 1f)))
-            targetPage -> minWidth + (rangeWidth * (1f - targetPageOffset.coerceIn(0f, 1f)))
-            else -> minWidth
-          }
-          val animateColor = animateColorAsState(
-            targetValue = if (it == pagerState.currentPage) {
-              MyColor.Yellow500
-            } else {
-              MyColor.Grey
-            },
-            animationSpec = tween(
-              durationMillis = 400,
-              easing = LinearOutSlowInEasing
-            )
+          HorizontalPagerChipIndicator(
+            itemIndex = it,
+            currentPage = pagerState.currentPage,
+            targetPage = pagerState.targetPage,
+            currentPageOffset = pagerState.currentPageOffset.absoluteValue,
+            targetPageOffset = targetPageOffset
           )
-          Surface(
-            modifier = Modifier
-              .padding(horizontal = 2.dp)
-              .width(animateWidth)
-              .height(8.dp),
-            color = animateColor.value,
-            shape = RoundedCornerShape(50f)
-          ) { }
         }
       }
     }

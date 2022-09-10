@@ -1,4 +1,4 @@
-package com.machina.jikan_client_compose.presentation.home_screen.composable.anime_popular_current.composable
+package com.machina.jikan_client_compose.presentation.home_screen.composable.anime_popular_current
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -12,7 +12,7 @@ import com.valentinilk.shimmer.Shimmer
 import com.valentinilk.shimmer.shimmer
 
 @Composable
-fun ShimmerHorizontalChipIndicator(shimmerInstance: Shimmer) {
+fun HorizontalPagerChipIndicatorShimmer(shimmerInstance: Shimmer) {
   Row(horizontalArrangement = Arrangement.Center) {
     Box(
       modifier = Modifier

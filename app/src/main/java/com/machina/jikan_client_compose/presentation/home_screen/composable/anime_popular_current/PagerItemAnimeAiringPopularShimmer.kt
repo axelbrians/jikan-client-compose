@@ -1,4 +1,4 @@
-package com.machina.jikan_client_compose.presentation.home_screen.composable.anime_popular_current.composable
+package com.machina.jikan_client_compose.presentation.home_screen.composable.anime_popular_current
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -23,7 +23,7 @@ import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun PagerScope.ShimmerPagerItemAnimeAiringPopular(
+fun PagerScope.PagerItemAnimeAiringPopularShimmer(
   shimmerInstance: Shimmer,
   currentPage: Int,
 ) {
@@ -60,6 +60,6 @@ fun PagerScope.ShimmerPagerItemAnimeAiringPopular(
         .clip(RoundedCornerShape(12.dp))
         .shimmer(shimmerInstance)
         .background(color = MyColor.Grey)
-    ) { }
+    )
   }
 }

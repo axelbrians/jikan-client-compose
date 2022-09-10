@@ -5,10 +5,11 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.machina.jikan_client_compose.domain.model.anime.AnimeAiringPopular
 import com.machina.jikan_client_compose.domain.use_case.anime_airing_popular.GetAnimeAiringPopularUseCase
 import com.machina.jikan_client_compose.domain.use_case.anime_schedule.GetAnimeScheduleUseCase
 import com.machina.jikan_client_compose.domain.use_case.get_top_anime.GetAnimeTopUseCase
-import com.machina.jikan_client_compose.presentation.home_screen.composable.anime_popular_current.state.AnimeAiringPopularState
+import com.machina.jikan_client_compose.presentation.data.DataListStateWrapper
 import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeHorizontalListContentState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -22,9 +23,9 @@ class HomeViewModel @Inject constructor(
   private val getAnimeScheduleUseCase: GetAnimeScheduleUseCase
 ) : ViewModel() {
 
-  private val _animeAiringPopular : MutableState<AnimeAiringPopularState> =
-    mutableStateOf(AnimeAiringPopularState())
-  val animeAiringPopular : State<AnimeAiringPopularState> = _animeAiringPopular
+  private val _animeAiringPopular : MutableState<DataListStateWrapper<AnimeAiringPopular>> =
+    mutableStateOf(DataListStateWrapper())
+  val animeAiringPopular : State<DataListStateWrapper<AnimeAiringPopular>> = _animeAiringPopular
 
   private val _animeScheduleState : MutableState<AnimeHorizontalListContentState> =
     mutableStateOf(AnimeHorizontalListContentState.Loading)

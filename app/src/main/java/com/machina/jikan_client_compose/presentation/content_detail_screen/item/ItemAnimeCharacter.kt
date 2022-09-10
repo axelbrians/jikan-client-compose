@@ -28,8 +28,6 @@ object ItemAnimeCharacterConfig {
 
   val ThumbnailHeightThree = 190.dp
   val ThumbnailHeightFour = 140.dp
-  val threeColumn = Modifier.height(190.dp)
-  val fourColumn = Modifier.height(140.dp)
 }
 
 @ExperimentalCoilApi

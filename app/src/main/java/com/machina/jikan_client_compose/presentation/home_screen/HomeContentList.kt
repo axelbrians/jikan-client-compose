@@ -13,10 +13,11 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
 import com.machina.jikan_client_compose.core.constant.Endpoints
 import com.machina.jikan_client_compose.core.helper.DateHelper
+import com.machina.jikan_client_compose.domain.model.anime.AnimeAiringPopular
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.HorizontalContentHeader
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.HorizontalContentHeaderConfig
+import com.machina.jikan_client_compose.presentation.data.DataListStateWrapper
 import com.machina.jikan_client_compose.presentation.home_screen.composable.anime_popular_current.AnimeAiringPopularHorizontalPager
-import com.machina.jikan_client_compose.presentation.home_screen.composable.anime_popular_current.state.AnimeAiringPopularState
 import com.machina.jikan_client_compose.presentation.home_screen.composable.shimmer.ContentListHeaderWithButtonShimmer
 import com.machina.jikan_client_compose.presentation.home_screen.composable.shimmer.showItemVerticalAnimeShimmer
 import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeHorizontalListContentState
@@ -34,7 +35,7 @@ import com.valentinilk.shimmer.rememberShimmer
 fun HomeContentList(
   modifier: Modifier = Modifier,
   navigator: HomeScreenNavigator,
-  animeAiringPopularState: AnimeAiringPopularState = AnimeAiringPopularState(),
+  animeAiringPopularState: DataListStateWrapper<AnimeAiringPopular> = DataListStateWrapper(),
   animeScheduleState: AnimeHorizontalListContentState = AnimeHorizontalListContentState(),
   animeTopState: AnimeHorizontalListContentState = AnimeHorizontalListContentState()
 ) {
@@ -53,7 +54,6 @@ fun HomeContentList(
         modifier = Modifier.onUpdateShimmerBounds(shimmerInstance),
         pagerState = pagerState,
         animeAiringPopularState = animeAiringPopularState,
-        data = animeAiringPopularState.data.take(7),
         shimmerInstance = shimmerInstance,
         navigateToContentDetailsScreen = navigator::navigateToContentDetailsScreen
       )

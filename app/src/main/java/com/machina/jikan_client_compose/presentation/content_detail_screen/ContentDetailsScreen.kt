@@ -6,16 +6,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
@@ -25,18 +19,14 @@ import com.machina.jikan_client_compose.core.constant.Endpoints
 import com.machina.jikan_client_compose.data.remote.dto.common.Jpg.Companion.getHighestResImgUrl
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.HorizontalContentHeader
-import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.ContentDetailsScreenToolbar
-import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.ContentDetailsSynopsis
-import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.ContentDetailsThreeColumnSection
-import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.ContentDetailsTrailerPlayer
+import com.machina.jikan_client_compose.presentation.composable.content_horizontal.ScrollableHorizontalContent
+import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.*
 import com.machina.jikan_client_compose.presentation.content_detail_screen.data.ContentDetailsViewModel
 import com.machina.jikan_client_compose.presentation.content_detail_screen.item.ItemAnimeCharacter
 import com.machina.jikan_client_compose.presentation.content_detail_screen.item.ItemAnimeCharacterConfig
 import com.machina.jikan_client_compose.presentation.content_detail_screen.nav.ContentDetailsNavArgs
 import com.machina.jikan_client_compose.presentation.content_detail_screen.nav.ContentDetailsScreenNavigator
-import com.machina.jikan_client_compose.presentation.home_screen.composable.shimmer.ContentListHeaderWithButtonShimmer
 import com.machina.jikan_client_compose.presentation.home_screen.composable.shimmer.showItemVerticalAnimeShimmer
-import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnime
 import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnimeModifier
 import com.machina.jikan_client_compose.presentation.home_screen.item.showItemVerticalAnimeMoreWhenPastLimit
 import com.machina.jikan_client_compose.ui.shimmer.onUpdateShimmerBounds
@@ -65,9 +55,9 @@ fun ContentDetailsScreen(
 ) {
   var isSynopsisExpanded by remember { mutableStateOf(false) }
   val toolbarScaffoldState = rememberCollapsingToolbarScaffoldState()
-  val contentDetailsState = viewModel.contentDetailsState.value
-  val animeCharacterListState = viewModel.animeCharactersListState.value
-  val animeRecommendationsListState = viewModel.animeRecommendationsListState.value
+  val contentDetailsState by viewModel.contentDetailsState
+  val animeCharacterListState by viewModel.animeCharactersListState
+  val animeRecommendationsListState by viewModel.animeRecommendationsListState
   val genres = contentDetailsState.data?.genres.orEmpty()
 
   val largeImageCoil = rememberImagePainter(
@@ -169,7 +159,7 @@ fun ContentDetailsScreen(
                 .padding(top = 12.dp)
                 .height(240.dp)
                 .fillMaxWidth(),
-              trailerUrl = contentDetailsState.data.trailer.embedUrl
+              trailerUrl = contentDetailsState.data?.trailer?.embedUrl!!
             )
           }
         }
@@ -225,76 +215,23 @@ fun ContentDetailsScreen(
         }
 
         item(key = Component.ContentSimilar) {
-          val shimmerInstance = rememberShimmerCustomBounds()
-          val action = {
-            navigator.navigateToContentViewAllScreen(
-              "${Constant.SIMILAR} to ${contentDetailsState.data?.title}",
-              Endpoints.getAnimeRecommendationEndpoint(contentDetailsState.data?.malId ?: 0)
-            )
-          }
-
-          if (animeRecommendationsListState.isLoading) {
-            ContentListHeaderWithButtonShimmer(shimmerInstance)
-          } else {
-            HorizontalContentHeader(
-              modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 18.dp, end = 12.dp, top = 8.dp, bottom = 4.dp),
-              title = Constant.SIMILAR,
-              onButtonClick = action
-            )
-          }
-
-          LazyRow(
-            modifier = Modifier.onUpdateShimmerBounds(shimmerInstance),
-            contentPadding = PaddingValues(12.dp, 0.dp, 12.dp, 0.dp),
-            horizontalArrangement = ItemVerticalAnimeModifier.HorizontalArrangement.Default
-          ) {
-            if (animeRecommendationsListState.isLoading) {
-              showItemVerticalAnimeShimmer(shimmerInstance)
-            } else {
-              items(
-                items = animeRecommendationsListState.data.take(Constant.HORIZONTAL_CONTENT_LIMIT),
-                key = { it.malId }
-              ) {
-                ItemVerticalAnime(
-                  modifier = ItemVerticalAnimeModifier.default,
-                  data = it,
-                  onClick = navigator::navigateToContentDetailsScreen
-                )
-              }
-              showItemVerticalAnimeMoreWhenPastLimit(
-                modifier = ItemVerticalAnimeModifier.default,
-                thumbnailHeight = ItemVerticalAnimeModifier.ThumbnailHeightDefault,
-                size = animeRecommendationsListState.data.size,
-                onClick = action
+          ScrollableHorizontalContent(
+            modifier = Modifier,
+            shimmer = rememberShimmerCustomBounds(),
+            headerTitle = Constant.SIMILAR,
+            contentState = animeRecommendationsListState,
+            contentPadding = PaddingValues(horizontal = 12.dp),
+            contentArrangement = ItemVerticalAnimeModifier.HorizontalArrangement.Default,
+            onIconClick = {
+              navigator.navigateToContentViewAllScreen(
+                "${Constant.SIMILAR} to ${contentDetailsState.data?.title}",
+                Endpoints.getAnimeRecommendationEndpoint(contentDetailsState.data?.malId ?: 0)
               )
-            }
-          }
+            },
+            onItemClick = navigator::navigateToContentDetailsScreen
+          )
         }
       }
     }
-  }
-}
-
-@Composable
-fun GenreChip(
-  modifier: Modifier = Modifier,
-  text: String = ""
-) {
-  Surface(
-    modifier = Modifier.padding(vertical = 4.dp, horizontal = 4.dp),
-    shape = RoundedCornerShape(16.dp),
-    color = MyColor.Yellow500,
-  ) {
-    Text(
-      text = text,
-      style = TextStyle(
-        color = MyColor.DarkBlueBackground,
-        fontSize = 13.sp,
-        fontWeight = FontWeight.SemiBold
-      ),
-      modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
-    )
   }
 }

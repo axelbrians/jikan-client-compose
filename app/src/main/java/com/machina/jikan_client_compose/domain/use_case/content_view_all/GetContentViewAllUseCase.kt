@@ -3,7 +3,7 @@ package com.machina.jikan_client_compose.domain.use_case.content_view_all
 import com.machina.jikan_client_compose.core.DispatchersProvider
 import com.machina.jikan_client_compose.core.wrapper.Event
 import com.machina.jikan_client_compose.core.wrapper.Resource
-import com.machina.jikan_client_compose.data.repository.AnimeSearchRepository
+import com.machina.jikan_client_compose.data.remote.anime_search.AnimeSearchService
 import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalDataModel
 import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalModel
 import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeHorizontalListContentState
@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class GetContentViewAllUseCase @Inject constructor(
-	private val repository: AnimeSearchRepository,
+	private val repository: AnimeSearchService,
 	private val dispatchers: DispatchersProvider
 ) {
 	operator fun invoke(

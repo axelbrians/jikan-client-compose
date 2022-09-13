@@ -1,5 +1,7 @@
 package com.machina.jikan_client_compose.core.constant
 
+import com.machina.jikan_client_compose.core.helper.DateHelper
+
 object Endpoints {
 
     const val BASE_URL = "https://api.jikan.moe/v3/"
@@ -26,4 +28,11 @@ object Endpoints {
         return "$ANIME_DETAILS/$malId$ANIME_RECOMMENDATIONS"
     }
 
+    fun getMangaDetailsEndpoint(malId: Int): String {
+        return "$MANGA_DETAILS/$malId"
+    }
+
+    fun getTodayScheduleAnimeEndpoints(): String {
+        return ANIME_SCHEDULES + "/" + DateHelper.getTodayDayNameInString()
+    }
 }

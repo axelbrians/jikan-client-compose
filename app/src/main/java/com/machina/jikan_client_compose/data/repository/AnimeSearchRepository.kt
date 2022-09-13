@@ -22,9 +22,8 @@ import com.machina.jikan_client_compose.presentation.content_search_screen.data.
 import io.ktor.client.*
 import io.ktor.client.request.*
 import timber.log.Timber
-import javax.inject.Inject
 
-class AnimeSearchRepository @Inject constructor(
+class AnimeSearchRepository(
 	@AndroidKtorClient private val client: HttpClient,
 	private val safeCall: SafeCall
 ): AnimeSearchService {

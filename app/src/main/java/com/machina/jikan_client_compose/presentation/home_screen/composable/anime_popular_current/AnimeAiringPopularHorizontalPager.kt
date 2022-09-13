@@ -11,7 +11,7 @@ import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.domain.model.anime.AnimeAiringPopular
-import com.machina.jikan_client_compose.presentation.data.DataListStateWrapper
+import com.machina.jikan_client_compose.presentation.data.StateListWrapper
 import com.valentinilk.shimmer.Shimmer
 import kotlin.math.absoluteValue
 
@@ -19,7 +19,7 @@ import kotlin.math.absoluteValue
 @Composable
 fun AnimeAiringPopularHorizontalPager(
   modifier: Modifier = Modifier,
-  animeAiringPopularState: DataListStateWrapper<AnimeAiringPopular> = DataListStateWrapper(),
+  animeAiringPopularState: StateListWrapper<AnimeAiringPopular> = StateListWrapper(),
   pagerState: PagerState = rememberPagerState(),
   shimmerInstance: Shimmer,
   navigateToContentDetailsScreen: (Int, ContentType) -> Unit

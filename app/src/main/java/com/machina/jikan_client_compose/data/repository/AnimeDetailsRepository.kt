@@ -19,8 +19,7 @@ import io.ktor.client.request.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
-@Singleton
-class AnimeDetailsRepository @Inject constructor(
+class AnimeDetailsRepository(
   @AndroidKtorClient private val client: HttpClient,
   private val safeCall: SafeCall
 ): AnimeDetailsService {

@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,9 +32,9 @@ fun HomeScreen(
   viewModel: HomeViewModel
 ) {
 
-  val animeAiringPopularState = viewModel.animeAiringPopular.value
-  val animeScheduleState = viewModel.animeScheduleState.value
-  val animeTopState = viewModel.animeTopState.value
+  val animeAiringPopularState by viewModel.animeAiringPopular
+  val animeScheduleState by viewModel.animeScheduleState
+  val animeTopState by viewModel.animeTopState
 
   val snackbarHostState = remember { SnackbarHostState() }
 

@@ -4,6 +4,7 @@ import com.machina.jikan_client_compose.core.SafeCall
 import com.machina.jikan_client_compose.core.constant.Endpoints
 import com.machina.jikan_client_compose.core.error.GeneralError
 import com.machina.jikan_client_compose.core.error.MyError
+import com.machina.jikan_client_compose.core.extensions.defaultUrl
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.core.wrapper.ResponseDataListWrapper
 import com.machina.jikan_client_compose.data.remote.anime.MangaService
@@ -14,11 +15,8 @@ import com.machina.jikan_client_compose.di.AndroidKtorClient
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class MangaRepository @Inject constructor(
+class MangaRepository(
   @AndroidKtorClient private val client: HttpClient,
   private val safeCall: SafeCall
 ): MangaService {
@@ -27,13 +25,9 @@ class MangaRepository @Inject constructor(
   suspend fun searchManga(query: String, page: Int): Resource<ResponseDataListWrapper<AnimeDetailsDtoV4>> {
     val request = HttpRequestBuilder().apply {
       method = HttpMethod.Get
-      url {
-        protocol = URLProtocol.HTTPS
-        host = Endpoints.HOST_V4
-        encodedPath = Endpoints.MANGA_SEARCH
-        parameter("q", query)
-        parameter("page", page)
-      }
+      defaultUrl { encodedPath = Endpoints.MANGA_SEARCH }
+      parameter("q", query)
+      parameter("page", page)
     }
 
     return safeCall<ResponseDataListWrapper<AnimeDetailsDtoV4>, GeneralError>(client, request)
@@ -42,11 +36,7 @@ class MangaRepository @Inject constructor(
   override suspend fun getMangaDetails(malId: Int): Resource<MangaDetailsDtoV4> {
     val request = HttpRequestBuilder().apply {
       method = HttpMethod.Get
-      url {
-        protocol = URLProtocol.HTTPS
-        host = Endpoints.HOST_V4
-        encodedPath = Endpoints.MANGA_DETAILS + "/$malId"
-      }
+      defaultUrl { encodedPath = Endpoints.getMangaDetailsEndpoint(malId) }
     }
 
     val res = safeCall<MangaDetailsResponseV4, GeneralError>(client, request)

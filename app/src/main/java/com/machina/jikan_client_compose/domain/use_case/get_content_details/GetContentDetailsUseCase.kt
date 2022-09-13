@@ -4,12 +4,12 @@ import com.machina.jikan_client_compose.core.DispatchersProvider
 import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.core.error.MyError
 import com.machina.jikan_client_compose.core.wrapper.Resource
+import com.machina.jikan_client_compose.data.remote.anime.MangaService
+import com.machina.jikan_client_compose.data.remote.anime_details.AnimeDetailsService
 import com.machina.jikan_client_compose.data.remote.dto.anime_details.AnimeDetailsDtoV4
 import com.machina.jikan_client_compose.data.remote.dto.anime_details.toContentDetails
 import com.machina.jikan_client_compose.data.remote.dto.manga_details.MangaDetailsDtoV4
 import com.machina.jikan_client_compose.data.remote.dto.manga_details.toContentDetails
-import com.machina.jikan_client_compose.data.repository.AnimeDetailsRepository
-import com.machina.jikan_client_compose.data.repository.MangaRepository
 import com.machina.jikan_client_compose.domain.model.ContentDetails
 import com.machina.jikan_client_compose.presentation.content_detail_screen.data.ContentDetailsState
 import kotlinx.coroutines.flow.Flow
@@ -19,8 +19,8 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class GetContentDetailsUseCase @Inject constructor(
-  private val animeRepository: AnimeDetailsRepository,
-  private val mangaRepository: MangaRepository,
+  private val animeRepository: AnimeDetailsService,
+  private val mangaRepository: MangaService,
   private val dispatchers: DispatchersProvider
 ) {
 

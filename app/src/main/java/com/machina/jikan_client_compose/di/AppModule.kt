@@ -9,6 +9,14 @@ import com.machina.jikan_client_compose.core.SafeCall
 import com.machina.jikan_client_compose.data.local.shared_pref.SharedPrefsAccess
 import com.machina.jikan_client_compose.data.local.shared_pref.SharedPrefsContract
 import com.machina.jikan_client_compose.data.local.shared_pref.SharedPrefsKey
+import com.machina.jikan_client_compose.data.remote.anime.AnimeService
+import com.machina.jikan_client_compose.data.remote.anime.MangaService
+import com.machina.jikan_client_compose.data.remote.anime_details.AnimeDetailsService
+import com.machina.jikan_client_compose.data.remote.anime_search.AnimeSearchService
+import com.machina.jikan_client_compose.data.repository.AnimeDetailsRepository
+import com.machina.jikan_client_compose.data.repository.AnimeRepository
+import com.machina.jikan_client_compose.data.repository.AnimeSearchRepository
+import com.machina.jikan_client_compose.data.repository.MangaRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -109,4 +117,41 @@ class AppModule {
       context.getSharedPreferences(SharedPrefsKey.Group.General, 0)
     )
   }
+
+  @Provides
+  @Singleton
+  fun provideAnimeService(
+    @AndroidKtorClient client: HttpClient,
+    safeCall: SafeCall
+  ): AnimeService {
+    return AnimeRepository(client, safeCall)
+  }
+
+  @Provides
+  @Singleton
+  fun provideAnimeDetailsService(
+    @AndroidKtorClient client: HttpClient,
+    safeCall: SafeCall
+  ): AnimeDetailsService {
+    return AnimeDetailsRepository(client, safeCall)
+  }
+
+  @Provides
+  @Singleton
+  fun provideAnimeSearchService(
+    @AndroidKtorClient client: HttpClient,
+    safeCall: SafeCall
+  ): AnimeSearchService {
+    return AnimeSearchRepository(client, safeCall)
+  }
+
+  @Provides
+  @Singleton
+  fun provideMangaService(
+    @AndroidKtorClient client: HttpClient,
+    safeCall: SafeCall
+  ): MangaService {
+    return MangaRepository(client, safeCall)
+  }
+
 }

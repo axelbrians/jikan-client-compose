@@ -5,9 +5,9 @@ import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.core.error.MyError.UNKNOWN_ERROR
 import com.machina.jikan_client_compose.core.wrapper.Event
 import com.machina.jikan_client_compose.core.wrapper.Resource
+import com.machina.jikan_client_compose.data.remote.anime.MangaService
+import com.machina.jikan_client_compose.data.remote.anime_search.AnimeSearchService
 import com.machina.jikan_client_compose.data.remote.dto.anime_details.AnimeDetailsDtoV4
-import com.machina.jikan_client_compose.data.repository.AnimeSearchRepository
-import com.machina.jikan_client_compose.data.repository.MangaRepository
 import com.machina.jikan_client_compose.domain.model.anime.AnimeHorizontalDataModel
 import com.machina.jikan_client_compose.domain.model.anime.AnimeHorizontalModel
 import com.machina.jikan_client_compose.presentation.content_search_screen.data.ContentSearchState
@@ -17,8 +17,8 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class SearchContentUseCase @Inject constructor(
-  private val repository: AnimeSearchRepository,
-  private val mangaRepository: MangaRepository,
+  private val repository: AnimeSearchService,
+  private val mangaRepository: MangaService,
   private val dispatchers: DispatchersProvider
 ) {
 

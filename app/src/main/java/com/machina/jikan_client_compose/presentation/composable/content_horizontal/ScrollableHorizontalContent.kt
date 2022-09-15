@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import coil.annotation.ExperimentalCoilApi
 import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalDataModel
@@ -26,6 +27,7 @@ fun ScrollableHorizontalContent(
 	headerModifier: Modifier = HorizontalContentHeaderConfig.default,
 	itemModifier: Modifier = ItemVerticalAnimeModifier.default,
 	shimmer: Shimmer = rememberShimmerCustomBounds(),
+	thumbnailHeight: Dp = ItemVerticalAnimeModifier.ThumbnailHeightDefault,
 	headerTitle: String,
 	contentState: StateListWrapper<AnimeVerticalDataModel>,
 	contentPadding: PaddingValues,
@@ -45,23 +47,27 @@ fun ScrollableHorizontalContent(
 	}
 
 	LazyRow(
-		contentPadding = contentPadding,
 		modifier = modifier.onUpdateShimmerBounds(shimmer),
+		contentPadding = contentPadding,
 		horizontalArrangement = contentArrangement
 	) {
 		if (contentState.isLoading) {
-			showItemVerticalAnimeShimmer(shimmer)
+			showItemVerticalAnimeShimmer(
+				shimmerInstance = shimmer,
+				thumbnailHeight = thumbnailHeight
+			)
 		} else {
 			items(contentState.data, key = { it.malId }) { data ->
 				ItemVerticalAnime(
 					modifier = itemModifier,
 					data = data,
+					thumbnailHeight = thumbnailHeight,
 					onClick = onItemClick
 				)
 			}
 			showItemVerticalAnimeMoreWhenPastLimit(
 				modifier = itemModifier,
-				thumbnailHeight = ItemVerticalAnimeModifier.ThumbnailHeightDefault,
+				thumbnailHeight = thumbnailHeight,
 				size = contentState.data.size,
 				onClick = onIconClick
 			)

@@ -25,8 +25,8 @@ class ContentDetailsViewModel @Inject constructor(
   private val _contentDetailsState : MutableState<ContentDetailsState> = mutableStateOf(ContentDetailsState.Loading)
   val contentDetailsState : State<ContentDetailsState> = _contentDetailsState
 
-  private val _animeCharactersListState : MutableState<AnimeCharacterListState> = mutableStateOf(AnimeCharacterListState.Loading)
-  val animeCharactersListState : State<AnimeCharacterListState> = _animeCharactersListState
+  private val _animeCharactersListState : MutableState<StateListWrapper<AnimeVerticalDataModel>> = mutableStateOf(StateListWrapper.loading())
+  val animeCharactersListState : State<StateListWrapper<AnimeVerticalDataModel>> = _animeCharactersListState
 
   private val _animeRecommendationsListState : MutableState<StateListWrapper<AnimeVerticalDataModel>> = mutableStateOf(StateListWrapper.loading())
   val animeRecommendationsListState : State<StateListWrapper<AnimeVerticalDataModel>> = _animeRecommendationsListState

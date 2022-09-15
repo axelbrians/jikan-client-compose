@@ -7,7 +7,7 @@ import com.machina.jikan_client_compose.core.wrapper.Event
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.data.remote.anime.MangaService
 import com.machina.jikan_client_compose.data.remote.anime_search.AnimeSearchService
-import com.machina.jikan_client_compose.data.remote.dto.anime_details.AnimeDetailsDtoV4
+import com.machina.jikan_client_compose.data.remote.dto.anime_details.AnimeDetailsDto
 import com.machina.jikan_client_compose.domain.model.anime.AnimeHorizontalDataModel
 import com.machina.jikan_client_compose.domain.model.anime.AnimeHorizontalModel
 import com.machina.jikan_client_compose.presentation.content_search_screen.data.ContentSearchState
@@ -57,7 +57,7 @@ class SearchContentUseCase @Inject constructor(
 
   private fun resolveContentType(
     contentType: ContentType,
-    contentList: List<AnimeDetailsDtoV4>?
+    contentList: List<AnimeDetailsDto>?
   ): List<AnimeHorizontalDataModel> {
     val result = when (contentType) {
       ContentType.Anime -> contentList?.map { AnimeHorizontalDataModel.from(it) }

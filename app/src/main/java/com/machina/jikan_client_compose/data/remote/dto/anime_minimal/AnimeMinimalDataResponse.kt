@@ -1,7 +1,7 @@
 package com.machina.jikan_client_compose.data.remote.dto.anime_minimal
 
 import com.machina.jikan_client_compose.data.remote.dto.anime_characters.AnimeCharacterResponse
-import com.machina.jikan_client_compose.data.remote.dto.anime_details.AnimeDetailsDtoV4
+import com.machina.jikan_client_compose.data.remote.dto.anime_details.AnimeDetailsDto
 import com.machina.jikan_client_compose.data.remote.dto.anime_recommendations.AnimeRecommendationResponse
 import com.machina.jikan_client_compose.data.remote.dto.common.Images
 import kotlinx.serialization.SerialName
@@ -19,7 +19,7 @@ data class AnimeMinimalDataResponse(
 	val images: Images = Images(),
 ) {
 	companion object {
-		fun from(data: AnimeDetailsDtoV4): AnimeMinimalDataResponse {
+		fun from(data: AnimeDetailsDto): AnimeMinimalDataResponse {
 			return AnimeMinimalDataResponse(
 				malId = data.malId,
 				title = data.title,

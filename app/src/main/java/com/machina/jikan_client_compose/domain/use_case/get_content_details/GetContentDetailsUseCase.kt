@@ -6,7 +6,7 @@ import com.machina.jikan_client_compose.core.error.MyError
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.data.remote.anime.MangaService
 import com.machina.jikan_client_compose.data.remote.anime_details.AnimeDetailsService
-import com.machina.jikan_client_compose.data.remote.dto.anime_details.AnimeDetailsDtoV4
+import com.machina.jikan_client_compose.data.remote.dto.anime_details.AnimeDetailsDto
 import com.machina.jikan_client_compose.data.remote.dto.anime_details.toContentDetails
 import com.machina.jikan_client_compose.data.remote.dto.manga_details.MangaDetailsDtoV4
 import com.machina.jikan_client_compose.data.remote.dto.manga_details.toContentDetails
@@ -46,7 +46,7 @@ class GetContentDetailsUseCase @Inject constructor(
   }
 
   private fun resolveContentType(data: Any?): ContentDetails? {
-    if (data is AnimeDetailsDtoV4) {
+    if (data is AnimeDetailsDto) {
       data.toContentDetails()
     } else if (data is MangaDetailsDtoV4) {
       data.toContentDetails()
@@ -54,7 +54,7 @@ class GetContentDetailsUseCase @Inject constructor(
       null
     }
     val res = when (data) {
-      is AnimeDetailsDtoV4 -> data.toContentDetails()
+      is AnimeDetailsDto -> data.toContentDetails()
       is MangaDetailsDtoV4 -> data.toContentDetails()
       else -> null
     }

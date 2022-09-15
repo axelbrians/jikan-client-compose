@@ -11,7 +11,7 @@ import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.core.wrapper.ResponseDataListWrapper
 import com.machina.jikan_client_compose.data.remote.anime_search.AnimeSearchService
 import com.machina.jikan_client_compose.data.remote.dto.anime_characters.AnimeCharacterResponse
-import com.machina.jikan_client_compose.data.remote.dto.anime_details.AnimeDetailsDtoV4
+import com.machina.jikan_client_compose.data.remote.dto.anime_details.AnimeDetailsDto
 import com.machina.jikan_client_compose.data.remote.dto.anime_minimal.AnimeMinimalDataResponse
 import com.machina.jikan_client_compose.data.remote.dto.anime_recommendations.AnimeRecommendationResponse
 import com.machina.jikan_client_compose.data.remote.dto.common.Genre
@@ -32,7 +32,7 @@ class AnimeSearchRepository(
 		query: String,
 		page: Int,
 		mapFilter: Map<String, FilterGroupData>
-	): Resource<ResponseDataListWrapper<AnimeDetailsDtoV4>> {
+	): Resource<ResponseDataListWrapper<AnimeDetailsDto>> {
 		val request = HttpRequestBuilder().apply {
 			defaultUrl { encodedPath = Endpoints.ANIME_SEARCH }
 			parameter(AnimeConstant.QueryKey, query)
@@ -55,7 +55,7 @@ class AnimeSearchRepository(
 				}
 			}
 		}
-		return safeCall<ResponseDataListWrapper<AnimeDetailsDtoV4>, GeneralError>(
+		return safeCall<ResponseDataListWrapper<AnimeDetailsDto>, GeneralError>(
 			client, request, true
 		)
 	}
@@ -127,7 +127,7 @@ class AnimeSearchRepository(
 	private suspend fun handleDefaultAnimeViewAllCall(
 		request: HttpRequestBuilder
 	): Resource<ResponseDataListWrapper<AnimeMinimalDataResponse>> {
-		val res = safeCall<ResponseDataListWrapper<AnimeDetailsDtoV4>, GeneralError>(
+		val res = safeCall<ResponseDataListWrapper<AnimeDetailsDto>, GeneralError>(
 			client, request, true
 		)
 		return if (res is Resource.Success && res.data != null) {

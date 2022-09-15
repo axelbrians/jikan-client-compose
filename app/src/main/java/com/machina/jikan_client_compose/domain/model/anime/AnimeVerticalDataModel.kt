@@ -1,6 +1,7 @@
 package com.machina.jikan_client_compose.domain.model.anime
 
-import com.machina.jikan_client_compose.data.remote.dto.anime_details.AnimeDetailsDtoV4
+import com.machina.jikan_client_compose.data.remote.dto.anime_characters.AnimeCharacterResponse
+import com.machina.jikan_client_compose.data.remote.dto.anime_details.AnimeDetailsDto
 import com.machina.jikan_client_compose.data.remote.dto.anime_minimal.AnimeMinimalDataResponse
 import com.machina.jikan_client_compose.data.remote.dto.anime_recommendations.AnimeRecommendationResponse
 import com.machina.jikan_client_compose.data.remote.dto.anime_schedules.AnimeScheduleDtoV4
@@ -15,7 +16,7 @@ data class AnimeVerticalDataModel(
 ) {
   companion object {
 
-    fun from(data: AnimeDetailsDtoV4): AnimeVerticalDataModel {
+    fun from(data: AnimeDetailsDto): AnimeVerticalDataModel {
       return AnimeVerticalDataModel(
         malId = data.malId,
         title = data.title,
@@ -75,6 +76,15 @@ data class AnimeVerticalDataModel(
         title = data.title,
         score = 0.0,
         imageUrl = data.images.jpg.getHighestResImgUrl()
+      )
+    }
+
+    fun from(data: AnimeCharacterResponse): AnimeVerticalDataModel {
+      return AnimeVerticalDataModel(
+        malId = data.character.malId,
+        title = data.character.name,
+        score = 0.0,
+        imageUrl = data.character.images.jpg.getHighestResImgUrl()
       )
     }
   }

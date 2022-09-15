@@ -18,7 +18,7 @@ fun GenreChip(
 	text: String
 ) {
 	Surface(
-		modifier = modifier.padding(vertical = 4.dp, horizontal = 4.dp),
+		modifier = modifier,
 		shape = RoundedCornerShape(50),
 		color = MyColor.Yellow500,
 	) {

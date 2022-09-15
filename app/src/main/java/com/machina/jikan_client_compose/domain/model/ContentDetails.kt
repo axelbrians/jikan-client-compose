@@ -1,6 +1,8 @@
 package com.machina.jikan_client_compose.domain.model
 
-import com.machina.jikan_client_compose.data.remote.dto.anime_common.*
+import com.machina.jikan_client_compose.data.remote.dto.anime_common.Aired
+import com.machina.jikan_client_compose.data.remote.dto.anime_common.Studio
+import com.machina.jikan_client_compose.data.remote.dto.anime_common.Trailer
 import com.machina.jikan_client_compose.data.remote.dto.common.*
 import com.machina.jikan_client_compose.data.remote.dto.manga_common.Author
 import com.machina.jikan_client_compose.data.remote.dto.manga_common.Published
@@ -18,13 +20,13 @@ data class ContentDetails(
   val status: String,
   val score: Double,
   val scoredBy: Int,
-  val rank: Int,
-  val popularity: Int,
-  val members: Int,
-  val favorites: Int,
+//  val rank: Int,
+//  val popularity: Int,
+//  val members: Int,
+//  val favorites: Int,
   val synopsis: String,
   val background: String?,
-  val genres: List<Genre>,
+  val genres: List<Genre> = listOf(),
   val explicitGenres: List<ExplicitGenre> = listOf(),
   val themes: List<Theme> = listOf(),
   val demographics: List<Demographic> = listOf(),
@@ -46,12 +48,12 @@ data class ContentDetails(
   val isAiring: Boolean? = false,
   val aired: Aired? = null,
   val duration: String? = null,
-  val ageRating: String? = null,
-  val season: String? = null,
-  val year: Int? = null,
-  val broadcast: Broadcast? = null,
-  val producers: List<Producer> = listOf(),
-  val licensors: List<Licensor> = listOf(),
+//  val ageRating: String? = null,
+//  val season: String? = null,
+//  val year: Int? = null,
+//  val broadcast: Broadcast? = null,
+//  val producers: List<Producer> = listOf(),
+//  val licensors: List<Licensor> = listOf(),
   val studios: List<Studio> = listOf(),
 
 

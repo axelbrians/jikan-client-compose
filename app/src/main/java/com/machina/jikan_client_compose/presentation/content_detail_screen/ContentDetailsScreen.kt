@@ -18,18 +18,13 @@ import com.machina.jikan_client_compose.core.constant.Constant
 import com.machina.jikan_client_compose.core.constant.Endpoints
 import com.machina.jikan_client_compose.data.remote.dto.common.Jpg.Companion.getHighestResImgUrl
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
-import com.machina.jikan_client_compose.presentation.composable.content_horizontal.HorizontalContentHeader
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.ScrollableHorizontalContent
 import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.*
 import com.machina.jikan_client_compose.presentation.content_detail_screen.data.ContentDetailsViewModel
-import com.machina.jikan_client_compose.presentation.content_detail_screen.item.ItemAnimeCharacter
 import com.machina.jikan_client_compose.presentation.content_detail_screen.item.ItemAnimeCharacterConfig
 import com.machina.jikan_client_compose.presentation.content_detail_screen.nav.ContentDetailsNavArgs
 import com.machina.jikan_client_compose.presentation.content_detail_screen.nav.ContentDetailsScreenNavigator
-import com.machina.jikan_client_compose.presentation.home_screen.composable.shimmer.showItemVerticalAnimeShimmer
 import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnimeModifier
-import com.machina.jikan_client_compose.presentation.home_screen.item.showItemVerticalAnimeMoreWhenPastLimit
-import com.machina.jikan_client_compose.ui.shimmer.onUpdateShimmerBounds
 import com.machina.jikan_client_compose.ui.shimmer.rememberShimmerCustomBounds
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import me.onebone.toolbar.CollapsingToolbarScaffold
@@ -58,7 +53,6 @@ fun ContentDetailsScreen(
   val contentDetailsState by viewModel.contentDetailsState
   val animeCharacterListState by viewModel.animeCharactersListState
   val animeRecommendationsListState by viewModel.animeRecommendationsListState
-  val genres = contentDetailsState.data?.genres.orEmpty()
 
   val largeImageCoil = rememberImagePainter(
     data = contentDetailsState.data?.images?.jpg?.getHighestResImgUrl(),
@@ -121,18 +115,21 @@ fun ContentDetailsScreen(
           ContentDetailsSynopsis(
             state = contentDetailsState,
             isExpanded = isSynopsisExpanded,
-            onClick = { isSynopsisExpanded = it }
+            onExpandChanged = { isSynopsisExpanded = it }
           )
         }
 
 
         // Genre FlowRow Chips
         item(key = Component.ContentGenre) {
+          val genres = contentDetailsState.data?.genres.orEmpty()
           if (genres.isNotEmpty()) {
             if (isSynopsisExpanded) {
               FlowRow(
                 modifier = Modifier.padding(horizontal = 10.dp),
-                lastLineMainAxisAlignment = FlowMainAxisAlignment.Start
+                lastLineMainAxisAlignment = FlowMainAxisAlignment.Start,
+                mainAxisSpacing = 4.dp,
+                crossAxisSpacing = 4.dp
               ) {
                 genres.forEach {
                   GenreChip(text = it.name)
@@ -140,8 +137,8 @@ fun ContentDetailsScreen(
               }
             } else {
               LazyRow(
-                contentPadding = PaddingValues(horizontal = 10.dp),
-                horizontalArrangement = Arrangement.Start
+                contentPadding = PaddingValues(horizontal = 10.dp, vertical = 4.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
               ) {
                 this.items(genres) { genre ->
                   GenreChip(text = genre.name)
@@ -167,51 +164,64 @@ fun ContentDetailsScreen(
         // Anime Characters List
         item(key = Component.ContentCharacters) {
           val shimmerInstance = rememberShimmerCustomBounds()
-          val action = {
-            navigator.navigateToContentSmallViewAllScreen(
-              Constant.CHARACTERS,
-              Endpoints.getAnimeCharactersEndpoint(contentDetailsState.data?.malId ?: 0)
-            )
-          }
+          val action =
 
-          HorizontalContentHeader(
-            modifier = Modifier
-              .fillMaxWidth()
-              .padding(start = 18.dp, end = 12.dp, top = 8.dp, bottom = 4.dp),
-            title = Constant.CHARACTERS,
-            onButtonClick = action
+          ScrollableHorizontalContent(
+            modifier = Modifier,
+            itemModifier = ItemAnimeCharacterConfig.default,
+            shimmer = shimmerInstance,
+            thumbnailHeight = ItemAnimeCharacterConfig.ThumbnailHeightFour,
+            headerTitle = Constant.CHARACTERS,
+            contentState = animeCharacterListState,
+            contentPadding = PaddingValues(horizontal = 12.dp),
+            contentArrangement = ItemVerticalAnimeModifier.HorizontalArrangement.Default,
+            onIconClick = {
+              navigator.navigateToContentSmallViewAllScreen(
+                Constant.CHARACTERS,
+                Endpoints.getAnimeCharactersEndpoint(contentDetailsState.data?.malId ?: 0)
+              )
+            },
+            onItemClick = { _, _ -> }
           )
 
-          LazyRow(
-            modifier = Modifier.onUpdateShimmerBounds(shimmerInstance),
-            contentPadding = PaddingValues(12.dp, 0.dp, 12.dp, 0.dp),
-            horizontalArrangement = ItemVerticalAnimeModifier.HorizontalArrangement.Default
-          ) {
-            if (animeCharacterListState.isLoading) {
-              showItemVerticalAnimeShimmer(
-                shimmerInstance = shimmerInstance,
-                thumbnailHeight = ItemVerticalAnimeModifier.ThumbnailHeightSmall
-              )
-            } else {
-              items(
-                items = animeCharacterListState.data.take(Constant.HORIZONTAL_CHARACTERS_LIMIT),
-                key = { it.malId }
-              ) {
-                ItemAnimeCharacter(
-                  modifier = ItemAnimeCharacterConfig.default,
-                  thumbnailHeight = ItemAnimeCharacterConfig.ThumbnailHeightFour,
-                  title = it.name,
-                  imageUrl = it.imageUrl
-                )
-              }
-              showItemVerticalAnimeMoreWhenPastLimit(
-                modifier = ItemAnimeCharacterConfig.default,
-                thumbnailHeight = ItemAnimeCharacterConfig.ThumbnailHeightFour,
-                size = animeCharacterListState.data.size,
-                onClick = action
-              )
-            }
-          }
+//          HorizontalContentHeader(
+//            modifier = Modifier
+//              .fillMaxWidth()
+//              .padding(start = 18.dp, end = 12.dp, top = 8.dp, bottom = 4.dp),
+//            title = Constant.CHARACTERS,
+//            onButtonClick = action
+//          )
+//
+//          LazyRow(
+//            modifier = Modifier.onUpdateShimmerBounds(shimmerInstance),
+//            contentPadding = PaddingValues(12.dp, 0.dp, 12.dp, 0.dp),
+//            horizontalArrangement = ItemVerticalAnimeModifier.HorizontalArrangement.Default
+//          ) {
+//            if (animeCharacterListState.isLoading) {
+//              showItemVerticalAnimeShimmer(
+//                shimmerInstance = shimmerInstance,
+//                thumbnailHeight = ItemVerticalAnimeModifier.ThumbnailHeightSmall
+//              )
+//            } else {
+//              items(
+//                items = animeCharacterListState.data.take(Constant.HORIZONTAL_CHARACTERS_LIMIT),
+//                key = { it.malId }
+//              ) {
+//                ItemAnimeCharacter(
+//                  modifier = ItemAnimeCharacterConfig.default,
+//                  thumbnailHeight = ItemAnimeCharacterConfig.ThumbnailHeightFour,
+//                  title = it.name,
+//                  imageUrl = it.imageUrl
+//                )
+//              }
+//              showItemVerticalAnimeMoreWhenPastLimit(
+//                modifier = ItemAnimeCharacterConfig.default,
+//                thumbnailHeight = ItemAnimeCharacterConfig.ThumbnailHeightFour,
+//                size = animeCharacterListState.data.size,
+//                onClick = action
+//              )
+//            }
+//          }
         }
 
         item(key = Component.ContentSimilar) {

@@ -1,6 +1,6 @@
 package com.machina.jikan_client_compose.domain.model.anime
 
-import com.machina.jikan_client_compose.data.remote.dto.anime_details.AnimeDetailsDtoV4
+import com.machina.jikan_client_compose.data.remote.dto.anime_details.AnimeDetailsDto
 import com.machina.jikan_client_compose.data.remote.dto.common.Jpg.Companion.getHighestResImgUrl
 
 data class AnimeHorizontalDataModel(
@@ -13,7 +13,7 @@ data class AnimeHorizontalDataModel(
   val episodesCount: Int
 ) {
   companion object {
-    fun from(data: AnimeDetailsDtoV4): AnimeHorizontalDataModel {
+    fun from(data: AnimeDetailsDto): AnimeHorizontalDataModel {
       return AnimeHorizontalDataModel(
         malId = data.malId,
         title = data.title,

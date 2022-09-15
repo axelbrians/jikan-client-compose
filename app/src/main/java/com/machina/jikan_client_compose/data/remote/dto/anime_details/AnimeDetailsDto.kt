@@ -8,7 +8,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AnimeDetailsDtoV4(
+data class AnimeDetailsDto(
   @SerialName("mal_id")
   val malId: Int = 0,
   @SerialName("url")
@@ -81,7 +81,7 @@ data class AnimeDetailsDtoV4(
   val studios: List<Studio> = listOf(),
 )
 
-fun AnimeDetailsDtoV4.toContentDetails(): ContentDetails {
+fun AnimeDetailsDto.toContentDetails(): ContentDetails {
 
   val combinedGenres = mutableListOf<Genre>()
 
@@ -106,10 +106,10 @@ fun AnimeDetailsDtoV4.toContentDetails(): ContentDetails {
     status = status,
     score = score ?: 0.0,
     scoredBy = scoredBy ?: 0,
-    rank = rank,
-    popularity = popularity,
-    members = members,
-    favorites = favorites,
+//    rank = rank,
+//    popularity = popularity,
+//    members = members,
+//    favorites = favorites,
     synopsis = synopsis,
     background = background,
     genres = combinedGenres,
@@ -124,12 +124,12 @@ fun AnimeDetailsDtoV4.toContentDetails(): ContentDetails {
     episodes = episodes,
     isAiring = airing,
     duration = duration,
-    ageRating = ageRating,
-    season = season,
-    year = year,
-    broadcast = broadcast,
-    producers = producers,
-    licensors = licensors,
+//    ageRating = ageRating,
+//    season = season,
+//    year = year,
+//    broadcast = broadcast,
+//    producers = producers,
+//    licensors = licensors,
     studios = studios
   )
 }

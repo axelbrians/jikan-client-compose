@@ -6,7 +6,7 @@ import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.data.remote.anime_search.AnimeSearchService
 import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalDataModel
 import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalModel
-import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeHorizontalListContentState
+import com.machina.jikan_client_compose.presentation.data.StateWrapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -20,12 +20,12 @@ class GetContentViewAllUseCase @Inject constructor(
 		url: String,
 		page: Int = 1,
 		params: Map<String, String>
-	): Flow<AnimeHorizontalListContentState> = flow {
-		emit(AnimeHorizontalListContentState.Loading)
+	): Flow<StateWrapper<AnimeVerticalModel>> = flow {
+		emit(StateWrapper.loading())
 
 		val state = when (val res = repository.getAnimeViewAll(url, page, params)) {
 			is Resource.Success -> {
-				AnimeHorizontalListContentState(
+				StateWrapper(
 					data = AnimeVerticalModel(
 						data = res.data!!.data.map {
 							AnimeVerticalDataModel.from(it)
@@ -34,8 +34,8 @@ class GetContentViewAllUseCase @Inject constructor(
 					)
 				)
 			}
-			is Resource.Error -> AnimeHorizontalListContentState(error = Event(res.message))
-			is Resource.Loading -> AnimeHorizontalListContentState(isLoading = true)
+			is Resource.Error -> StateWrapper(error = Event(res.message))
+			is Resource.Loading -> StateWrapper(isLoading = true)
 		}
 		emit(state)
 	}.flowOn(dispatchers.io)

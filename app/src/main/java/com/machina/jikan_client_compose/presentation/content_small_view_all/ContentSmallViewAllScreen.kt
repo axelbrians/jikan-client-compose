@@ -3,34 +3,32 @@ package com.machina.jikan_client_compose.presentation.content_small_view_all
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import coil.annotation.ExperimentalCoilApi
 import com.machina.jikan_client_compose.core.extensions.scrollDirection
-import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalDataModel
+import com.machina.jikan_client_compose.presentation.composable.content_horizontal.ScrollableVerticalGridContent
+import com.machina.jikan_client_compose.presentation.composable.content_horizontal.VerticalGridModifier
 import com.machina.jikan_client_compose.presentation.content_small_view_all.nav.ContentSmallViewAllNavigator
 import com.machina.jikan_client_compose.presentation.content_small_view_all.view_model.ContentSmallGridSizeViewModel
 import com.machina.jikan_client_compose.presentation.content_view_all_screen.composable.ContentViewAllListScreenToolbar
 import com.machina.jikan_client_compose.presentation.content_view_all_screen.data.ScrollDirection
 import com.machina.jikan_client_compose.presentation.content_view_all_screen.nav.ContentViewAllListNavArgs
 import com.machina.jikan_client_compose.presentation.content_view_all_screen.viewmodel.ContentViewAllAnimeViewModel
-import com.machina.jikan_client_compose.presentation.home_screen.composable.shimmer.showItemVerticalAnimeShimmer
-import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnime
 import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnimeModifier
 import com.machina.jikan_client_compose.ui.animation_spec.TweenSpec
-import com.machina.jikan_client_compose.ui.shimmer.onUpdateShimmerBounds
 import com.machina.jikan_client_compose.ui.shimmer.rememberShimmerCustomBounds
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.machina.jikan_client_compose.ui.theme.MyIcons
@@ -50,10 +48,9 @@ fun ContentSmallViewAllScreen(
 		animationSpec = TweenSpec.defaultEasing()
 	)
 
-	val gridCount = gridSizeViewModel.gridSize.value
-	val contentState = viewModel.contentState.value
+	val gridCount by gridSizeViewModel.gridSize
+	val contentState by viewModel.contentState
 
-	// TODO: Save grid setting to Shared Preference
 	val appBarPainter = if (gridCount == 3) {
 		MyIcons.Filled.grid3()
 	} else {
@@ -73,11 +70,9 @@ fun ContentSmallViewAllScreen(
 	}
 
 	LaunchedEffect(key1 = viewModel) {
-//		gridSizeViewModel.setGridSize()
 		viewModel.getNextContentPart(navArgs.url, navArgs.params)
 	}
 
-	Icons.Default.ArrowBack
 	Box(
 		modifier = Modifier
 			.fillMaxSize()
@@ -100,31 +95,16 @@ fun ContentSmallViewAllScreen(
 			}
 		)
 
-		LazyVerticalGrid(
-			modifier = Modifier
-				.fillMaxSize()
-				.onUpdateShimmerBounds(shimmerInstance),
-			cells = GridCells.Fixed(gridCount),
-			state = lazyGridState,
-			contentPadding = PaddingValues(start = 12.dp, end = 12.dp, top = 64.dp, bottom = 12.dp),
-			verticalArrangement = Arrangement.spacedBy(6.dp),
+		ScrollableVerticalGridContent(
+			modifier = Modifier.fillMaxSize(),
+			itemModifier = ItemVerticalAnimeModifier.fillParentWidth,
+			shimmerInstance = shimmerInstance,
+			contentState = contentState,
+			thumbnailHeight = thumbnailHeight,
+			gridCells = GridCells.Fixed(gridCount),
+			lazyGridState = lazyGridState,
+			verticalArrangement = VerticalGridModifier.VerticalArrangementMedium,
 			horizontalArrangement = Arrangement.spacedBy(gridHorizontalPadding)
-		) {
-			items(contentState.data.data) { character: AnimeVerticalDataModel ->
-				ItemVerticalAnime(
-					modifier = ItemVerticalAnimeModifier.fillParentWidth,
-					data = character,
-					thumbnailHeight = thumbnailHeight,
-					onClick = { _, _ -> }
-				)
-			}
-
-			if (contentState.isLoading) {
-				showItemVerticalAnimeShimmer(
-					thumbnailHeight = thumbnailHeight,
-					shimmerInstance = shimmerInstance
-				)
-			}
-		}
+		)
 	}
 }

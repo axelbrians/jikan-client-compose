@@ -25,12 +25,24 @@ data class StateWrapper<T>(
 			return StateWrapper()
 		}
 
+		fun <T> StateWrapper<T>.isSuccess(): Boolean {
+			return error.peekContent() == null && data != null
+		}
+
 		fun <T> StateWrapper<T>.copyKeepData(
-			data: StateWrapper<T>
+			state: StateWrapper<T>
 		): StateWrapper<T> {
 			return this.copy(
-				isLoading = data.isLoading,
-				error = data.error
+				isLoading = state.isLoading,
+				error = state.error
+			)
+		}
+
+		fun <T> StateWrapper<T>.copyNewError(
+			error: String
+		): StateWrapper<T> {
+			return this.copy(
+				error = Event(error)
 			)
 		}
 	}

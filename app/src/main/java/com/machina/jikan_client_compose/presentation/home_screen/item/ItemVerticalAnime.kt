@@ -1,6 +1,7 @@
 package com.machina.jikan_client_compose.presentation.home_screen.item
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
@@ -8,7 +9,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
@@ -17,6 +21,8 @@ import coil.compose.rememberImagePainter
 import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalDataModel
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
+import com.machina.jikan_client_compose.presentation.home_screen.preview.ItemVerticalAnimeProvider
+import com.machina.jikan_client_compose.presentation.home_screen.preview.ItemVerticalAnimeState
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.machina.jikan_client_compose.ui.theme.MyShape
 import com.machina.jikan_client_compose.ui.theme.MyType
@@ -29,7 +35,6 @@ fun ItemVerticalAnime(
   thumbnailHeight: Dp = ItemVerticalAnimeModifier.ThumbnailHeightDefault,
   onClick: (Int, ContentType) -> Unit
 ) {
-
   var titleLineCount by remember { mutableStateOf(0) }
   val painter = rememberImagePainter(
     data = data.imageUrl,
@@ -37,7 +42,6 @@ fun ItemVerticalAnime(
       crossfade(true)
     }
   )
-
 
   Column(
     modifier = modifier
@@ -55,14 +59,21 @@ fun ItemVerticalAnime(
           color = MyColor.Yellow500
         )
       }
-      Image(
-        painter = painter,
-        contentDescription = "Thumbnail",
-        contentScale = ContentScale.Crop,
-        modifier = Modifier
-          .fillMaxSize()
-          .clip(MyShape.Rounded12)
-      )
+      val imageModifier = Modifier
+        .fillMaxSize()
+        .clip(MyShape.Rounded12)
+      if (LocalInspectionMode.current) {
+        Box(modifier = imageModifier
+          .background(MyColor.Teal200)
+        )
+      } else {
+        Image(
+          painter = painter,
+          contentDescription = "Thumbnail",
+          contentScale = ContentScale.Crop,
+          modifier = imageModifier
+        )
+      }
     }
 
     Text(
@@ -93,4 +104,18 @@ fun ItemVerticalAnime(
 //      )
 //    )
   }
+}
+
+@OptIn(ExperimentalCoilApi::class)
+@Preview
+@Composable
+fun Preview_ItemVerticalAnime_Default(
+  @PreviewParameter(ItemVerticalAnimeProvider::class) data: ItemVerticalAnimeState,
+) {
+  ItemVerticalAnime(
+    modifier = data.modifier,
+    data = data.data,
+    thumbnailHeight = data.thumbnailHeight,
+    onClick = { _, _ -> }
+  )
 }

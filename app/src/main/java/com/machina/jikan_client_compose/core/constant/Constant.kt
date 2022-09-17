@@ -9,6 +9,8 @@ object Constant {
   const val SEARCH_QUERY_TOO_SHORT = "Search query must be at least 3 characters long"
 
 
+  const val AIRING_TODAY = "Airing today"
+  const val TOP_ANIME_OF_ALL_TIMES = "Top anime of all times"
   const val CHARACTERS = "Characters"
   const val SIMILAR = "Similar"
 }

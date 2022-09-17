@@ -21,7 +21,6 @@ import com.machina.jikan_client_compose.presentation.composable.CenterCircularPr
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.ScrollableHorizontalContent
 import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.*
 import com.machina.jikan_client_compose.presentation.content_detail_screen.data.ContentDetailsViewModel
-import com.machina.jikan_client_compose.presentation.content_detail_screen.item.ItemAnimeCharacterConfig
 import com.machina.jikan_client_compose.presentation.content_detail_screen.nav.ContentDetailsNavArgs
 import com.machina.jikan_client_compose.presentation.content_detail_screen.nav.ContentDetailsScreenNavigator
 import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnimeModifier
@@ -31,7 +30,7 @@ import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
 import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
 
-private object Component {
+private object ContentDetailsScreenSection {
   const val ThreeColumn = "three_column_section"
   const val ContentDescription = "content_description_composable"
   const val ContentGenre = "content_genre_chips"
@@ -103,7 +102,7 @@ fun ContentDetailsScreen(
       ) {
 
         // Three Column Section
-        item(key = Component.ThreeColumn) {
+        item(key = ContentDetailsScreenSection.ThreeColumn) {
           ContentDetailsThreeColumnSection(
             modifier = Modifier.padding(top = 12.dp, bottom = 4.dp),
             state = contentDetailsState)
@@ -111,7 +110,7 @@ fun ContentDetailsScreen(
 
 
         // Synopsis Composable
-        item(key = Component.ContentDescription) {
+        item(key = ContentDetailsScreenSection.ContentDescription) {
           ContentDetailsSynopsis(
             state = contentDetailsState,
             isExpanded = isSynopsisExpanded,
@@ -121,7 +120,7 @@ fun ContentDetailsScreen(
 
 
         // Genre FlowRow Chips
-        item(key = Component.ContentGenre) {
+        item(key = ContentDetailsScreenSection.ContentGenre) {
           val genres = contentDetailsState.data?.genres.orEmpty()
           if (genres.isNotEmpty()) {
             if (isSynopsisExpanded) {
@@ -150,7 +149,7 @@ fun ContentDetailsScreen(
 
         // Content Trailer (if any, like TV or Movies or Anime)
         if (contentDetailsState.data?.trailer?.embedUrl?.isNotEmpty() == true) {
-          item(key = Component.ContentTrailer) {
+          item(key = ContentDetailsScreenSection.ContentTrailer) {
             ContentDetailsTrailerPlayer(
               modifier = Modifier
                 .padding(top = 12.dp)
@@ -162,15 +161,13 @@ fun ContentDetailsScreen(
         }
 
         // Anime Characters List
-        item(key = Component.ContentCharacters) {
+        item(key = ContentDetailsScreenSection.ContentCharacters) {
           val shimmerInstance = rememberShimmerCustomBounds()
-          val action =
-
           ScrollableHorizontalContent(
             modifier = Modifier,
-            itemModifier = ItemAnimeCharacterConfig.default,
+            itemModifier = ItemVerticalAnimeModifier.Small,
             shimmer = shimmerInstance,
-            thumbnailHeight = ItemAnimeCharacterConfig.ThumbnailHeightFour,
+            thumbnailHeight = ItemVerticalAnimeModifier.ThumbnailHeightSmall,
             headerTitle = Constant.CHARACTERS,
             contentState = animeCharacterListState,
             contentPadding = PaddingValues(horizontal = 12.dp),
@@ -183,48 +180,9 @@ fun ContentDetailsScreen(
             },
             onItemClick = { _, _ -> }
           )
-
-//          HorizontalContentHeader(
-//            modifier = Modifier
-//              .fillMaxWidth()
-//              .padding(start = 18.dp, end = 12.dp, top = 8.dp, bottom = 4.dp),
-//            title = Constant.CHARACTERS,
-//            onButtonClick = action
-//          )
-//
-//          LazyRow(
-//            modifier = Modifier.onUpdateShimmerBounds(shimmerInstance),
-//            contentPadding = PaddingValues(12.dp, 0.dp, 12.dp, 0.dp),
-//            horizontalArrangement = ItemVerticalAnimeModifier.HorizontalArrangement.Default
-//          ) {
-//            if (animeCharacterListState.isLoading) {
-//              showItemVerticalAnimeShimmer(
-//                shimmerInstance = shimmerInstance,
-//                thumbnailHeight = ItemVerticalAnimeModifier.ThumbnailHeightSmall
-//              )
-//            } else {
-//              items(
-//                items = animeCharacterListState.data.take(Constant.HORIZONTAL_CHARACTERS_LIMIT),
-//                key = { it.malId }
-//              ) {
-//                ItemAnimeCharacter(
-//                  modifier = ItemAnimeCharacterConfig.default,
-//                  thumbnailHeight = ItemAnimeCharacterConfig.ThumbnailHeightFour,
-//                  title = it.name,
-//                  imageUrl = it.imageUrl
-//                )
-//              }
-//              showItemVerticalAnimeMoreWhenPastLimit(
-//                modifier = ItemAnimeCharacterConfig.default,
-//                thumbnailHeight = ItemAnimeCharacterConfig.ThumbnailHeightFour,
-//                size = animeCharacterListState.data.size,
-//                onClick = action
-//              )
-//            }
-//          }
         }
 
-        item(key = Component.ContentSimilar) {
+        item(key = ContentDetailsScreenSection.ContentSimilar) {
           ScrollableHorizontalContent(
             modifier = Modifier,
             shimmer = rememberShimmerCustomBounds(),

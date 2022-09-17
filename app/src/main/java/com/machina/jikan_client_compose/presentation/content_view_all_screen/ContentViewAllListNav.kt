@@ -1,7 +1,5 @@
 package com.machina.jikan_client_compose.presentation.content_view_all_screen
 
-
-
 import android.view.Window
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel

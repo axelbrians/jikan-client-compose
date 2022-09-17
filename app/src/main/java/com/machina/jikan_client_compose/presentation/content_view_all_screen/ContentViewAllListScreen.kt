@@ -84,6 +84,7 @@ fun ContentViewAllListScreen(
 
       if (contentState.isLoading) {
         showItemVerticalAnimeShimmer(
+          modifier = ItemVerticalAnimeModifier.fillParentWidth,
           shimmerInstance = shimmerInstance,
           thumbnailHeight = ItemVerticalAnimeModifier.ThumbnailHeightGrid
         )

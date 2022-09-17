@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 import com.machina.jikan_client_compose.ui.theme.MyColor
 
 object HorizontalContentHeaderConfig {
-  val default = Modifier.fillMaxWidth().padding(start = 18.dp, end = 12.dp, bottom = 4.dp)
+  val Default = Modifier.fillMaxWidth().padding(start = 18.dp, end = 12.dp, bottom = 4.dp)
   val fillWidth = Modifier.fillMaxWidth()
 }
 

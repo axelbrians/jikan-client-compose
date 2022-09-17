@@ -66,11 +66,11 @@ fun ItemVerticalAnimeMore(
 }
 
 fun LazyListScope.showItemVerticalAnimeMoreWhenPastLimit(
-  modifier: Modifier = ItemVerticalAnimeModifier.default,
-  thumbnailHeight: Dp = ItemVerticalAnimeModifier.ThumbnailHeightDefault,
-  limit: Int = Constant.HORIZONTAL_CONTENT_LIMIT,
-  size: Int = 0,
-  onClick: () -> Unit
+	modifier: Modifier = ItemVerticalAnimeModifier.Default,
+	thumbnailHeight: Dp = ItemVerticalAnimeModifier.ThumbnailHeightDefault,
+	limit: Int = Constant.HORIZONTAL_CONTENT_LIMIT,
+	size: Int = 0,
+	onClick: () -> Unit
 ) {
   if (size > limit) {
     item {

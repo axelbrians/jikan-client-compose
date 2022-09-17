@@ -19,8 +19,8 @@ import com.valentinilk.shimmer.shimmer
 @Composable
 fun ItemVerticalAnimeShimmer(
   modifier: Modifier,
+  shimmerInstance: Shimmer,
   thumbnailHeight: Dp = ItemVerticalAnimeModifier.ThumbnailHeightDefault,
-  shimmerInstance: Shimmer
 ) {
   Column(
     modifier = modifier
@@ -63,13 +63,14 @@ fun ItemVerticalAnimeShimmer(
 
 @OptIn(ExperimentalFoundationApi::class)
 fun LazyGridScope.showItemVerticalAnimeShimmer(
+  modifier: Modifier = ItemVerticalAnimeModifier.fillParentWidth,
   shimmerInstance: Shimmer,
   count: Int = 9,
   thumbnailHeight: Dp = ItemVerticalAnimeModifier.ThumbnailHeightDefault
 ) {
   items(count) {
     ItemVerticalAnimeShimmer(
-      modifier = ItemVerticalAnimeModifier.fillParentWidth,
+      modifier = modifier,
       shimmerInstance = shimmerInstance,
       thumbnailHeight = thumbnailHeight
     )
@@ -77,13 +78,14 @@ fun LazyGridScope.showItemVerticalAnimeShimmer(
 }
 
 fun LazyListScope.showItemVerticalAnimeShimmer(
+  modifier: Modifier = ItemVerticalAnimeModifier.Default,
   shimmerInstance: Shimmer,
   count: Int = 5,
   thumbnailHeight: Dp = ItemVerticalAnimeModifier.ThumbnailHeightDefault
 ) {
   items(count) {
     ItemVerticalAnimeShimmer(
-      modifier = ItemVerticalAnimeModifier.default,
+      modifier = modifier,
       shimmerInstance = shimmerInstance,
       thumbnailHeight = thumbnailHeight
     )

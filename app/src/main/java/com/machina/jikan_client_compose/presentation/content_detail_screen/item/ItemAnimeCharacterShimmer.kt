@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnimeModifier
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.valentinilk.shimmer.Shimmer
 import com.valentinilk.shimmer.shimmer
@@ -45,8 +46,8 @@ fun ItemAnimeCharacterShimmer(
 
 @OptIn(ExperimentalFoundationApi::class)
 fun LazyGridScope.showItemContentSmallShimmer(
-	modifier: Modifier = Modifier,
-	thumbnailHeight: Dp = ItemAnimeCharacterConfig.ThumbnailHeightFour,
+	modifier: Modifier = ItemVerticalAnimeModifier.Small,
+	thumbnailHeight: Dp = ItemVerticalAnimeModifier.ThumbnailHeightSmall,
 	shimmerInstance: Shimmer
 ) {
 	items(9) {
@@ -59,8 +60,8 @@ fun LazyGridScope.showItemContentSmallShimmer(
 }
 
 fun LazyListScope.showItemContentSmallShimmer(
-	modifier: Modifier = ItemAnimeCharacterConfig.default,
-	thumbnailHeight: Dp = ItemAnimeCharacterConfig.ThumbnailHeightFour,
+	modifier: Modifier = ItemVerticalAnimeModifier.Small,
+	thumbnailHeight: Dp = ItemVerticalAnimeModifier.ThumbnailHeightSmall,
 	shimmerInstance: Shimmer
 ) {
 	items(9) {

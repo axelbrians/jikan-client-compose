@@ -22,14 +22,6 @@ import com.machina.jikan_client_compose.ui.theme.Type.alignCenter
 import com.machina.jikan_client_compose.ui.theme.Type.bold
 import com.machina.jikan_client_compose.ui.theme.Type.onDarkSurface
 
-object ItemAnimeCharacterConfig {
-  val default = Modifier
-    .width(100.dp)
-
-  val ThumbnailHeightThree = 190.dp
-  val ThumbnailHeightFour = 140.dp
-}
-
 @ExperimentalCoilApi
 @Composable
 fun ItemAnimeCharacter(

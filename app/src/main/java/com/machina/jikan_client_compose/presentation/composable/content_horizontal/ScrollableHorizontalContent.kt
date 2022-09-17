@@ -1,11 +1,14 @@
 package com.machina.jikan_client_compose.presentation.composable.content_horizontal
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import coil.annotation.ExperimentalCoilApi
 import com.machina.jikan_client_compose.core.enums.ContentType
@@ -19,13 +22,15 @@ import com.machina.jikan_client_compose.presentation.home_screen.item.showItemVe
 import com.machina.jikan_client_compose.ui.shimmer.onUpdateShimmerBounds
 import com.machina.jikan_client_compose.ui.shimmer.rememberShimmerCustomBounds
 import com.valentinilk.shimmer.Shimmer
+import com.valentinilk.shimmer.ShimmerBounds
+import com.valentinilk.shimmer.rememberShimmer
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
 fun ScrollableHorizontalContent(
 	modifier: Modifier,
-	headerModifier: Modifier = HorizontalContentHeaderConfig.default,
-	itemModifier: Modifier = ItemVerticalAnimeModifier.default,
+	headerModifier: Modifier = HorizontalContentHeaderConfig.Default,
+	itemModifier: Modifier = ItemVerticalAnimeModifier.Default,
 	shimmer: Shimmer = rememberShimmerCustomBounds(),
 	thumbnailHeight: Dp = ItemVerticalAnimeModifier.ThumbnailHeightDefault,
 	headerTitle: String,
@@ -35,10 +40,9 @@ fun ScrollableHorizontalContent(
 	onIconClick: () -> Unit,
 	onItemClick: (Int, ContentType) -> Unit,
 ) {
-
 	if (contentState.isLoading) {
 		ContentListHeaderWithButtonShimmer(shimmerInstance = shimmer)
-	} else {
+	} else if (contentState.data.isNotEmpty()) {
 		HorizontalContentHeader(
 			modifier = headerModifier,
 			title = headerTitle,
@@ -53,10 +57,11 @@ fun ScrollableHorizontalContent(
 	) {
 		if (contentState.isLoading) {
 			showItemVerticalAnimeShimmer(
+				modifier = itemModifier,
 				shimmerInstance = shimmer,
 				thumbnailHeight = thumbnailHeight
 			)
-		} else {
+		} else if (contentState.data.isNotEmpty()) {
 			items(contentState.data, key = { it.malId }) { data ->
 				ItemVerticalAnime(
 					modifier = itemModifier,
@@ -72,5 +77,28 @@ fun ScrollableHorizontalContent(
 				onClick = onIconClick
 			)
 		}
+	}
+}
+
+@Preview
+@Composable
+fun Preview_ScrollableHorizontalContent(
+	@PreviewParameter(ScrollableHorizontalContentParameterProvider::class) state: ScrollableHorizontalContentState
+) {
+	val shimmerInstance = rememberShimmer(shimmerBounds = ShimmerBounds.Custom)
+	Column {
+		ScrollableHorizontalContent(
+			modifier = state.modifier.onUpdateShimmerBounds(shimmerInstance),
+			headerModifier = state.headerModifier,
+			itemModifier = state.itemModifier,
+			shimmer = shimmerInstance,
+			thumbnailHeight = state.thumbnailHeight,
+			headerTitle = state.headerTitle,
+			contentState = state.contentState,
+			contentPadding = state.contentPadding,
+			contentArrangement = state.contentArrangement,
+			onIconClick = state.onIconClick,
+			onItemClick = state.onItemClick
+		)
 	}
 }

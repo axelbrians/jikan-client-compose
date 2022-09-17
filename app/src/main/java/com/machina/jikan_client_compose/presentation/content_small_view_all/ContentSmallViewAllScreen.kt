@@ -20,15 +20,15 @@ import androidx.compose.ui.zIndex
 import coil.annotation.ExperimentalCoilApi
 import com.machina.jikan_client_compose.core.extensions.scrollDirection
 import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalDataModel
-import com.machina.jikan_client_compose.presentation.content_detail_screen.item.ItemAnimeCharacter
-import com.machina.jikan_client_compose.presentation.content_detail_screen.item.ItemAnimeCharacterConfig
-import com.machina.jikan_client_compose.presentation.content_detail_screen.item.showItemContentSmallShimmer
 import com.machina.jikan_client_compose.presentation.content_small_view_all.nav.ContentSmallViewAllNavigator
 import com.machina.jikan_client_compose.presentation.content_small_view_all.view_model.ContentSmallGridSizeViewModel
 import com.machina.jikan_client_compose.presentation.content_view_all_screen.composable.ContentViewAllListScreenToolbar
 import com.machina.jikan_client_compose.presentation.content_view_all_screen.data.ScrollDirection
 import com.machina.jikan_client_compose.presentation.content_view_all_screen.nav.ContentViewAllListNavArgs
 import com.machina.jikan_client_compose.presentation.content_view_all_screen.viewmodel.ContentViewAllAnimeViewModel
+import com.machina.jikan_client_compose.presentation.home_screen.composable.shimmer.showItemVerticalAnimeShimmer
+import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnime
+import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnimeModifier
 import com.machina.jikan_client_compose.ui.animation_spec.TweenSpec
 import com.machina.jikan_client_compose.ui.shimmer.onUpdateShimmerBounds
 import com.machina.jikan_client_compose.ui.shimmer.rememberShimmerCustomBounds
@@ -61,9 +61,9 @@ fun ContentSmallViewAllScreen(
 	}
 
 	val thumbnailHeight = if (gridCount == 3) {
-		ItemAnimeCharacterConfig.ThumbnailHeightThree
+		ItemVerticalAnimeModifier.ThumbnailHeightGrid
 	} else {
-		ItemAnimeCharacterConfig.ThumbnailHeightFour
+		ItemVerticalAnimeModifier.ThumbnailHeightSmall
 	}
 
 	val gridHorizontalPadding = if (gridCount == 3) {
@@ -111,15 +111,16 @@ fun ContentSmallViewAllScreen(
 			horizontalArrangement = Arrangement.spacedBy(gridHorizontalPadding)
 		) {
 			items(contentState.data.data) { character: AnimeVerticalDataModel ->
-				ItemAnimeCharacter(
+				ItemVerticalAnime(
+					modifier = ItemVerticalAnimeModifier.fillParentWidth,
+					data = character,
 					thumbnailHeight = thumbnailHeight,
-					title = character.title,
-					imageUrl = character.imageUrl
+					onClick = { _, _ -> }
 				)
 			}
 
 			if (contentState.isLoading) {
-				showItemContentSmallShimmer(
+				showItemVerticalAnimeShimmer(
 					thumbnailHeight = thumbnailHeight,
 					shimmerInstance = shimmerInstance
 				)

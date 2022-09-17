@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
@@ -172,6 +173,7 @@ fun ContentDetailsScreen(
             contentState = animeCharacterListState,
             contentPadding = PaddingValues(horizontal = 12.dp),
             contentArrangement = ItemVerticalAnimeModifier.HorizontalArrangement.Default,
+            textAlign = TextAlign.Center,
             onIconClick = {
               navigator.navigateToContentSmallViewAllScreen(
                 Constant.CHARACTERS,

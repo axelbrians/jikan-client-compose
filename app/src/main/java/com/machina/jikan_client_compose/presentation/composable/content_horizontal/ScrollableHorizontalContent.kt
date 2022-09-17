@@ -7,10 +7,12 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import coil.annotation.ExperimentalCoilApi
+import com.machina.jikan_client_compose.core.constant.Constant
 import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalDataModel
 import com.machina.jikan_client_compose.presentation.data.StateListWrapper
@@ -37,6 +39,7 @@ fun ScrollableHorizontalContent(
 	contentState: StateListWrapper<AnimeVerticalDataModel>,
 	contentPadding: PaddingValues,
 	contentArrangement: Arrangement.Horizontal,
+	textAlign: TextAlign = TextAlign.Start,
 	onIconClick: () -> Unit,
 	onItemClick: (Int, ContentType) -> Unit,
 ) {
@@ -62,11 +65,15 @@ fun ScrollableHorizontalContent(
 				thumbnailHeight = thumbnailHeight
 			)
 		} else if (contentState.data.isNotEmpty()) {
-			items(contentState.data, key = { it.malId }) { data ->
+			items(
+				contentState.data.take(Constant.HORIZONTAL_CONTENT_LIMIT),
+				key = { it.malId }
+			) { data ->
 				ItemVerticalAnime(
 					modifier = itemModifier,
 					data = data,
 					thumbnailHeight = thumbnailHeight,
+					textAlign = textAlign,
 					onClick = onItemClick
 				)
 			}
@@ -88,7 +95,7 @@ fun Preview_ScrollableHorizontalContent(
 	val shimmerInstance = rememberShimmer(shimmerBounds = ShimmerBounds.Custom)
 	Column {
 		ScrollableHorizontalContent(
-			modifier = state.modifier.onUpdateShimmerBounds(shimmerInstance),
+			modifier = state.modifier,
 			headerModifier = state.headerModifier,
 			itemModifier = state.itemModifier,
 			shimmer = shimmerInstance,

@@ -13,10 +13,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.machina.jikan_client_compose.core.constant.Constant
-import com.machina.jikan_client_compose.ui.theme.*
+import com.machina.jikan_client_compose.presentation.home_screen.preview.ItemVerticalAnimeMoreParameterProvider
+import com.machina.jikan_client_compose.presentation.home_screen.preview.ItemVerticalAnimeMoreState
+import com.machina.jikan_client_compose.ui.theme.MyColor
+import com.machina.jikan_client_compose.ui.theme.MyIcons
+import com.machina.jikan_client_compose.ui.theme.MyShape
+import com.machina.jikan_client_compose.ui.theme.Type
 import com.machina.jikan_client_compose.ui.theme.Type.alignCenter
 import com.machina.jikan_client_compose.ui.theme.Type.bold
 import com.machina.jikan_client_compose.ui.theme.Type.onDarkSurface
@@ -27,7 +34,6 @@ fun ItemVerticalAnimeMore(
   thumbnailHeight: Dp = ItemVerticalAnimeModifier.ThumbnailHeightDefault,
   onClick: () -> Unit
 ) {
-
   Column(
     modifier = modifier
       .clip(MyShape.Rounded12)
@@ -57,11 +63,6 @@ fun ItemVerticalAnimeMore(
         modifier = Modifier.fillMaxWidth()
       )
     }
-
-    Text(
-      text = "\n",
-      style = MyType.Body2.Bold.OnDarkSurface
-    )
   }
 }
 
@@ -81,4 +82,16 @@ fun LazyListScope.showItemVerticalAnimeMoreWhenPastLimit(
       )
     }
   }
+}
+
+@Preview
+@Composable
+fun Preview_ItemVerticalAnimeMore(
+  @PreviewParameter(ItemVerticalAnimeMoreParameterProvider::class) state: ItemVerticalAnimeMoreState
+) {
+  ItemVerticalAnimeMore(
+    modifier = state.modifier,
+    thumbnailHeight = state.thumbnailHeight,
+    onClick = { }
+  )
 }

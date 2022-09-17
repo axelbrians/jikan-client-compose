@@ -5,11 +5,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -33,9 +34,10 @@ fun ItemVerticalAnime(
   modifier: Modifier = Modifier,
   data: AnimeVerticalDataModel,
   thumbnailHeight: Dp = ItemVerticalAnimeModifier.ThumbnailHeightDefault,
+  textAlign: TextAlign = TextAlign.Start,
   onClick: (Int, ContentType) -> Unit
 ) {
-  var titleLineCount by remember { mutableStateOf(0) }
+//  var titleLineCount by remember { mutableStateOf(0) }
   val painter = rememberImagePainter(
     data = data.imageUrl,
     builder = {
@@ -78,21 +80,22 @@ fun ItemVerticalAnime(
 
     Text(
       text = data.title,
-      modifier = Modifier.padding(vertical = 6.dp),
+      modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp),
       maxLines = 2,
       overflow = TextOverflow.Ellipsis,
       style = MyType.Body2.Normal.OnDarkSurfaceLight,
-      onTextLayout = {
-        titleLineCount = it.lineCount
-      }
+      textAlign = textAlign,
+//      onTextLayout = {
+//        titleLineCount = it.lineCount
+//      }
     )
 
-    repeat(2 - titleLineCount) {
-      Text(
-        text = "",
-        style = MyType.Body2.Bold.OnDarkSurface
-      )
-    }
+//    repeat(2 - titleLineCount) {
+//      Text(
+//        text = "",
+//        style = MyType.Body2.Bold.OnDarkSurface
+//      )
+//    }
 //
 //    Text(
 //      text = "${data.score}",

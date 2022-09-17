@@ -84,6 +84,7 @@ dependencies {
     implementation "com.google.accompanist:accompanist-flowlayout:$accompanist_version"
     implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanist_version"
     implementation "com.google.accompanist:accompanist-insets:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-placeholder:$accompanist_version"
     implementation "com.google.accompanist:accompanist-swiperefresh:$accompanist_version"
     implementation "com.google.accompanist:accompanist-pager:$accompanist_version"
 
@@ -125,7 +126,7 @@ dependencies {
 
 
     // Image Loader (Coil)
-    implementation "io.coil-kt:coil-compose:1.3.2"
+    implementation "io.coil-kt:coil-compose:2.2.1"
 
     //Shimmer
     implementation 'com.valentinilk.shimmer:compose-shimmer:1.0.0'

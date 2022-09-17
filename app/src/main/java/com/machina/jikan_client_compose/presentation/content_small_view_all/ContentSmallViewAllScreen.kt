@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import coil.annotation.ExperimentalCoilApi
@@ -104,7 +105,8 @@ fun ContentSmallViewAllScreen(
 			gridCells = GridCells.Fixed(gridCount),
 			lazyGridState = lazyGridState,
 			verticalArrangement = VerticalGridModifier.VerticalArrangementMedium,
-			horizontalArrangement = Arrangement.spacedBy(gridHorizontalPadding)
+			horizontalArrangement = Arrangement.spacedBy(gridHorizontalPadding),
+			textAlign = TextAlign.Center
 		)
 	}
 }

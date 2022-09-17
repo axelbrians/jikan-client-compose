@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
@@ -39,6 +40,7 @@ fun ScrollableVerticalGridContent(
 	lazyGridState: LazyListState = rememberLazyListState(),
 	verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(0.dp),
 	horizontalArrangement: Arrangement.Horizontal = Arrangement.spacedBy(0.dp),
+	textAlign: TextAlign = TextAlign.Start
 ) {
 
 	LazyVerticalGrid(
@@ -56,6 +58,7 @@ fun ScrollableVerticalGridContent(
 					modifier = itemModifier,
 					data = character,
 					thumbnailHeight = thumbnailHeight,
+					textAlign = textAlign,
 					onClick = { _, _ -> }
 				)
 			}

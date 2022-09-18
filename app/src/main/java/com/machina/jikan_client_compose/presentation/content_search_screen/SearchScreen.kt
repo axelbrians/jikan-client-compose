@@ -57,7 +57,7 @@ fun SearchScreen(
 
   LaunchedEffect(key1 = viewModel.hashCode()) {
     focusRequester.requestFocus()
-    viewModel.getFilterData()
+    viewModel.onFilterEvent(FilterEvent.FetchFilter())
   }
 
   BackHandler(enabled = true) {
@@ -115,7 +115,7 @@ fun SearchScreen(
           }
         )
 
-        MyDivider.Horizontal.DarkGreyBackground(PaddingValues(bottom = 8.dp))
+        MyDivider.Horizontal.DarkGreyBackground()
 
 //      ChipGroup(
 //        selectedType = selectedType.value,
@@ -155,7 +155,6 @@ fun SearchScreen(
     // Side-effect to control how snackbar should showing
     LaunchedEffect(snackbarChannel) {
       snackbarChannel.receiveAsFlow().collect { error ->
-
         val result = if (error != null) {
           snackbarHostState.showSnackbar(
             message = error,
@@ -172,6 +171,7 @@ fun SearchScreen(
           SnackbarResult.Dismissed -> {
             /* dismissed, no action needed */
           }
+          else -> { }
         }
       }
     }

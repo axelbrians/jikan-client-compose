@@ -6,7 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -38,7 +38,7 @@ fun ContentViewAllListScreen(
 
   val contentState by viewModel.contentState
   val shimmerInstance = rememberShimmerCustomBounds()
-  val lazyGridState = rememberLazyListState()
+  val lazyGridState = rememberLazyGridState()
   val animateToolbarOffset = animateDpAsState(
     targetValue = if (lazyGridState.scrollDirection() == ScrollDirection.UP) 0.dp else (-56).dp,
     animationSpec = TweenSpec.defaultEasing()

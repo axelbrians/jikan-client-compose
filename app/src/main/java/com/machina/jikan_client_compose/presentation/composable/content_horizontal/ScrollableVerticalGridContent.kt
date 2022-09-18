@@ -3,7 +3,7 @@ package com.machina.jikan_client_compose.presentation.composable.content_horizon
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -37,7 +37,7 @@ fun ScrollableVerticalGridContent(
 	contentPadding: PaddingValues = PaddingValues(start = 12.dp, end = 12.dp, top = 64.dp, bottom = 12.dp),
 	thumbnailHeight: Dp = ItemVerticalAnimeModifier.ThumbnailHeightGrid,
 	gridCells: GridCells = GridCells.Fixed(3),
-	lazyGridState: LazyListState = rememberLazyListState(),
+	lazyGridState: LazyGridState = rememberLazyGridState(),
 	verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(0.dp),
 	horizontalArrangement: Arrangement.Horizontal = Arrangement.spacedBy(0.dp),
 	textAlign: TextAlign = TextAlign.Start
@@ -46,7 +46,7 @@ fun ScrollableVerticalGridContent(
 	LazyVerticalGrid(
 		modifier = modifier
 			.onUpdateShimmerBounds(shimmerInstance),
-		cells = gridCells,
+		columns = gridCells,
 		state = lazyGridState,
 		contentPadding = contentPadding,
 		verticalArrangement = verticalArrangement,

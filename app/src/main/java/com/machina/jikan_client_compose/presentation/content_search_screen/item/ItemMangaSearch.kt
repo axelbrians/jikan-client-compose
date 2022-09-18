@@ -1,9 +1,7 @@
 package com.machina.jikan_client_compose.presentation.content_search_screen.item
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -15,12 +13,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.ImagePainter
-import coil.compose.rememberImagePainter
+import coil.compose.SubcomposeAsyncImage
 import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.domain.model.ContentSearch
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
 import com.machina.jikan_client_compose.ui.theme.MyColor
+import com.machina.jikan_client_compose.ui.theme.MyShape
 
 @ExperimentalCoilApi
 @Composable
@@ -29,39 +27,26 @@ fun ItemMangaSearch(
   data: ContentSearch,
   onItemClick: (Int, ContentType) -> Unit
 ) {
-
-  val painter = rememberImagePainter(
-    data = data.imageUrl,
-    builder = {
-      crossfade(true)
-    }
-  )
-
   Row(
     modifier = modifier
       .clickable { onItemClick(data.malId, ContentType.Manga) }
   ) {
-    Box(
+    SubcomposeAsyncImage(
       modifier = Modifier
         .width(120.dp)
         .height(160.dp)
-    ) {
-      if (painter.state is ImagePainter.State.Loading) {
+        .clip(MyShape.Rounded12),
+      model = data.imageUrl,
+      contentDescription = "Content thumbnail",
+      contentScale = ContentScale.Crop,
+      loading = {
         CenterCircularProgressIndicator(
           strokeWidth = 2.dp,
           size = 20.dp,
           color = MyColor.Yellow500
         )
       }
-      Image(
-        painter = painter,
-        contentDescription = "Thumbnail",
-        contentScale = ContentScale.Crop,
-        modifier = Modifier
-          .fillMaxSize()
-          .clip(RoundedCornerShape(12.dp))
-      )
-    }
+    )
 
     Column(
       modifier = Modifier

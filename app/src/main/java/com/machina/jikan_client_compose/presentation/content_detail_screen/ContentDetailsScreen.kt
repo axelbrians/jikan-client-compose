@@ -12,12 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberImagePainter
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.machina.jikan_client_compose.core.constant.Constant
 import com.machina.jikan_client_compose.core.constant.Endpoints
-import com.machina.jikan_client_compose.data.remote.dto.common.Jpg.Companion.getHighestResImgUrl
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.ScrollableHorizontalContent
 import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.*
@@ -54,16 +52,6 @@ fun ContentDetailsScreen(
   val animeCharacterListState by viewModel.animeCharactersListState
   val animeRecommendationsListState by viewModel.animeRecommendationsListState
 
-  val largeImageCoil = rememberImagePainter(
-    data = contentDetailsState.data?.images?.jpg?.getHighestResImgUrl(),
-    builder = { crossfade(true) }
-  )
-
-  val smallImageCoil = rememberImagePainter(
-    data = contentDetailsState.data?.images?.jpg?.getHighestResImgUrl(),
-    builder = { crossfade(true) }
-  )
-
   LaunchedEffect(
     key1 = navArgs.malId,
     block = {
@@ -87,8 +75,6 @@ fun ContentDetailsScreen(
       scrollStrategy = ScrollStrategy.ExitUntilCollapsed,
       toolbar = {
         ContentDetailsScreenToolbar(
-          largeCoil = largeImageCoil,
-          smallCoil = smallImageCoil,
           contentDetailsState = contentDetailsState,
           toolbarScaffoldState = toolbarScaffoldState,
           onArrowClick = navigator::navigateUp

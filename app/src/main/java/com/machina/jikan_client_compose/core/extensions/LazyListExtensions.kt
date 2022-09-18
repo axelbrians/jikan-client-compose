@@ -40,19 +40,19 @@ fun LazyListState.isScrollingUp(): Boolean {
 fun LazyListState.scrollDirection(): ScrollDirection {
   var previousIndex by remember(this) { mutableStateOf(firstVisibleItemIndex) }
   var previousScrollOffset by remember(this) { mutableStateOf(firstVisibleItemScrollOffset) }
-  val previousDirection = remember(this) { mutableStateOf(ScrollDirection.UP) }
+  var previousDirection by remember(this) { mutableStateOf(ScrollDirection.UP) }
   return remember(this) {
     derivedStateOf {
-      previousDirection.value = when {
+      previousDirection = when {
         firstVisibleItemIndex > previousIndex -> ScrollDirection.DOWN
         firstVisibleItemIndex < previousIndex -> ScrollDirection.UP
         firstVisibleItemScrollOffset > previousScrollOffset -> ScrollDirection.DOWN
         firstVisibleItemScrollOffset < previousScrollOffset -> ScrollDirection.UP
-        else -> previousDirection.value
+        else -> previousDirection
       }
       previousIndex = firstVisibleItemIndex
       previousScrollOffset = firstVisibleItemScrollOffset
-      previousDirection.value
+      previousDirection
     }
   }.value
 }

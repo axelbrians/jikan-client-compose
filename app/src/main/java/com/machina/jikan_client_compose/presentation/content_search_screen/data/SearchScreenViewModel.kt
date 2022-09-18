@@ -94,7 +94,7 @@ class SearchScreenViewModel @Inject constructor(
     }
   }
 
-  fun getFilterData() {
+  private fun getFilterData() {
     searchFilterUseCase().onEach {
       defaultFilterMap = it.data
       _searchFilterState.value = it
@@ -129,6 +129,9 @@ class SearchScreenViewModel @Inject constructor(
       is FilterEvent.FilterReset -> {
         _searchFilterState.value = _searchFilterState.value.copy(data = defaultFilterMap)
         searchContentByQuery(event.contentType, event.query)
+      }
+      is FilterEvent.FetchFilter -> {
+        getFilterData()
       }
     }
   }

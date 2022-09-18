@@ -1,6 +1,5 @@
 package com.machina.jikan_client_compose.presentation.home_screen.item
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -17,8 +16,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.ImagePainter
-import coil.compose.rememberImagePainter
+import coil.compose.SubcomposeAsyncImage
 import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalDataModel
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
@@ -38,49 +36,41 @@ fun ItemVerticalAnime(
   onClick: (Int, ContentType) -> Unit
 ) {
 //  var titleLineCount by remember { mutableStateOf(0) }
-  val painter = rememberImagePainter(
-    data = data.imageUrl,
-    builder = {
-      crossfade(true)
-    }
-  )
 
   Column(
     modifier = modifier
       .clip(MyShape.Rounded12)
       .clickable { onClick(data.malId, ContentType.Anime) }
   ) {
-    Box(
-      modifier = Modifier
-        .height(thumbnailHeight)
-    ) {
-      if (painter.state is ImagePainter.State.Loading) {
-        CenterCircularProgressIndicator(
-          strokeWidth = 2.dp,
-          size = 20.dp,
-          color = MyColor.Yellow500
-        )
-      }
-      val imageModifier = Modifier
-        .fillMaxSize()
-        .clip(MyShape.Rounded12)
-      if (LocalInspectionMode.current) {
-        Box(modifier = imageModifier
-          .background(MyColor.Teal200)
-        )
-      } else {
-        Image(
-          painter = painter,
-          contentDescription = "Thumbnail",
-          contentScale = ContentScale.Crop,
-          modifier = imageModifier
-        )
-      }
+    val thumbnailModifier = Modifier
+      .fillMaxWidth()
+      .height(thumbnailHeight)
+      .clip(MyShape.Rounded12)
+    if (LocalInspectionMode.current) {
+      Box(modifier = thumbnailModifier
+        .background(MyColor.Teal200)
+      )
+    } else {
+      SubcomposeAsyncImage(
+        modifier = thumbnailModifier,
+        model = data.imageUrl,
+        contentDescription = "Content thumbnail",
+        contentScale = ContentScale.Crop,
+        loading = {
+          CenterCircularProgressIndicator(
+            strokeWidth = 2.dp,
+            size = 20.dp,
+            color = MyColor.Yellow500
+          )
+        }
+      )
     }
 
     Text(
       text = data.title,
-      modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp),
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(vertical = 6.dp),
       maxLines = 2,
       overflow = TextOverflow.Ellipsis,
       style = MyType.Body2.Normal.OnDarkSurfaceLight,

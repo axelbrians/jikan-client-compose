@@ -1,14 +1,13 @@
 package com.machina.jikan_client_compose.presentation.content_small_view_all
 
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.runtime.Composable
@@ -18,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import coil.annotation.ExperimentalCoilApi
 import com.machina.jikan_client_compose.core.extensions.scrollDirection
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.ScrollableVerticalGridContent
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.VerticalGridModifier
@@ -34,7 +32,6 @@ import com.machina.jikan_client_compose.ui.shimmer.rememberShimmerCustomBounds
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.machina.jikan_client_compose.ui.theme.MyIcons
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalCoilApi::class)
 @Composable
 fun ContentSmallViewAllScreen(
 	navigator: ContentSmallViewAllNavigator,
@@ -43,7 +40,7 @@ fun ContentSmallViewAllScreen(
 	navArgs: ContentViewAllListNavArgs
 ) {
 	val shimmerInstance = rememberShimmerCustomBounds()
-	val lazyGridState = rememberLazyListState()
+	val lazyGridState = rememberLazyGridState()
 	val animateToolbarOffset = animateDpAsState(
 		targetValue = if (lazyGridState.scrollDirection() == ScrollDirection.UP) 0.dp else (-56).dp,
 		animationSpec = TweenSpec.defaultEasing()

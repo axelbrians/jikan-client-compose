@@ -4,10 +4,8 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -26,26 +24,27 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.ImagePainter
-import coil.compose.rememberImagePainter
+import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import com.google.accompanist.insets.statusBarsPadding
+import com.machina.jikan_client_compose.data.remote.dto.common.Jpg.Companion.getHighestResImgUrl
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
 import com.machina.jikan_client_compose.presentation.content_detail_screen.data.ContentDetailsState
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.machina.jikan_client_compose.ui.theme.MyIcons
+import com.machina.jikan_client_compose.ui.theme.MyShape
 import com.machina.jikan_client_compose.ui.theme.MySize
-import me.onebone.toolbar.*
+import me.onebone.toolbar.CollapsingToolbarScaffoldState
+import me.onebone.toolbar.CollapsingToolbarScope
+import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
 import kotlin.math.roundToInt
 
 @ExperimentalCoilApi
 @Composable
 fun CollapsingToolbarScope.ContentDetailsScreenToolbar(
-  largeCoil: ImagePainter = rememberImagePainter(data = null),
-  smallCoil: ImagePainter = rememberImagePainter(data = null),
   contentDetailsState: ContentDetailsState = ContentDetailsState(null),
   toolbarScaffoldState: CollapsingToolbarScaffoldState = rememberCollapsingToolbarScaffoldState(),
   onArrowClick: () -> Boolean = { false }
@@ -57,21 +56,12 @@ fun CollapsingToolbarScope.ContentDetailsScreenToolbar(
   )
 
   val isTitleVisible = toolbarScaffoldState.toolbarState.progress <= 0.25
+  val imageUrl = contentDetailsState.data?.images?.jpg?.getHighestResImgUrl()
 
-
-  val headerCaptionIcon: ImageVector
-  val headerCaptionDescription: String
-
-  if (
-    contentDetailsState.data?.isAiring == true ||
-    contentDetailsState.data?.isPublishing == true
-  ) {
-    headerCaptionIcon = ImageVector.vectorResource(id = MyIcons.Outlined.Clock4)
-    headerCaptionDescription = "Ongoing"
-  } else {
-    headerCaptionIcon = ImageVector.vectorResource(id = MyIcons.Outlined.DoubleCheck)
-    headerCaptionDescription = "Completed"
-  }
+  val (
+    headerCaptionIcon: ImageVector,
+    headerCaptionDescription: String
+  ) = resolveHeaderIconAndDescription(contentDetailsState)
 
   Box(
     modifier = Modifier
@@ -86,8 +76,8 @@ fun CollapsingToolbarScope.ContentDetailsScreenToolbar(
 
     // Parallax header background
     Box {
-      Image(
-        painter = largeCoil,
+      AsyncImage(
+        model = imageUrl,
         contentDescription = "Heading Background",
         contentScale = ContentScale.Crop,
         modifier = Modifier
@@ -106,31 +96,26 @@ fun CollapsingToolbarScope.ContentDetailsScreenToolbar(
         modifier = Modifier
           .fillMaxSize()
           .statusBarsPadding()
-          .then(Modifier.padding(top = 52.dp, start = 16.dp, end = 16.dp, bottom = 12.dp)),
+          .padding(top = 52.dp, start = 16.dp, end = 16.dp, bottom = 12.dp),
         verticalAlignment = Alignment.CenterVertically
       ) {
-
         // Left cover image
-        Box(
+        SubcomposeAsyncImage(
           modifier = Modifier
             .width(100.dp)
-        ) {
-          if (smallCoil.state is ImagePainter.State.Loading) {
+            .fillMaxHeight()
+            .clip(MyShape.Rounded12),
+          model = imageUrl,
+          contentDescription = "Content thumbnail",
+          contentScale = ContentScale.Crop,
+          loading = {
             CenterCircularProgressIndicator(
               strokeWidth = 2.dp,
               size = 20.dp,
               color = MyColor.Yellow500
             )
           }
-          Image(
-            painter = smallCoil,
-            contentDescription = "Thumbnail",
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-              .fillMaxSize()
-              .clip(RoundedCornerShape(8.dp))
-          )
-        }
+        )
 
         // Header right content
         Column(
@@ -199,7 +184,9 @@ fun CollapsingToolbarScope.ContentDetailsScreenToolbar(
 
   // Toolbar
   Row(
-    modifier = Modifier.fillMaxWidth().statusBarsPadding(),
+    modifier = Modifier
+      .fillMaxWidth()
+      .statusBarsPadding(),
     verticalAlignment = Alignment.CenterVertically
   ) {
     IconButton(onClick = { onArrowClick() }) {
@@ -245,28 +232,31 @@ fun CollapsingToolbarScope.ContentDetailsScreenToolbar(
           fontWeight = FontWeight.Bold,
           fontSize = 20.sp
         ),
-        modifier = Modifier.weight(1f).padding(start = 8.dp, end = 12.dp)
+        modifier = Modifier
+          .weight(1f)
+          .padding(start = 8.dp, end = 12.dp)
       )
     }
   }
 }
 
-
-
-@OptIn(ExperimentalCoilApi::class)
-@Preview(widthDp = 280)
 @Composable
-fun Preview_ContentDetailsScreenCollapsingToolbar() {
-  CollapsingToolbarScaffold(
-    modifier = Modifier
-      .fillMaxSize()
-      .background(MyColor.DarkBlueBackground),
-    state = rememberCollapsingToolbarScaffoldState(),
-    scrollStrategy = ScrollStrategy.EnterAlwaysCollapsed,
-    toolbar = {
-      ContentDetailsScreenToolbar()
-    }
+private fun resolveHeaderIconAndDescription(
+  data: ContentDetailsState
+): Pair<ImageVector, String> {
+  return if (
+    data.data?.isAiring == true ||
+    data.data?.isPublishing == true
   ) {
-
+    Pair(
+      ImageVector.vectorResource(id = MyIcons.Outlined.Clock4),
+      "Ongoing"
+    )
+  } else {
+    Pair(
+      ImageVector.vectorResource(id = MyIcons.Outlined.DoubleCheck),
+      "Completed"
+    )
   }
+
 }

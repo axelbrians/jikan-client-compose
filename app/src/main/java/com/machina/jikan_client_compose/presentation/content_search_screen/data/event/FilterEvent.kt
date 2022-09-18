@@ -18,4 +18,9 @@ sealed class FilterEvent {
 	 * Event for when a filter is reset to it's original state
 	 */
 	class FilterReset(val contentType: ContentType, val query: String) : FilterEvent()
+
+	/**
+	 * Event for fetching available Search Filter
+	 */
+	class FetchFilter(val type: ContentType = ContentType.Anime): FilterEvent()
 }

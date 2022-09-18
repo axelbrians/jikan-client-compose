@@ -1,6 +1,5 @@
 package com.machina.jikan_client_compose.presentation.content_search_screen.composable
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -33,9 +32,8 @@ fun ContentSearchList(
   val shimmerInstance = rememberShimmer(shimmerBounds = ShimmerBounds.Custom)
 
   LazyColumn(
+    modifier = Modifier.onUpdateShimmerBounds(shimmerInstance),
     state = listState,
-    contentPadding = PaddingValues(12.dp, 0.dp, 12.dp, 0.dp),
-    modifier = Modifier.onUpdateShimmerBounds(shimmerInstance)
   ) {
     itemsIndexed(state.data.data, key = { index, data ->
       "${data.malId}-$index"
@@ -52,9 +50,7 @@ fun ContentSearchList(
 //        }
 //        else -> {
           ItemAnimeSearch(
-            modifier = Modifier
-              .fillMaxWidth()
-              .padding(12.dp, 8.dp),
+            modifier = Modifier,
             data = data,
             onItemClick = onItemClick
           )

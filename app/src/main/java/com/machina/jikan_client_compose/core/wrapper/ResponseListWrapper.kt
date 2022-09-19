@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ResponseDataListWrapper<T>(
+data class ResponseListWrapper<T>(
   @SerialName("pagination")
   val pagination: Pagination = Pagination(),
   @SerialName("data")

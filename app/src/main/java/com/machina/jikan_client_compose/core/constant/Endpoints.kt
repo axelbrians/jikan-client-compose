@@ -12,7 +12,8 @@ object Endpoints {
     const val ANIME_SCHEDULES = "/schedules"
     const val ANIME_CHARACTERS = "/characters"
     const val ANIME_RECOMMENDATIONS = "/recommendations"
-    const val ANIME_GENRES = "genres/anime"
+    const val ANIME_PICTURES = "/pictures"
+    const val ANIME_GENRES = "/genres/anime"
 
     const val MANGA_SEARCH = "/manga"
     const val MANGA_DETAILS = "/manga"
@@ -26,6 +27,10 @@ object Endpoints {
 
     fun getAnimeRecommendationEndpoint(malId: Int): String {
         return "$ANIME_DETAILS/$malId$ANIME_RECOMMENDATIONS"
+    }
+
+    fun getAnimePicturesEndpoint(malId: Int): String {
+        return "$ANIME_DETAILS/$malId/$ANIME_PICTURES"
     }
 
     fun getMangaDetailsEndpoint(malId: Int): String {

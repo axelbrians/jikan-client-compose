@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalDataModel
 import com.machina.jikan_client_compose.domain.use_case.anime_characters.GetAnimeCharactersUseCase
 import com.machina.jikan_client_compose.domain.use_case.anime_recommendations.GetAnimeRecommendationsUseCase
+import com.machina.jikan_client_compose.domain.use_case.get_content_details.GetAnimePicturesUseCase
 import com.machina.jikan_client_compose.domain.use_case.get_content_details.GetContentDetailsUseCase
 import com.machina.jikan_client_compose.presentation.data.StateListWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,17 +20,22 @@ import javax.inject.Inject
 class ContentDetailsViewModel @Inject constructor(
   private val getContentDetailsUseCase: GetContentDetailsUseCase,
   private val getAnimeCharactersUseCase: GetAnimeCharactersUseCase,
-  private val getAnimeRecommendationsUseCase: GetAnimeRecommendationsUseCase
+  private val getAnimeRecommendationsUseCase: GetAnimeRecommendationsUseCase,
+  private val getAnimePicturesUseCase: GetAnimePicturesUseCase
 ): ViewModel() {
 
   private val _contentDetailsState : MutableState<ContentDetailsState> = mutableStateOf(ContentDetailsState.Loading)
   val contentDetailsState : State<ContentDetailsState> = _contentDetailsState
 
-  private val _animeCharactersListState : MutableState<StateListWrapper<AnimeVerticalDataModel>> = mutableStateOf(StateListWrapper.loading())
-  val animeCharactersListState : State<StateListWrapper<AnimeVerticalDataModel>> = _animeCharactersListState
+  private val _animeCharactersState : MutableState<StateListWrapper<AnimeVerticalDataModel>> = mutableStateOf(StateListWrapper.loading())
+  val animeCharactersState : State<StateListWrapper<AnimeVerticalDataModel>> = _animeCharactersState
 
-  private val _animeRecommendationsListState : MutableState<StateListWrapper<AnimeVerticalDataModel>> = mutableStateOf(StateListWrapper.loading())
-  val animeRecommendationsListState : State<StateListWrapper<AnimeVerticalDataModel>> = _animeRecommendationsListState
+  private val _animeRecommendationsState : MutableState<StateListWrapper<AnimeVerticalDataModel>> = mutableStateOf(StateListWrapper.loading())
+  val animeRecommendationsState : State<StateListWrapper<AnimeVerticalDataModel>> = _animeRecommendationsState
+
+  private val _animePicturesState : MutableState<StateListWrapper<String>> = mutableStateOf(StateListWrapper.loading())
+  val animePicturesState : State<StateListWrapper<String>> = _animePicturesState
+
 
 
   fun getContentDetails(contentType: String?, malId: Int?) {
@@ -40,13 +46,19 @@ class ContentDetailsViewModel @Inject constructor(
 
   fun getAnimeCharacters(malId: Int) {
     getAnimeCharactersUseCase(malId).onEach { state ->
-      _animeCharactersListState.value = state
+      _animeCharactersState.value = state
     }.launchIn(viewModelScope)
   }
 
   fun getAnimeRecommendations(malId: Int) {
     getAnimeRecommendationsUseCase.getAsStateListWrapper(malId).onEach { state ->
-      _animeRecommendationsListState.value = state
+      _animeRecommendationsState.value = state
+    }.launchIn(viewModelScope)
+  }
+
+  fun getAnimePictures(malId: Int) {
+    getAnimePicturesUseCase(malId).onEach { state ->
+      _animePicturesState.value = state
     }.launchIn(viewModelScope)
   }
 }

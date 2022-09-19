@@ -1,5 +1,6 @@
 package com.machina.jikan_client_compose.presentation.data
 
+import com.machina.jikan_client_compose.core.error.MyError
 import com.machina.jikan_client_compose.core.wrapper.Event
 
 data class StateListWrapper<T>(
@@ -14,6 +15,10 @@ data class StateListWrapper<T>(
 
 		fun <T> default(): StateListWrapper<T> {
 			return StateListWrapper()
+		}
+
+		fun <T> error(message: String?): StateListWrapper<T> {
+			return StateListWrapper(error = Event(message ?: MyError.UNKNOWN_ERROR))
 		}
 
 		fun <T> StateListWrapper<T>.copyKeepData(

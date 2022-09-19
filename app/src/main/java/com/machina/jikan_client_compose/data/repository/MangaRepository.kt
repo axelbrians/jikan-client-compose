@@ -6,7 +6,7 @@ import com.machina.jikan_client_compose.core.error.GeneralError
 import com.machina.jikan_client_compose.core.error.MyError
 import com.machina.jikan_client_compose.core.extensions.defaultUrl
 import com.machina.jikan_client_compose.core.wrapper.Resource
-import com.machina.jikan_client_compose.core.wrapper.ResponseDataListWrapper
+import com.machina.jikan_client_compose.core.wrapper.ResponseListWrapper
 import com.machina.jikan_client_compose.data.remote.anime.MangaService
 import com.machina.jikan_client_compose.data.remote.dto.anime_details.AnimeDetailsDto
 import com.machina.jikan_client_compose.data.remote.dto.manga_details.MangaDetailsDtoV4
@@ -22,7 +22,7 @@ class MangaRepository(
 ): MangaService {
 
   // TODO: Need regulated class for manga and anime search, currently just focus on anime
-  suspend fun searchManga(query: String, page: Int): Resource<ResponseDataListWrapper<AnimeDetailsDto>> {
+  suspend fun searchManga(query: String, page: Int): Resource<ResponseListWrapper<AnimeDetailsDto>> {
     val request = HttpRequestBuilder().apply {
       method = HttpMethod.Get
       defaultUrl { encodedPath = Endpoints.MANGA_SEARCH }
@@ -30,7 +30,7 @@ class MangaRepository(
       parameter("page", page)
     }
 
-    return safeCall<ResponseDataListWrapper<AnimeDetailsDto>, GeneralError>(client, request)
+    return safeCall<ResponseListWrapper<AnimeDetailsDto>, GeneralError>(client, request)
   }
 
   override suspend fun getMangaDetails(malId: Int): Resource<MangaDetailsDtoV4> {

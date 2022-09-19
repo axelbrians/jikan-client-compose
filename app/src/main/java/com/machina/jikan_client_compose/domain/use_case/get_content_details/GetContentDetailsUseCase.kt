@@ -15,7 +15,6 @@ import com.machina.jikan_client_compose.presentation.content_detail_screen.data.
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import timber.log.Timber
 import javax.inject.Inject
 
 class GetContentDetailsUseCase @Inject constructor(
@@ -33,7 +32,6 @@ class GetContentDetailsUseCase @Inject constructor(
         ContentType.Manga -> mangaRepository.getMangaDetails(malId ?: 0)
         else -> Resource.Error(MyError.UNKNOWN_ERROR)
       }
-      Timber.d(res.message)
 
       val state = when (res) {
         is Resource.Success -> ContentDetailsState(resolveContentType(res.data))

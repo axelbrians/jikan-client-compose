@@ -1,5 +1,6 @@
 package com.machina.jikan_client_compose.presentation.data
 
+import com.machina.jikan_client_compose.core.error.MyError
 import com.machina.jikan_client_compose.core.wrapper.Event
 
 data class StateWrapper<T>(
@@ -23,6 +24,10 @@ data class StateWrapper<T>(
 
 		fun <T> default(): StateWrapper<T> {
 			return StateWrapper()
+		}
+
+		fun <T> error(message: String?): StateWrapper<T> {
+			return StateWrapper(error = Event(message ?: MyError.UNKNOWN_ERROR))
 		}
 
 		fun <T> StateWrapper<T>.isSuccess(): Boolean {

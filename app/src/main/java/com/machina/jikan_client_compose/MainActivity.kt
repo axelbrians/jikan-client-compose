@@ -8,7 +8,6 @@ import android.view.animation.AnticipateInterpolator
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.animation.doOnEnd
-import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.machina.jikan_client_compose.core.DispatchersProvider
 import com.machina.jikan_client_compose.presentation.NavGraphs
@@ -16,7 +15,6 @@ import com.machina.jikan_client_compose.ui.theme.JikanClientComposeTheme
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.navigation.dependency
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.InternalCoroutinesApi
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -25,7 +23,6 @@ class MainActivity : ComponentActivity() {
   @Inject
   lateinit var dispatchers: DispatchersProvider
 
-  @OptIn(InternalCoroutinesApi::class, ExperimentalCoilApi::class)
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 

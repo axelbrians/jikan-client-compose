@@ -49,17 +49,15 @@ fun ContentDetailsScreen(
   var isSynopsisExpanded by remember { mutableStateOf(false) }
   val toolbarScaffoldState = rememberCollapsingToolbarScaffoldState()
   val contentDetailsState by viewModel.contentDetailsState
-  val animeCharacterListState by viewModel.animeCharactersListState
-  val animeRecommendationsListState by viewModel.animeRecommendationsListState
+  val animeCharactersState by viewModel.animeCharactersState
+  val animeRecommendationsState by viewModel.animeRecommendationsState
 
-  LaunchedEffect(
-    key1 = navArgs.malId,
-    block = {
-      viewModel.getContentDetails(navArgs.contentType.name, navArgs.malId)
-      viewModel.getAnimeCharacters(navArgs.malId)
-      viewModel.getAnimeRecommendations(navArgs.malId)
-    }
-  )
+  LaunchedEffect(navArgs.malId) {
+    viewModel.getContentDetails(navArgs.contentType.name, navArgs.malId)
+    viewModel.getAnimeCharacters(navArgs.malId)
+    viewModel.getAnimeRecommendations(navArgs.malId)
+    viewModel.getAnimePictures(navArgs.malId)
+  }
 
   if (contentDetailsState.isLoading) {
     CenterCircularProgressIndicator(
@@ -149,14 +147,13 @@ fun ContentDetailsScreen(
 
         // Anime Characters List
         item(key = ContentDetailsScreenSection.ContentCharacters) {
-          val shimmerInstance = rememberShimmerCustomBounds()
           ScrollableHorizontalContent(
             modifier = Modifier,
             itemModifier = ItemVerticalAnimeModifier.Small,
-            shimmer = shimmerInstance,
+            shimmer = rememberShimmerCustomBounds(),
             thumbnailHeight = ItemVerticalAnimeModifier.ThumbnailHeightSmall,
             headerTitle = Constant.CHARACTERS,
-            contentState = animeCharacterListState,
+            contentState = animeCharactersState,
             contentPadding = PaddingValues(horizontal = 12.dp),
             contentArrangement = ItemVerticalAnimeModifier.HorizontalArrangement.Default,
             textAlign = TextAlign.Center,
@@ -175,7 +172,7 @@ fun ContentDetailsScreen(
             modifier = Modifier,
             shimmer = rememberShimmerCustomBounds(),
             headerTitle = Constant.SIMILAR,
-            contentState = animeRecommendationsListState,
+            contentState = animeRecommendationsState,
             contentPadding = PaddingValues(horizontal = 12.dp),
             contentArrangement = ItemVerticalAnimeModifier.HorizontalArrangement.Default,
             onIconClick = {

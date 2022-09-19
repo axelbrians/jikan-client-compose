@@ -5,12 +5,13 @@ import com.machina.jikan_client_compose.core.constant.Endpoints
 import com.machina.jikan_client_compose.core.error.GeneralError
 import com.machina.jikan_client_compose.core.extensions.defaultUrl
 import com.machina.jikan_client_compose.core.wrapper.Resource
-import com.machina.jikan_client_compose.core.wrapper.ResponseDataListWrapper
+import com.machina.jikan_client_compose.core.wrapper.ResponseListWrapper
 import com.machina.jikan_client_compose.data.remote.anime_details.AnimeDetailsService
 import com.machina.jikan_client_compose.data.remote.dto.anime_characters.AnimeCharacterResponse
 import com.machina.jikan_client_compose.data.remote.dto.anime_details.AnimeDetailsDto
 import com.machina.jikan_client_compose.data.remote.dto.anime_details.AnimeDetailsResponseV4
 import com.machina.jikan_client_compose.data.remote.dto.anime_recommendations.AnimeRecommendationResponse
+import com.machina.jikan_client_compose.data.remote.dto.common.Images
 import com.machina.jikan_client_compose.di.AndroidKtorClient
 import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalDataModel
 import io.ktor.client.*
@@ -43,7 +44,7 @@ class AnimeDetailsRepository(
       }
     }
 
-    val res = safeCall<ResponseDataListWrapper<AnimeCharacterResponse>, GeneralError>(
+    val res = safeCall<ResponseListWrapper<AnimeCharacterResponse>, GeneralError>(
       client, request, true
     )
     return if (res is Resource.Success && res.data != null) {
@@ -59,7 +60,7 @@ class AnimeDetailsRepository(
       defaultUrl { encodedPath = Endpoints.getAnimeRecommendationEndpoint(malId) }
     }
 
-    val res = safeCall<ResponseDataListWrapper<AnimeRecommendationResponse>, GeneralError>(
+    val res = safeCall<ResponseListWrapper<AnimeRecommendationResponse>, GeneralError>(
       client, request, true
     )
 
@@ -70,5 +71,13 @@ class AnimeDetailsRepository(
     } else {
       Resource.Error(res.message)
     }
+  }
+
+  override suspend fun getAnimePictures(malId: Int): Resource<ResponseListWrapper<Images>> {
+    val request = HttpRequestBuilder().apply {
+      defaultUrl { encodedPath = Endpoints.getAnimePicturesEndpoint(malId) }
+    }
+
+    return safeCall<ResponseListWrapper<Images>, GeneralError>(client, request, true)
   }
 }

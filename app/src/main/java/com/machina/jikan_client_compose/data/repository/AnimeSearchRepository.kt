@@ -8,7 +8,7 @@ import com.machina.jikan_client_compose.core.error.GeneralError
 import com.machina.jikan_client_compose.core.extensions.defaultUrl
 import com.machina.jikan_client_compose.core.helper.ParamHelper
 import com.machina.jikan_client_compose.core.wrapper.Resource
-import com.machina.jikan_client_compose.core.wrapper.ResponseDataListWrapper
+import com.machina.jikan_client_compose.core.wrapper.ResponseListWrapper
 import com.machina.jikan_client_compose.data.remote.anime_search.AnimeSearchService
 import com.machina.jikan_client_compose.data.remote.dto.anime_characters.AnimeCharacterResponse
 import com.machina.jikan_client_compose.data.remote.dto.anime_details.AnimeDetailsDto
@@ -32,7 +32,7 @@ class AnimeSearchRepository(
 		query: String,
 		page: Int,
 		mapFilter: Map<String, FilterGroupData>
-	): Resource<ResponseDataListWrapper<AnimeDetailsDto>> {
+	): Resource<ResponseListWrapper<AnimeDetailsDto>> {
 		val request = HttpRequestBuilder().apply {
 			defaultUrl { encodedPath = Endpoints.ANIME_SEARCH }
 			parameter(AnimeConstant.QueryKey, query)
@@ -55,7 +55,7 @@ class AnimeSearchRepository(
 				}
 			}
 		}
-		return safeCall<ResponseDataListWrapper<AnimeDetailsDto>, GeneralError>(
+		return safeCall<ResponseListWrapper<AnimeDetailsDto>, GeneralError>(
 			client, request, true
 		)
 	}
@@ -65,7 +65,7 @@ class AnimeSearchRepository(
 		url: String,
 		page: Int,
 		params: Map<String, String>
-	): Resource<ResponseDataListWrapper<AnimeMinimalDataResponse>> {
+	): Resource<ResponseListWrapper<AnimeMinimalDataResponse>> {
 		val request = HttpRequestBuilder().apply {
 			defaultUrl { encodedPath = url }
 			parameter(AnimeConstant.PageKey, page)
@@ -89,13 +89,13 @@ class AnimeSearchRepository(
 
 	private suspend fun handleAnimeRecommendationCall(
 		request: HttpRequestBuilder
-	): Resource<ResponseDataListWrapper<AnimeMinimalDataResponse>> {
-		val res = safeCall<ResponseDataListWrapper<AnimeRecommendationResponse>, GeneralError>(
+	): Resource<ResponseListWrapper<AnimeMinimalDataResponse>> {
+		val res = safeCall<ResponseListWrapper<AnimeRecommendationResponse>, GeneralError>(
 			client, request, true
 		)
 		return if (res is Resource.Success && res.data != null) {
 			Resource.Success(
-				ResponseDataListWrapper(
+				ResponseListWrapper(
 					res.data.pagination,
 					res.data.data.map { AnimeMinimalDataResponse.from(it) }
 				)
@@ -107,14 +107,14 @@ class AnimeSearchRepository(
 
 	private suspend fun handleAnimeCharactersCall(
 		request: HttpRequestBuilder
-	): Resource<ResponseDataListWrapper<AnimeMinimalDataResponse>> {
-		val res = safeCall<ResponseDataListWrapper<AnimeCharacterResponse>, GeneralError>(
+	): Resource<ResponseListWrapper<AnimeMinimalDataResponse>> {
+		val res = safeCall<ResponseListWrapper<AnimeCharacterResponse>, GeneralError>(
 			client, request, true
 		)
 		return if (res is Resource.Success && res.data != null) {
 			val orderedCharacters = res.data.data.sortedByDescending { it.favoritesCount }
 			Resource.Success(
-				ResponseDataListWrapper(
+				ResponseListWrapper(
 					res.data.pagination,
 					orderedCharacters.map { AnimeMinimalDataResponse.from(it) }
 				)
@@ -126,8 +126,8 @@ class AnimeSearchRepository(
 
 	private suspend fun handleDefaultAnimeViewAllCall(
 		request: HttpRequestBuilder
-	): Resource<ResponseDataListWrapper<AnimeMinimalDataResponse>> {
-		val res = safeCall<ResponseDataListWrapper<AnimeDetailsDto>, GeneralError>(
+	): Resource<ResponseListWrapper<AnimeMinimalDataResponse>> {
+		val res = safeCall<ResponseListWrapper<AnimeDetailsDto>, GeneralError>(
 			client, request, true
 		)
 		return if (res is Resource.Success && res.data != null) {
@@ -139,7 +139,7 @@ class AnimeSearchRepository(
 				sortedSchedule.add(temp)
 			}
 			Resource.Success(
-				ResponseDataListWrapper(
+				ResponseListWrapper(
 					res.data.pagination,
 					sortedSchedule.map { AnimeMinimalDataResponse.from(it) }
 				)
@@ -155,7 +155,7 @@ class AnimeSearchRepository(
 			parameter(AnimeConstant.FilterKey, AnimeGenres.GenreKey)
 		}
 
-		val res = safeCall<ResponseDataListWrapper<Genre>, GeneralError>(
+		val res = safeCall<ResponseListWrapper<Genre>, GeneralError>(
 			client, request, true
 		)
 
@@ -178,7 +178,7 @@ class AnimeSearchRepository(
 			parameter(AnimeConstant.FilterKey, AnimeGenres.DemographicsKey)
 		}
 
-		val res = safeCall<ResponseDataListWrapper<Genre>, GeneralError>(
+		val res = safeCall<ResponseListWrapper<Genre>, GeneralError>(
 			client, request, true
 		)
 
@@ -201,7 +201,7 @@ class AnimeSearchRepository(
 			parameter(AnimeConstant.FilterKey, AnimeGenres.ThemesKey)
 		}
 
-		val res = safeCall<ResponseDataListWrapper<Genre>, GeneralError>(
+		val res = safeCall<ResponseListWrapper<Genre>, GeneralError>(
 			client, request, true
 		)
 
@@ -224,7 +224,7 @@ class AnimeSearchRepository(
 			parameter(AnimeConstant.FilterKey, AnimeGenres.ExplicitKey)
 		}
 
-		val res = safeCall<ResponseDataListWrapper<Genre>, GeneralError>(
+		val res = safeCall<ResponseListWrapper<Genre>, GeneralError>(
 			client, request, true
 		)
 

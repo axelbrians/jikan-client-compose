@@ -2,7 +2,10 @@ package com.machina.jikan_client_compose.presentation.content_detail_screen
 
 import android.view.Window
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.systemuicontroller.SystemUiController
@@ -28,10 +31,11 @@ fun ContentDetailsNav(
     drawOverStatusBar = true,
     window = window,
   )
-
-  ContentDetailsScreen(
-    navigator = ContentDetailsScreenNavigator(navigator),
-    viewModel = hiltViewModel(),
-    navArgs = navArgs
-  )
+  Box(modifier = Modifier.fillMaxSize()) {
+    ContentDetailsScreen(
+      navigator = ContentDetailsScreenNavigator(navigator),
+      viewModel = hiltViewModel(),
+      navArgs = navArgs
+    )
+  }
 }

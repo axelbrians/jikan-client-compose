@@ -23,9 +23,11 @@ fun CenterCircularProgressIndicator(
 	color: Color = MaterialTheme.colors.primary,
 	strokeWidth: Dp = ProgressIndicatorDefaults.StrokeWidth
 ) {
-	Box(modifier = modifier
+	Box(
+		modifier = modifier
 		.fillMaxSize()
-		.background(MaterialTheme.colors.background)) {
+		.background(MaterialTheme.colors.background)
+	) {
 		CircularProgressIndicator(
 			modifier = Modifier
 				.size(size)

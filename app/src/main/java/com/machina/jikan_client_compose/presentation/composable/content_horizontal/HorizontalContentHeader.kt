@@ -1,9 +1,6 @@
 package com.machina.jikan_client_compose.presentation.composable.content_horizontal
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -19,7 +16,9 @@ import androidx.compose.ui.unit.sp
 import com.machina.jikan_client_compose.ui.theme.MyColor
 
 object HorizontalContentHeaderConfig {
-  val Default = Modifier.fillMaxWidth().padding(start = 18.dp, end = 12.dp, bottom = 4.dp)
+  val Default = Modifier
+    .fillMaxWidth()
+    .padding(start = 18.dp, end = 12.dp, bottom = 4.dp)
   val fillWidth = Modifier.fillMaxWidth()
 }
 
@@ -27,10 +26,10 @@ object HorizontalContentHeaderConfig {
 fun HorizontalContentHeader(
   modifier: Modifier = Modifier,
   title: String,
-  onButtonClick: () -> Unit
+  onButtonClick: (() -> Unit)? = null
 ) {
   Row(
-    modifier = modifier,
+    modifier = modifier.heightIn(min = 32.dp),
     verticalAlignment = Alignment.CenterVertically,
     horizontalArrangement = Arrangement.SpaceBetween
   ) {
@@ -43,12 +42,14 @@ fun HorizontalContentHeader(
       )
     )
 
-    IconButton(onClick = onButtonClick) {
-      Icon(
-        imageVector = Icons.Default.ArrowForward,
-        contentDescription = "See all",
-        tint = MyColor.Grey
-      )
+    if (onButtonClick != null) {
+      IconButton(onClick = onButtonClick) {
+        Icon(
+          imageVector = Icons.Default.ArrowForward,
+          contentDescription = "See all",
+          tint = MyColor.Grey
+        )
+      }
     }
   }
 }

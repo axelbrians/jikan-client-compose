@@ -70,7 +70,7 @@ fun ItemVerticalAnime(
       text = data.title,
       modifier = Modifier
         .fillMaxWidth()
-        .padding(vertical = 6.dp),
+        .padding(top = 6.dp, bottom = 4.dp),
       maxLines = 2,
       overflow = TextOverflow.Ellipsis,
       style = MyType.Body2.Normal.OnDarkSurfaceLight,

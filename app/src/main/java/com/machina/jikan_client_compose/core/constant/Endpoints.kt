@@ -30,7 +30,7 @@ object Endpoints {
     }
 
     fun getAnimePicturesEndpoint(malId: Int): String {
-        return "$ANIME_DETAILS/$malId/$ANIME_PICTURES"
+        return "$ANIME_DETAILS/$malId$ANIME_PICTURES"
     }
 
     fun getMangaDetailsEndpoint(malId: Int): String {

@@ -34,6 +34,10 @@ import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.navigationBarsHeight
+import com.google.accompanist.insets.statusBarsPadding
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 import com.machina.jikan_client_compose.core.constant.Constant
 import com.machina.jikan_client_compose.core.constant.Endpoints
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
@@ -66,6 +70,7 @@ private object ContentDetailsScreenSection {
   const val ContentPhotos = "content_photos"
 }
 
+@OptIn(ExperimentalPagerApi::class)
 @ExperimentalAnimationApi
 @ExperimentalCoilApi
 @Composable
@@ -81,14 +86,13 @@ fun ContentDetailsScreen(
   val contentHeight = with(density) {
     (190 * screenWidth.roundToPx() / 140).toDp()
   }
-//  Timber.d("screenWidth: $screenWidth")
-//  Timber.d("contentHeight: $contentHeight")
 
   val coroutineScope = rememberCoroutineScope()
   val galleryListState = rememberLazyListState()
   val overlayListState = rememberLazyListState()
+  val pagerState = rememberPagerState()
 
-  val extraContentPadding = 12.dp
+  val extraContentPadding = 24.dp - 140.dp
   val toolbarScaffoldState = rememberCollapsingToolbarScaffoldState()
   var isSynopsisExpanded by remember { mutableStateOf(false) }
   val contentDetailsState by viewModel.contentDetailsState
@@ -99,24 +103,36 @@ fun ContentDetailsScreen(
 
   var isGalleryPageOpen by remember { mutableStateOf(false) }
   var isOverlayVisible by remember { mutableStateOf(false) }
+  var selectedImageUrl by remember { mutableStateOf("") }
   var selectedImageIndex by remember { mutableStateOf(0) }
-  var clickedImageUrl by remember { mutableStateOf("") }
   var yAxisOffset by remember { mutableStateOf(0.dp) }
   var xAxisOffset by remember { mutableStateOf(0.dp) }
   var xAxisStart by remember { mutableStateOf(0.dp) }
   var xAxisTarget by remember { mutableStateOf(0.dp) }
+  var xAxisOffsetBlocker by remember { mutableStateOf(0.dp) }
+  var xAxisStartBlocker by remember { mutableStateOf(0.dp) }
+  var xAxisTargetBlocker by remember { mutableStateOf(0.dp) }
 
   val animatedYDp by animateDpAsState(
     targetValue = if (isGalleryPageOpen) statusBarHeight else yAxisOffset,
     animationSpec = tween(animateDuration)
   )
   var animatedXDp by remember { mutableStateOf(0.dp) }
+  var animatedXDpBlocker by remember { mutableStateOf(0.dp) }
   val animXDp = remember(isGalleryPageOpen) {
     TargetBasedAnimation(
       animationSpec = tween(animateDuration),
       typeConverter = Dp.VectorConverter,
       initialValue = xAxisStart,
       targetValue = xAxisTarget
+    )
+  }
+  val animXDpBlocker = remember(isGalleryPageOpen) {
+    TargetBasedAnimation(
+      animationSpec = tween(animateDuration),
+      typeConverter = Dp.VectorConverter,
+      initialValue = xAxisStartBlocker,
+      targetValue = xAxisTargetBlocker
     )
   }
   val animatedContentWidth by animateDpAsState(
@@ -133,35 +149,50 @@ fun ContentDetailsScreen(
   )
 
   val closeOverlayAction = {
+    selectedImageUrl = if (pagerState.currentPage in 0 until animePhotos.data.size) {
+      animePhotos.data[pagerState.currentPage]
+    } else {
+      ""
+    }
+    val index = pagerState.currentPage
     val isLastSelectedVisible = galleryListState.layoutInfo.visibleItemsInfo.find {
-      it.index == selectedImageIndex
+      it.index == index
     } == null
 
     coroutineScope.launch {
       if (isLastSelectedVisible) {
-        galleryListState.scrollToItem(selectedImageIndex)
+        galleryListState.scrollToItem(index)
       }
       val xOffset = galleryListState.layoutInfo.visibleItemsInfo.find {
-        it.index == selectedImageIndex
+        it.index == index
       }?.offset ?: 0
       xAxisOffset = with(density) {
         xOffset.toFloat().toDp() + extraContentPadding
       }
-
       xAxisStart = 0.dp
       xAxisTarget = xAxisOffset
       animatedXDp = 0.dp
+
+      xAxisOffsetBlocker = xAxisOffset + 140.dp - 12.dp
+      xAxisStartBlocker = 0.dp
+      xAxisTargetBlocker = xAxisOffsetBlocker
+      animatedXDpBlocker = 0.dp
       isGalleryPageOpen = false
     }
     Unit
   }
 
-  LaunchedEffect(animXDp) {
+  LaunchedEffect(pagerState.currentPage) {
+    overlayListState.animateScrollToItem(pagerState.currentPage)
+  }
+
+  LaunchedEffect(key1 = animXDp, key2 = animXDpBlocker) {
     val targetValue = if (isGalleryPageOpen) 0.dp else xAxisOffset
     val startTime = withFrameNanos { it }
     do {
       val playTime = withFrameNanos { it } - startTime
       animatedXDp = animXDp.getValueFromNanos(playTime)
+      animatedXDpBlocker = animXDpBlocker.getValueFromNanos(playTime)
     } while (animatedXDp != targetValue)
     if (targetValue == xAxisOffset) {
       isOverlayVisible = false
@@ -337,18 +368,24 @@ fun ContentDetailsScreen(
                   .height(190.dp)
                   .clip(MyShape.Rounded6)
                   .clickable {
-                    clickedImageUrl = imageUrl
                     selectedImageIndex = index
+                    selectedImageUrl = imageUrl
 
                     val xOffset = galleryListState.layoutInfo.visibleItemsInfo.find {
                       it.index == index
                     }?.offset ?: 0
                     xAxisOffset = with(density) {
-                      (xOffset.toFloat()).toDp() +  extraContentPadding
+                      (xOffset.toFloat()).toDp() + extraContentPadding
                     }
                     xAxisStart = xAxisOffset
                     xAxisTarget = 0.dp
                     animatedXDp = xAxisOffset
+
+                    xAxisOffsetBlocker = xAxisOffset + 140.dp - 12.dp
+                    xAxisStartBlocker = xAxisOffsetBlocker
+                    xAxisTargetBlocker = 0.dp
+                    animatedXDpBlocker = xAxisOffsetBlocker
+
                     isOverlayVisible = true
                     isGalleryPageOpen = true
                   },
@@ -373,40 +410,33 @@ fun ContentDetailsScreen(
 
 
     if (isOverlayVisible) {
+      LaunchedEffect(Unit) {
+        pagerState.scrollToPage(selectedImageIndex)
+        overlayListState.animateScrollToItem(selectedImageIndex)
+      }
       Box(
         modifier = Modifier
           .zIndex(5f)
           .fillMaxSize()
           .background(animatedBgColor)
       ) {
-        Box(modifier = Modifier
-          .fillMaxSize()
-          .clickable(
-            interactionSource = remember { MutableInteractionSource() },
-            indication = null,
-            onClick = closeOverlayAction
-          )
-        )
-
-        Column(
-          modifier = Modifier.fillMaxSize(),
-          verticalArrangement = Arrangement.SpaceBetween
-        ) {
-          SubcomposeAsyncImage(
-            model = clickedImageUrl,
-            contentScale = ContentScale.Crop,
-            contentDescription = "Zoomed image",
-            loading = {
-              CenterCircularProgressIndicator(
-                strokeWidth = 2.dp,
-                size = 20.dp,
-                color = MyColor.Yellow500
-              )
-            },
-            modifier = Modifier
+        HorizontalPager(
+          modifier = Modifier
+            .fillMaxSize()
+            .clickable(
+              interactionSource = remember { MutableInteractionSource() },
+              indication = null,
+              onClick = closeOverlayAction
+            ),
+          verticalAlignment = Alignment.Top,
+          count = animePhotos.data.size,
+          state = pagerState,
+        ) { index: Int ->
+          val pagerItemModifier = if (pagerState.currentPage == index) {
+            Modifier
               .graphicsLayer {
                 with(density) {
-                  translationX = animatedXDp.toPx()
+                  translationX = (animatedXDp).toPx()
                   translationY = animatedYDp.toPx()
                 }
               }
@@ -419,56 +449,109 @@ fun ContentDetailsScreen(
                 indication = null,
                 onClick = { }
               )
-          )
-          val smallImageModifier = Modifier
-            .width(70.dp)
-            .height(95.dp)
-            .clip(MyShape.Rounded6)
-          LazyRow(
-            state = overlayListState,
-            contentPadding = PaddingValues(horizontal = 12.dp),
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-            modifier = Modifier
+          } else {
+            Modifier
+              .statusBarsPadding()
               .fillMaxWidth()
-              .navigationBarsPadding()
-          ) {
-            itemsIndexed(animePhotos.data) { index, imageUrl ->
-              Box(
-                modifier = (
-                  if (selectedImageIndex == index) {
-                    smallImageModifier.border(
-                      width = 2.dp,
-                      color = MyColor.OnDarkSurfaceLight,
-                      shape = MyShape.Rounded6
-                    )
-                  } else {
-                    smallImageModifier
-                  }
-                ).clickable {
-                  selectedImageIndex = index
-                  clickedImageUrl = imageUrl
+              .height(contentHeight)
+              .clickable(
+                enabled = true,
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = { }
+              )
+          }
+          SubcomposeAsyncImage(
+            model = animePhotos.data[index],
+            contentScale = ContentScale.Crop,
+            contentDescription = "Zoomed image",
+            loading = {
+              CenterCircularProgressIndicator(
+                strokeWidth = 2.dp,
+                size = 20.dp,
+                color = MyColor.Yellow500
+              )
+            },
+            modifier = pagerItemModifier
+          )
+        }
+
+        if (animatedYDp > statusBarHeight) {
+          SubcomposeAsyncImage(
+            model = selectedImageUrl,
+            contentScale = ContentScale.Crop,
+            contentDescription = "Zoomed image",
+            loading = {
+              CenterCircularProgressIndicator(
+                strokeWidth = 2.dp,
+                size = 20.dp,
+                color = MyColor.Yellow500
+              )
+            },
+            modifier = Modifier
+              .graphicsLayer {
+                with(density) {
+                  translationX = (animatedXDpBlocker).toPx()
+                  translationY = animatedYDp.toPx()
                 }
-              ) {
-                SubcomposeAsyncImage(
-                  modifier = Modifier.fillMaxSize(),
-                  model = imageUrl,
-                  contentDescription = "Anime Photos",
-                  contentScale = ContentScale.Crop,
-                  loading = {
-                    CenterCircularProgressIndicator(
-                      strokeWidth = 2.dp,
-                      size = 20.dp,
-                      color = MyColor.Yellow500
-                    )
-                  }
-                )
               }
+              .width(animatedContentWidth)
+              .height(animatedContentHeight)
+              .clip(MyShape.Rounded6)
+          )
+        }
+
+        val smallImageModifier = Modifier
+          .width(70.dp)
+          .height(95.dp)
+          .clip(MyShape.Rounded6)
+
+        LazyRow(
+          state = overlayListState,
+          contentPadding = PaddingValues(horizontal = 12.dp),
+          horizontalArrangement = Arrangement.spacedBy(4.dp),
+          modifier = Modifier
+            .fillMaxWidth()
+            .align(Alignment.BottomCenter)
+            .navigationBarsPadding()
+        ) {
+          itemsIndexed(animePhotos.data) { index, imageUrl ->
+            Box(
+              modifier = (
+                if (pagerState.currentPage == index) {
+                  smallImageModifier.border(
+                    width = 2.dp,
+                    color = MyColor.OnDarkSurfaceLight,
+                    shape = MyShape.Rounded6
+                  )
+                } else {
+                  smallImageModifier
+                }
+              ).clickable {
+                selectedImageUrl = imageUrl
+                if (pagerState.currentPage != index) {
+                  coroutineScope.launch {
+                    pagerState.animateScrollToPage(index)
+                  }
+                }
+              }
+            ) {
+              SubcomposeAsyncImage(
+                modifier = Modifier.fillMaxSize(),
+                model = imageUrl,
+                contentDescription = "Anime Photos",
+                contentScale = ContentScale.Crop,
+                loading = {
+                  CenterCircularProgressIndicator(
+                    strokeWidth = 2.dp,
+                    size = 20.dp,
+                    color = MyColor.Yellow500
+                  )
+                }
+              )
             }
           }
         }
-      }
-      LaunchedEffect(overlayListState) {
-        overlayListState.animateScrollToItem(selectedImageIndex)
       }
     }
   }

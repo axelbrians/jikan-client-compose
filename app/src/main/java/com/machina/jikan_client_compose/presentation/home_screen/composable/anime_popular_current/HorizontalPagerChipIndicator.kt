@@ -8,13 +8,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.machina.jikan_client_compose.ui.theme.MyColor
+import com.machina.jikan_client_compose.ui.theme.MyShape
 
 @Composable
 fun HorizontalPagerChipIndicator(
@@ -51,7 +51,7 @@ fun HorizontalPagerChipIndicator(
 			.padding(horizontal = 2.dp)
 			.width(animateWidth)
 			.height(8.dp)
-			.clip(RoundedCornerShape(50f))
+			.clip(MyShape.RoundedAllPercent50)
 			.background(animateColor.value)
 	)
 }

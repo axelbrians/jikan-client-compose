@@ -17,49 +17,51 @@ import com.ramcosta.composedestinations.navigation.dependency
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-  @Inject
-  lateinit var dispatchers: DispatchersProvider
+	@Inject
+	lateinit var dispatchers: DispatchersProvider
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
 
-    setContent {
-      JikanClientComposeTheme {
+		setContent {
+			JikanClientComposeTheme {
 //        MyApp(
 //          window = window,
 //          dispatchers = dispatchers
-//        
-        DestinationsNavHost(
-          navGraph = NavGraphs.root,
-          dependenciesContainerBuilder = {
-            dependency(window)
-            dependency(rememberSystemUiController())
-          }
-        )
-      }
-    }
+//
+				DestinationsNavHost(
+					navGraph = NavGraphs.root,
+					dependenciesContainerBuilder = {
+						dependency(window)
+						dependency(rememberSystemUiController())
+					}
+				)
+			}
+		}
 
-    if (BuildConfig.VERSION_CODE >= Build.VERSION_CODES.S)
-    splashScreen.setOnExitAnimationListener { splashScreenView ->
-      val slideUp = ObjectAnimator.ofFloat(
-        splashScreenView,
-        View.TRANSLATION_Y,
-        0f,
-        -splashScreenView.height.toFloat()
-      )
-      slideUp.interpolator = AnticipateInterpolator()
-      slideUp.duration = 200L
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+			splashScreen.setOnExitAnimationListener { splashScreenView ->
+				val slideUp = ObjectAnimator.ofFloat(
+					splashScreenView,
+					View.TRANSLATION_Y,
+					0f,
+					-splashScreenView.height.toFloat()
+				)
+				slideUp.interpolator = AnticipateInterpolator()
+				slideUp.duration = 200L
 
-      // Call SplashScreenView.remove at the end of your custom animation.
-      slideUp.doOnEnd { splashScreenView.remove() }
+				// Call SplashScreenView.remove at the end of your custom animation.
+				slideUp.doOnEnd { splashScreenView.remove() }
 
-      // Run your animation.
-      slideUp.start()
-    }
-  }
+				// Run your animation.
+				slideUp.start()
+			}
+		}
+	}
 }
 
 //@OptIn(

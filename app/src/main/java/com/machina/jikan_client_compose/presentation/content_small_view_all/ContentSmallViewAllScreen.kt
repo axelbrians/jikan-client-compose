@@ -8,8 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -43,7 +43,8 @@ fun ContentSmallViewAllScreen(
 	val lazyGridState = rememberLazyGridState()
 	val animateToolbarOffset = animateDpAsState(
 		targetValue = if (lazyGridState.scrollDirection() == ScrollDirection.UP) 0.dp else (-56).dp,
-		animationSpec = TweenSpec.defaultEasing()
+		animationSpec = TweenSpec.defaultEasing(),
+		label = "Animated Toolbar Offset"
 	)
 
 	val gridCount by gridSizeViewModel.gridSize

@@ -2,10 +2,15 @@ package com.machina.jikan_client_compose.presentation.home_screen.item
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,40 +35,40 @@ import com.machina.jikan_client_compose.ui.theme.Type.onDarkSurface
 
 @Composable
 fun ItemVerticalAnimeMore(
-  modifier: Modifier = Modifier,
-  thumbnailHeight: Dp = ItemVerticalAnimeModifier.ThumbnailHeightDefault,
-  onClick: () -> Unit
+	modifier: Modifier = Modifier,
+	thumbnailHeight: Dp = ItemVerticalAnimeModifier.ThumbnailHeightDefault,
+	onClick: () -> Unit
 ) {
-  Column(
-    modifier = modifier
-      .clip(MyShape.Rounded12)
-  ) {
-    Column(
-      modifier = Modifier
-        .fillMaxWidth()
-        .height(thumbnailHeight)
-        .clip(MyShape.Rounded12)
-        .background(MyColor.DarkGreyBackground)
-        .clickable { onClick() },
-      horizontalAlignment = Alignment.CenterHorizontally,
-      verticalArrangement = Arrangement.Center,
-    ) {
-      Icon(
-        imageVector = ImageVector.vectorResource(id = MyIcons.Filled.ChevronDown),
-        contentDescription = "",
-        tint = MyColor.OnDarkSurface,
-        modifier = Modifier
-          .size(32.dp)
-          .padding(bottom = 6.dp)
-          .rotate(-90f)
-      )
-      Text(
-        text = "See all",
-        style = Type.Typography.body2.bold().onDarkSurface().alignCenter(),
-        modifier = Modifier.fillMaxWidth()
-      )
-    }
-  }
+	Column(
+		modifier = modifier
+			.clip(MyShape.Rounded12)
+	) {
+		Column(
+			modifier = Modifier
+				.fillMaxWidth()
+				.height(thumbnailHeight)
+				.clip(MyShape.Rounded12)
+				.background(MyColor.DarkGreyBackground)
+				.clickable { onClick() },
+			horizontalAlignment = Alignment.CenterHorizontally,
+			verticalArrangement = Arrangement.Center,
+		) {
+			Icon(
+				imageVector = ImageVector.vectorResource(id = MyIcons.Filled.ChevronDown),
+				contentDescription = "",
+				tint = MyColor.OnDarkSurface,
+				modifier = Modifier
+					.size(32.dp)
+					.padding(bottom = 6.dp)
+					.rotate(-90f)
+			)
+			Text(
+				text = "See all",
+				style = Type.Typography.bodyMedium.bold().onDarkSurface().alignCenter(),
+				modifier = Modifier.fillMaxWidth()
+			)
+		}
+	}
 }
 
 fun LazyListScope.showItemVerticalAnimeMoreWhenPastLimit(
@@ -73,25 +78,25 @@ fun LazyListScope.showItemVerticalAnimeMoreWhenPastLimit(
 	size: Int = 0,
 	onClick: () -> Unit
 ) {
-  if (size > limit) {
-    item {
-      ItemVerticalAnimeMore(
-        modifier = modifier,
-        thumbnailHeight = thumbnailHeight,
-        onClick = onClick
-      )
-    }
-  }
+	if (size > limit) {
+		item {
+			ItemVerticalAnimeMore(
+				modifier = modifier,
+				thumbnailHeight = thumbnailHeight,
+				onClick = onClick
+			)
+		}
+	}
 }
 
 @Preview
 @Composable
 fun Preview_ItemVerticalAnimeMore(
-  @PreviewParameter(ItemVerticalAnimeMoreParameterProvider::class) state: ItemVerticalAnimeMoreState
+	@PreviewParameter(ItemVerticalAnimeMoreParameterProvider::class) state: ItemVerticalAnimeMoreState
 ) {
-  ItemVerticalAnimeMore(
-    modifier = state.modifier,
-    thumbnailHeight = state.thumbnailHeight,
-    onClick = { }
-  )
+	ItemVerticalAnimeMore(
+		modifier = state.modifier,
+		thumbnailHeight = state.thumbnailHeight,
+		onClick = { }
+	)
 }

@@ -2,8 +2,8 @@ package com.machina.jikan_client_compose.presentation.content_detail_screen.comp
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
@@ -14,8 +14,8 @@ import com.machina.jikan_client_compose.ui.theme.MyColor
 
 @Composable
 fun GenreChip(
+	text: String,
 	modifier: Modifier = Modifier,
-	text: String
 ) {
 	Surface(
 		modifier = modifier,

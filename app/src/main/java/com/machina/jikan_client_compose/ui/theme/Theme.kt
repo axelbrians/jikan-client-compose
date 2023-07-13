@@ -11,13 +11,16 @@ private val DarkColorPalette = darkColorScheme(
 	primary = MyColor.Yellow500,
 	secondary = MyColor.Yellow500,
 	background = MyColor.DarkBlueBackground,
-	onSurface = MyColor.OnDarkSurface
+	surface = MyColor.DarkBlueBackground,
+	onSurface = MyColor.OnDarkSurface,
+
 )
 
 private val LightColorPalette = lightColorScheme(
 	primary = MyColor.Yellow500,
 	secondary = MyColor.Yellow500,
 	background = MyColor.DarkBlueBackground,
+	surface = MyColor.DarkBlueBackground,
 	onSurface = MyColor.OnDarkSurface,
 	/* Other default colors to override
 	background = Color.White,

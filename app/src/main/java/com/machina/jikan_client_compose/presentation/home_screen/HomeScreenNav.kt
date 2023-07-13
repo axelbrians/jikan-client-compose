@@ -21,49 +21,48 @@ import kotlinx.coroutines.InternalCoroutinesApi
 @Destination(start = true)
 @Composable
 fun HomeScreenNav(
-  systemUiController: SystemUiController,
-  window: Window,
-  navigator: DestinationsNavigator
+	systemUiController: SystemUiController,
+	window: Window,
+	navigator: DestinationsNavigator
 ) {
-  OnDestinationChanged(
-    systemUiController = systemUiController,
-    color = MyColor.DarkBlueBackground,
-    drawOverStatusBar = false,
-    window = window,
-  )
+	OnDestinationChanged(
+		systemUiController = systemUiController,
+		color = MyColor.DarkBlueBackground,
+		drawOverStatusBar = false,
+		window = window,
+	)
 
-  HomeScreen(
-    navigator = HomeScreenNavigator(navigator),
-    viewModel = hiltViewModel()
-  )
+	HomeScreen(
+		navigator = HomeScreenNavigator(navigator)
+	)
 }
 
 
 class HomeScreenNavigator(
-  private val navigator: DestinationsNavigator
+	private val navigator: DestinationsNavigator
 ) {
 
-  fun navigateToSearchScreen() {
-    navigator.navigate(SearchNavDestination())
-  }
+	fun navigateToSearchScreen() {
+		navigator.navigate(SearchNavDestination())
+	}
 
-  fun navigateToContentViewAllScreen(
-    title: String,
-    url: String,
-    params: Map<String, String> = mapOf()
-  ) {
-    val destination = ContentViewAllListNavDestination(
-      ContentViewAllListNavArgs(title, url, params)
-    )
-    navigator.navigate(destination)
+	fun navigateToContentViewAllScreen(
+		title: String,
+		url: String,
+		params: Map<String, String> = mapOf()
+	) {
+		val destination = ContentViewAllListNavDestination(
+			ContentViewAllListNavArgs(title, url, params)
+		)
+		navigator.navigate(destination)
 //    navController.navigate("${MainNavigationRoute.CONTENT_VIEW_ALL_SCREEN}/${type.name}/${title}")
-  }
+	}
 
-  fun navigateToContentDetailsScreen(
-    malId: Int,
-    contentType: ContentType
-  ) {
-    val destination = ContentDetailsNavDestination(ContentDetailsNavArgs(malId, contentType))
-    navigator.navigate(destination)
-  }
+	fun navigateToContentDetailsScreen(
+		malId: Int,
+		contentType: ContentType
+	) {
+		val destination = ContentDetailsNavDestination(ContentDetailsNavArgs(malId, contentType))
+		navigator.navigate(destination)
+	}
 }

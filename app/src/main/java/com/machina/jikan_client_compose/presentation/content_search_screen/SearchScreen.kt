@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.annotation.ExperimentalCoilApi
 import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.core.extensions.isScrolledToTheEnd
@@ -46,7 +47,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun SearchScreen(
 	navigator: SearchScreenNavigator,
-	viewModel: SearchScreenViewModel
+	viewModel: SearchScreenViewModel = hiltViewModel(),
+	modifier: Modifier = Modifier
 ) {
 
 	val selectedType = rememberSaveable { mutableStateOf(ContentType.Anime) }
@@ -78,7 +80,7 @@ fun SearchScreen(
 		}
 	}
 
-	Box(modifier = Modifier.fillMaxSize()) {
+	Box(modifier = modifier.fillMaxSize()) {
 		ModalBottomSheet(
 			onDismissRequest = { /*TODO*/ },
 			scrimColor = Color.Black.copy(alpha = 0.6f),

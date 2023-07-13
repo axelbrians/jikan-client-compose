@@ -16,7 +16,7 @@ import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalDataMode
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.ScrollableHorizontalContent
 import com.machina.jikan_client_compose.presentation.data.StateListWrapper
 import com.machina.jikan_client_compose.presentation.home_screen.composable.anime_popular_current.AnimeAiringPopularHorizontalPager
-import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnimeModifier
+import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortraitDefault
 import com.machina.jikan_client_compose.ui.shimmer.onUpdateShimmerBounds
 import com.machina.jikan_client_compose.ui.shimmer.rememberShimmerCustomBounds
 import com.valentinilk.shimmer.ShimmerBounds
@@ -30,71 +30,72 @@ object HomeContentList {
 @ExperimentalCoilApi
 @Composable
 fun HomeContentList(
-  modifier: Modifier = Modifier,
-  navigator: HomeScreenNavigator,
-  animeAiringPopularState: StateListWrapper<AnimeAiringPopular>,
-  animeScheduleState: StateListWrapper<AnimeVerticalDataModel>,
-  animeTopState: StateListWrapper<AnimeVerticalDataModel>
+	modifier: Modifier = Modifier,
+	navigator: HomeScreenNavigator,
+	animeAiringPopularState: StateListWrapper<AnimeAiringPopular>,
+	animeScheduleState: StateListWrapper<AnimeVerticalDataModel>,
+	animeTopState: StateListWrapper<AnimeVerticalDataModel>
 ) {
-  val lazyColumnState = rememberLazyListState()
+	val lazyColumnState = rememberLazyListState()
 
-  LazyColumn(
-    modifier = modifier,
-    state = lazyColumnState
-  ) {
+	LazyColumn(
+		modifier = modifier,
+		state = lazyColumnState
+	) {
 
-    /* - - - Start of Currently popular anime - - - */
-    item(key = "horizontal_pager_demo") {
-      val shimmerInstance = rememberShimmer(shimmerBounds = ShimmerBounds.Custom)
-      val pagerState = rememberPagerState()
-      AnimeAiringPopularHorizontalPager(
-        modifier = Modifier.onUpdateShimmerBounds(shimmerInstance),
-        pagerState = pagerState,
-        animeAiringPopularState = animeAiringPopularState,
-        shimmerInstance = shimmerInstance,
-        navigateToContentDetailsScreen = navigator::navigateToContentDetailsScreen
-      )
-    }
-    /* End of Currently Popular Anime */
-
-
-    /* Start of Anime Airing Today */
-    item(key = "anime_schedule_list") {
-      ScrollableHorizontalContent(
-        modifier = Modifier,
-        shimmer = rememberShimmerCustomBounds(),
-        headerTitle = Constant.AIRING_TODAY,
-        contentState = animeScheduleState,
-        contentPadding = PaddingValues(horizontal = 12.dp),
-        contentArrangement = ItemVerticalAnimeModifier.HorizontalArrangement.Default,
-        onIconClick = {
-          navigator.navigateToContentViewAllScreen(
-            Constant.AIRING_TODAY,
-            Endpoints.getTodayScheduleAnimeEndpoints()
-          )
-        },
-        onItemClick = navigator::navigateToContentDetailsScreen
-      )
-    }
-    // End of Anime Airing Today
+		/* - - - Start of Currently popular anime - - - */
+		item(key = "horizontal_pager_demo") {
+			val shimmerInstance = rememberShimmer(shimmerBounds = ShimmerBounds.Custom)
+			val pagerState = rememberPagerState()
+			AnimeAiringPopularHorizontalPager(
+				modifier = Modifier.onUpdateShimmerBounds(shimmerInstance),
+				pagerState = pagerState,
+				animeAiringPopularState = animeAiringPopularState,
+				shimmerInstance = shimmerInstance,
+				navigateToContentDetailsScreen = navigator::navigateToContentDetailsScreen
+			)
+		}
+		/* End of Currently Popular Anime */
 
 
-    // Start of Top Anime of All Times
-    item(key = "anime_top_list") {ScrollableHorizontalContent(
-        modifier = Modifier,
-        shimmer = rememberShimmerCustomBounds(),
-        headerTitle = Constant.TOP_ANIME_OF_ALL_TIMES,
-        contentState = animeTopState,
-        contentPadding = PaddingValues(horizontal = 12.dp),
-        contentArrangement = ItemVerticalAnimeModifier.HorizontalArrangement.Default,
-        onIconClick = {
-          navigator.navigateToContentViewAllScreen(
-            Constant.TOP_ANIME_OF_ALL_TIMES,
-            Endpoints.ANIME_TOP
-          )
-        },
-        onItemClick = navigator::navigateToContentDetailsScreen
-      )
+		/* Start of Anime Airing Today */
+		item(key = "anime_schedule_list") {
+			ScrollableHorizontalContent(
+				modifier = Modifier,
+				shimmer = rememberShimmerCustomBounds(),
+				headerTitle = Constant.AIRING_TODAY,
+				contentState = animeScheduleState,
+				contentPadding = PaddingValues(horizontal = 12.dp),
+				contentArrangement = CardThumbnailPortraitDefault.Arrangement.Default,
+				onIconClick = {
+					navigator.navigateToContentViewAllScreen(
+						Constant.AIRING_TODAY,
+						Endpoints.getTodayScheduleAnimeEndpoints()
+					)
+				},
+				onItemClick = navigator::navigateToContentDetailsScreen
+			)
+		}
+		// End of Anime Airing Today
+
+
+		// Start of Top Anime of All Times
+		item(key = "anime_top_list") {
+			ScrollableHorizontalContent(
+				modifier = Modifier,
+				shimmer = rememberShimmerCustomBounds(),
+				headerTitle = Constant.TOP_ANIME_OF_ALL_TIMES,
+				contentState = animeTopState,
+				contentPadding = PaddingValues(horizontal = 12.dp),
+				contentArrangement = CardThumbnailPortraitDefault.Arrangement.Default,
+				onIconClick = {
+					navigator.navigateToContentViewAllScreen(
+						Constant.TOP_ANIME_OF_ALL_TIMES,
+						Endpoints.ANIME_TOP
+					)
+				},
+				onItemClick = navigator::navigateToContentDetailsScreen
+			)
 
 //      if (animeTopState.isLoading) {
 //        ContentListHeaderWithButtonShimmer(shimmerInstance = shimmerInstance)
@@ -129,9 +130,9 @@ fun HomeContentList(
 //          )
 //        }
 //      }
-    }
-    // End of Top Anime of All Times
+		}
+		// End of Top Anime of All Times
 
 
-  }
+	}
 }

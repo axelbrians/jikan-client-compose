@@ -20,22 +20,22 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Destination
 @Composable
 fun ContentDetailsNav(
-  systemUiController: SystemUiController,
-  window: Window,
-  navigator: DestinationsNavigator,
-  navArgs: ContentDetailsNavArgs
+	systemUiController: SystemUiController,
+	window: Window,
+	navigator: DestinationsNavigator,
+	navArgs: ContentDetailsNavArgs
 ) {
-  OnDestinationChanged(
-    systemUiController = systemUiController,
-    color = MyColor.Transparent,
-    drawOverStatusBar = true,
-    window = window,
-  )
-  Box(modifier = Modifier.fillMaxSize()) {
-    ContentDetailsScreen(
-      navigator = ContentDetailsScreenNavigator(navigator),
-      viewModel = hiltViewModel(),
-      navArgs = navArgs
-    )
-  }
+	OnDestinationChanged(
+		systemUiController = systemUiController,
+		color = MyColor.DarkBlueBackground,
+		drawOverStatusBar = true,
+		window = window,
+	)
+	Box(modifier = Modifier.fillMaxSize()) {
+		ContentDetailsScreen(
+			navigator = ContentDetailsScreenNavigator(navigator),
+			viewModel = hiltViewModel(),
+			navArgs = navArgs
+		)
+	}
 }

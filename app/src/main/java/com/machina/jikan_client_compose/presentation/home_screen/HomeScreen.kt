@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.annotation.ExperimentalCoilApi
 import com.machina.jikan_client_compose.presentation.composable.MyDivider
 import com.machina.jikan_client_compose.presentation.content_search_screen.composable.SearchFieldComponent
@@ -34,7 +35,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 @Composable
 fun HomeScreen(
 	navigator: HomeScreenNavigator,
-	viewModel: HomeViewModel
+	viewModel: HomeViewModel = hiltViewModel()
 ) {
 
 	val animeAiringPopularState by viewModel.animeAiringPopular

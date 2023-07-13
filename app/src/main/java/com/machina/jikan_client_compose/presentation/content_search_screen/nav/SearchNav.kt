@@ -13,19 +13,18 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Destination
 @Composable
 fun SearchNav(
-  systemUiController: SystemUiController,
-  window: Window,
-  navigator: DestinationsNavigator
+	systemUiController: SystemUiController,
+	window: Window,
+	navigator: DestinationsNavigator
 ) {
-  OnDestinationChanged(
-    systemUiController = systemUiController,
-    color = MyColor.DarkBlueBackground,
-    drawOverStatusBar = false,
-    window = window,
-  )
+	OnDestinationChanged(
+		systemUiController = systemUiController,
+		color = MyColor.DarkBlueBackground,
+		drawOverStatusBar = false,
+		window = window,
+	)
 
-  SearchScreen(
-    navigator = SearchScreenNavigator(navigator),
-    viewModel = hiltViewModel()
-  )
+	SearchScreen(
+		navigator = SearchScreenNavigator(navigator)
+	)
 }

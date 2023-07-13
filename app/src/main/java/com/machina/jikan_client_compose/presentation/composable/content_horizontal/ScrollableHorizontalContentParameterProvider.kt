@@ -9,7 +9,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.machina.jikan_client_compose.core.enums.ContentType
-import com.machina.jikan_client_compose.domain.model.anime.AnimePortraitDataModel
+import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalDataModel
 import com.machina.jikan_client_compose.presentation.data.StateListWrapper
 import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortraitDefault.Height
 import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortraitDefault.Arrangement
@@ -17,7 +17,7 @@ import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbn
 
 data class ScrollableHorizontalContentState(
 	val headerTitle: String = "Title",
-	val contentState: StateListWrapper<AnimePortraitDataModel>,
+	val contentState: StateListWrapper<AnimeVerticalDataModel>,
 	val contentPadding: PaddingValues = PaddingValues(horizontal = 12.dp),
 	val contentArrangement: androidx.compose.foundation.layout.Arrangement.Horizontal.Horizontal,
 	val modifier: Modifier,
@@ -30,7 +30,7 @@ data class ScrollableHorizontalContentState(
 )
 
 private val DataSet = List(10) {
-	AnimePortraitDataModel(
+	AnimeVerticalDataModel(
 		malId = 50709+it,
 		title = "Lycoris Recoil",
 		score = 8.27,

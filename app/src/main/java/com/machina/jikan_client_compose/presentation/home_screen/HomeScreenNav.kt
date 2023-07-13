@@ -18,12 +18,10 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.InternalCoroutinesApi
 
 @OptIn(InternalCoroutinesApi::class, ExperimentalCoilApi::class)
-@Destination(start = true)
 @Composable
 fun HomeScreenNav(
 	systemUiController: SystemUiController,
-	window: Window,
-	navigator: DestinationsNavigator
+	window: Window
 ) {
 	OnDestinationChanged(
 		systemUiController = systemUiController,

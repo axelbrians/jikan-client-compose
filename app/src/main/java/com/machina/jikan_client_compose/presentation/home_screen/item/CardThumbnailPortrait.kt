@@ -11,7 +11,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.style.TextAlign
@@ -25,7 +24,6 @@ import coil.compose.SubcomposeAsyncImage
 import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalDataModel
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
-import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortraitDefault.Height
 import com.machina.jikan_client_compose.presentation.home_screen.preview.ItemVerticalAnimeProvider
 import com.machina.jikan_client_compose.presentation.home_screen.preview.ItemVerticalAnimeState
 import com.machina.jikan_client_compose.ui.theme.MyColor
@@ -34,10 +32,10 @@ import com.machina.jikan_client_compose.ui.theme.Type
 
 @ExperimentalCoilApi
 @Composable
-fun CardThumbnailPortrait(
+fun ItemVerticalAnime(
 	modifier: Modifier = Modifier,
 	data: AnimeVerticalDataModel,
-	thumbnailHeight: Dp = Height.Default,
+	thumbnailHeight: Dp = ItemVerticalAnimeModifier.ThumbnailHeightDefault,
 	textAlign: TextAlign = TextAlign.Start,
 	onClick: (Int, ContentType) -> Unit
 ) {
@@ -81,7 +79,6 @@ fun CardThumbnailPortrait(
 			overflow = TextOverflow.Ellipsis,
 			style = Type.Typography.bodyMedium,
 			textAlign = textAlign,
-			color = Color.White
 //      onTextLayout = {
 //        titleLineCount = it.lineCount
 //      }
@@ -110,12 +107,12 @@ fun CardThumbnailPortrait(
 @Preview
 @Composable
 fun Preview_ItemVerticalAnime_Default(
-	@PreviewParameter(ItemVerticalAnimeProvider::class) state: ItemVerticalAnimeState,
+	@PreviewParameter(ItemVerticalAnimeProvider::class) data: ItemVerticalAnimeState,
 ) {
-	CardThumbnailPortrait(
-		modifier = state.modifier,
-		data = state.data,
-		thumbnailHeight = state.thumbnailHeight,
+	ItemVerticalAnime(
+		modifier = data.modifier,
+		data = data.data,
+		thumbnailHeight = data.thumbnailHeight,
 		onClick = { _, _ -> }
 	)
 }

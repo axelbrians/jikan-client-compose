@@ -21,39 +21,39 @@ import com.machina.jikan_client_compose.ui.theme.MyColor
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ContentViewAllListScreenToolbar(
-	modifier: Modifier = Modifier,
-	title: String,
-	onClick: () -> Unit,
-	trailingIcon: (@Composable () -> Unit)? = null
+  modifier: Modifier = Modifier,
+  title: String,
+  onClick: () -> Unit,
+  trailingIcon: (@Composable () -> Unit)? = null
 ) {
-	TopAppBar(
-		modifier = modifier
-			.fillMaxWidth(),
-		navigationIcon = {
-			IconButton(onClick = onClick) {
-				Icon(
-					imageVector = Icons.Default.ArrowBack,
-					contentDescription = "Back", tint = MyColor.OnDarkSurfaceLight
-				)
-			}
-		},
-		title = {
-			Text(
-				text = title,
-				overflow = TextOverflow.Ellipsis,
-				maxLines = 1,
-				style = TextStyle(
-					color = MyColor.OnDarkSurfaceLight,
-					fontWeight = FontWeight.Bold,
-					fontSize = 18.sp
-				),
-				modifier = Modifier.padding(horizontal = 8.dp)
-			)
-		},
-		actions = {
-			if (trailingIcon != null) {
-				trailingIcon()
-			}
-		}
-	)
+  TopAppBar(
+    modifier = modifier
+      .fillMaxWidth(),
+    navigationIcon = {
+      IconButton(onClick = onClick) {
+        Icon(
+          imageVector = Icons.Default.ArrowBack,
+          contentDescription = "Back", tint = MyColor.OnDarkSurfaceLight
+        )
+      }
+    },
+    title = {
+      Text(
+        text = title,
+        overflow = TextOverflow.Ellipsis,
+        maxLines = 1,
+        style = TextStyle(
+          color = MyColor.OnDarkSurfaceLight,
+          fontWeight = FontWeight.Bold,
+          fontSize = 18.sp
+        ),
+        modifier = Modifier.padding(horizontal = 8.dp)
+      )
+    },
+    actions = {
+      if (trailingIcon != null) {
+        trailingIcon()
+      }
+    }
+  )
 }

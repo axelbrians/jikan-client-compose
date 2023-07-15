@@ -25,7 +25,6 @@ class GetAnimePicturesUseCase @Inject constructor(
 				)
 			}
 			is Resource.Error -> StateListWrapper.error(message = res.message)
-			is Resource.Loading -> StateListWrapper.loading()
 		}
 
 		emit(state)

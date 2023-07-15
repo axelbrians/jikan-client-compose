@@ -5,7 +5,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalDataModel
+import com.machina.jikan_client_compose.domain.model.anime.AnimePortraitDataModel
 import com.machina.jikan_client_compose.domain.use_case.anime_characters.GetAnimeCharactersUseCase
 import com.machina.jikan_client_compose.domain.use_case.anime_recommendations.GetAnimeRecommendationsUseCase
 import com.machina.jikan_client_compose.domain.use_case.get_content_details.GetAnimePicturesUseCase
@@ -27,11 +27,11 @@ class ContentDetailsViewModel @Inject constructor(
   private val _contentDetailsState : MutableState<ContentDetailsState> = mutableStateOf(ContentDetailsState.Loading)
   val contentDetailsState : State<ContentDetailsState> = _contentDetailsState
 
-  private val _animeCharactersState : MutableState<StateListWrapper<AnimeVerticalDataModel>> = mutableStateOf(StateListWrapper.loading())
-  val animeCharactersState : State<StateListWrapper<AnimeVerticalDataModel>> = _animeCharactersState
+  private val _animeCharactersState : MutableState<StateListWrapper<AnimePortraitDataModel>> = mutableStateOf(StateListWrapper.loading())
+  val animeCharactersState : State<StateListWrapper<AnimePortraitDataModel>> = _animeCharactersState
 
-  private val _animeRecommendationsState : MutableState<StateListWrapper<AnimeVerticalDataModel>> = mutableStateOf(StateListWrapper.loading())
-  val animeRecommendationsState : State<StateListWrapper<AnimeVerticalDataModel>> = _animeRecommendationsState
+  private val _animeRecommendationsState : MutableState<StateListWrapper<AnimePortraitDataModel>> = mutableStateOf(StateListWrapper.loading())
+  val animeRecommendationsState : State<StateListWrapper<AnimePortraitDataModel>> = _animeRecommendationsState
 
   private val _animePicturesState : MutableState<StateListWrapper<String>> = mutableStateOf(StateListWrapper.loading())
   val animePicturesState : State<StateListWrapper<String>> = _animePicturesState

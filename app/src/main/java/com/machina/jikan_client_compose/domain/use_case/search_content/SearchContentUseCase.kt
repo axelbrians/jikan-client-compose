@@ -48,7 +48,6 @@ class SearchContentUseCase @Inject constructor(
           )
         }
         is Resource.Error -> ContentSearchState(error = Event(res.message))
-        is Resource.Loading -> ContentSearchState(isLoading = true)
       }
 
       emit(state)

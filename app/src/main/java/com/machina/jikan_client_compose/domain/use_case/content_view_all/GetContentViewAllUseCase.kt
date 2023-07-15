@@ -4,7 +4,7 @@ import com.machina.jikan_client_compose.core.DispatchersProvider
 import com.machina.jikan_client_compose.core.wrapper.Event
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.data.remote.anime_search.AnimeSearchService
-import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalDataModel
+import com.machina.jikan_client_compose.domain.model.anime.AnimePortraitDataModel
 import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalModel
 import com.machina.jikan_client_compose.presentation.data.StateWrapper
 import kotlinx.coroutines.flow.Flow
@@ -28,14 +28,13 @@ class GetContentViewAllUseCase @Inject constructor(
 				StateWrapper(
 					data = AnimeVerticalModel(
 						data = res.data!!.data.map {
-							AnimeVerticalDataModel.from(it)
+							AnimePortraitDataModel.from(it)
 						},
 						pagination = res.data.pagination
 					)
 				)
 			}
 			is Resource.Error -> StateWrapper(error = Event(res.message))
-			is Resource.Loading -> StateWrapper(isLoading = true)
 		}
 		emit(state)
 	}.flowOn(dispatchers.io)

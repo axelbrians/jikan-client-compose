@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.SubcomposeAsyncImage
 import com.machina.jikan_client_compose.core.enums.ContentType
-import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalDataModel
+import com.machina.jikan_client_compose.domain.model.anime.AnimePortraitDataModel
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
 import com.machina.jikan_client_compose.presentation.home_screen.preview.ItemVerticalAnimeProvider
 import com.machina.jikan_client_compose.presentation.home_screen.preview.ItemVerticalAnimeState
@@ -29,11 +29,11 @@ import com.machina.jikan_client_compose.ui.theme.MyType
 @ExperimentalCoilApi
 @Composable
 fun ItemVerticalAnime(
-  modifier: Modifier = Modifier,
-  data: AnimeVerticalDataModel,
-  thumbnailHeight: Dp = ItemVerticalAnimeModifier.ThumbnailHeightDefault,
-  textAlign: TextAlign = TextAlign.Start,
-  onClick: (Int, ContentType) -> Unit
+	modifier: Modifier = Modifier,
+	data: AnimePortraitDataModel,
+	thumbnailHeight: Dp = ItemVerticalAnimeModifier.ThumbnailHeightDefault,
+	textAlign: TextAlign = TextAlign.Start,
+	onClick: (Int, ContentType) -> Unit
 ) {
 //  var titleLineCount by remember { mutableStateOf(0) }
 

@@ -5,7 +5,7 @@ import com.machina.jikan_client_compose.core.wrapper.Event
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.data.remote.anime.AnimeService
 import com.machina.jikan_client_compose.data.remote.dto.anime_top.toAnimeTop
-import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalDataModel
+import com.machina.jikan_client_compose.domain.model.anime.AnimePortraitDataModel
 import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalModel
 import com.machina.jikan_client_compose.presentation.data.StateListWrapper
 import com.machina.jikan_client_compose.presentation.data.StateWrapper
@@ -30,7 +30,6 @@ class GetAnimeTopUseCase @Inject constructor(
           AnimeTopState(data)
         }
         is Resource.Error -> AnimeTopState(error = Event(res.message))
-        is Resource.Loading -> AnimeTopState(isLoading = true)
       }
 
       emit(state)
@@ -46,14 +45,13 @@ class GetAnimeTopUseCase @Inject constructor(
           AnimeHorizontalListContentState(
             data = AnimeVerticalModel(
               data = res.data!!.data.map {
-                AnimeVerticalDataModel.from(it)
+                AnimePortraitDataModel.from(it)
               },
               pagination = res.data.pagination
             )
           )
         }
         is Resource.Error -> AnimeHorizontalListContentState(error = Event(res.message))
-        is Resource.Loading -> AnimeHorizontalListContentState(isLoading = true)
       }
 
       emit(state)
@@ -68,32 +66,30 @@ class GetAnimeTopUseCase @Inject constructor(
         StateWrapper(
           data = AnimeVerticalModel(
             data = res.data!!.data.map {
-              AnimeVerticalDataModel.from(it)
+              AnimePortraitDataModel.from(it)
             },
             pagination = res.data.pagination
           )
         )
       }
       is Resource.Error -> StateWrapper(error = Event(res.message))
-      is Resource.Loading -> StateWrapper(isLoading = true)
     }
 
     emit(state)
   }.flowOn(dispatchers.io)
 
-  fun getAsStateListWrapper(page: Int = 1): Flow<StateListWrapper<AnimeVerticalDataModel>> = flow {
+  fun getAsStateListWrapper(page: Int = 1): Flow<StateListWrapper<AnimePortraitDataModel>> = flow {
     emit(StateListWrapper.loading())
 
     val state = when (val res = repository.getAnimeTopOfAllTime(page)) {
       is Resource.Success -> {
         StateListWrapper(
           data = res.data!!.data.map {
-            AnimeVerticalDataModel.from(it)
+            AnimePortraitDataModel.from(it)
           }
         )
       }
       is Resource.Error -> StateListWrapper(error = Event(res.message))
-      is Resource.Loading -> StateListWrapper(isLoading = true)
     }
 
     emit(state)

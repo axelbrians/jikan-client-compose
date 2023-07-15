@@ -10,7 +10,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
-import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalDataModel
+import com.machina.jikan_client_compose.domain.model.anime.AnimePortraitDataModel
 import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalModel
 import com.machina.jikan_client_compose.presentation.data.StateWrapper
 import com.machina.jikan_client_compose.presentation.home_screen.composable.shimmer.showItemVerticalAnimeShimmer
@@ -53,7 +53,7 @@ fun ScrollableVerticalGridContent(
 		horizontalArrangement = horizontalArrangement
 	) {
 		if (contentState.data != null) {
-			items(contentState.data.data) { character: AnimeVerticalDataModel ->
+			items(contentState.data.data) { character: AnimePortraitDataModel ->
 				ItemVerticalAnime(
 					modifier = itemModifier,
 					data = character,

@@ -36,7 +36,6 @@ class GetContentDetailsUseCase @Inject constructor(
       val state = when (res) {
         is Resource.Success -> ContentDetailsState(resolveContentType(res.data))
         is Resource.Error -> ContentDetailsState(error = res.message)
-        is Resource.Loading -> ContentDetailsState(isLoading = true)
       }
 
       emit(state)

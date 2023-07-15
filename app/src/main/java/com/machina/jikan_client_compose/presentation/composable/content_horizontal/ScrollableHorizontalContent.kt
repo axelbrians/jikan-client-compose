@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.Dp
 import coil.annotation.ExperimentalCoilApi
 import com.machina.jikan_client_compose.core.constant.Constant
 import com.machina.jikan_client_compose.core.enums.ContentType
-import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalDataModel
+import com.machina.jikan_client_compose.domain.model.anime.AnimePortraitDataModel
 import com.machina.jikan_client_compose.presentation.data.StateListWrapper
 import com.machina.jikan_client_compose.presentation.home_screen.composable.shimmer.ContentListHeaderWithButtonShimmer
 import com.machina.jikan_client_compose.presentation.home_screen.composable.shimmer.showItemVerticalAnimeShimmer
@@ -36,7 +36,7 @@ fun ScrollableHorizontalContent(
 	shimmer: Shimmer = rememberShimmerCustomBounds(),
 	thumbnailHeight: Dp = ItemVerticalAnimeModifier.ThumbnailHeightDefault,
 	headerTitle: String,
-	contentState: StateListWrapper<AnimeVerticalDataModel>,
+	contentState: StateListWrapper<AnimePortraitDataModel>,
 	contentPadding: PaddingValues,
 	contentArrangement: Arrangement.Horizontal,
 	textAlign: TextAlign = TextAlign.Start,

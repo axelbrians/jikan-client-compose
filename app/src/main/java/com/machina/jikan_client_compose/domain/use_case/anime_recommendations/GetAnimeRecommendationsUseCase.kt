@@ -4,7 +4,7 @@ import com.machina.jikan_client_compose.core.DispatchersProvider
 import com.machina.jikan_client_compose.core.wrapper.Event
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.data.remote.anime_details.AnimeDetailsService
-import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalDataModel
+import com.machina.jikan_client_compose.domain.model.anime.AnimePortraitDataModel
 import com.machina.jikan_client_compose.presentation.content_detail_screen.data.AnimeRecommendationsListState
 import com.machina.jikan_client_compose.presentation.data.StateListWrapper
 import kotlinx.coroutines.flow.Flow
@@ -26,7 +26,6 @@ class GetAnimeRecommendationsUseCase @Inject constructor(
           AnimeRecommendationsListState(res.data.orEmpty())
         }
         is Resource.Error -> AnimeRecommendationsListState(error = Event(res.message))
-        is Resource.Loading -> AnimeRecommendationsListState(isLoading = true)
       }
 
       emit(state)
@@ -35,14 +34,13 @@ class GetAnimeRecommendationsUseCase @Inject constructor(
 
   fun getAsStateListWrapper(
     malId: Int
-  ): Flow<StateListWrapper<AnimeVerticalDataModel>> = flow {
+  ): Flow<StateListWrapper<AnimePortraitDataModel>> = flow {
     emit(StateListWrapper.loading())
     val state = when (val res = repository.getAnimeRecommendations(malId)) {
       is Resource.Success -> {
         StateListWrapper(res.data.orEmpty())
       }
       is Resource.Error -> StateListWrapper(error = Event(res.message))
-      is Resource.Loading -> StateListWrapper(isLoading = true)
     }
 
     emit(state)

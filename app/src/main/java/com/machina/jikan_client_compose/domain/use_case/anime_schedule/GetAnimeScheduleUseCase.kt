@@ -6,7 +6,7 @@ import com.machina.jikan_client_compose.core.wrapper.Event
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.data.remote.anime.AnimeService
 import com.machina.jikan_client_compose.data.remote.dto.anime_schedules.toAnimeSchedule
-import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalDataModel
+import com.machina.jikan_client_compose.domain.model.anime.AnimePortraitDataModel
 import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalModel
 import com.machina.jikan_client_compose.presentation.data.StateListWrapper
 import com.machina.jikan_client_compose.presentation.data.StateWrapper
@@ -41,7 +41,6 @@ class GetAnimeScheduleUseCase @Inject constructor(
           )
         }
         is Resource.Error -> AnimeScheduleState(error = Event(res.message))
-        is Resource.Loading -> AnimeScheduleState(isLoading = true)
       }
 
       emit(state)
@@ -60,14 +59,13 @@ class GetAnimeScheduleUseCase @Inject constructor(
           AnimeHorizontalListContentState(
             data = AnimeVerticalModel(
               data = res.data!!.data.map {
-                AnimeVerticalDataModel.from(it)
+                AnimePortraitDataModel.from(it)
               },
               pagination = res.data.pagination
             )
           )
         }
         is Resource.Error -> AnimeHorizontalListContentState(error = Event(res.message))
-        is Resource.Loading -> AnimeHorizontalListContentState(isLoading = true)
       }
 
       emit(state)
@@ -85,14 +83,13 @@ class GetAnimeScheduleUseCase @Inject constructor(
         StateWrapper(
           data = AnimeVerticalModel(
             data = res.data!!.data.map {
-              AnimeVerticalDataModel.from(it)
+              AnimePortraitDataModel.from(it)
             },
             pagination = res.data.pagination
           )
         )
       }
       is Resource.Error -> StateWrapper(error = Event(res.message))
-      is Resource.Loading -> StateWrapper(isLoading = true)
     }
 
     emit(state)
@@ -101,19 +98,18 @@ class GetAnimeScheduleUseCase @Inject constructor(
   fun getAsStateListWrapper(
     dayInCalendar: Int = Calendar.getInstance().get(Calendar.DAY_OF_WEEK),
     page: Int = 1
-  ): Flow<StateListWrapper<AnimeVerticalDataModel>> = flow {
+  ): Flow<StateListWrapper<AnimePortraitDataModel>> = flow {
     emit(StateListWrapper.loading())
 
     val state = when (val res = repository.getAnimeSchedule(dayInCalendar, page)) {
       is Resource.Success -> {
         StateListWrapper(
           data = res.data!!.data.map {
-            AnimeVerticalDataModel.from(it)
+            AnimePortraitDataModel.from(it)
           }
         )
       }
       is Resource.Error -> StateListWrapper(error = Event(res.message))
-      is Resource.Loading -> StateListWrapper(isLoading = true)
     }
 
     emit(state)

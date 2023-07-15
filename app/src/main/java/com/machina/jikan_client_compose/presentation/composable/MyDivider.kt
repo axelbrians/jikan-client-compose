@@ -11,14 +11,14 @@ import com.machina.jikan_client_compose.ui.theme.MyColor
 
 object MyDivider {
 
-  object Horizontal {
-    @Composable
-    fun DarkGreyBackground(padding: PaddingValues = PaddingValues(0.dp)) {
-      Divider(
-        modifier = Modifier.fillMaxWidth().padding(padding),
-        color = MyColor.DarkGreyBackground
-      )
-    }
-  }
+	object Horizontal {
+		@Composable
+		fun DarkGreyBackground(padding: PaddingValues = PaddingValues(0.dp)) {
+			Divider(
+				modifier = Modifier.fillMaxWidth().padding(padding),
+				color = MyColor.DarkGreyBackground
+			)
+		}
+	}
 
 }

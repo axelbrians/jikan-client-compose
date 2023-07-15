@@ -1,12 +1,12 @@
 package com.machina.jikan_client_compose.presentation.content_small_view_all.nav
 
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import androidx.navigation.NavController
 
 class ContentSmallViewAllNavigator(
-	private val navigator: DestinationsNavigator
+	private val navController: NavController
 ) {
 
 	fun navigateUp(): Boolean {
-		return navigator.navigateUp()
+		return navController.navigateUp()
 	}
 }

@@ -9,18 +9,18 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class AnimeAiringPopularResponseV4(
-  @SerialName("data")
-  val data: List<AnimeGeneralDtoV4> = listOf(),
-  @SerialName("pagination")
-  val pagination: Pagination = Pagination()
+	@SerialName("data")
+	val data: List<AnimeGeneralDtoV4> = listOf(),
+	@SerialName("pagination")
+	val pagination: Pagination = Pagination()
 )
 
 fun AnimeGeneralDtoV4.toAnimeAiringPopular(): AnimeAiringPopular {
-  return AnimeAiringPopular(
-    malId, rank, title,
-    url, images.jpg.getHighestResImgUrl(), type,
-    episodes,
-    members, score ?: 0.0
-  )
+	return AnimeAiringPopular(
+		malId, rank, title,
+		url, images.jpg.getHighestResImgUrl(), type,
+		episodes,
+		members, score ?: 0.0
+	)
 }
 

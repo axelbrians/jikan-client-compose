@@ -4,15 +4,20 @@ import android.animation.ObjectAnimator
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.Window
 import android.view.animation.AnticipateInterpolator
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.runtime.Composable
 import androidx.core.animation.doOnEnd
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.machina.jikan_client_compose.core.DispatchersProvider
-import com.machina.jikan_client_compose.presentation.NavGraphs
+import com.machina.jikan_client_compose.navigation.composable
+import com.machina.jikan_client_compose.presentation.home_screen.HomeScreenNav
+import com.machina.jikan_client_compose.ui.navigation.MainRoute
 import com.machina.jikan_client_compose.ui.theme.JikanClientComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -34,14 +39,6 @@ class MainActivity : ComponentActivity() {
 				)
 			}
 		}
-//
-//				DestinationsNavHost(
-//					navGraph = NavGraphs.root,
-//					dependenciesContainerBuilder = {
-//						dependency(window)
-//						dependency(rememberSystemUiController())
-//					}
-//				)
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
 			splashScreen.setOnExitAnimationListener { splashScreenView ->

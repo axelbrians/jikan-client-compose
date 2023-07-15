@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.Dp
-import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortraitDefault
 import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortraitDefault.Height
 import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortraitDefault.Width
 

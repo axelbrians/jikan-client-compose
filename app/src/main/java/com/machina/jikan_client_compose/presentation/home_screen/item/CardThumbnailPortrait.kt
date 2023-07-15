@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.SubcomposeAsyncImage
 import com.machina.jikan_client_compose.core.enums.ContentType
-import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalDataModel
+import com.machina.jikan_client_compose.domain.model.anime.AnimePortraitDataModel
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
 import com.machina.jikan_client_compose.presentation.home_screen.preview.ItemVerticalAnimeProvider
 import com.machina.jikan_client_compose.presentation.home_screen.preview.ItemVerticalAnimeState
@@ -32,10 +32,10 @@ import com.machina.jikan_client_compose.ui.theme.Type
 
 @ExperimentalCoilApi
 @Composable
-fun ItemVerticalAnime(
+fun CardThumbnailPortrait(
 	modifier: Modifier = Modifier,
-	data: AnimeVerticalDataModel,
-	thumbnailHeight: Dp = ItemVerticalAnimeModifier.ThumbnailHeightDefault,
+	data: AnimePortraitDataModel,
+	thumbnailHeight: Dp = CardThumbnailPortraitDefault.Height.Default,
 	textAlign: TextAlign = TextAlign.Start,
 	onClick: (Int, ContentType) -> Unit
 ) {
@@ -109,7 +109,7 @@ fun ItemVerticalAnime(
 fun Preview_ItemVerticalAnime_Default(
 	@PreviewParameter(ItemVerticalAnimeProvider::class) data: ItemVerticalAnimeState,
 ) {
-	ItemVerticalAnime(
+	CardThumbnailPortrait(
 		modifier = data.modifier,
 		data = data.data,
 		thumbnailHeight = data.thumbnailHeight,

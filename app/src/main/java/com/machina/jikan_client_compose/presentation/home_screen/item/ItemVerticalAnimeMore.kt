@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -23,6 +24,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.machina.jikan_client_compose.core.constant.Constant
+import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortraitDefault.Height
+import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortraitDefault.Width
 import com.machina.jikan_client_compose.presentation.home_screen.preview.ItemVerticalAnimeMoreParameterProvider
 import com.machina.jikan_client_compose.presentation.home_screen.preview.ItemVerticalAnimeMoreState
 import com.machina.jikan_client_compose.ui.theme.MyColor
@@ -36,7 +39,7 @@ import com.machina.jikan_client_compose.ui.theme.Type.onDarkSurface
 @Composable
 fun ItemVerticalAnimeMore(
 	modifier: Modifier = Modifier,
-	thumbnailHeight: Dp = ItemVerticalAnimeModifier.ThumbnailHeightDefault,
+	thumbnailHeight: Dp = Height.Default,
 	onClick: () -> Unit
 ) {
 	Column(
@@ -72,8 +75,8 @@ fun ItemVerticalAnimeMore(
 }
 
 fun LazyListScope.showItemVerticalAnimeMoreWhenPastLimit(
-	modifier: Modifier = ItemVerticalAnimeModifier.Default,
-	thumbnailHeight: Dp = ItemVerticalAnimeModifier.ThumbnailHeightDefault,
+	modifier: Modifier = Modifier.width(Width.Default),
+	thumbnailHeight: Dp = Height.Default,
 	limit: Int = Constant.HORIZONTAL_CONTENT_LIMIT,
 	size: Int = 0,
 	onClick: () -> Unit

@@ -5,14 +5,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.Dp
 import com.machina.jikan_client_compose.core.enums.ContentType
-import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalDataModel
+import com.machina.jikan_client_compose.domain.model.anime.AnimePortraitDataModel
 import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortraitDefault
 import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortraitDefault.Height
 
 data class ItemVerticalAnimeState(
 	val modifier: Modifier = Modifier,
 	val thumbnailHeight: Dp,
-	val data: AnimeVerticalDataModel = AnimeVerticalDataModel(
+	val data: AnimePortraitDataModel = AnimePortraitDataModel(
 		malId = 5114,
 		title = "Fullmetal Alchemist: Brotherhood",
 		score=9.13,

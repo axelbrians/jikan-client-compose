@@ -9,17 +9,17 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.machina.jikan_client_compose.core.enums.ContentType
-import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalDataModel
+import com.machina.jikan_client_compose.domain.model.anime.AnimePortraitDataModel
 import com.machina.jikan_client_compose.presentation.data.StateListWrapper
+import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortraitDefault
 import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortraitDefault.Height
-import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortraitDefault.Arrangement
 import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortraitDefault.Width
 
 data class ScrollableHorizontalContentState(
 	val headerTitle: String = "Title",
-	val contentState: StateListWrapper<AnimeVerticalDataModel>,
+	val contentState: StateListWrapper<AnimePortraitDataModel>,
 	val contentPadding: PaddingValues = PaddingValues(horizontal = 12.dp),
-	val contentArrangement: androidx.compose.foundation.layout.Arrangement.Horizontal.Horizontal,
+	val contentArrangement: Arrangement.Horizontal,
 	val modifier: Modifier,
 	val headerModifier: Modifier = HorizontalContentHeaderConfig.Default,
 	val itemModifier: Modifier = Modifier.width(Width.Default),
@@ -30,7 +30,7 @@ data class ScrollableHorizontalContentState(
 )
 
 private val DataSet = List(10) {
-	AnimeVerticalDataModel(
+	AnimePortraitDataModel(
 		malId = 50709+it,
 		title = "Lycoris Recoil",
 		score = 8.27,
@@ -49,14 +49,14 @@ class ScrollableHorizontalContentParameterProvider
 				headerTitle = "Scrollable Default",
 				contentState = StateListWrapper.loading(),
 				contentPadding = PaddingValues(horizontal = 12.dp),
-				contentArrangement = Arrangement.Default
+				contentArrangement = CardThumbnailPortraitDefault.Arrangement.Default
 			),
 			ScrollableHorizontalContentState(
 				modifier = Modifier,
 				headerTitle = "Scrollable Default",
 				contentState = StateListWrapper(data = DataSet),
 				contentPadding = PaddingValues(horizontal = 12.dp),
-				contentArrangement = Arrangement.Default,
+				contentArrangement = CardThumbnailPortraitDefault.Arrangement.Default,
 			),
 			ScrollableHorizontalContentState(
 				modifier = Modifier,
@@ -65,7 +65,7 @@ class ScrollableHorizontalContentParameterProvider
 				headerTitle = "Scrollable Small",
 				contentState = StateListWrapper.loading(),
 				contentPadding = PaddingValues(horizontal = 12.dp),
-				contentArrangement = Arrangement.Default
+				contentArrangement = CardThumbnailPortraitDefault.Arrangement.Default
 			),
 			ScrollableHorizontalContentState(
 				modifier = Modifier,
@@ -74,7 +74,7 @@ class ScrollableHorizontalContentParameterProvider
 				headerTitle = "Scrollable Small",
 				contentState = StateListWrapper(data = DataSet),
 				contentPadding = PaddingValues(horizontal = 12.dp),
-				contentArrangement = Arrangement.Default,
+				contentArrangement = CardThumbnailPortraitDefault.Arrangement.Default,
 				textAlign = TextAlign.Center
 			)
 		).asSequence()

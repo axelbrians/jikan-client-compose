@@ -3,6 +3,7 @@ package com.machina.jikan_client_compose.presentation.composable.content_horizon
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
@@ -17,9 +18,10 @@ import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.domain.model.anime.AnimePortraitDataModel
 import com.machina.jikan_client_compose.presentation.data.StateListWrapper
 import com.machina.jikan_client_compose.presentation.home_screen.composable.shimmer.ContentListHeaderWithButtonShimmer
-import com.machina.jikan_client_compose.presentation.home_screen.composable.shimmer.showItemVerticalAnimeShimmer
-import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnime
-import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnimeModifier
+import com.machina.jikan_client_compose.presentation.home_screen.composable.shimmer.showCardThumbnailPortraitShimmer
+import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortrait
+import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortraitDefault
+import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortraitDefault.Width.Small
 import com.machina.jikan_client_compose.presentation.home_screen.item.showItemVerticalAnimeMoreWhenPastLimit
 import com.machina.jikan_client_compose.ui.shimmer.onUpdateShimmerBounds
 import com.machina.jikan_client_compose.ui.shimmer.rememberShimmerCustomBounds
@@ -30,15 +32,15 @@ import com.valentinilk.shimmer.rememberShimmer
 @OptIn(ExperimentalCoilApi::class)
 @Composable
 fun ScrollableHorizontalContent(
-	modifier: Modifier,
-	headerModifier: Modifier = HorizontalContentHeaderConfig.Default,
-	itemModifier: Modifier = ItemVerticalAnimeModifier.Default,
-	shimmer: Shimmer = rememberShimmerCustomBounds(),
-	thumbnailHeight: Dp = ItemVerticalAnimeModifier.ThumbnailHeightDefault,
 	headerTitle: String,
 	contentState: StateListWrapper<AnimePortraitDataModel>,
 	contentPadding: PaddingValues,
 	contentArrangement: Arrangement.Horizontal,
+	modifier: Modifier = Modifier,
+	headerModifier: Modifier = HorizontalContentHeaderConfig.Default,
+	itemModifier: Modifier = Modifier.width(Small),
+	thumbnailHeight: Dp = CardThumbnailPortraitDefault.Height.Default,
+	shimmer: Shimmer = rememberShimmerCustomBounds(),
 	textAlign: TextAlign = TextAlign.Start,
 	onIconClick: () -> Unit,
 	onItemClick: (Int, ContentType) -> Unit,
@@ -59,7 +61,7 @@ fun ScrollableHorizontalContent(
 		horizontalArrangement = contentArrangement
 	) {
 		if (contentState.isLoading) {
-			showItemVerticalAnimeShimmer(
+			showCardThumbnailPortraitShimmer(
 				modifier = itemModifier,
 				shimmerInstance = shimmer,
 				thumbnailHeight = thumbnailHeight
@@ -69,7 +71,7 @@ fun ScrollableHorizontalContent(
 				contentState.data.take(Constant.HORIZONTAL_CONTENT_LIMIT),
 				key = { it.malId }
 			) { data ->
-				ItemVerticalAnime(
+				CardThumbnailPortrait(
 					modifier = itemModifier,
 					data = data,
 					thumbnailHeight = thumbnailHeight,

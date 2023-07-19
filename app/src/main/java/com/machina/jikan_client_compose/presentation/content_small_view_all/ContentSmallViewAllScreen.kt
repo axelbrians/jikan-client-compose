@@ -5,11 +5,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -26,7 +27,8 @@ import com.machina.jikan_client_compose.presentation.content_view_all_screen.com
 import com.machina.jikan_client_compose.presentation.content_view_all_screen.data.ScrollDirection
 import com.machina.jikan_client_compose.presentation.content_view_all_screen.nav.ContentViewAllListNavArgs
 import com.machina.jikan_client_compose.presentation.content_view_all_screen.viewmodel.ContentViewAllAnimeViewModel
-import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnimeModifier
+import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortraitDefault
+import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortraitDefault.Height
 import com.machina.jikan_client_compose.ui.animation_spec.TweenSpec
 import com.machina.jikan_client_compose.ui.shimmer.rememberShimmerCustomBounds
 import com.machina.jikan_client_compose.ui.theme.MyColor
@@ -43,7 +45,8 @@ fun ContentSmallViewAllScreen(
 	val lazyGridState = rememberLazyGridState()
 	val animateToolbarOffset = animateDpAsState(
 		targetValue = if (lazyGridState.scrollDirection() == ScrollDirection.UP) 0.dp else (-56).dp,
-		animationSpec = TweenSpec.defaultEasing()
+		animationSpec = TweenSpec.defaultEasing(),
+		label = "Animated Toolbar Offset"
 	)
 
 	val gridCount by gridSizeViewModel.gridSize
@@ -56,9 +59,9 @@ fun ContentSmallViewAllScreen(
 	}
 
 	val thumbnailHeight = if (gridCount == 3) {
-		ItemVerticalAnimeModifier.ThumbnailHeightGrid
+		Height.Grid
 	} else {
-		ItemVerticalAnimeModifier.ThumbnailHeightSmall
+		Height.Small
 	}
 
 	val gridHorizontalPadding = if (gridCount == 3) {
@@ -95,7 +98,7 @@ fun ContentSmallViewAllScreen(
 
 		ScrollableVerticalGridContent(
 			modifier = Modifier.fillMaxSize(),
-			itemModifier = ItemVerticalAnimeModifier.fillParentWidth,
+			itemModifier = Modifier.fillMaxWidth(),
 			shimmerInstance = shimmerInstance,
 			contentState = contentState,
 			thumbnailHeight = thumbnailHeight,

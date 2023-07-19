@@ -7,38 +7,41 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.annotation.ExperimentalCoilApi
-import com.machina.jikan_client_compose.domain.model.anime.AnimePortraitDataModel
-import com.machina.jikan_client_compose.domain.model.anime.AnimeThumbnail
 import com.machina.jikan_client_compose.presentation.composable.MyDivider
-import com.machina.jikan_client_compose.presentation.content_search_screen.composable.SearchBoxSearchScreen
-import com.machina.jikan_client_compose.presentation.data.StateListWrapper
-import com.machina.jikan_client_compose.presentation.home_screen.viewmodel.HomeViewModel.HomeEvent
+import com.machina.jikan_client_compose.presentation.content_search_screen.composable.SearchFieldComponent
+import com.machina.jikan_client_compose.presentation.home_screen.viewmodel.HomeViewModel
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
+
 
 @InternalCoroutinesApi
 @ExperimentalCoilApi
 @Composable
 fun HomeScreen(
 	navigator: HomeScreenNavigator,
-	airingPopular: StateFlow<List<AnimeThumbnail>>,
-	scheduleState: State<StateListWrapper<AnimePortraitDataModel>>,
-	topState: State<StateListWrapper<AnimePortraitDataModel>>,
-	sendViewModelEvent: (HomeEvent) -> Unit,
+	viewModel: HomeViewModel = hiltViewModel()
 ) {
+
+	val animeAiringPopularState by viewModel.animeAiringPopular
+	val animeScheduleState by viewModel.animeScheduleState
+	val animeTopState by viewModel.animeTopState
+
 	val snackbarHostState = remember { SnackbarHostState() }
 
 
@@ -47,23 +50,25 @@ fun HomeScreen(
 	val snackbarChannel = remember { Channel<String?>(Channel.CONFLATED) }
 
 
-	LaunchedEffect(Unit) {
-		sendViewModelEvent(HomeEvent.GetAnimeAiringPopular)
-		sendViewModelEvent(HomeEvent.GetAnimeSchedule)
-		sendViewModelEvent(HomeEvent.GetAnimeTop)
-//		viewModel.getAnimeAiringPopular()
-//		viewModel.getTodayAnimeSchedule()
-//		viewModel.getTopAnimeList()
+	LaunchedEffect(viewModel) {
+		viewModel.getAnimeAiringPopular()
+		viewModel.getTodayAnimeSchedule()
+		viewModel.getTopAnimeList()
 	}
 
 	Scaffold(
 		modifier = Modifier
 			.fillMaxSize()
 			.background(MyColor.DarkBlueBackground),
-		scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
+		snackbarHost = {
+			SnackbarHost(hostState = snackbarHostState)
+		}
 	) {
-		Column(modifier = Modifier.fillMaxWidth()) {
-			SearchBoxSearchScreen(
+		Column(modifier = Modifier
+			.fillMaxWidth()
+			.padding(it)) {
+			SearchFieldComponent(
+				value = "",
 				modifier = Modifier
 					.fillMaxWidth()
 					.padding(12.dp)
@@ -71,47 +76,51 @@ fun HomeScreen(
 					.clickable(
 						onClick = { navigator.navigateToSearchScreen() }
 					),
-				isEnabled = false
+				isEnabled = false,
+				onValueChanged = { },
+				onValueCleared = { }
 			)
 
 			MyDivider.Horizontal.DarkGreyBackground()
 
 			HomeContentList(
 				navigator = navigator,
-				airingPopular = airingPopular,
-				animeScheduleState = scheduleState,
-				animeTopState = topState
+				animeAiringPopularState = animeAiringPopularState,
+				animeScheduleState = animeScheduleState,
+				animeTopState = animeTopState
 			)
 		}
 
 		// Try to emmit error message to snackbarChannel if not have been handled before.
-//		with(animeTopState.error.getContentIfNotHandled()) {
-//			snackbarChannel.trySend(this)
-//		}
+		with(animeTopState.error.getContentIfNotHandled()) {
+			snackbarChannel.trySend(this)
+		}
 
 		// Side-effect to control how snackbar should showing
-//		LaunchedEffect(snackbarChannel) {
-//			snackbarChannel.receiveAsFlow().collect { error ->
-//
-//				val result = if (error != null) {
-//					snackbarHostState.showSnackbar(
-//						message = error,
-//						actionLabel = "Dismiss",
-//						duration = SnackbarDuration.Long
-//					)
-//				} else {
-//					null
-//				}
-//
-//				when (result) {
-//					SnackbarResult.ActionPerformed -> {
-//						/* action has been performed */
-//					}
-//					SnackbarResult.Dismissed -> {
-//						/* dismissed, no action needed */
-//					}
-//				}
-//			}
-//		}
+		LaunchedEffect(snackbarChannel) {
+			snackbarChannel.receiveAsFlow().collect { error ->
+
+				val result = if (error != null) {
+					snackbarHostState.showSnackbar(
+						message = error,
+						actionLabel = "Dismiss",
+						duration = SnackbarDuration.Long
+					)
+				} else {
+					null
+				}
+
+				when (result) {
+					SnackbarResult.ActionPerformed -> {
+						/* action has been performed */
+
+					}
+					SnackbarResult.Dismissed -> {
+						/* dismissed, no action needed */
+					}
+					else -> { }
+				}
+			}
+		}
 	}
 }

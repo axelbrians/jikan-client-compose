@@ -10,17 +10,15 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.core.animation.doOnEnd
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.machina.jikan_client_compose.core.DispatchersProvider
-import com.machina.jikan_client_compose.navigation.composable
-import com.machina.jikan_client_compose.presentation.home_screen.HomeScreenNav
-import com.machina.jikan_client_compose.ui.navigation.MainRoute
+import com.machina.jikan_client_compose.ui.navigation.MainNavigationRoute.HOME_SCREEN
 import com.machina.jikan_client_compose.ui.theme.JikanClientComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -33,14 +31,22 @@ class MainActivity : ComponentActivity() {
 
 		setContent {
 			JikanClientComposeTheme {
-		        MyApp(
-		            window = window,
-		            dispatchers = dispatchers
-		        )
+				MyApp(
+					window = window,
+					dispatchers = dispatchers
+				)
 			}
 		}
+//
+//				DestinationsNavHost(
+//					navGraph = NavGraphs.root,
+//					dependenciesContainerBuilder = {
+//						dependency(window)
+//						dependency(rememberSystemUiController())
+//					}
+//				)
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
 			splashScreen.setOnExitAnimationListener { splashScreenView ->
 				val slideUp = ObjectAnimator.ofFloat(
 					splashScreenView,
@@ -57,6 +63,7 @@ class MainActivity : ComponentActivity() {
 				// Run your animation.
 				slideUp.start()
 			}
+		}
 	}
 }
 
@@ -72,38 +79,30 @@ fun MyApp(
 	val systemUiController = rememberSystemUiController()
 	val navController = rememberNavController()
 
-	NavHost(navController = navController, startDestination = MainRoute.Home.route) {
-		composable(MainRoute.Home) {
-			HomeScreenNav(
-				systemUiController = systemUiController,
-				window = window,
-				navController = navController,
-				viewModel = hiltViewModel()
-			)
-		}
-//		homeScreenNav(
-//			systemUiController = systemUiController,
-//			window = window,
-//			navController = navController
-//		)
-//
-//		searchNav(
-//			systemUiController = systemUiController,
-//			window = window,
-//			navController = navController,
-//			dispatchers = dispatchers
-//		)
-//
-//		contentDetailsNav(
-//			systemUiController = systemUiController,
-//			window = window,
-//			navController = navController
-//		)
-//
-//		contentViewAllListNav(
-//			systemUiController = systemUiController,
-//			window = window,
-//			navController = navController
-//		)
+	NavHost(navController = navController, startDestination = HOME_SCREEN) {
+		homeScreenNav(
+			systemUiController = systemUiController,
+			window = window,
+			navController = navController
+		)
+
+		searchNav(
+			systemUiController = systemUiController,
+			window = window,
+			navController = navController,
+			dispatchers = dispatchers
+		)
+
+		contentDetailsNav(
+			systemUiController = systemUiController,
+			window = window,
+			navController = navController
+		)
+
+		contentViewAllListNav(
+			systemUiController = systemUiController,
+			window = window,
+			navController = navController
+		)
 	}
 }

@@ -1,29 +1,30 @@
 package com.machina.jikan_client_compose.presentation.home_screen.preview
 
+import androidx.compose.foundation.layout.width
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.Dp
-import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnimeModifier
+import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortraitDefault
+import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortraitDefault.Height
+import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortraitDefault.Width
 
 
 data class ItemVerticalAnimeMoreState(
 	val modifier: Modifier = Modifier,
-	val thumbnailHeight: Dp = ItemVerticalAnimeModifier.ThumbnailHeightDefault
+	val thumbnailHeight: Dp = Height.Default
 )
 
 class ItemVerticalAnimeMoreParameterProvider
 	: PreviewParameterProvider<ItemVerticalAnimeMoreState> {
-	override val count: Int
-		get() = 2
 	override val values: Sequence<ItemVerticalAnimeMoreState>
 		get() = listOf(
 			ItemVerticalAnimeMoreState(
-				modifier = ItemVerticalAnimeModifier.Default,
-				thumbnailHeight = ItemVerticalAnimeModifier.ThumbnailHeightDefault
+				modifier = Modifier.width(Width.Default),
+				thumbnailHeight = Height.Default
 			),
 			ItemVerticalAnimeMoreState(
-				modifier = ItemVerticalAnimeModifier.Small,
-				thumbnailHeight = ItemVerticalAnimeModifier.ThumbnailHeightSmall
+				modifier = Modifier.width(Width.Small),
+				thumbnailHeight = Height.Small
 			)
 		).asSequence()
 }

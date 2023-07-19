@@ -2,6 +2,7 @@ package com.machina.jikan_client_compose.presentation.composable.content_horizon
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.width
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
@@ -10,17 +11,19 @@ import androidx.compose.ui.unit.dp
 import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.domain.model.anime.AnimePortraitDataModel
 import com.machina.jikan_client_compose.presentation.data.StateListWrapper
-import com.machina.jikan_client_compose.presentation.home_screen.item.ItemVerticalAnimeModifier
+import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortraitDefault.Height
+import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortraitDefault.Arrangement
+import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortraitDefault.Width
 
 data class ScrollableHorizontalContentState(
-	val modifier: Modifier,
-	val headerModifier: Modifier = HorizontalContentHeaderConfig.Default,
-	val itemModifier: Modifier = ItemVerticalAnimeModifier.Default,
-	val thumbnailHeight: Dp = ItemVerticalAnimeModifier.ThumbnailHeightDefault,
 	val headerTitle: String = "Title",
 	val contentState: StateListWrapper<AnimePortraitDataModel>,
 	val contentPadding: PaddingValues = PaddingValues(horizontal = 12.dp),
-	val contentArrangement: Arrangement.Horizontal,
+	val contentArrangement: androidx.compose.foundation.layout.Arrangement.Horizontal.Horizontal,
+	val modifier: Modifier,
+	val headerModifier: Modifier = HorizontalContentHeaderConfig.Default,
+	val itemModifier: Modifier = Modifier.width(Width.Default),
+	val thumbnailHeight: Dp = Height.Default,
 	val textAlign: TextAlign = TextAlign.Start,
 	val onIconClick: () -> Unit = { },
 	val onItemClick: (Int, ContentType) -> Unit = { _, _ -> },
@@ -46,32 +49,32 @@ class ScrollableHorizontalContentParameterProvider
 				headerTitle = "Scrollable Default",
 				contentState = StateListWrapper.loading(),
 				contentPadding = PaddingValues(horizontal = 12.dp),
-				contentArrangement = ItemVerticalAnimeModifier.HorizontalArrangement.Default
+				contentArrangement = Arrangement.Default
 			),
 			ScrollableHorizontalContentState(
 				modifier = Modifier,
 				headerTitle = "Scrollable Default",
 				contentState = StateListWrapper(data = DataSet),
 				contentPadding = PaddingValues(horizontal = 12.dp),
-				contentArrangement = ItemVerticalAnimeModifier.HorizontalArrangement.Default,
+				contentArrangement = Arrangement.Default,
 			),
 			ScrollableHorizontalContentState(
 				modifier = Modifier,
-				itemModifier = ItemVerticalAnimeModifier.Small,
-				thumbnailHeight = ItemVerticalAnimeModifier.ThumbnailHeightSmall,
+				itemModifier = Modifier.width(Width.Small),
+				thumbnailHeight = Height.Small,
 				headerTitle = "Scrollable Small",
 				contentState = StateListWrapper.loading(),
 				contentPadding = PaddingValues(horizontal = 12.dp),
-				contentArrangement = ItemVerticalAnimeModifier.HorizontalArrangement.Default
+				contentArrangement = Arrangement.Default
 			),
 			ScrollableHorizontalContentState(
 				modifier = Modifier,
-				itemModifier = ItemVerticalAnimeModifier.Small,
-				thumbnailHeight = ItemVerticalAnimeModifier.ThumbnailHeightSmall,
+				itemModifier = Modifier.width(Width.Small),
+				thumbnailHeight = Height.Small,
 				headerTitle = "Scrollable Small",
 				contentState = StateListWrapper(data = DataSet),
 				contentPadding = PaddingValues(horizontal = 12.dp),
-				contentArrangement = ItemVerticalAnimeModifier.HorizontalArrangement.Default,
+				contentArrangement = Arrangement.Default,
 				textAlign = TextAlign.Center
 			)
 		).asSequence()

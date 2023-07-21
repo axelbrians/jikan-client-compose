@@ -1,10 +1,8 @@
 package com.machina.jikan_client_compose.presentation.home_screen
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,11 +18,11 @@ import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import com.machina.jikan_client_compose.domain.model.anime.AnimePortraitDataModel
 import com.machina.jikan_client_compose.domain.model.anime.AnimeThumbnail
+import com.machina.jikan_client_compose.domain.use_case.anime.HomeSection
 import com.machina.jikan_client_compose.presentation.composable.MyDivider
 import com.machina.jikan_client_compose.presentation.content_search_screen.composable.SearchFieldComponent
 import com.machina.jikan_client_compose.presentation.data.StateListWrapper
 import com.machina.jikan_client_compose.presentation.home_screen.viewmodel.HomeViewModel.HomeEvent
-import com.machina.jikan_client_compose.ui.theme.MyColor
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.StateFlow
@@ -38,7 +36,10 @@ fun HomeScreen(
 	airingPopular: StateFlow<List<AnimeThumbnail>>,
 	scheduleState: State<StateListWrapper<AnimePortraitDataModel>>,
 	topState: State<StateListWrapper<AnimePortraitDataModel>>,
+	homeSections: StateFlow<List<HomeSection>>,
 	sendViewModelEvent: (HomeEvent) -> Unit,
+	getHomeContent: () -> Unit,
+	modifier: Modifier = Modifier
 ) {
 	val snackbarHostState = remember { SnackbarHostState() }
 
@@ -49,19 +50,17 @@ fun HomeScreen(
 
 
 	LaunchedEffect(Unit) {
-		sendViewModelEvent(HomeEvent.GetAnimeAiringPopular)
+		getHomeContent.invoke()
+//		sendViewModelEvent(HomeEvent.GetAnimeAiringPopular)
 		sendViewModelEvent(HomeEvent.GetAnimeSchedule)
 		sendViewModelEvent(HomeEvent.GetAnimeTop)
+
 //		viewModel.getAnimeAiringPopular()
 //		viewModel.getTodayAnimeSchedule()
 //		viewModel.getTopAnimeList()
 	}
 
-	Scaffold(
-		modifier = Modifier
-			.fillMaxSize()
-			.background(MyColor.DarkBlueBackground),
-	) {
+	Scaffold(modifier = modifier) {
 		Column(modifier = Modifier.fillMaxWidth()) {
 			SearchFieldComponent(
 				value = "",
@@ -83,7 +82,8 @@ fun HomeScreen(
 				navigator = navigator,
 				airingPopular = airingPopular,
 				animeScheduleState = scheduleState,
-				animeTopState = topState
+				animeTopState = topState,
+				homeSections = homeSections
 			)
 		}
 

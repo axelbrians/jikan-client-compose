@@ -1,7 +1,9 @@
 package com.machina.jikan_client_compose.presentation.home_screen
 
 import android.view.Window
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.systemuicontroller.SystemUiController
@@ -32,7 +34,10 @@ fun HomeScreenNav(
 		airingPopular = viewModel.airingPopular,
 		scheduleState = viewModel.animeScheduleState,
 		topState = viewModel.animeTopState,
-		sendViewModelEvent = viewModel::sendEvent
+		homeSections = viewModel.homeSectionsState,
+		sendViewModelEvent = viewModel::sendEvent,
+		getHomeContent = viewModel::getHomeContent,
+		modifier = Modifier.fillMaxSize()
 	)
 }
 

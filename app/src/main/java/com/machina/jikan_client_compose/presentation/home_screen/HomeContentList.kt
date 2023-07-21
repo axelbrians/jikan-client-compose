@@ -1,7 +1,9 @@
 package com.machina.jikan_client_compose.presentation.home_screen
 
+import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
@@ -14,12 +16,15 @@ import com.machina.jikan_client_compose.core.constant.Constant
 import com.machina.jikan_client_compose.core.constant.Endpoints
 import com.machina.jikan_client_compose.domain.model.anime.AnimePortraitDataModel
 import com.machina.jikan_client_compose.domain.model.anime.AnimeThumbnail
+import com.machina.jikan_client_compose.domain.use_case.anime.HomeSection
+import com.machina.jikan_client_compose.domain.use_case.anime.SectionType
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.ScrollableHorizontalContent
 import com.machina.jikan_client_compose.presentation.data.StateListWrapper
 import com.machina.jikan_client_compose.presentation.home_screen.composable.anime_popular_current.AnimeHeadlineCarousel
 import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortraitDefault
 import com.machina.jikan_client_compose.ui.shimmer.rememberShimmerCustomBounds
 import kotlinx.coroutines.flow.StateFlow
+import timber.log.Timber
 
 object HomeContentList {
 
@@ -33,23 +38,40 @@ fun HomeContentList(
 	navigator: HomeScreenNavigator,
 	airingPopular: StateFlow<List<AnimeThumbnail>>,
 	animeScheduleState: State<StateListWrapper<AnimePortraitDataModel>>,
-	animeTopState: State<StateListWrapper<AnimePortraitDataModel>>
+	animeTopState: State<StateListWrapper<AnimePortraitDataModel>>,
+	homeSections: StateFlow<List<HomeSection>>
 ) {
 	val lazyColumnState = rememberLazyListState()
 	val airingPopularState = airingPopular.collectAsState()
+	val homeSectionsState = homeSections.collectAsState()
 
 	LazyColumn(
 		modifier = modifier,
 		state = lazyColumnState
 	) {
+		items(
+			items = homeSectionsState.value,
+			key = { it.id },
+			contentType = { it.type }
+		) { section ->
+			when (section.type) {
+				is SectionType.AnimeAiringPopular -> {
+					AnimeHeadlineCarousel(
+						dataSet = section.contents,
+						onClick = navigator::navigateToContentDetailsScreen
+					)
+				}
+				else -> { }
+			}
+		}
 
 		/* - - - Start of Currently popular anime - - - */
-		item(key = "airing_popular") {
-			AnimeHeadlineCarousel(
-				dataSet = airingPopularState.value,
-				onClick = navigator::navigateToContentDetailsScreen
-			)
-		}
+//		item(key = "airing_popular") {
+//			AnimeHeadlineCarousel(
+//				dataSet = airingPopularState.value,
+//				onClick = navigator::navigateToContentDetailsScreen
+//			)
+//		}
 		/* End of Currently Popular Anime */
 
 

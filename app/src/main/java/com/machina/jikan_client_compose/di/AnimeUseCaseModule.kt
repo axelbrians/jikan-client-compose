@@ -1,6 +1,9 @@
 package com.machina.jikan_client_compose.di
 
+import com.machina.jikan_client_compose.core.DispatchersProvider
 import com.machina.jikan_client_compose.data.remote.anime.AnimeService
+import com.machina.jikan_client_compose.domain.use_case.anime.GetHomeContentUseCase
+import com.machina.jikan_client_compose.domain.use_case.anime.GetHomeContentUseCaseImpl
 import com.machina.jikan_client_compose.domain.use_case.anime_airing_popular.GetAnimeAiringPopularUseCase
 import com.machina.jikan_client_compose.domain.use_case.anime_airing_popular.GetAnimeAiringPopularUseCaseImpl
 import dagger.Module
@@ -17,5 +20,14 @@ class AnimeUseCaseModule {
 	@ViewModelScoped
 	fun provideGetAnimeAiringPopularUseCase(service: AnimeService): GetAnimeAiringPopularUseCase {
 		return GetAnimeAiringPopularUseCaseImpl(service)
+	}
+
+	@Provides
+	@ViewModelScoped
+	fun provideHomeContentUseCase(
+		animeAiringPopularUseCase: GetAnimeAiringPopularUseCase,
+		dispatchers: DispatchersProvider
+	): GetHomeContentUseCase {
+		return GetHomeContentUseCaseImpl(animeAiringPopularUseCase, dispatchers)
 	}
 }

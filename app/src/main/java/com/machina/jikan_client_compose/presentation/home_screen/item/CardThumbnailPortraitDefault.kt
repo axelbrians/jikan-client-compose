@@ -1,6 +1,5 @@
 package com.machina.jikan_client_compose.presentation.home_screen.item
 
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.Arrangement as HorizontalArrangement
 

@@ -29,12 +29,12 @@ class GetAnimeAiringPopularUseCaseImpl(
 			throw Exception(resource.message)
 		}
 
-		val airingPopularList = resource.data?.data?.map {
+		val result = resource.data?.data?.map {
 			AnimeThumbnail.from(it)
 		}
 
-		if (!airingPopularList.isNullOrEmpty()) {
-			return airingPopularList
+		if (!result.isNullOrEmpty()) {
+			return result
 		} else {
 			throw EmptyDataException()
 		}

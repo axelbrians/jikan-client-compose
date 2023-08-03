@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.machina.jikan_client_compose.core.DispatchersProvider
 import com.machina.jikan_client_compose.domain.model.anime.AnimePortraitDataModel
-import com.machina.jikan_client_compose.domain.model.anime.AnimeThumbnail
 import com.machina.jikan_client_compose.domain.use_case.anime.GetHomeContentUseCase
 import com.machina.jikan_client_compose.domain.use_case.anime.HomeSection
 import com.machina.jikan_client_compose.domain.use_case.anime_airing_popular.GetAnimeAiringPopularUseCase
@@ -37,14 +36,6 @@ class HomeViewModel @Inject constructor(
 		MutableStateFlow(emptyList())
 	val homeSectionsState: StateFlow<List<HomeSection>>
 	    get() = _homeSectionsState.asStateFlow()
-	
-	private val _airingPopular: MutableStateFlow<List<AnimeThumbnail>> =
-		MutableStateFlow(emptyList())
-	val airingPopular = _airingPopular.asStateFlow()
-
-	private val _animeScheduleState : MutableState<StateListWrapper<AnimePortraitDataModel>> =
-		mutableStateOf(StateListWrapper.default())
-	val animeScheduleState : State<StateListWrapper<AnimePortraitDataModel>> = _animeScheduleState
 
 	private val _animeTopState: MutableState<StateListWrapper<AnimePortraitDataModel>> =
 		mutableStateOf(StateListWrapper.default())
@@ -60,27 +51,8 @@ class HomeViewModel @Inject constructor(
 
 	fun sendEvent(event: HomeEvent) {
 		when (event) {
-			HomeEvent.GetAnimeAiringPopular -> getAnimeAiringPopular()
-			HomeEvent.GetAnimeSchedule -> getTodayAnimeSchedule()
 			HomeEvent.GetAnimeTop -> getTopAnimeList()
 		}
-	}
-
-	private fun getAnimeAiringPopular() {
-		viewModelScope.launch(dispatcher.io) {
-			try {
-				val result = getAnimeAiringPopularUseCase.invoke()
-				_airingPopular.update { result }
-			} catch (exception: Exception) {
-				// Handle Error
-			}
-		}
-	}
-
-	private fun getTodayAnimeSchedule() {
-		getAnimeScheduleUseCase.getAsStateListWrapper().onEach {
-			_animeScheduleState.value = it
-		}.launchIn(viewModelScope)
 	}
 
 	private fun getTopAnimeList() {
@@ -95,8 +67,6 @@ class HomeViewModel @Inject constructor(
 	}
 
 	sealed class HomeEvent {
-		object GetAnimeAiringPopular: HomeEvent()
-		object GetAnimeSchedule: HomeEvent()
 		object GetAnimeTop: HomeEvent()
 	}
 

@@ -31,8 +31,6 @@ fun HomeScreenNav(
 
 	HomeScreen(
 		navigator = HomeScreenNavigator(navController),
-		airingPopular = viewModel.airingPopular,
-		scheduleState = viewModel.animeScheduleState,
 		topState = viewModel.animeTopState,
 		homeSections = viewModel.homeSectionsState,
 		sendViewModelEvent = viewModel::sendEvent,

@@ -17,7 +17,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import com.machina.jikan_client_compose.domain.model.anime.AnimePortraitDataModel
-import com.machina.jikan_client_compose.domain.model.anime.AnimeThumbnail
 import com.machina.jikan_client_compose.domain.use_case.anime.HomeSection
 import com.machina.jikan_client_compose.presentation.composable.MyDivider
 import com.machina.jikan_client_compose.presentation.content_search_screen.composable.SearchFieldComponent
@@ -33,8 +32,6 @@ import kotlinx.coroutines.flow.StateFlow
 @Composable
 fun HomeScreen(
 	navigator: HomeScreenNavigator,
-	airingPopular: StateFlow<List<AnimeThumbnail>>,
-	scheduleState: State<StateListWrapper<AnimePortraitDataModel>>,
 	topState: State<StateListWrapper<AnimePortraitDataModel>>,
 	homeSections: StateFlow<List<HomeSection>>,
 	sendViewModelEvent: (HomeEvent) -> Unit,
@@ -51,13 +48,7 @@ fun HomeScreen(
 
 	LaunchedEffect(Unit) {
 		getHomeContent.invoke()
-//		sendViewModelEvent(HomeEvent.GetAnimeAiringPopular)
-		sendViewModelEvent(HomeEvent.GetAnimeSchedule)
 		sendViewModelEvent(HomeEvent.GetAnimeTop)
-
-//		viewModel.getAnimeAiringPopular()
-//		viewModel.getTodayAnimeSchedule()
-//		viewModel.getTopAnimeList()
 	}
 
 	Scaffold(modifier = modifier) {
@@ -80,8 +71,6 @@ fun HomeScreen(
 
 			HomeContentList(
 				navigator = navigator,
-				airingPopular = airingPopular,
-				animeScheduleState = scheduleState,
 				animeTopState = topState,
 				homeSections = homeSections
 			)

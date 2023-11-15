@@ -6,6 +6,7 @@ import com.machina.jikan_client_compose.data.remote.anime.AnimeService
 import com.machina.jikan_client_compose.domain.model.anime.AnimeThumbnail
 import com.machina.jikan_client_compose.domain.use_case.anime.HomeSection
 import com.machina.jikan_client_compose.domain.use_case.anime.SectionType
+import kotlinx.collections.immutable.toImmutableList
 import java.util.UUID
 import kotlin.jvm.Throws
 
@@ -41,7 +42,7 @@ class GetAnimeAiringPopularUseCaseImpl(
 	}
 
 	override suspend fun executeAsHomeSection(): HomeSection {
-		val result = invoke()
+		val result = invoke().toImmutableList()
 		return HomeSection(
 			id = UUID.randomUUID().toString(),
 			contents = result,

@@ -18,6 +18,7 @@ import coil.annotation.ExperimentalCoilApi
 import com.machina.jikan_client_compose.domain.use_case.anime.HomeSection
 import com.machina.jikan_client_compose.presentation.composable.MyDivider
 import com.machina.jikan_client_compose.presentation.content_search_screen.composable.SearchFieldComponent
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.StateFlow
@@ -28,7 +29,7 @@ import kotlinx.coroutines.flow.StateFlow
 @Composable
 fun HomeScreen(
 	navigator: HomeScreenNavigator,
-	homeSections: StateFlow<List<HomeSection>>,
+	homeSections: StateFlow<ImmutableList<HomeSection>>,
 	getHomeContent: () -> Unit,
 	modifier: Modifier = Modifier
 ) {

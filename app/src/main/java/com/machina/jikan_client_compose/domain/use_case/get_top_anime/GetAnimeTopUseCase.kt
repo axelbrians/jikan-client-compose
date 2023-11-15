@@ -10,6 +10,7 @@ import com.machina.jikan_client_compose.domain.model.anime.AnimeThumbnail
 import com.machina.jikan_client_compose.domain.use_case.anime.HomeSection
 import com.machina.jikan_client_compose.domain.use_case.anime.SectionType
 import com.machina.jikan_client_compose.presentation.data.StateListWrapper
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -60,7 +61,7 @@ class GetAnimeTopUseCase @Inject constructor(
 
 	@Throws(Exception::class)
 	suspend fun executeAsHomeSection(): HomeSection {
-		val result = invoke()
+		val result = invoke().toImmutableList()
 		return HomeSection(
 			id = UUID.randomUUID().toString(),
 			contents = result,

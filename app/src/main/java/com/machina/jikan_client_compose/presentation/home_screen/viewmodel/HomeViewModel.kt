@@ -9,16 +9,14 @@ import com.machina.jikan_client_compose.core.DispatchersProvider
 import com.machina.jikan_client_compose.domain.model.anime.AnimePortraitDataModel
 import com.machina.jikan_client_compose.domain.use_case.anime.GetHomeContentUseCase
 import com.machina.jikan_client_compose.domain.use_case.anime.HomeSection
-import com.machina.jikan_client_compose.domain.use_case.anime_airing_popular.GetAnimeAiringPopularUseCase
-import com.machina.jikan_client_compose.domain.use_case.anime_schedule.GetAnimeScheduleUseCase
-import com.machina.jikan_client_compose.domain.use_case.get_top_anime.GetAnimeTopUseCase
 import com.machina.jikan_client_compose.presentation.data.StateListWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.immutableListOf
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -29,9 +27,9 @@ class HomeViewModel @Inject constructor(
 	private val dispatcher: DispatchersProvider
 ) : ViewModel() {
 
-	private val _homeSectionsState: MutableStateFlow<List<HomeSection>> =
-		MutableStateFlow(emptyList())
-	val homeSectionsState: StateFlow<List<HomeSection>>
+	private val _homeSectionsState: MutableStateFlow<ImmutableList<HomeSection>> =
+		MutableStateFlow(persistentListOf())
+	val homeSectionsState: StateFlow<ImmutableList<HomeSection>>
 	    get() = _homeSectionsState.asStateFlow()
 
 	private val _animeTopState: MutableState<StateListWrapper<AnimePortraitDataModel>> =

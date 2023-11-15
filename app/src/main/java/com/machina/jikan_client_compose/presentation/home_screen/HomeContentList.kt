@@ -18,6 +18,7 @@ import com.machina.jikan_client_compose.presentation.composable.content_horizont
 import com.machina.jikan_client_compose.presentation.home_screen.composable.anime_popular_current.AnimeHeadlineCarousel
 import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortraitDefault.Arrangement
 import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortraitDefault.Height
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.StateFlow
 
 @OptIn(ExperimentalPagerApi::class)
@@ -25,7 +26,7 @@ import kotlinx.coroutines.flow.StateFlow
 @Composable
 fun HomeContentList(
 	navigator: HomeScreenNavigator,
-	homeSections: StateFlow<List<HomeSection>>,
+	homeSections: StateFlow<ImmutableList<HomeSection>>,
 	modifier: Modifier = Modifier,
 ) {
 	val homeSectionsState = homeSections.collectAsState()

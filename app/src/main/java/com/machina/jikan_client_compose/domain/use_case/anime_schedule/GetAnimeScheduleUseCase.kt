@@ -14,6 +14,7 @@ import com.machina.jikan_client_compose.domain.use_case.anime.SectionType
 import com.machina.jikan_client_compose.presentation.data.StateListWrapper
 import com.machina.jikan_client_compose.presentation.data.StateWrapper
 import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeHorizontalListContentState
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -145,7 +146,7 @@ class GetAnimeScheduleUseCaseImpl(
 		dayInCalendar: Int,
 		page: Int
 	): HomeSection {
-		val result = invoke(dayInCalendar, page)
+		val result = invoke(dayInCalendar, page).toImmutableList()
 		return HomeSection(
 			id = UUID.randomUUID().toString(),
 			contents = result,

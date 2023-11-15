@@ -40,7 +40,7 @@ interface GetAnimeScheduleUseCase {
 		page: Int = 1
 	): Flow<StateListWrapper<AnimePortraitDataModel>>
 
-	suspend fun getAsHomeSection(
+	suspend fun executeAsHomeSection(
 		dayInCalendar: Int = Calendar.getInstance().get(Calendar.DAY_OF_WEEK),
 		page: Int = 1
 	): HomeSection
@@ -141,7 +141,7 @@ class GetAnimeScheduleUseCaseImpl(
 		emit(state)
 	}.flowOn(dispatchers.io)
 
-	override suspend fun getAsHomeSection(
+	override suspend fun executeAsHomeSection(
 		dayInCalendar: Int,
 		page: Int
 	): HomeSection {

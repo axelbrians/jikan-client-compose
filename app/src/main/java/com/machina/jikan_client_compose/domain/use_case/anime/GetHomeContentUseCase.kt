@@ -4,11 +4,9 @@ import com.machina.jikan_client_compose.core.DispatchersProvider
 import com.machina.jikan_client_compose.domain.model.anime.AnimeThumbnail
 import com.machina.jikan_client_compose.domain.use_case.anime_airing_popular.GetAnimeAiringPopularUseCase
 import com.machina.jikan_client_compose.domain.use_case.anime_schedule.GetAnimeScheduleUseCase
+import com.machina.jikan_client_compose.domain.use_case.get_top_anime.GetAnimeTopUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 
 sealed class SectionType(val name: String) {
 	object AnimeAiringPopular: SectionType("Airing Now")
@@ -24,7 +22,7 @@ data class HomeSection(
 
 interface GetHomeContentUseCase {
 
-	operator fun invoke(): Flow<List<HomeSection>>
+	suspend fun invoke(): List<HomeSection>
 
 	fun onCleared()
 }
@@ -32,23 +30,25 @@ interface GetHomeContentUseCase {
 class GetHomeContentUseCaseImpl(
 	private val airingPopularUseCase: GetAnimeAiringPopularUseCase,
 	private val animeScheduleUseCase: GetAnimeScheduleUseCase,
+	private val animeTopUseCase: GetAnimeTopUseCase,
 	private val dispatchers: DispatchersProvider
 ): GetHomeContentUseCase {
 
 	private val supervisorJob = SupervisorJob()
 	private val concurrentScope = CoroutineScope(dispatchers.io + supervisorJob)
 
-	override fun invoke(): Flow<List<HomeSection>> = flow {
+	override suspend fun invoke(): List<HomeSection> {
 		val homeSections = mutableListOf<HomeSection>()
 		val airingPopular = airingPopularUseCase.executeAsHomeSection()
-		val airingToday = animeScheduleUseCase.getAsHomeSection()
-
+		val airingToday = animeScheduleUseCase.executeAsHomeSection()
+		val animeTop = animeTopUseCase.executeAsHomeSection()
 
 		homeSections.add(airingPopular)
 		homeSections.add(airingToday)
+		homeSections.add(animeTop)
 
-		emit(homeSections)
-	}.flowOn(dispatchers.io)
+		return homeSections
+	}
 
 	override fun onCleared() {
 		supervisorJob.cancel()

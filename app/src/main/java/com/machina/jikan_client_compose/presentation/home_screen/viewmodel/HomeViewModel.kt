@@ -25,9 +25,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-	private val getAnimeAiringPopularUseCase: GetAnimeAiringPopularUseCase,
-	private val getAnimeTopUseCase: GetAnimeTopUseCase,
-	private val getAnimeScheduleUseCase: GetAnimeScheduleUseCase,
 	private val getHomeContentUseCase: GetHomeContentUseCase,
 	private val dispatcher: DispatchersProvider
 ) : ViewModel() {
@@ -43,31 +40,13 @@ class HomeViewModel @Inject constructor(
 
 	fun getHomeContent() {
 		viewModelScope.launch(dispatcher.io) {
-			getHomeContentUseCase.invoke().collect { state ->
-				_homeSectionsState.update { state }
-			}
+			val contentList = getHomeContentUseCase.invoke()
+			_homeSectionsState.update { contentList }
 		}
-	}
-
-	fun sendEvent(event: HomeEvent) {
-		when (event) {
-			HomeEvent.GetAnimeTop -> getTopAnimeList()
-		}
-	}
-
-	private fun getTopAnimeList() {
-		getAnimeTopUseCase.getAsStateListWrapper().onEach {
-			_animeTopState.value = it
-		}.launchIn(viewModelScope)
 	}
 
 	override fun onCleared() {
 		super.onCleared()
 		getHomeContentUseCase.onCleared()
 	}
-
-	sealed class HomeEvent {
-		object GetAnimeTop: HomeEvent()
-	}
-
 }

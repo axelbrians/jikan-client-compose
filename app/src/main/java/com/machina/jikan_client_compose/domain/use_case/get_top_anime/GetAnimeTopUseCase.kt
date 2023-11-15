@@ -1,97 +1,70 @@
 package com.machina.jikan_client_compose.domain.use_case.get_top_anime
 
 import com.machina.jikan_client_compose.core.DispatchersProvider
+import com.machina.jikan_client_compose.core.error.EmptyDataException
 import com.machina.jikan_client_compose.core.wrapper.Event
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.data.remote.anime.AnimeService
-import com.machina.jikan_client_compose.data.remote.dto.anime_top.toAnimeTop
 import com.machina.jikan_client_compose.domain.model.anime.AnimePortraitDataModel
-import com.machina.jikan_client_compose.domain.model.anime.AnimeVerticalModel
+import com.machina.jikan_client_compose.domain.model.anime.AnimeThumbnail
+import com.machina.jikan_client_compose.domain.use_case.anime.HomeSection
+import com.machina.jikan_client_compose.domain.use_case.anime.SectionType
 import com.machina.jikan_client_compose.presentation.data.StateListWrapper
-import com.machina.jikan_client_compose.presentation.data.StateWrapper
-import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeHorizontalListContentState
-import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeTopState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import java.util.UUID
 import javax.inject.Inject
 
 class GetAnimeTopUseCase @Inject constructor(
-  private val repository: AnimeService,
-  private val dispatchers: DispatchersProvider
+	private val service: AnimeService,
+	private val dispatchers: DispatchersProvider,
+	private val type: SectionType = SectionType.AnimeTop
 ) {
-  operator fun invoke(page: Int = 1): Flow<AnimeTopState> {
-    return flow {
-      emit(AnimeTopState.Loading)
+	suspend fun invoke(): List<AnimeThumbnail> {
+		val resource = service.getAnimeAiringPopular()
 
-      val state = when (val res = repository.getAnimeTopOfAllTime(page)) {
-        is Resource.Success -> {
-          val data = res.data?.data?.map { it.toAnimeTop() }.orEmpty()
-          AnimeTopState(data)
-        }
-        is Resource.Error -> AnimeTopState(error = Event(res.message))
-      }
+		if (resource is Resource.Error) {
+			throw Exception(resource.message)
+		}
 
-      emit(state)
-    }.flowOn(dispatchers.io)
-  }
+		val result = resource.data?.data?.map {
+			AnimeThumbnail.from(it)
+		}
 
-  fun getAsAnimeHorizontalList(page: Int = 1): Flow<AnimeHorizontalListContentState> {
-    return flow {
-      emit(AnimeHorizontalListContentState.Loading)
+		if (!result.isNullOrEmpty()) {
+			return result
+		} else {
+			throw EmptyDataException()
+		}
+	}
 
-      val state = when (val res = repository.getAnimeTopOfAllTime(page)) {
-        is Resource.Success -> {
-          AnimeHorizontalListContentState(
-            data = AnimeVerticalModel(
-              data = res.data!!.data.map {
-                AnimePortraitDataModel.from(it)
-              },
-              pagination = res.data.pagination
-            )
-          )
-        }
-        is Resource.Error -> AnimeHorizontalListContentState(error = Event(res.message))
-      }
+	fun getAsStateListWrapper(page: Int = 1): Flow<StateListWrapper<AnimePortraitDataModel>> =
+		flow {
+			emit(StateListWrapper.loading())
 
-      emit(state)
-    }.flowOn(dispatchers.io)
-  }
+			val state = when (val res = service.getAnimeTopOfAllTime(page)) {
+				is Resource.Success -> {
+					StateListWrapper(
+						data = res.data!!.data.map {
+							AnimePortraitDataModel.from(it)
+						}
+					)
+				}
 
-  fun getAsStateWrapper(page: Int = 1): Flow<StateWrapper<AnimeVerticalModel>> = flow {
-    emit(StateWrapper.loading())
+				is Resource.Error -> StateListWrapper(error = Event(res.message))
+			}
 
-    val state = when (val res = repository.getAnimeTopOfAllTime(page)) {
-      is Resource.Success -> {
-        StateWrapper(
-          data = AnimeVerticalModel(
-            data = res.data!!.data.map {
-              AnimePortraitDataModel.from(it)
-            },
-            pagination = res.data.pagination
-          )
-        )
-      }
-      is Resource.Error -> StateWrapper(error = Event(res.message))
-    }
+			emit(state)
+		}.flowOn(dispatchers.io)
 
-    emit(state)
-  }.flowOn(dispatchers.io)
-
-  fun getAsStateListWrapper(page: Int = 1): Flow<StateListWrapper<AnimePortraitDataModel>> = flow {
-    emit(StateListWrapper.loading())
-
-    val state = when (val res = repository.getAnimeTopOfAllTime(page)) {
-      is Resource.Success -> {
-        StateListWrapper(
-          data = res.data!!.data.map {
-            AnimePortraitDataModel.from(it)
-          }
-        )
-      }
-      is Resource.Error -> StateListWrapper(error = Event(res.message))
-    }
-
-    emit(state)
-  }.flowOn(dispatchers.io)
+	@Throws(Exception::class)
+	suspend fun executeAsHomeSection(): HomeSection {
+		val result = invoke()
+		return HomeSection(
+			id = UUID.randomUUID().toString(),
+			contents = result,
+			type = type
+		)
+	}
 }

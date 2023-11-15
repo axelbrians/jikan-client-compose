@@ -4,6 +4,7 @@ import android.view.Window
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.systemuicontroller.SystemUiController
@@ -20,7 +21,8 @@ fun HomeScreenNav(
 	systemUiController: SystemUiController,
 	window: Window,
 	navController: NavController,
-	viewModel: HomeViewModel
+	modifier: Modifier = Modifier,
+	viewModel: HomeViewModel = hiltViewModel()
 ) {
 	OnDestinationChanged(
 		systemUiController = systemUiController,
@@ -31,11 +33,9 @@ fun HomeScreenNav(
 
 	HomeScreen(
 		navigator = HomeScreenNavigator(navController),
-		topState = viewModel.animeTopState,
 		homeSections = viewModel.homeSectionsState,
-		sendViewModelEvent = viewModel::sendEvent,
 		getHomeContent = viewModel::getHomeContent,
-		modifier = Modifier.fillMaxSize()
+		modifier = modifier.fillMaxSize()
 	)
 }
 

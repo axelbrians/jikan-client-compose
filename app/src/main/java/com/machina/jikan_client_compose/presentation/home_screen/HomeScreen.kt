@@ -10,18 +10,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
-import com.machina.jikan_client_compose.domain.model.anime.AnimePortraitDataModel
 import com.machina.jikan_client_compose.domain.use_case.anime.HomeSection
 import com.machina.jikan_client_compose.presentation.composable.MyDivider
 import com.machina.jikan_client_compose.presentation.content_search_screen.composable.SearchFieldComponent
-import com.machina.jikan_client_compose.presentation.data.StateListWrapper
-import com.machina.jikan_client_compose.presentation.home_screen.viewmodel.HomeViewModel.HomeEvent
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.StateFlow
@@ -32,9 +28,7 @@ import kotlinx.coroutines.flow.StateFlow
 @Composable
 fun HomeScreen(
 	navigator: HomeScreenNavigator,
-	topState: State<StateListWrapper<AnimePortraitDataModel>>,
 	homeSections: StateFlow<List<HomeSection>>,
-	sendViewModelEvent: (HomeEvent) -> Unit,
 	getHomeContent: () -> Unit,
 	modifier: Modifier = Modifier
 ) {
@@ -48,7 +42,6 @@ fun HomeScreen(
 
 	LaunchedEffect(Unit) {
 		getHomeContent.invoke()
-		sendViewModelEvent(HomeEvent.GetAnimeTop)
 	}
 
 	Scaffold(modifier = modifier) {
@@ -71,7 +64,6 @@ fun HomeScreen(
 
 			HomeContentList(
 				navigator = navigator,
-				animeTopState = topState,
 				homeSections = homeSections
 			)
 		}

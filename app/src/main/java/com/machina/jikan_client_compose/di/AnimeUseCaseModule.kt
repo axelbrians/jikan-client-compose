@@ -8,6 +8,7 @@ import com.machina.jikan_client_compose.domain.use_case.anime_airing_popular.Get
 import com.machina.jikan_client_compose.domain.use_case.anime_airing_popular.GetAnimeAiringPopularUseCaseImpl
 import com.machina.jikan_client_compose.domain.use_case.anime_schedule.GetAnimeScheduleUseCase
 import com.machina.jikan_client_compose.domain.use_case.anime_schedule.GetAnimeScheduleUseCaseImpl
+import com.machina.jikan_client_compose.domain.use_case.get_top_anime.GetAnimeTopUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -35,14 +36,25 @@ class AnimeUseCaseModule {
 
 	@Provides
 	@ViewModelScoped
+	fun provideGetAnimeTopUseCase(
+		service: AnimeService,
+		dispatchers: DispatchersProvider
+	): GetAnimeTopUseCase {
+		return GetAnimeTopUseCase(service, dispatchers)
+	}
+
+	@Provides
+	@ViewModelScoped
 	fun provideHomeContentUseCase(
 		animeAiringPopularUseCase: GetAnimeAiringPopularUseCase,
 		animeScheduleUseCase: GetAnimeScheduleUseCase,
+		animeTopUseCase: GetAnimeTopUseCase,
 		dispatchers: DispatchersProvider
 	): GetHomeContentUseCase {
 		return GetHomeContentUseCaseImpl(
 			airingPopularUseCase = animeAiringPopularUseCase,
 			animeScheduleUseCase = animeScheduleUseCase,
+			animeTopUseCase = animeTopUseCase,
 			dispatchers = dispatchers
 		)
 	}

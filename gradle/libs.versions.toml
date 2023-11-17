@@ -1,0 +1,149 @@
+[versions]
+app-version-code = "1"
+app-version-name = "1.0.0"
+sdk-compile = "33"
+sdk-min = "24"
+sdk-target = "33"
+
+jvm = "1.8"
+agp = "7.1.3"
+kotlin = "1.8.22"
+ktx = "1.8.0"
+collections-immutable = "0.3.5"
+coroutines = "1.6.4"
+
+lifecycle = "2.5.1"
+dagger = "2.44"
+hilt = "1.0.0"
+ktor = "1.6.4"
+logback = "1.2.6"
+chucker = "3.5.2"
+hyperion = "0.9.34"
+
+accompanist = "0.23.1"
+coil = "2.2.1"
+compose-activity = "1.5.1"
+compose-bom = "2023.05.01"
+compose-compiler-ext = "1.4.8"
+compose-navigation = "2.5.1"
+
+
+[libraries]
+androidx-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "ktx" }
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version = "1.5.0" }
+androidx-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
+androidx-lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
+
+
+compose-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "compose-activity" }
+compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
+compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "compose-navigation" }
+compose-ui-ui = { group = "androidx.compose.ui", name = "ui" }
+compose-ui-util = { group = "androidx.compose.ui", name = "ui-util" }
+compose-ui-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+compose-coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+compose-ui-test = { group = "androidx.compose.ui", name = "ui-test" }
+compose-ui-junit = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+
+
+accompanist-flowlayout = { group = "com.google.accompanist", name = "accompanist-flowlayout", version.ref = "accompanist" }
+accompanist-insets = { group = "com.google.accompanist", name = "accompanist-insets", version.ref = "accompanist" }
+accompanist-pager = { group = "com.google.accompanist", name = "accompanist-pager", version.ref = "accompanist" }
+accompanist-placeholder = { group = "com.google.accompanist", name = "accompanist-placeholder", version.ref = "accompanist" }
+accompanist-systemuicontroller = { group = "com.google.accompanist", name = "accompanist-systemuicontroller", version.ref = "accompanist" }
+accompanist-swiperefresh = { group = "com.google.accompanist", name = "accompanist-swiperefresh", version.ref = "accompanist" }
+
+
+hilt-dagger-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "dagger" }
+hilt-dagger-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "dagger" }
+hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hilt" }
+hilt-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt" }
+
+
+kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
+kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
+kotlinx-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "collections-immutable" }
+
+
+ktor-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
+ktor-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor" }
+ktor-android = { group = "io.ktor", name = "ktor-client-android", version.ref = "ktor" }
+ktor-serialization = { group = "io.ktor", name = "ktor-client-serialization", version.ref = "ktor" }
+ktor-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor" }
+ktor-logback = { group = "ch.qos.logback", name = "logback-classic", version.ref = "logback" }
+
+valentinilk-shimmer = { group = "com.valentinilk.shimmer", name = "compose-shimmer", version = "1.0.0" }
+onebone-toolbar = { group = "me.onebone", name = "toolbar-compose", version = "2.2.0" }
+
+
+chucker-core = { group = "com.github.chuckerteam.chucker", name = "library", version.ref = "chucker" }
+chucker-no-op = { group = "com.github.chuckerteam.chucker", name = "library-no-op", version.ref = "chucker" }
+timber = { group = "com.jakewharton.timber", name = "timber", version = "5.0.1" }
+
+hyperion-core = { group = "com.willowtreeapps.hyperion", name = "hyperion-core", version.ref = "hyperion" }
+hyperion-attr = { group = "com.willowtreeapps.hyperion", name = "hyperion-attr", version.ref = "hyperion" }
+hyperion-build-config = { group = "com.willowtreeapps.hyperion", name = "hyperion-build-config", version.ref = "hyperion" }
+hyperion-crash = { group = "com.willowtreeapps.hyperion", name = "hyperion-crash", version.ref = "hyperion" }
+hyperion-disk = { group = "com.willowtreeapps.hyperion", name = "hyperion-disk", version.ref = "hyperion" }
+hyperion-geiger-counter = { group = "com.willowtreeapps.hyperion", name = "hyperion-geiger-counter", version.ref = "hyperion" }
+hyperion-measurement = { group = "com.willowtreeapps.hyperion", name = "hyperion-measurement", version.ref = "hyperion" }
+hyperion-phoenix = { group = "com.willowtreeapps.hyperion", name = "hyperion-phoenix", version.ref = "hyperion" }
+hyperion-recorder = { group = "com.willowtreeapps.hyperion", name = "hyperion-recorder", version.ref = "hyperion" }
+hyperion-shared-preferences = { group = "com.willowtreeapps.hyperion", name = "hyperion-shared-preferences", version.ref = "hyperion" }
+hyperion-timber = { group = "com.willowtreeapps.hyperion", name = "hyperion-timber", version.ref = "hyperion" }
+
+
+# region -----test-----
+test-androidx-core = { group = "androidx.test", name = "core", version = "1.4.0" }
+test-androidx-junit = { group = "androidx-test-ext", name = "junit", version = "1.1.3" }
+test-androidx-espresso = { group = "androidx-test-espresso", name = "espresso-core", version = "3.4.0" }
+test-kotlinx-coroutine = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version = "1.5.0" }
+test-mockk = { group = "io.mockk", name = "mockk", version = "1.12.2" }
+test-junit = { group = "junit ", name = "junit", version = "4.13.2" }
+test-hamcrest = { group = "org.hamcrest", name = "hamcrest-all", version = "1.3"}
+
+# region -----plugin-----
+plugin-agp = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
+plugin-kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+plugin-hilt = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "dagger" }
+# endregion -----
+
+[plugins]
+
+
+
+[bundles]
+ktor = [
+    "ktor-android",
+    "ktor-core",
+    "ktor-logback",
+    "ktor-logging",
+    "ktor-okhttp",
+    "ktor-serialization"
+]
+compose-test = ["compose-ui-test", "compose-ui-junit"]
+compose-ui = [
+    "compose-activity",
+    "compose-ui-ui",
+    "compose-ui-util",
+    "compose-ui-preview",
+    "compose-navigation",
+    "compose-coil"
+]
+hyperion = [
+    "hyperion-attr",
+    "hyperion-build-config",
+    "hyperion-core",
+    "hyperion-crash",
+    "hyperion-disk",
+    "hyperion-geiger-counter",
+    "hyperion-measurement",
+    "hyperion-phoenix",
+    "hyperion-recorder",
+    "hyperion-shared-preferences",
+    "hyperion-timber"
+]
+
+
+

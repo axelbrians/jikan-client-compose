@@ -10,6 +10,7 @@ import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.machina.jikan_client_compose.OnDestinationChanged
 import com.machina.jikan_client_compose.core.enums.ContentType
+import com.machina.jikan_client_compose.presentation.content_detail_screen.ContentDetailsNavArgs
 import com.machina.jikan_client_compose.presentation.home_screen.viewmodel.HomeViewModel
 import com.machina.jikan_client_compose.ui.navigation.MainRoute
 import com.machina.jikan_client_compose.ui.theme.MyColor
@@ -64,7 +65,7 @@ class HomeScreenNavigator(
 		malId: Int,
 		contentType: ContentType
 	) {
-//		val destination = ContentDetailsNavDestination(ContentDetailsNavArgs(malId, contentType))
-//		navController.navigate(destination)
+		val navArgs = ContentDetailsNavArgs(malId, contentType)
+		navController.navigate(MainRoute.ContentDetails.route)
 	}
 }

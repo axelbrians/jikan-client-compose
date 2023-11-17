@@ -15,7 +15,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.machina.jikan_client_compose.core.DispatchersProvider
+import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.navigation.composable
+import com.machina.jikan_client_compose.presentation.content_detail_screen.ContentDetailsNav
+import com.machina.jikan_client_compose.presentation.content_detail_screen.ContentDetailsNavArgs
 import com.machina.jikan_client_compose.presentation.home_screen.HomeScreenNav
 import com.machina.jikan_client_compose.ui.navigation.MainRoute
 import com.machina.jikan_client_compose.ui.theme.JikanClientComposeTheme
@@ -79,6 +82,17 @@ fun MyApp(
 				systemUiController = systemUiController,
 				window = window,
 				navController = navController,
+				viewModel = hiltViewModel()
+			)
+		}
+		composable(MainRoute.ContentDetails) {
+			val contentDetailsNavArgs = ContentDetailsNavArgs(43608, ContentType.Anime)
+
+			ContentDetailsNav(
+				systemUiController = systemUiController,
+				window = window,
+				navController = navController,
+				navArgs = contentDetailsNavArgs,
 				viewModel = hiltViewModel()
 			)
 		}

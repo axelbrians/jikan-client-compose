@@ -33,14 +33,6 @@ fun HomeScreen(
 	getHomeContent: () -> Unit,
 	modifier: Modifier = Modifier
 ) {
-	val snackbarHostState = remember { SnackbarHostState() }
-
-
-	// Controlling snackbar on error. Only show one snackbar at a time with channel.
-	// Channel create something like queue, so no snackbar will be showed when one is still showing.
-	val snackbarChannel = remember { Channel<String?>(Channel.CONFLATED) }
-
-
 	LaunchedEffect(Unit) {
 		getHomeContent.invoke()
 	}
@@ -68,6 +60,12 @@ fun HomeScreen(
 				homeSections = homeSections
 			)
 		}
+//		val snackbarHostState = remember { SnackbarHostState() }
+
+
+		// Controlling snackbar on error. Only show one snackbar at a time with channel.
+		// Channel create something like queue, so no snackbar will be showed when one is still showing.
+//		val snackbarChannel = remember { Channel<String?>(Channel.CONFLATED) }
 
 		// Try to emmit error message to snackbarChannel if not have been handled before.
 //		with(animeTopState.error.getContentIfNotHandled()) {

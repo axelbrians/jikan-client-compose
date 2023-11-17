@@ -71,7 +71,7 @@ fun HomeContentList(
 						contentArrangement = Arrangement.Default,
 						thumbnailHeight = Height.Small,
 						onIconClick = { },
-						onItemClick = { _, _ ->}
+						onItemClick = navigator::navigateToContentDetailsScreen
 					)
 				}
 			}

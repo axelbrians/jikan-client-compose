@@ -26,4 +26,5 @@ sealed class MainRoute(
 ): Destination(route, arguments, deepLinks) {
 	object Home: MainRoute(route = "home")
 	object Search: MainRoute(route = "search")
+	object ContentDetails: MainRoute(route = "home/content_details")
 }

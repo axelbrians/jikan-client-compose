@@ -1,7 +1,7 @@
 package com.machina.jikan_client_compose.domain.use_case.get_top_anime
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.google.common.truth.Truth.assertThat
+//import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+//import com.google.common.truth.Truth.assertThat
 import com.machina.jikan_client_compose.core.DefaultDispatchers
 import com.machina.jikan_client_compose.core.wrapper.Event
 import com.machina.jikan_client_compose.core.wrapper.Resource
@@ -22,8 +22,8 @@ import org.junit.runners.JUnit4
 @RunWith(JUnit4::class)
 class GetTopAnimeUseCaseTest {
 
-	@get:Rule
-	val rule = InstantTaskExecutorRule()
+//	@get:Rule
+//	val rule = InstantTaskExecutorRule()
 
 	private val animeRepository = mockk<AnimeService>()
 

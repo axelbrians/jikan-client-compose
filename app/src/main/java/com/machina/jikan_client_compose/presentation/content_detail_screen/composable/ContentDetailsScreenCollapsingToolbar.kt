@@ -85,6 +85,64 @@ fun CollapsingToolbarScope.ContentDetailsScreenToolbar(
 				alpha = toolbarScaffoldState.toolbarState.progress
 			},
 	) {
+		// Toolbar
+		Row(
+			modifier = Modifier
+				.fillMaxWidth()
+				.statusBarsPadding(),
+			verticalAlignment = Alignment.CenterVertically
+		) {
+			IconButton(onClick = { onArrowClick() }) {
+				Icon(
+					imageVector = Icons.Default.ArrowBack,
+					contentDescription = "Back",
+					tint = MyColor.OnDarkSurfaceLight
+				)
+			}
+
+			val density = LocalDensity.current
+			val initialOffset = with(density) {
+				40.dp.toPx().roundToInt()
+			}
+			val targetOffset = with(density) {
+				-40.dp.toPx().roundToInt()
+			}
+
+			AnimatedVisibility(
+				visible = isTitleVisible,
+				enter = slideInVertically(
+					initialOffsetY = { initialOffset },
+					animationSpec = tween(
+						durationMillis = 800,
+						delayMillis = 50,
+						easing = FastOutSlowInEasing
+					)
+				) + fadeIn(initialAlpha = 0f),
+				exit = slideOutVertically(
+					targetOffsetY = { targetOffset },
+					animationSpec = tween(
+						durationMillis = 800,
+						delayMillis = 50,
+						easing = LinearOutSlowInEasing
+					)
+				) + fadeOut()
+			) {
+				Text(
+					text = contentDetailsState.data?.title ?: "-",
+					overflow = TextOverflow.Ellipsis,
+					maxLines = 1,
+					style = TextStyle(
+						color = MyColor.OnDarkSurfaceLight,
+						fontWeight = FontWeight.Bold,
+						fontSize = 20.sp
+					),
+					modifier = Modifier
+						.weight(1f)
+						.padding(start = 8.dp, end = 12.dp)
+				)
+			}
+		}
+
 
 		// Parallax header background
 		Box {
@@ -192,63 +250,6 @@ fun CollapsingToolbarScope.ContentDetailsScreenToolbar(
 			}
 		}
 	}
-
-	// Toolbar
-	Row(
-		modifier = Modifier
-			.fillMaxWidth()
-			.statusBarsPadding(),
-		verticalAlignment = Alignment.CenterVertically
-	) {
-		IconButton(onClick = { onArrowClick() }) {
-			Icon(
-				imageVector = Icons.Default.ArrowBack,
-				contentDescription = "Back", tint = MyColor.OnDarkSurfaceLight
-			)
-		}
-
-		val density = LocalDensity.current
-		val initialOffset = with(density) {
-			40.dp.toPx().roundToInt()
-		}
-		val targetOffset = with(density) {
-			-40.dp.toPx().roundToInt()
-		}
-
-		AnimatedVisibility(
-			visible = isTitleVisible,
-			enter = slideInVertically(
-				initialOffsetY = { initialOffset },
-				animationSpec = tween(
-					durationMillis = 800,
-					delayMillis = 50,
-					easing = FastOutSlowInEasing
-				)
-			) + fadeIn(initialAlpha = 0f),
-			exit = slideOutVertically(
-				targetOffsetY = { targetOffset },
-				animationSpec = tween(
-					durationMillis = 800,
-					delayMillis = 50,
-					easing = LinearOutSlowInEasing
-				)
-			) + fadeOut()
-		) {
-			Text(
-				text = contentDetailsState.data?.title ?: "-",
-				overflow = TextOverflow.Ellipsis,
-				maxLines = 1,
-				style = TextStyle(
-					color = MyColor.OnDarkSurfaceLight,
-					fontWeight = FontWeight.Bold,
-					fontSize = 20.sp
-				),
-				modifier = Modifier
-					.weight(1f)
-					.padding(start = 8.dp, end = 12.dp)
-			)
-		}
-	}
 }
 
 @Composable
@@ -259,15 +260,11 @@ private fun resolveHeaderIconAndDescription(
 		data.data?.isAiring == true ||
 		data.data?.isPublishing == true
 	) {
-		Pair(
-			ImageVector.vectorResource(id = MyIcons.Outlined.Clock4),
-			"Ongoing"
-		)
+		ImageVector.vectorResource(id = MyIcons.Outlined.Clock4) to
+		"Ongoing"
 	} else {
-		Pair(
-			ImageVector.vectorResource(id = MyIcons.Outlined.DoubleCheck),
-			"Completed"
-		)
+		ImageVector.vectorResource(id = MyIcons.Outlined.DoubleCheck) to
+		"Completed"
 	}
 
 }

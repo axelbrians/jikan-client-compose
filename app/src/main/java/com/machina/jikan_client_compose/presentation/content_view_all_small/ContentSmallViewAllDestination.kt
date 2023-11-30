@@ -1,4 +1,4 @@
-package com.machina.jikan_client_compose.presentation.content_small_view_all
+package com.machina.jikan_client_compose.presentation.content_view_all_small
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
@@ -18,21 +18,39 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.navigation.navArgument
 import com.machina.jikan_client_compose.core.extensions.scrollDirection
+import com.machina.jikan_client_compose.navigation.Destination
+import com.machina.jikan_client_compose.navigation.destinationParam
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.ScrollableVerticalGridContent
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.VerticalGridModifier
-import com.machina.jikan_client_compose.presentation.content_small_view_all.nav.ContentSmallViewAllNavigator
-import com.machina.jikan_client_compose.presentation.content_small_view_all.view_model.ContentSmallGridSizeViewModel
-import com.machina.jikan_client_compose.presentation.content_view_all_screen.composable.ContentViewAllListScreenToolbar
-import com.machina.jikan_client_compose.presentation.content_view_all_screen.data.ScrollDirection
-import com.machina.jikan_client_compose.presentation.content_view_all_screen.nav.ContentViewAllListNavArgs
-import com.machina.jikan_client_compose.presentation.content_view_all_screen.viewmodel.ContentViewAllAnimeViewModel
-import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortraitDefault
+import com.machina.jikan_client_compose.presentation.content_view_all_normal.ContentViewAllListNavArgs
+import com.machina.jikan_client_compose.presentation.content_view_all_normal.composable.ContentViewAllListScreenToolbar
+import com.machina.jikan_client_compose.presentation.content_view_all_normal.data.ScrollDirection
+import com.machina.jikan_client_compose.presentation.content_view_all_normal.viewmodel.ContentViewAllAnimeViewModel
+import com.machina.jikan_client_compose.presentation.content_view_all_small.view_model.ContentSmallGridSizeViewModel
 import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortraitDefault.Height
 import com.machina.jikan_client_compose.ui.animation_spec.TweenSpec
 import com.machina.jikan_client_compose.ui.shimmer.rememberShimmerCustomBounds
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.machina.jikan_client_compose.ui.theme.MyIcons
+
+object ContentSmallViewAllDestination : Destination(
+	destinationParam = destinationParam {
+		route = "home/content/view_all/small"
+		requiredNav(
+			navArgument(ContentSmallViewAllDestination.KEY_NAV_ARGS) {
+				type = ContentViewAllListNavArgs
+			}
+		)
+	}
+) {
+	const val KEY_NAV_ARGS = "contentViewAllListScreenNavArgs"
+
+	fun constructRoute(navArgs: ContentViewAllListNavArgs): String {
+		return super.createDestinationRoute(KEY_NAV_ARGS to navArgs)
+	}
+}
 
 @Composable
 fun ContentSmallViewAllScreen(

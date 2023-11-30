@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.style.TextAlign
@@ -25,7 +26,7 @@ import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.domain.model.anime.AnimePortraitDataModel
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
 import com.machina.jikan_client_compose.presentation.home_screen.preview.ItemVerticalAnimeProvider
-import com.machina.jikan_client_compose.presentation.home_screen.preview.ItemVerticalAnimeState
+import com.machina.jikan_client_compose.presentation.home_screen.preview.ItemVerticalAnimePreviewParam
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.machina.jikan_client_compose.ui.theme.MyShape
 import com.machina.jikan_client_compose.ui.theme.Type
@@ -125,9 +126,7 @@ fun CardThumbnailPortrait(
 			.height(thumbnailHeight)
 			.clip(MyShape.Rounded12)
 		if (LocalInspectionMode.current) {
-			Box(modifier = thumbnailModifier
-				.background(MyColor.Teal200)
-			)
+			Box(thumbnailModifier.background(MyColor.Teal200))
 		} else {
 			SubcomposeAsyncImage(
 				modifier = thumbnailModifier,
@@ -137,8 +136,7 @@ fun CardThumbnailPortrait(
 				loading = {
 					CenterCircularProgressIndicator(
 						strokeWidth = 2.dp,
-						size = 20.dp,
-						color = MyColor.Yellow500
+						size = 20.dp
 					)
 				}
 			)
@@ -153,6 +151,7 @@ fun CardThumbnailPortrait(
 			overflow = TextOverflow.Ellipsis,
 			style = Type.Typography.bodyMedium,
 			textAlign = textAlign,
+			color = Color.White
 //      onTextLayout = {
 //        titleLineCount = it.lineCount
 //      }
@@ -181,12 +180,12 @@ fun CardThumbnailPortrait(
 @Preview
 @Composable
 private fun Preview_ItemVerticalAnime_Default(
-	@PreviewParameter(ItemVerticalAnimeProvider::class) data: ItemVerticalAnimeState,
+	@PreviewParameter(ItemVerticalAnimeProvider::class) param: ItemVerticalAnimePreviewParam,
 ) {
 	CardThumbnailPortrait(
-		modifier = data.modifier,
-		data = data.data,
-		thumbnailHeight = data.thumbnailHeight,
+		modifier = param.modifier,
+		data = param.data,
+		thumbnailHeight = param.thumbnailHeight,
 		onClick = { _, _ -> }
 	)
 }

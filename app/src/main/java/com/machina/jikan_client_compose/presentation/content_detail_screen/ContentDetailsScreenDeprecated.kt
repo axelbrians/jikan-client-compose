@@ -324,7 +324,7 @@ fun ContentDetailsScreenDeprecated(
 					contentPadding = PaddingValues(horizontal = 12.dp),
 					contentArrangement = CardThumbnailPortraitDefault.Arrangement.Default,
 					textAlign = TextAlign.Center,
-					onIconClick = {
+					onHeaderClick = {
 						navigator.navigateToContentSmallViewAllScreen(
 							Constant.CHARACTERS,
 							Endpoints.getAnimeCharactersEndpoint(
@@ -345,7 +345,7 @@ fun ContentDetailsScreenDeprecated(
 					contentState = animeRecommendationsState,
 					contentPadding = PaddingValues(horizontal = 12.dp),
 					contentArrangement = CardThumbnailPortraitDefault.Arrangement.Default,
-					onIconClick = {
+					onHeaderClick = {
 						navigator.navigateToContentViewAllScreen(
 							"${Constant.SIMILAR} to ${contentDetailsState.data?.title}",
 							Endpoints.getAnimeRecommendationEndpoint(

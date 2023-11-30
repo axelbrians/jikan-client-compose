@@ -1,4 +1,4 @@
-package com.machina.jikan_client_compose.presentation.content_view_all_screen.composable
+package com.machina.jikan_client_compose.presentation.content_view_all_normal.composable
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding

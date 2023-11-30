@@ -92,7 +92,7 @@ fun ScrollableHorizontalContent(
 	thumbnailHeight: Dp = CardThumbnailPortraitDefault.Height.Default,
 	shimmer: Shimmer = rememberShimmerCustomBounds(),
 	textAlign: TextAlign = TextAlign.Start,
-	onIconClick: () -> Unit,
+	onHeaderClick: () -> Unit,
 	onItemClick: (Int, ContentType) -> Unit,
 ) {
 	if (contentState.isLoading) {
@@ -101,7 +101,7 @@ fun ScrollableHorizontalContent(
 		HorizontalContentHeader(
 			modifier = headerModifier,
 			title = headerTitle,
-			onButtonClick = onIconClick
+			onButtonClick = onHeaderClick
 		)
 	}
 
@@ -133,7 +133,7 @@ fun ScrollableHorizontalContent(
 				modifier = itemModifier,
 				thumbnailHeight = thumbnailHeight,
 				size = contentState.data.size,
-				onClick = onIconClick
+				onClick = onHeaderClick
 			)
 		}
 	}
@@ -156,7 +156,7 @@ private fun Preview_ScrollableHorizontalContent(
 			contentState = state.contentState,
 			contentPadding = state.contentPadding,
 			contentArrangement = state.contentArrangement,
-			onIconClick = state.onIconClick,
+			onHeaderClick = state.onIconClick,
 			onItemClick = state.onItemClick
 		)
 	}

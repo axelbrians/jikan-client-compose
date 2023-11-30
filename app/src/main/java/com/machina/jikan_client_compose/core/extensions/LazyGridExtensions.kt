@@ -1,8 +1,13 @@
 package com.machina.jikan_client_compose.core.extensions
 
 import androidx.compose.foundation.lazy.grid.LazyGridState
-import androidx.compose.runtime.*
-import com.machina.jikan_client_compose.presentation.content_view_all_screen.data.ScrollDirection
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import com.machina.jikan_client_compose.presentation.content_view_all_normal.data.ScrollDirection
 
 fun LazyGridState.isScrolledToTheEnd(): Boolean {
 	return layoutInfo.visibleItemsInfo.lastOrNull()?.index == layoutInfo.totalItemsCount - 1

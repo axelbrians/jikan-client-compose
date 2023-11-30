@@ -1,7 +1,6 @@
-package com.machina.jikan_client_compose.presentation.content_view_all_screen
+package com.machina.jikan_client_compose.presentation.content_view_all_normal
 
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,22 +12,37 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import coil.annotation.ExperimentalCoilApi
+import androidx.navigation.navArgument
 import com.machina.jikan_client_compose.core.extensions.isScrolledToTheEnd
 import com.machina.jikan_client_compose.core.extensions.scrollDirection
+import com.machina.jikan_client_compose.navigation.Destination
+import com.machina.jikan_client_compose.navigation.destinationParam
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.ScrollableVerticalGridContent
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.VerticalGridModifier
-import com.machina.jikan_client_compose.presentation.content_view_all_screen.composable.ContentViewAllListScreenToolbar
-import com.machina.jikan_client_compose.presentation.content_view_all_screen.data.ScrollDirection
-import com.machina.jikan_client_compose.presentation.content_view_all_screen.nav.ContentViewAllListNavArgs
-import com.machina.jikan_client_compose.presentation.content_view_all_screen.nav.ContentViewAllScreenNavigator
-import com.machina.jikan_client_compose.presentation.content_view_all_screen.viewmodel.ContentViewAllAnimeViewModel
-import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortraitDefault
+import com.machina.jikan_client_compose.presentation.content_view_all_normal.composable.ContentViewAllListScreenToolbar
+import com.machina.jikan_client_compose.presentation.content_view_all_normal.data.ScrollDirection
+import com.machina.jikan_client_compose.presentation.content_view_all_normal.viewmodel.ContentViewAllAnimeViewModel
 import com.machina.jikan_client_compose.ui.animation_spec.TweenSpec
 import com.machina.jikan_client_compose.ui.shimmer.rememberShimmerCustomBounds
 import com.machina.jikan_client_compose.ui.theme.MyColor
 
-@OptIn(ExperimentalCoilApi::class, ExperimentalFoundationApi::class)
+object ContentViewAllListDestination: Destination(
+	destinationParam = destinationParam {
+		route = "home/content/view_all/normal"
+		requiredNav(
+			navArgument(ContentViewAllListDestination.KEY_NAV_ARGS) {
+				type = ContentViewAllListNavArgs
+			}
+		)
+	}
+) {
+	const val KEY_NAV_ARGS = "contentViewAllListNavArgs"
+
+	fun constructRoute(navArgs: ContentViewAllListNavArgs): String {
+		return super.createDestinationRoute(KEY_NAV_ARGS to navArgs)
+	}
+}
+
 @Composable
 fun ContentViewAllListScreen(
 	navigator: ContentViewAllScreenNavigator,

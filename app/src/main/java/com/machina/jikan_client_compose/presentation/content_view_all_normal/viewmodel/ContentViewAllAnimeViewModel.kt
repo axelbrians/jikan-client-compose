@@ -1,4 +1,4 @@
-package com.machina.jikan_client_compose.presentation.content_view_all_screen.viewmodel
+package com.machina.jikan_client_compose.presentation.content_view_all_normal.viewmodel
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State

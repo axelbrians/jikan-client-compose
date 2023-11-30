@@ -1,4 +1,4 @@
-package com.machina.jikan_client_compose.presentation.content_small_view_all.nav
+package com.machina.jikan_client_compose.presentation.content_view_all_small
 
 import androidx.navigation.NavController
 

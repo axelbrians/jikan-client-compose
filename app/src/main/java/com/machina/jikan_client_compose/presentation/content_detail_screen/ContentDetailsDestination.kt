@@ -26,6 +26,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.SubcomposeAsyncImage
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
@@ -33,6 +35,8 @@ import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.insets.navigationBarsHeight
 import com.machina.jikan_client_compose.core.constant.Constant
 import com.machina.jikan_client_compose.core.constant.Endpoints
+import com.machina.jikan_client_compose.navigation.Destination
+import com.machina.jikan_client_compose.navigation.destinationParam
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.HorizontalContentHeader
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.HorizontalContentHeaderConfig
@@ -40,7 +44,6 @@ import com.machina.jikan_client_compose.presentation.composable.content_horizont
 import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.ContentDetailsScreenToolbar
 import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.ContentDetailsSynopsis
 import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.ContentDetailsThreeColumnSection
-import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.ContentDetailsTrailerPlayer
 import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.GenreChip
 import com.machina.jikan_client_compose.presentation.content_detail_screen.data.ContentDetailsViewModel
 import com.machina.jikan_client_compose.presentation.home_screen.composable.shimmer.ContentListHeaderWithButtonShimmer
@@ -62,6 +65,33 @@ internal object ContentDetailsScreenSection {
 	const val ContentCharacters = "content_characters"
 	const val ContentSimilar = "content_similar"
 	const val ContentPhotos = "content_photos"
+}
+
+object ContentDetailsDestination: Destination(
+	destinationParam {
+		route = "home/content/details"
+		requiredNav(
+			navArgument(ContentDetailsDestination.KEY_CONTENT_DETAIL_ARGS) {
+				type = ContentDetailsArgs
+			}
+		)
+		requiredNav(
+			navArgument(ContentDetailsDestination.KEY_MAGIC_NUMBER) {
+				type = NavType.IntType
+			}
+		)
+	}
+) {
+	const val KEY_CONTENT_DETAIL_ARGS = "contentDetailArgs"
+	const val KEY_MAGIC_NUMBER = "magicNumber"
+
+	fun createRoute(args: ContentDetailsArgs, number: Int): String {
+		return super.createDestinationRoute(
+			KEY_CONTENT_DETAIL_ARGS to args,
+			KEY_MAGIC_NUMBER to number
+		)
+	}
+
 }
 
 @Composable
@@ -165,17 +195,17 @@ fun ContentDetailsScreen(
 			}
 
 			// Content Trailer (if any, like TV or Movies or Anime)
-			if (contentDetailsState.data?.trailer?.embedUrl?.isNotEmpty() == true) {
-				item(key = ContentDetailsScreenSection.ContentTrailer) {
-					ContentDetailsTrailerPlayer(
-						modifier = Modifier
-							.padding(top = 12.dp)
-							.height(240.dp)
-							.fillMaxWidth(),
-						trailerUrl = contentDetailsState.data?.trailer?.embedUrl!!
-					)
-				}
-			}
+//			if (contentDetailsState.data?.trailer?.embedUrl?.isNotEmpty() == true) {
+//				item(key = ContentDetailsScreenSection.ContentTrailer) {
+//					ContentDetailsTrailerPlayer(
+//						modifier = Modifier
+//							.padding(top = 12.dp)
+//							.height(240.dp)
+//							.fillMaxWidth(),
+//						trailerUrl = contentDetailsState.data?.trailer?.embedUrl!!
+//					)
+//				}
+//			}
 
 			// Anime Characters List
 			item(key = ContentDetailsScreenSection.ContentCharacters) {
@@ -188,7 +218,7 @@ fun ContentDetailsScreen(
 					contentPadding = PaddingValues(horizontal = 12.dp),
 					contentArrangement = CardThumbnailPortraitDefault.Arrangement.Default,
 					textAlign = TextAlign.Center,
-					onIconClick = {
+					onHeaderClick = {
 						navigator.navigateToContentSmallViewAllScreen(
 							Constant.CHARACTERS,
 							Endpoints.getAnimeCharactersEndpoint(
@@ -209,7 +239,7 @@ fun ContentDetailsScreen(
 					contentState = animeRecommendationsState,
 					contentPadding = PaddingValues(horizontal = 12.dp),
 					contentArrangement = CardThumbnailPortraitDefault.Arrangement.Default,
-					onIconClick = {
+					onHeaderClick = {
 						navigator.navigateToContentViewAllScreen(
 							"${Constant.SIMILAR} to ${contentDetailsState.data?.title}",
 							Endpoints.getAnimeRecommendationEndpoint(

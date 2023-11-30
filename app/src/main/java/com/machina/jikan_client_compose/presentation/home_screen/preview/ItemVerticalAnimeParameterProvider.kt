@@ -9,7 +9,7 @@ import com.machina.jikan_client_compose.domain.model.anime.AnimePortraitDataMode
 import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortraitDefault
 import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortraitDefault.Height
 
-data class ItemVerticalAnimeState(
+data class ItemVerticalAnimePreviewParam(
 	val modifier: Modifier = Modifier,
 	val thumbnailHeight: Dp,
 	val data: AnimePortraitDataModel = AnimePortraitDataModel(
@@ -21,18 +21,18 @@ data class ItemVerticalAnimeState(
 	val onClick: (Int, ContentType) -> Unit = { _, _ -> }
 )
 
-class ItemVerticalAnimeProvider: PreviewParameterProvider<ItemVerticalAnimeState> {
-	override val values: Sequence<ItemVerticalAnimeState>
+class ItemVerticalAnimeProvider: PreviewParameterProvider<ItemVerticalAnimePreviewParam> {
+	override val values: Sequence<ItemVerticalAnimePreviewParam>
 		get() = listOf(
-			ItemVerticalAnimeState(
+			ItemVerticalAnimePreviewParam(
 				modifier = Modifier.width(CardThumbnailPortraitDefault.Width.Default),
 				thumbnailHeight = Height.Default
 			),
-			ItemVerticalAnimeState(
+			ItemVerticalAnimePreviewParam(
 				modifier = Modifier.width(CardThumbnailPortraitDefault.Width.Small),
 				thumbnailHeight = Height.Grid,
 			),
-			ItemVerticalAnimeState(
+			ItemVerticalAnimePreviewParam(
 				modifier = Modifier.width(CardThumbnailPortraitDefault.Width.Small),
 				thumbnailHeight = Height.Small,
 			)

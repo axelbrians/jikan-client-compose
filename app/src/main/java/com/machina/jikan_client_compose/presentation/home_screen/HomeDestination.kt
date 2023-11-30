@@ -1,29 +1,67 @@
 package com.machina.jikan_client_compose.presentation.home_screen
 
-import android.annotation.SuppressLint
+import android.view.Window
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
 import coil.annotation.ExperimentalCoilApi
+import com.google.accompanist.systemuicontroller.SystemUiController
+import com.machina.jikan_client_compose.OnDestinationChanged
 import com.machina.jikan_client_compose.domain.use_case.anime.HomeSection
+import com.machina.jikan_client_compose.navigation.Destination
+import com.machina.jikan_client_compose.navigation.composable
+import com.machina.jikan_client_compose.navigation.destinationParam
 import com.machina.jikan_client_compose.presentation.composable.MyDivider
 import com.machina.jikan_client_compose.presentation.content_search_screen.composable.SearchFieldComponent
+import com.machina.jikan_client_compose.presentation.home_screen.viewmodel.HomeViewModel
+import com.machina.jikan_client_compose.ui.theme.MyColor
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.StateFlow
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+object HomeDestination: Destination(
+	destinationParam = destinationParam {
+		route = "home"
+	}
+)
+
+@OptIn(InternalCoroutinesApi::class, ExperimentalCoilApi::class)
+fun NavGraphBuilder.addHomeScreen(
+	systemUiController: SystemUiController,
+	window: Window,
+	navController: NavController
+) {
+	composable(HomeDestination) {
+		val viewModel: HomeViewModel = hiltViewModel()
+
+		OnDestinationChanged(
+			systemUiController = systemUiController,
+			color = MyColor.DarkBlueBackground,
+			drawOverStatusBar = false,
+			window = window,
+		)
+
+		HomeScreen(
+			navigator = HomeScreenNavigator(navController),
+			homeSections = viewModel.homeSectionsState,
+			getHomeContent = viewModel::getHomeContent,
+			modifier = Modifier.fillMaxSize()
+		)
+	}
+}
+
 @InternalCoroutinesApi
 @ExperimentalCoilApi
 @Composable
@@ -38,7 +76,7 @@ fun HomeScreen(
 	}
 
 	Scaffold(modifier = modifier) {
-		Column(modifier = Modifier.fillMaxWidth()) {
+		Column(modifier = Modifier.fillMaxWidth().padding(it)) {
 			SearchFieldComponent(
 				value = "",
 				modifier = Modifier

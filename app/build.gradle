@@ -108,17 +108,19 @@ dependencies {
     implementation libs.timber
 
     /* - - - - - - Debug Variant Dependencies - - - - - -  */
-    debugImplementation libs.bundles.hyperion
+//    debugImplementation libs.bundles.hyperion
     debugImplementation libs.chucker.core
     releaseImplementation libs.chucker.no.op
     /* - - - - - - - - - - - - - - - - - - - - - */
 
     // Local Unit Tests
     implementation libs.test.androidx.core
-    testImplementation libs.test.junit
+//    testImplementation libs.test.junit
+    testImplementation "junit:junit:4.12"
     testImplementation libs.test.kotlinx.coroutine
     testImplementation libs.test.mockk
     testImplementation libs.test.hamcrest
+//    testImplementation "org.hamcrest:hamcrest-all:1.3"
 
     // Android Tests
     androidTestImplementation libs.bundles.compose.test

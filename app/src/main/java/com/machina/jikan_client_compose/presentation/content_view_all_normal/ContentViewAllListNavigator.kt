@@ -1,4 +1,4 @@
-package com.machina.jikan_client_compose.presentation.content_view_all_screen.nav
+package com.machina.jikan_client_compose.presentation.content_view_all_normal
 
 import androidx.navigation.NavController
 import com.machina.jikan_client_compose.core.enums.ContentType

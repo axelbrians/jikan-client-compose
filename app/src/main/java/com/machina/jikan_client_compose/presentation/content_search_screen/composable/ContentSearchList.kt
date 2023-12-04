@@ -8,10 +8,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -30,11 +33,10 @@ import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
 
-@Composable
 fun Modifier.simpleVerticalScrollbar(
 	state: LazyListState,
 	width: Dp = 8.dp
-): Modifier {
+): Modifier = composed {
 	val targetAlpha = if (state.isScrollInProgress) 1f else 0f
 	val duration = if (state.isScrollInProgress) 150 else 500
 
@@ -44,7 +46,7 @@ fun Modifier.simpleVerticalScrollbar(
 		label = "Scrollbar Alpha"
 	)
 
-	return drawWithContent {
+	drawWithContent {
 		drawContent()
 
 		val firstVisibleElementIndex = state.layoutInfo.visibleItemsInfo.firstOrNull()?.index
@@ -69,19 +71,26 @@ fun Modifier.simpleVerticalScrollbar(
 @ExperimentalCoilApi
 @Composable
 fun ContentSearchList(
-	listState: LazyListState,
 	state: ContentSearchState,
-	onItemClick: (Int, ContentType) -> Unit
+	onItemClick: (Int, ContentType) -> Unit,
+	modifier: Modifier = Modifier,
+	listState: LazyListState = rememberLazyListState(),
 ) {
 	val shimmerInstance = rememberShimmer(shimmerBounds = ShimmerBounds.Custom)
+	val error by produceState<String?>(initialValue = null) {
+		value = state.error.peekContent()
+	}
 
 	LazyColumn(
-		modifier = Modifier.onUpdateShimmerBounds(shimmerInstance).simpleVerticalScrollbar(listState),
+		modifier = modifier
+			.onUpdateShimmerBounds(shimmerInstance)
+			.simpleVerticalScrollbar(listState),
 		state = listState,
 	) {
-		itemsIndexed(state.data.data, key = { index, data ->
-			"${data.malId}-$index"
-		}) { _, data ->
+		itemsIndexed(
+			items = state.data.data,
+			key = { _, data -> "${data.malId}" }
+		) { _, data ->
 //      when (data.type) {
 //        MANGA, MANHUA, MANHWA, DOUJIN, ONE_SHOT, LIGHT_NOVEL -> {
 //          ItemMangaSearch(
@@ -109,8 +118,7 @@ fun ContentSearchList(
 			}
 		}
 
-		val error = state.error.peekContent()
-		if (error != null) {
+		error?.let {
 			item {
 				Row(
 					modifier = Modifier
@@ -118,7 +126,7 @@ fun ContentSearchList(
 						.padding(horizontal = 24.dp)
 				) {
 					Text(
-						text = error,
+						text = it,
 						color = MyColor.OnDarkSurface,
 						fontSize = 20.sp,
 						textAlign = TextAlign.Center,

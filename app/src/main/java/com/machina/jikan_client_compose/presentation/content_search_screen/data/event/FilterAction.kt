@@ -3,24 +3,24 @@ package com.machina.jikan_client_compose.presentation.content_search_screen.data
 import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.presentation.content_search_screen.data.filter.FilterGroupData
 
-sealed class FilterEvent {
+sealed interface FilterAction {
 	/**
 	 * Event for when a filter is Changed on certain [FilterGroupData]
 	 */
-	class FilterChanged(val filter: FilterGroupData) : FilterEvent()
+	data class Change(val filter: FilterGroupData) : FilterAction
 
 	/**
 	 * Event for when a filter is applied
 	 */
-	class FilterApplied(val contentType: ContentType, val query: String) : FilterEvent()
+	data class Apply(val contentType: ContentType, val query: String) : FilterAction
 
 	/**
 	 * Event for when a filter is reset to it's original state
 	 */
-	class FilterReset(val contentType: ContentType, val query: String) : FilterEvent()
+	data class Reset(val contentType: ContentType, val query: String) : FilterAction
 
 	/**
 	 * Event for fetching available Search Filter
 	 */
-	class FetchFilter(val type: ContentType = ContentType.Anime): FilterEvent()
+	data class GetOption(val type: ContentType = ContentType.Anime): FilterAction
 }

@@ -36,7 +36,7 @@ import com.machina.jikan_client_compose.core.constant.Constant
 import com.machina.jikan_client_compose.core.constant.Endpoints
 import com.machina.jikan_client_compose.navigation.Destination
 import com.machina.jikan_client_compose.navigation.destinationParam
-import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
+import com.machina.jikan_client_compose.presentation.composable.CenterCircularLoading
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.HorizontalContentHeader
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.HorizontalContentHeaderConfig
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.ScrollableHorizontalContent
@@ -119,7 +119,7 @@ fun ContentDetailsScreen(
 	}
 
 	if (contentDetailsState.isLoading) {
-		CenterCircularProgressIndicator(
+		CenterCircularLoading(
 			size = 40.dp,
 			color = MyColor.Yellow500
 		)
@@ -279,7 +279,7 @@ fun ContentDetailsScreen(
 							contentDescription = "Character Portrait",
 							contentScale = ContentScale.Crop,
 							loading = {
-								CenterCircularProgressIndicator(
+								CenterCircularLoading(
 									strokeWidth = 2.dp,
 									size = 20.dp,
 									color = MyColor.Yellow500

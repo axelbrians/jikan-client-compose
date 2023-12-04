@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
 import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.domain.model.anime.AnimeHorizontalDataModel
-import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
+import com.machina.jikan_client_compose.presentation.composable.CenterCircularLoading
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.machina.jikan_client_compose.ui.theme.MyShape
 
@@ -49,7 +49,7 @@ fun ItemAnimeSearch(
 			contentDescription = "Content thumbnail",
 			contentScale = ContentScale.Crop,
 			loading = {
-				CenterCircularProgressIndicator(
+				CenterCircularLoading(
 					strokeWidth = 2.dp,
 					size = 20.dp,
 					color = MyColor.Yellow500

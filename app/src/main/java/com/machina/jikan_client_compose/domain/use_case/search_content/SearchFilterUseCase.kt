@@ -3,7 +3,7 @@ package com.machina.jikan_client_compose.domain.use_case.search_content
 import com.machina.jikan_client_compose.core.DispatchersProvider
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.data.remote.anime_search.AnimeSearchService
-import com.machina.jikan_client_compose.presentation.content_search_screen.data.FilterSearchState
+import com.machina.jikan_client_compose.presentation.content_search_screen.data.FilterOptionState
 import com.machina.jikan_client_compose.presentation.content_search_screen.data.filter.FilterGroupData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -42,9 +42,9 @@ class SearchFilterUseCase @Inject constructor(
 //
 //  genres_exclude: id of genre with comma as delimitter 1,2,3 etc
 
-	operator fun invoke(): Flow<FilterSearchState> {
+	operator fun invoke(): Flow<FilterOptionState> {
 		return flow {
-			emit(FilterSearchState.Loading)
+			emit(FilterOptionState.Loading)
 
 			val mapFilter = mutableMapOf<String, FilterGroupData>()
 
@@ -86,7 +86,7 @@ class SearchFilterUseCase @Inject constructor(
 				}
 			}
 
-			emit(FilterSearchState(data = mapFilter.toMap()))
+			emit(FilterOptionState(data = mapFilter.toMap()))
 		}.flowOn(dispatchers.io)
 	}
 }

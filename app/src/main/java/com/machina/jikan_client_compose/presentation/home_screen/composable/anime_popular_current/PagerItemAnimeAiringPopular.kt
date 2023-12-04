@@ -28,7 +28,7 @@ import com.google.accompanist.pager.PagerScope
 import com.google.accompanist.pager.calculateCurrentOffsetForPage
 import com.machina.jikan_client_compose.domain.model.anime.AnimeAiringPopular
 import com.machina.jikan_client_compose.domain.model.anime.AnimeThumbnail
-import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
+import com.machina.jikan_client_compose.presentation.composable.CenterCircularLoading
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.machina.jikan_client_compose.ui.theme.MyShape
 import com.machina.jikan_client_compose.ui.theme.Type
@@ -86,7 +86,7 @@ fun PagerScope.ItemHeadlineCarousel(
 				contentDescription = "Content thumbnail",
 				contentScale = ContentScale.Crop,
 				loading = {
-					CenterCircularProgressIndicator(
+					CenterCircularLoading(
 						strokeWidth = 2.dp,
 						size = 20.dp,
 						color = MyColor.Yellow500
@@ -176,7 +176,7 @@ fun PagerScope.PagerItemAnimeAiringPopular(
 				contentDescription = "Content thumbnail",
 				contentScale = ContentScale.Crop,
 				loading = {
-					CenterCircularProgressIndicator(
+					CenterCircularLoading(
 						strokeWidth = 2.dp,
 						size = 20.dp,
 						color = MyColor.Yellow500

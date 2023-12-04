@@ -1,6 +1,5 @@
 package com.machina.jikan_client_compose.presentation.composable
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
@@ -17,20 +16,15 @@ import androidx.compose.ui.unit.dp
 import com.machina.jikan_client_compose.ui.theme.JikanClientComposeTheme
 
 @Composable
-fun CenterCircularProgressIndicator(
+fun CenterCircularLoading(
 	modifier: Modifier = Modifier,
 	size: Dp = 20.dp,
 	color: Color = MaterialTheme.colorScheme.primary,
 	strokeWidth: Dp = ProgressIndicatorDefaults.CircularStrokeWidth
 ) {
-	Box(
-		modifier = modifier
-		.fillMaxSize()
-		.background(MaterialTheme.colorScheme.background)
-	) {
-		CircularProgressIndicator(
-			modifier = Modifier
-				.size(size)
+	Box(modifier = modifier.fillMaxSize()) {
+		CircularLoading(
+			modifier = Modifier.size(size)
 				.align(Alignment.Center),
 			color = color,
 			strokeWidth = strokeWidth
@@ -38,10 +32,23 @@ fun CenterCircularProgressIndicator(
 	}
 }
 
+@Composable
+fun CircularLoading(
+	modifier: Modifier = Modifier,
+	color: Color = MaterialTheme.colorScheme.primary,
+	strokeWidth: Dp = ProgressIndicatorDefaults.CircularStrokeWidth
+) {
+	CircularProgressIndicator(
+		modifier = modifier,
+		color = color,
+		strokeWidth = strokeWidth
+	)
+}
+
 @Preview(widthDp = 200, heightDp = 200)
 @Composable
 fun Preview_CenterCircularProgressIndicator() {
 	JikanClientComposeTheme {
-		CenterCircularProgressIndicator()
+		CenterCircularLoading()
 	}
 }

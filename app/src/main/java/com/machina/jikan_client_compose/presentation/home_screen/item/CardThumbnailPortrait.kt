@@ -24,7 +24,7 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.SubcomposeAsyncImage
 import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.domain.model.anime.AnimePortraitDataModel
-import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
+import com.machina.jikan_client_compose.presentation.composable.CenterCircularLoading
 import com.machina.jikan_client_compose.presentation.home_screen.preview.ItemVerticalAnimeProvider
 import com.machina.jikan_client_compose.presentation.home_screen.preview.ItemVerticalAnimePreviewParam
 import com.machina.jikan_client_compose.ui.theme.MyColor
@@ -63,7 +63,7 @@ fun CardThumbnailPortrait(
 				contentDescription = "Content thumbnail",
 				contentScale = ContentScale.Crop,
 				loading = {
-					CenterCircularProgressIndicator(
+					CenterCircularLoading(
 						strokeWidth = 2.dp,
 						size = 20.dp,
 						color = MyColor.Yellow500
@@ -134,7 +134,7 @@ fun CardThumbnailPortrait(
 				contentDescription = "Content thumbnail",
 				contentScale = ContentScale.Crop,
 				loading = {
-					CenterCircularProgressIndicator(
+					CenterCircularLoading(
 						strokeWidth = 2.dp,
 						size = 20.dp
 					)

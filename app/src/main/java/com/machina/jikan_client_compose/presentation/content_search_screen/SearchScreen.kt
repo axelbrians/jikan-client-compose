@@ -3,13 +3,10 @@ package com.machina.jikan_client_compose.presentation.content_search_screen
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -20,10 +17,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import com.machina.jikan_client_compose.core.enums.ContentType
@@ -37,14 +34,12 @@ import com.machina.jikan_client_compose.presentation.content_search_screen.compo
 import com.machina.jikan_client_compose.presentation.content_search_screen.composable.bottom_sheet.ExpandableFloatingButtonSearchScreen
 import com.machina.jikan_client_compose.presentation.content_search_screen.composable.bottom_sheet.FilterModalBottomSheet
 import com.machina.jikan_client_compose.presentation.content_search_screen.data.SearchScreenViewModel
-import com.machina.jikan_client_compose.presentation.content_search_screen.data.event.FilterEvent
+import com.machina.jikan_client_compose.presentation.content_search_screen.data.event.FilterAction
 import com.machina.jikan_client_compose.presentation.content_search_screen.data.event.SearchEvent
-import com.machina.jikan_client_compose.presentation.content_search_screen.data.filter.FilterGroupData
 import com.machina.jikan_client_compose.presentation.content_search_screen.nav.SearchScreenNavigator
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 object SearchDestination: Destination(
 	destinationParam = destinationParam {
@@ -60,64 +55,51 @@ object SearchDestination: Destination(
 @Composable
 fun SearchScreen(
 	navigator: SearchScreenNavigator,
-	viewModel: SearchScreenViewModel
+	viewModel: SearchScreenViewModel,
+	modifier: Modifier = Modifier
 ) {
-
 	val selectedType = rememberSaveable { mutableStateOf(ContentType.Anime) }
 	val searchQuery = rememberSaveable { mutableStateOf("") }
 
 	val listState = rememberLazyListState()
 	val coroutineScope = rememberCoroutineScope()
-	val sheetState = rememberModalBottomSheetState()
+	val focusRequester = remember { FocusRequester() }
 
-	val focusRequester = remember { (FocusRequester()) }
+	var shouldShowBottomSheet by remember { mutableStateOf(false) }
+	val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+	val hideBottomSheet = remember {{
+		coroutineScope.launch {
+			bottomSheetState.hide()
+		}.invokeOnCompletion { shouldShowBottomSheet = false }
+		Unit
+	}}
+
 	val snackbarHostState = remember { SnackbarHostState() }
 	val snackbarChannel = remember { Channel<String?>(Channel.CONFLATED) }
 
-	val contentSearchState = viewModel.contentSearchState.value
-	val filterSearchState = viewModel.searchFilterState.value
+	val contentSearchState by viewModel.contentSearchState
+	val filterOptionState by viewModel.filterOptionState
 
 	LaunchedEffect(key1 = viewModel.hashCode()) {
 		focusRequester.requestFocus()
-		viewModel.onFilterEvent(FilterEvent.FetchFilter())
+		viewModel.onFilterEvent(FilterAction.GetOption())
 	}
 
-	BackHandler(enabled = true) {
-		if (sheetState.isVisible) {
-			coroutineScope.launch {
-				sheetState.hide()
-			}
-		} else {
-			navigator.navigateUp()
-		}
+	BackHandler(enabled = bottomSheetState.isVisible) {
+		coroutineScope.launch {
+			bottomSheetState.hide()
+		}.invokeOnCompletion { shouldShowBottomSheet = false }
 	}
 
-	Box(modifier = Modifier.fillMaxSize()) {
-		ModalBottomSheet(
-			onDismissRequest = { /*TODO*/ },
-			scrimColor = Color.Black.copy(alpha = 0.6f),
-			sheetState = sheetState,
-			shape = RoundedCornerShape(topEnd = 12.dp, topStart = 12.dp),
-		) {
+	Box(modifier = modifier) {
+		if (shouldShowBottomSheet) {
 			FilterModalBottomSheet(
-				mapFilter = filterSearchState.data,
-				onFilterChanged = { data: FilterGroupData ->
-					viewModel.onFilterEvent(
-						FilterEvent.FilterChanged(data)
-					)
-				},
-				onFilterReset = {
-					viewModel.onFilterEvent(
-						FilterEvent.FilterReset(selectedType.value, searchQuery.value)
-					)
-					coroutineScope.launch { sheetState.hide() }
-				},
-				onFilterApplied = {
-					viewModel.onFilterEvent(
-						FilterEvent.FilterApplied(selectedType.value, searchQuery.value)
-					)
-					coroutineScope.launch { sheetState.hide() }
-				}
+				selectedType = selectedType.value,
+				searchQuery = searchQuery.value,
+				filterOptionState = viewModel.filterOptionState,
+				onFilterAction = viewModel::onFilterEvent,
+				bottomSheetState = bottomSheetState,
+				onHideBottomSheet = hideBottomSheet
 			)
 		}
 
@@ -137,10 +119,11 @@ fun SearchScreen(
 
 			MyDivider.Horizontal.DarkGreyBackground()
 
-//      ChipGroup(
-//        selectedType = selectedType.value,
-//        onSelectedChanged = { selectedType.value = ContentType.valueOf(it) }
-//      )
+	//      ChipGroup(
+	//        selectedType = selectedType.value,
+	//        onSelectedChanged = { selectedType.value = ContentType.valueOf(it) }
+	//      )
+
 			ContentSearchList(
 				listState = listState,
 				state = contentSearchState,
@@ -154,12 +137,11 @@ fun SearchScreen(
 				.align(Alignment.BottomEnd),
 			isExpanded = listState.isScrollingUp(),
 			onClick = {
-				coroutineScope.launch {
-					sheetState.show()
-				}
+				shouldShowBottomSheet = true
 			}
 		)
 	}
+
 
 	if (listState.isScrolledToTheEnd()) {
 		viewModel.onSearchEvent(

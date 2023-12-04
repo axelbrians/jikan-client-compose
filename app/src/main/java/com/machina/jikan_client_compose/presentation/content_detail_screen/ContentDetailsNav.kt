@@ -85,7 +85,7 @@ class ContentDetailsScreenNavigator(
 		malId: Int,
 		contentType: ContentType
 	) {
-		val route = ContentDetailsDestination.createRoute(
+		val route = ContentDetailsDestination.constructRoute(
 			ContentDetailsArgs(malId, contentType), 10
 		)
 		navController.navigate(

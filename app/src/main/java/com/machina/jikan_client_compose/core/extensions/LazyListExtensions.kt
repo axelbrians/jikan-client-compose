@@ -9,8 +9,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.machina.jikan_client_compose.presentation.content_view_all_normal.data.ScrollDirection
 
+@Composable
 fun LazyListState.isScrolledToTheEnd(): Boolean {
-	return layoutInfo.visibleItemsInfo.lastOrNull()?.index == layoutInfo.totalItemsCount - 1
+	val isScrolledToEnd = remember(this) {
+		derivedStateOf {
+			layoutInfo.visibleItemsInfo.lastOrNull()?.index == layoutInfo.totalItemsCount - 1
+		}
+	}
+
+	return isScrolledToEnd.value
 }
 
 fun LazyListState.isScrolledToTheStart(): Boolean {

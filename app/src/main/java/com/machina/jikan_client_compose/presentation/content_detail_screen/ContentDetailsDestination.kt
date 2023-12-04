@@ -1,7 +1,6 @@
 package com.machina.jikan_client_compose.presentation.content_detail_screen
 
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -85,7 +84,7 @@ object ContentDetailsDestination: Destination(
 	const val KEY_CONTENT_DETAIL_ARGS = "contentDetailArgs"
 	const val KEY_MAGIC_NUMBER = "magicNumber"
 
-	fun createRoute(args: ContentDetailsArgs, number: Int): String {
+	fun constructRoute(args: ContentDetailsArgs, number: Int = 0): String {
 		return super.createDestinationRoute(
 			KEY_CONTENT_DETAIL_ARGS to args,
 			KEY_MAGIC_NUMBER to number
@@ -129,8 +128,7 @@ fun ContentDetailsScreen(
 	}
 
 	CollapsingToolbarScaffold(
-		modifier = modifier
-			.background(MyColor.DarkBlueBackground),
+		modifier = modifier,
 		state = toolbarScaffoldState,
 		scrollStrategy = ScrollStrategy.ExitUntilCollapsed,
 		toolbar = {

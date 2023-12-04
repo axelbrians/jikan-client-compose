@@ -7,11 +7,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.machina.jikan_client_compose.navigation.MainRoute
 import com.machina.jikan_client_compose.navigation.composable
 import com.machina.jikan_client_compose.presentation.content_detail_screen.ContentDetailsArgs
 import com.machina.jikan_client_compose.presentation.content_detail_screen.ContentDetailsNav
 import com.machina.jikan_client_compose.presentation.content_detail_screen.ContentDetailsDestination
+import com.machina.jikan_client_compose.presentation.content_search_screen.SearchDestination
+import com.machina.jikan_client_compose.presentation.content_search_screen.nav.SearchScreenNav
 import com.machina.jikan_client_compose.presentation.content_view_all_normal.ContentViewAllListNav
 import com.machina.jikan_client_compose.presentation.content_view_all_normal.ContentViewAllListNavArgs
 import com.machina.jikan_client_compose.presentation.content_view_all_normal.ContentViewAllListDestination
@@ -90,23 +91,14 @@ fun AppScreen(
 				navArgs = navArgs
 			)
 		}
-//		homeScreenNav(
-//			systemUiController = systemUiController,
-//			window = window,
-//			navController = navController
-//		)
-//
-//		searchNav(
-//			systemUiController = systemUiController,
-//			window = window,
-//			navController = navController,
-//			dispatchers = dispatchers
-//		)
-//
-//		contentViewAllListNav(
-//			systemUiController = systemUiController,
-//			window = window,
-//			navController = navController
-//		)
+
+		composable(SearchDestination) {
+			SearchScreenNav(
+				systemUiController = systemUiController,
+				window = window,
+				navController = navController
+			)
+		}
+
 	}
 }

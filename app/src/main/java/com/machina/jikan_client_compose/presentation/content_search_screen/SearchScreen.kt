@@ -15,6 +15,7 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -28,6 +29,8 @@ import coil.annotation.ExperimentalCoilApi
 import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.core.extensions.isScrolledToTheEnd
 import com.machina.jikan_client_compose.core.extensions.isScrollingUp
+import com.machina.jikan_client_compose.navigation.Destination
+import com.machina.jikan_client_compose.navigation.destinationParam
 import com.machina.jikan_client_compose.presentation.composable.MyDivider
 import com.machina.jikan_client_compose.presentation.content_search_screen.composable.ContentSearchList
 import com.machina.jikan_client_compose.presentation.content_search_screen.composable.SearchFieldComponent
@@ -41,6 +44,17 @@ import com.machina.jikan_client_compose.presentation.content_search_screen.nav.S
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
+
+object SearchDestination: Destination(
+	destinationParam = destinationParam {
+		route = "search"
+	}
+) {
+	fun constructRoute(): String {
+		return super.createDestinationRoute()
+	}
+}
 
 @OptIn(ExperimentalCoilApi::class, ExperimentalMaterial3Api::class)
 @Composable

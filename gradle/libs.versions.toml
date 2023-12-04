@@ -40,6 +40,7 @@ compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = 
 compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "compose-navigation" }
 compose-ui-ui = { group = "androidx.compose.ui", name = "ui" }
 compose-ui-util = { group = "androidx.compose.ui", name = "ui-util" }
+compose-ui-foundation = { group = "androidx.compose.foundation", name = "foundation" }
 compose-ui-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 compose-coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
@@ -74,7 +75,7 @@ ktor-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = 
 ktor-logback = { group = "ch.qos.logback", name = "logback-classic", version.ref = "logback" }
 
 valentinilk-shimmer = { group = "com.valentinilk.shimmer", name = "compose-shimmer", version = "1.0.0" }
-onebone-toolbar = { group = "me.onebone", name = "toolbar-compose", version = "2.2.0" }
+onebone-toolbar = { group = "me.onebone", name = "toolbar-compose", version = "2.3.5" }
 
 
 chucker-core = { group = "com.github.chuckerteam.chucker", name = "library", version.ref = "chucker" }
@@ -127,6 +128,7 @@ compose-ui = [
     "compose-activity",
     "compose-ui-ui",
     "compose-ui-util",
+    "compose-ui-foundation",
     "compose-ui-preview",
     "compose-navigation",
     "compose-coil"

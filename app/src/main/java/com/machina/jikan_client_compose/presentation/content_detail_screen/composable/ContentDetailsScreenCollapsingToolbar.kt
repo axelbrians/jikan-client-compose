@@ -24,6 +24,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,22 +47,23 @@ import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
 import com.google.accompanist.insets.statusBarsPadding
 import com.machina.jikan_client_compose.data.remote.dto.common.Jpg.Companion.getHighestResImgUrl
-import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
+import com.machina.jikan_client_compose.presentation.composable.CenterCircularLoading
 import com.machina.jikan_client_compose.presentation.content_detail_screen.data.ContentDetailsState
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.machina.jikan_client_compose.ui.theme.MyIcons
 import com.machina.jikan_client_compose.ui.theme.MyShape
 import com.machina.jikan_client_compose.ui.theme.MySize
+import me.onebone.toolbar.CollapsingToolbar
 import me.onebone.toolbar.CollapsingToolbarScaffoldState
 import me.onebone.toolbar.CollapsingToolbarScope
-import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
 import kotlin.math.roundToInt
 
 @ExperimentalCoilApi
 @Composable
 fun CollapsingToolbarScope.ContentDetailsScreenToolbar(
-	contentDetailsState: ContentDetailsState = ContentDetailsState(null),
-	toolbarScaffoldState: CollapsingToolbarScaffoldState = rememberCollapsingToolbarScaffoldState(),
+	contentDetailsState: ContentDetailsState,
+	toolbarScaffoldState: CollapsingToolbarScaffoldState,
+	modifier: Modifier = Modifier,
 	onArrowClick: () -> Boolean = { false }
 ) {
 	val blockerColorGradients = listOf(
@@ -67,184 +72,193 @@ fun CollapsingToolbarScope.ContentDetailsScreenToolbar(
 		MyColor.DarkBlueBackground
 	)
 
-	val isTitleVisible = toolbarScaffoldState.toolbarState.progress <= 0.25
-	val imageUrl = contentDetailsState.data?.images?.jpg?.getHighestResImgUrl()
+	val isTitleVisible by remember {
+		derivedStateOf {
+			toolbarScaffoldState.toolbarState.progress <= 0.25
+		}
+	}
+	val imageUrl by remember(contentDetailsState.data?.images?.jpg) {
+		mutableStateOf(contentDetailsState.data?.images?.jpg?.getHighestResImgUrl())
+	}
 
 	val (
 		headerCaptionIcon: ImageVector,
 		headerCaptionDescription: String
 	) = resolveHeaderIconAndDescription(contentDetailsState)
 
-	Box(
-		modifier = Modifier
-			.fillMaxWidth()
-			.height(240.dp)
-			.parallax(0.5f)
-			.graphicsLayer {
-				// change alpha of Image as the toolbar expands
-				alpha = toolbarScaffoldState.toolbarState.progress
-			},
-	) {
-		// Toolbar
-		Row(
-			modifier = Modifier
+
+	CollapsingToolbar(collapsingToolbarState = toolbarScaffoldState.toolbarState) {
+		Box(
+			modifier = modifier
 				.fillMaxWidth()
-				.statusBarsPadding(),
-			verticalAlignment = Alignment.CenterVertically
+				.height(240.dp)
+				.parallax(0.5f)
+				.graphicsLayer {
+					// change alpha of Image as the toolbar expands
+					alpha = toolbarScaffoldState.toolbarState.progress
+				},
 		) {
-			IconButton(onClick = { onArrowClick() }) {
-				Icon(
-					imageVector = Icons.Default.ArrowBack,
-					contentDescription = "Back",
-					tint = MyColor.OnDarkSurfaceLight
-				)
-			}
-
-			val density = LocalDensity.current
-			val initialOffset = with(density) {
-				40.dp.toPx().roundToInt()
-			}
-			val targetOffset = with(density) {
-				-40.dp.toPx().roundToInt()
-			}
-
-			AnimatedVisibility(
-				visible = isTitleVisible,
-				enter = slideInVertically(
-					initialOffsetY = { initialOffset },
-					animationSpec = tween(
-						durationMillis = 800,
-						delayMillis = 50,
-						easing = FastOutSlowInEasing
-					)
-				) + fadeIn(initialAlpha = 0f),
-				exit = slideOutVertically(
-					targetOffsetY = { targetOffset },
-					animationSpec = tween(
-						durationMillis = 800,
-						delayMillis = 50,
-						easing = LinearOutSlowInEasing
-					)
-				) + fadeOut()
-			) {
-				Text(
-					text = contentDetailsState.data?.title ?: "-",
-					overflow = TextOverflow.Ellipsis,
-					maxLines = 1,
-					style = TextStyle(
-						color = MyColor.OnDarkSurfaceLight,
-						fontWeight = FontWeight.Bold,
-						fontSize = 20.sp
-					),
-					modifier = Modifier
-						.weight(1f)
-						.padding(start = 8.dp, end = 12.dp)
-				)
-			}
-		}
-
-
-		// Parallax header background
-		Box {
-			AsyncImage(
-				model = imageUrl,
-				contentDescription = "Heading Background",
-				contentScale = ContentScale.Crop,
-				modifier = Modifier
-					.fillMaxSize()
-			)
-			Box(
-				modifier = Modifier
-					.fillMaxSize()
-					.background(
-						brush = Brush.verticalGradient(colors = blockerColorGradients)
-					)
-			)
-
-			// Header Content
+			// Toolbar
 			Row(
 				modifier = Modifier
-					.fillMaxSize()
-					.statusBarsPadding()
-					.padding(top = 52.dp, start = 16.dp, end = 16.dp, bottom = 12.dp),
+					.fillMaxWidth()
+					.statusBarsPadding(),
 				verticalAlignment = Alignment.CenterVertically
 			) {
-				// Left cover image
-				SubcomposeAsyncImage(
-					modifier = Modifier
-						.width(100.dp)
-						.fillMaxHeight()
-						.clip(MyShape.Rounded12),
-					model = imageUrl,
-					contentDescription = "Content thumbnail",
-					contentScale = ContentScale.Crop,
-					loading = {
-						CenterCircularProgressIndicator(
-							strokeWidth = 2.dp,
-							size = 20.dp,
-							color = MyColor.Yellow500
-						)
-					}
-				)
+				IconButton(onClick = { onArrowClick() }) {
+					Icon(
+						imageVector = Icons.Default.ArrowBack,
+						contentDescription = "Back",
+						tint = MyColor.OnDarkSurfaceLight
+					)
+				}
 
-				// Header right content
-				Column(
-					modifier = Modifier
-						.fillMaxWidth()
-						.padding(start = 16.dp)
+				val density = LocalDensity.current
+				val initialOffset = with(density) {
+					40.dp.toPx().roundToInt()
+				}
+				val targetOffset = with(density) {
+					-40.dp.toPx().roundToInt()
+				}
+
+				AnimatedVisibility(
+					visible = isTitleVisible,
+					enter = slideInVertically(
+						initialOffsetY = { initialOffset },
+						animationSpec = tween(
+							durationMillis = 800,
+							delayMillis = 50,
+							easing = FastOutSlowInEasing
+						)
+					) + fadeIn(initialAlpha = 0f),
+					exit = slideOutVertically(
+						targetOffsetY = { targetOffset },
+						animationSpec = tween(
+							durationMillis = 800,
+							delayMillis = 50,
+							easing = LinearOutSlowInEasing
+						)
+					) + fadeOut()
 				) {
 					Text(
 						text = contentDetailsState.data?.title ?: "-",
+						overflow = TextOverflow.Ellipsis,
+						maxLines = 1,
 						style = TextStyle(
 							color = MyColor.OnDarkSurfaceLight,
 							fontWeight = FontWeight.Bold,
-							fontSize = MySize.Text20
+							fontSize = 20.sp
+						),
+						modifier = Modifier
+							.weight(1f)
+							.padding(start = 8.dp, end = 12.dp)
+					)
+				}
+			}
+
+
+			// Parallax header background
+			Box {
+				AsyncImage(
+					model = imageUrl,
+					contentDescription = "Heading Background",
+					contentScale = ContentScale.Crop,
+					modifier = Modifier
+						.fillMaxSize()
+				)
+				Box(
+					modifier = Modifier
+						.fillMaxSize()
+						.background(
+							brush = Brush.verticalGradient(colors = blockerColorGradients)
 						)
+				)
+
+				// Header Content
+				Row(
+					modifier = Modifier
+						.fillMaxSize()
+						.statusBarsPadding()
+						.padding(top = 52.dp, start = 16.dp, end = 16.dp, bottom = 12.dp),
+					verticalAlignment = Alignment.CenterVertically
+				) {
+					// Left cover image
+					SubcomposeAsyncImage(
+						modifier = Modifier
+							.width(100.dp)
+							.fillMaxHeight()
+							.clip(MyShape.Rounded12),
+						model = imageUrl,
+						contentDescription = "Content thumbnail",
+						contentScale = ContentScale.Crop,
+						loading = {
+							CenterCircularLoading(
+								strokeWidth = 2.dp,
+								size = 20.dp,
+								color = MyColor.Yellow500
+							)
+						}
 					)
 
-					with(contentDetailsState.data) {
-						this?.authors?.firstOrNull()?.let { author ->
-							Text(
-								text = author.name,
-								style = TextStyle(
-									color = MyColor.OnDarkSurface,
-									fontWeight = FontWeight.Bold,
-									fontSize = MySize.Text14
-								)
-							)
-						}
-
-						this?.studios?.firstOrNull()?.let { studio ->
-							Text(
-								text = studio.name,
-								style = TextStyle(
-									color = MyColor.OnDarkSurface,
-									fontWeight = FontWeight.Bold,
-									fontSize = MySize.Text14
-								)
-							)
-						}
-					}
-
-					// Ongoing / Airing status
-					Row(verticalAlignment = Alignment.CenterVertically) {
-
-						Icon(
-							imageVector = headerCaptionIcon,
-							contentDescription = headerCaptionDescription,
-							tint = MyColor.OnDarkSurface,
-							modifier = Modifier
-								.height(14.dp)
-								.padding(end = 6.dp))
-
+					// Header right content
+					Column(
+						modifier = Modifier
+							.fillMaxWidth()
+							.padding(start = 16.dp)
+					) {
 						Text(
-							text = contentDetailsState.data?.status ?: "-",
+							text = contentDetailsState.data?.title ?: "-",
 							style = TextStyle(
-								color = MyColor.OnDarkSurface,
+								color = MyColor.OnDarkSurfaceLight,
 								fontWeight = FontWeight.Bold,
-								fontSize = 13.sp
+								fontSize = MySize.Text20
 							)
 						)
+
+						with(contentDetailsState.data) {
+							this?.authors?.firstOrNull()?.let { author ->
+								Text(
+									text = author.name,
+									style = TextStyle(
+										color = MyColor.OnDarkSurface,
+										fontWeight = FontWeight.Bold,
+										fontSize = MySize.Text14
+									)
+								)
+							}
+
+							this?.studios?.firstOrNull()?.let { studio ->
+								Text(
+									text = studio.name,
+									style = TextStyle(
+										color = MyColor.OnDarkSurface,
+										fontWeight = FontWeight.Bold,
+										fontSize = MySize.Text14
+									)
+								)
+							}
+						}
+
+						// Ongoing / Airing status
+						Row(verticalAlignment = Alignment.CenterVertically) {
+
+							Icon(
+								imageVector = headerCaptionIcon,
+								contentDescription = headerCaptionDescription,
+								tint = MyColor.OnDarkSurface,
+								modifier = Modifier
+									.height(14.dp)
+									.padding(end = 6.dp))
+
+							Text(
+								text = contentDetailsState.data?.status ?: "-",
+								style = TextStyle(
+									color = MyColor.OnDarkSurface,
+									fontWeight = FontWeight.Bold,
+									fontSize = 13.sp
+								)
+							)
+						}
 					}
 				}
 			}

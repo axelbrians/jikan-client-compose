@@ -60,7 +60,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.machina.jikan_client_compose.core.constant.Constant
 import com.machina.jikan_client_compose.core.constant.Endpoints
-import com.machina.jikan_client_compose.presentation.composable.CenterCircularProgressIndicator
+import com.machina.jikan_client_compose.presentation.composable.CenterCircularLoading
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.HorizontalContentHeader
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.HorizontalContentHeaderConfig
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.ScrollableHorizontalContent
@@ -225,7 +225,7 @@ fun ContentDetailsScreenDeprecated(
 	}
 
 	if (contentDetailsState.isLoading) {
-		CenterCircularProgressIndicator(
+		CenterCircularLoading(
 			size = 40.dp,
 			color = MyColor.Yellow500
 		)
@@ -415,7 +415,7 @@ fun ContentDetailsScreenDeprecated(
 							contentDescription = "Anime Photos",
 							contentScale = ContentScale.Crop,
 							loading = {
-								CenterCircularProgressIndicator(
+								CenterCircularLoading(
 									strokeWidth = 2.dp,
 									size = 20.dp,
 									color = MyColor.Yellow500
@@ -488,7 +488,7 @@ fun ContentDetailsScreenDeprecated(
 					contentScale = ContentScale.Crop,
 					contentDescription = "Zoomed image",
 					loading = {
-						CenterCircularProgressIndicator(
+						CenterCircularLoading(
 							strokeWidth = 2.dp,
 							size = 20.dp,
 							color = MyColor.Yellow500
@@ -504,7 +504,7 @@ fun ContentDetailsScreenDeprecated(
 					contentScale = ContentScale.Crop,
 					contentDescription = "Zoomed image",
 					loading = {
-						CenterCircularProgressIndicator(
+						CenterCircularLoading(
 							strokeWidth = 2.dp,
 							size = 20.dp,
 							color = MyColor.Yellow500
@@ -564,7 +564,7 @@ fun ContentDetailsScreenDeprecated(
 							contentDescription = "Anime Photos",
 							contentScale = ContentScale.Crop,
 							loading = {
-								CenterCircularProgressIndicator(
+								CenterCircularLoading(
 									strokeWidth = 2.dp,
 									size = 20.dp,
 									color = MyColor.Yellow500

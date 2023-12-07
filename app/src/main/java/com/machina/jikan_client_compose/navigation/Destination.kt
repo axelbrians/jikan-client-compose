@@ -23,6 +23,8 @@ open class Destination(
 		return this.map { it.name }
 	}
 
+	// todo: ab
+	// To make this support both required and optional, try to make it as DSL again
 	open fun createDestinationRoute(vararg requiredParams: Pair<String, Any?>): String {
 		val builder = StringBuilder(destinationParam.route)
 

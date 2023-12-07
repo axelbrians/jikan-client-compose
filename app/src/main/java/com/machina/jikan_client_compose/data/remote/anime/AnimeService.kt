@@ -44,7 +44,12 @@ class AnimeServiceImpl(
 
 	override suspend fun getAnimeAiringPopular(): Resource<AnimeAiringPopularResponseV4> {
 		val request = HttpRequestBuilder().apply {
-			defaultUrl { encodedPath = Endpoints.ANIME_DETAILS }
+			defaultUrl {
+				encodedPath = Endpoints.ANIME_DETAILS
+				// TODO:ab
+//				this.parameter()
+			}
+//			parameter()
 			parameter(AnimeConstant.PageKey, 1)
 			parameter(AnimeConstant.StatusKey, "airing")
 			parameter(AnimeConstant.OrderByKey, "score")

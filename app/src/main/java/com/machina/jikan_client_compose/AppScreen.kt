@@ -46,6 +46,10 @@ fun AppScreen(
 		)
 
 		composable(ContentDetailsDestination) { backStack ->
+			// todo: ab
+			// Pindahin parsing argument ke Custom Scope
+//			this.navArgs
+//			this.magicNumber
 			val navArgs = ContentDetailsArgs.requireGet(
 				bundle = backStack.arguments,
 				key = ContentDetailsDestination.KEY_CONTENT_DETAIL_ARGS

@@ -67,15 +67,25 @@ internal object ContentDetailsScreenSection {
 }
 
 object ContentDetailsDestination: Destination(
-	destinationParam {
-		route = "home/content/details"
+	destinationParam = destinationParam {
+		// todo: ab
+		// DSL karena route wajib ada, harus jadi required
+		// Define route nya kalo bisa ngikutin KTOR, pake path based. bisa apped static path atau
+		// dynamic (dynamic ini bakal di replace sama argument) static adalah route aslinya.
+		route = "home/content/{}/details"
 		requiredNav(
 			navArgument(ContentDetailsDestination.KEY_CONTENT_DETAIL_ARGS) {
 				type = ContentDetailsArgs
+
 			}
 		)
 		requiredNav(
 			navArgument(ContentDetailsDestination.KEY_MAGIC_NUMBER) {
+				type = NavType.IntType
+			}
+		)
+		optionalNav(
+			navArgument("optional") {
 				type = NavType.IntType
 			}
 		)

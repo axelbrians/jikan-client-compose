@@ -1,9 +1,9 @@
 [versions]
 app-version-code = "1"
 app-version-name = "1.0.0"
-sdk-compile = "33"
+sdk-compile = "34"
 sdk-min = "24"
-sdk-target = "33"
+sdk-target = "34"
 
 jvm = "1.8"
 agp = "7.1.3"
@@ -38,6 +38,7 @@ androidx-lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle
 compose-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "compose-activity" }
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
 compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "compose-navigation" }
+compose-material = { module = "androidx.compose.material3:material3", version = "1.2.0-beta01" }
 compose-ui-ui = { group = "androidx.compose.ui", name = "ui" }
 compose-ui-util = { group = "androidx.compose.ui", name = "ui-util" }
 compose-ui-foundation = { group = "androidx.compose.foundation", name = "foundation" }
@@ -126,12 +127,13 @@ ktor = [
 compose-test = ["compose-ui-test", "compose-ui-junit"]
 compose-ui = [
     "compose-activity",
-    "compose-ui-ui",
-    "compose-ui-util",
+    "compose-coil",
+    "compose-material",
+    "compose-navigation",
     "compose-ui-foundation",
     "compose-ui-preview",
-    "compose-navigation",
-    "compose-coil"
+    "compose-ui-ui",
+    "compose-ui-util",
 ]
 hyperion = [
 #    "hyperion-attr",

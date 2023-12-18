@@ -2,8 +2,8 @@ package com.machina.jikan_client_compose.di
 
 import com.machina.jikan_client_compose.core.DispatchersProvider
 import com.machina.jikan_client_compose.data.remote.anime.AnimeService
-import com.machina.jikan_client_compose.domain.use_case.anime.GetHomeContentUseCase
-import com.machina.jikan_client_compose.domain.use_case.anime.GetHomeContentUseCaseImpl
+import com.machina.jikan_client_compose.domain.use_case.anime.GetHomeSectionsUseCase
+import com.machina.jikan_client_compose.domain.use_case.anime.GetHomeSectionsUseCaseImpl
 import com.machina.jikan_client_compose.domain.use_case.anime_airing_popular.GetAnimeAiringPopularUseCase
 import com.machina.jikan_client_compose.domain.use_case.anime_airing_popular.GetAnimeAiringPopularUseCaseImpl
 import com.machina.jikan_client_compose.domain.use_case.anime_schedule.GetAnimeScheduleUseCase
@@ -50,8 +50,8 @@ class AnimeUseCaseModule {
 		animeScheduleUseCase: GetAnimeScheduleUseCase,
 		animeTopUseCase: GetAnimeTopUseCase,
 		dispatchers: DispatchersProvider
-	): GetHomeContentUseCase {
-		return GetHomeContentUseCaseImpl(
+	): GetHomeSectionsUseCase {
+		return GetHomeSectionsUseCaseImpl(
 			airingPopularUseCase = animeAiringPopularUseCase,
 			animeScheduleUseCase = animeScheduleUseCase,
 			animeTopUseCase = animeTopUseCase,

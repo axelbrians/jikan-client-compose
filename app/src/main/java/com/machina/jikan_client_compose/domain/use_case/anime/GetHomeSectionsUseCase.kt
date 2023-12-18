@@ -7,7 +7,6 @@ import com.machina.jikan_client_compose.domain.use_case.anime_schedule.GetAnimeS
 import com.machina.jikan_client_compose.domain.use_case.get_top_anime.GetAnimeTopUseCase
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 
@@ -23,19 +22,19 @@ data class HomeSection(
 	val type: SectionType
 )
 
-interface GetHomeContentUseCase {
+interface GetHomeSectionsUseCase {
 
 	suspend fun invoke(): ImmutableList<HomeSection>
 
 	fun onCleared()
 }
 
-class GetHomeContentUseCaseImpl(
+class GetHomeSectionsUseCaseImpl(
 	private val airingPopularUseCase: GetAnimeAiringPopularUseCase,
 	private val animeScheduleUseCase: GetAnimeScheduleUseCase,
 	private val animeTopUseCase: GetAnimeTopUseCase,
 	private val dispatchers: DispatchersProvider
-): GetHomeContentUseCase {
+): GetHomeSectionsUseCase {
 
 	private val supervisorJob = SupervisorJob()
 	private val concurrentScope = CoroutineScope(dispatchers.io + supervisorJob)

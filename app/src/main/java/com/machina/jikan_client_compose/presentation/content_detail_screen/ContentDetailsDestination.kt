@@ -72,7 +72,8 @@ object ContentDetailsDestination: Destination(
 		// DSL karena route wajib ada, harus jadi required
 		// Define route nya kalo bisa ngikutin KTOR, pake path based. bisa apped static path atau
 		// dynamic (dynamic ini bakal di replace sama argument) static adalah route aslinya.
-		route = "home/content/{}/details"
+		// route = "home/content/{}/details"
+		route = "home/content/details"
 		requiredNav(
 			navArgument(ContentDetailsDestination.KEY_CONTENT_DETAIL_ARGS) {
 				type = ContentDetailsArgs
@@ -84,11 +85,11 @@ object ContentDetailsDestination: Destination(
 				type = NavType.IntType
 			}
 		)
-		optionalNav(
-			navArgument("optional") {
-				type = NavType.IntType
-			}
-		)
+//		optionalNav(
+//			navArgument("optional") {
+//				type = NavType.IntType
+//			}
+//		)
 	}
 ) {
 	const val KEY_CONTENT_DETAIL_ARGS = "contentDetailArgs"

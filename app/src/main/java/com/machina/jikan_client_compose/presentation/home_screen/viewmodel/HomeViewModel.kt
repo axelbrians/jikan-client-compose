@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-	private val getHomeContentUseCase: GetHomeContentUseCase,
+	private val getHomeSectionsUseCase: GetHomeSectionsUseCase,
 	private val dispatcher: DispatchersProvider
 ) : ViewModel() {
 

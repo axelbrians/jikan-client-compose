@@ -9,6 +9,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
+import java.util.UUID
 
 sealed class SectionType(val name: String) {
 	object AnimeAiringPopular: SectionType("Airing Now")
@@ -40,15 +41,19 @@ class GetHomeSectionsUseCaseImpl(
 	private val concurrentScope = CoroutineScope(dispatchers.io + supervisorJob)
 
 	override suspend fun invoke(): ImmutableList<HomeSection> {
-		val homeSections = mutableListOf<HomeSection>()
 		val airingPopular = airingPopularUseCase.executeAsHomeSection()
 		val airingToday = animeScheduleUseCase.executeAsHomeSection()
 		val animeTop = animeTopUseCase.executeAsHomeSection()
 
-		homeSections.add(airingPopular)
-		homeSections.add(airingToday)
-		homeSections.add(animeTop)
-		return homeSections.toImmutableList()
+		// TODO: revert to non shuffled
+		return buildList {
+			add(airingPopular)
+			add(airingToday)
+			add(animeTop)
+			add(airingPopular.copy(id = UUID.randomUUID().toString()))
+			add(airingToday.copy(id = UUID.randomUUID().toString()))
+			add(animeTop.copy(id = UUID.randomUUID().toString()))
+		}.shuffled().toImmutableList()
 	}
 
 	override fun onCleared() {

@@ -62,6 +62,7 @@ fun SearchScreen(
 	val searchQuery = rememberSaveable { mutableStateOf("") }
 
 	val listState = rememberLazyListState()
+	val isScrolledToTheEnd by listState.isScrolledToTheEnd()
 	val coroutineScope = rememberCoroutineScope()
 	val focusRequester = remember { FocusRequester() }
 
@@ -142,8 +143,7 @@ fun SearchScreen(
 		)
 	}
 
-
-	if (listState.isScrolledToTheEnd()) {
+	if (isScrolledToTheEnd) {
 		viewModel.onSearchEvent(
 			SearchEvent.SearchNextPage(selectedType.value, searchQuery.value)
 		)

@@ -2,7 +2,6 @@ package com.machina.jikan_client_compose.presentation.home_screen
 
 import android.view.Window
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -19,7 +18,6 @@ import androidx.navigation.NavGraphBuilder
 import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.machina.jikan_client_compose.OnDestinationChanged
-import com.machina.jikan_client_compose.domain.use_case.anime.HomeSection
 import com.machina.jikan_client_compose.navigation.Destination
 import com.machina.jikan_client_compose.navigation.composable
 import com.machina.jikan_client_compose.navigation.destinationParam
@@ -27,7 +25,6 @@ import com.machina.jikan_client_compose.presentation.composable.MyDivider
 import com.machina.jikan_client_compose.presentation.content_search_screen.composable.SearchFieldComponent
 import com.machina.jikan_client_compose.presentation.home_screen.viewmodel.HomeViewModel
 import com.machina.jikan_client_compose.ui.theme.MyColor
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 
@@ -46,6 +43,10 @@ fun NavGraphBuilder.addHomeScreen(
 	composable(HomeDestination) {
 		val viewModel: HomeViewModel = hiltViewModel()
 
+		LaunchedEffect(viewModel.hashCode()) {
+			viewModel.getHomeSections()
+		}
+
 		OnDestinationChanged(
 			systemUiController = systemUiController,
 			color = MyColor.DarkBlueBackground,
@@ -55,8 +56,8 @@ fun NavGraphBuilder.addHomeScreen(
 
 		HomeScreen(
 			navigator = HomeScreenNavigator(navController),
-			homeSections = viewModel.homeSectionsState,
-			getHomeContent = viewModel::getHomeContent,
+			homeSections = viewModel.homeState,
+			getHomeSections = viewModel::getHomeSections,
 			modifier = Modifier.fillMaxSize()
 		)
 	}
@@ -67,16 +68,13 @@ fun NavGraphBuilder.addHomeScreen(
 @Composable
 fun HomeScreen(
 	navigator: HomeScreenNavigator,
-	homeSections: StateFlow<ImmutableList<HomeSection>>,
-	getHomeContent: () -> Unit,
+	homeSections: StateFlow<HomeViewModel.HomeState>,
+	getHomeSections: () -> Unit,
 	modifier: Modifier = Modifier
 ) {
-	LaunchedEffect(Unit) {
-		getHomeContent.invoke()
-	}
-
-	Scaffold(modifier = modifier) {
-		Column(modifier = Modifier.fillMaxWidth().padding(it)) {
+	Scaffold(
+		modifier = modifier,
+		topBar = {
 			SearchFieldComponent(
 				value = "",
 				modifier = Modifier
@@ -90,14 +88,15 @@ fun HomeScreen(
 				onValueChanged = { },
 				onValueCleared = { }
 			)
-
 			MyDivider.Horizontal.DarkGreyBackground()
-
-			HomeContentList(
-				navigator = navigator,
-				homeSections = homeSections
-			)
 		}
+	) {
+		HomeContentList(
+			navigator = navigator,
+			homeSections = homeSections,
+			getHomeSections = getHomeSections,
+			modifier = Modifier.fillMaxSize().padding(it)
+		)
 //		val snackbarHostState = remember { SnackbarHostState() }
 
 

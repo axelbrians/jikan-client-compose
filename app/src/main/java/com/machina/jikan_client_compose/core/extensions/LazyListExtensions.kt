@@ -2,6 +2,7 @@ package com.machina.jikan_client_compose.core.extensions
 
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -10,18 +11,26 @@ import androidx.compose.runtime.setValue
 import com.machina.jikan_client_compose.presentation.content_view_all_normal.data.ScrollDirection
 
 @Composable
-fun LazyListState.isScrolledToTheEnd(): Boolean {
-	val isScrolledToEnd = remember(this) {
+fun LazyListState.isScrolledToTheEnd(): State<Boolean> {
+	val isScrolledToEnd = remember {
 		derivedStateOf {
-			layoutInfo.visibleItemsInfo.lastOrNull()?.index == layoutInfo.totalItemsCount - 1
+			layoutInfo.visibleItemsInfo.lastOrNull()?.index ==
+			  layoutInfo.totalItemsCount - 1
 		}
 	}
 
-	return isScrolledToEnd.value
+	return isScrolledToEnd
 }
 
-fun LazyListState.isScrolledToTheStart(): Boolean {
-	return layoutInfo.visibleItemsInfo.firstOrNull()?.index == 0
+@Composable
+fun LazyListState.isScrolledToTheFirst(): State<Boolean> {
+	val isScrolledToTheFirst = remember {
+		derivedStateOf {
+			firstVisibleItemIndex == 0 &&
+			  firstVisibleItemScrollOffset == 0
+		}
+	}
+	return isScrolledToTheFirst
 }
 
 /**

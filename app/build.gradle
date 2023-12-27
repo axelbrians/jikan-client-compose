@@ -82,7 +82,6 @@ dependencies {
     implementation libs.accompanist.insets
     implementation libs.accompanist.pager
     implementation libs.accompanist.placeholder
-    implementation libs.accompanist.swiperefresh
     implementation libs.accompanist.systemuicontroller
 
     // Hilt dependency injection

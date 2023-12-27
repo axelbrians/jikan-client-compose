@@ -21,7 +21,7 @@ data class ScrollableHorizontalContentState(
 	val contentPadding: PaddingValues = PaddingValues(horizontal = 12.dp),
 	val contentArrangement: Arrangement.Horizontal,
 	val modifier: Modifier,
-	val headerModifier: Modifier = HorizontalContentHeaderConfig.Default,
+	val headerModifier: Modifier = HorizontalContentHeaderDefaults.Default,
 	val itemModifier: Modifier = Modifier.width(Width.Default),
 	val thumbnailHeight: Dp = Height.Default,
 	val textAlign: TextAlign = TextAlign.Start,

@@ -6,9 +6,11 @@ import androidx.compose.ui.unit.dp
 
 object MyShape {
     val ThemeShapes = Shapes(
-        small = RoundedCornerShape(4.dp),
-        medium = RoundedCornerShape(4.dp),
-        large = RoundedCornerShape(0.dp)
+        extraSmall = RoundedCornerShape(4.dp),
+        small = RoundedCornerShape(6.dp),
+        medium = RoundedCornerShape(8.dp),
+        large = RoundedCornerShape(12.dp),
+        extraLarge = RoundedCornerShape(16.dp)
     )
 
     val Rounded6 = RoundedCornerShape(6.dp)

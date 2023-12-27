@@ -34,24 +34,15 @@ import com.valentinilk.shimmer.rememberShimmer
 @OptIn(ExperimentalCoilApi::class)
 @Composable
 fun ScrollableHorizontalContent(
-//	headerTitle: String,
 	data: HomeSection,
 	contentPadding: PaddingValues,
 	contentArrangement: Arrangement.Horizontal,
 	modifier: Modifier = Modifier,
-//	headerModifier: Modifier = HorizontalContentHeaderConfig.Default,
 	itemModifier: Modifier = Modifier.width(Small),
 	thumbnailHeight: Dp = CardThumbnailPortraitDefault.Height.Default,
 	textAlign: TextAlign = TextAlign.Start,
-//	onIconClick: () -> Unit,
 	onItemClick: (Int, ContentType) -> Unit,
 ) {
-//	HorizontalContentHeader(
-//		modifier = headerModifier,
-//		title = headerTitle,
-//		onButtonClick = onIconClick
-//	)
-
 	LazyRow(
 		modifier = modifier,
 		contentPadding = contentPadding,
@@ -87,7 +78,7 @@ fun ScrollableHorizontalContent(
 	contentPadding: PaddingValues,
 	contentArrangement: Arrangement.Horizontal,
 	modifier: Modifier = Modifier,
-	headerModifier: Modifier = HorizontalContentHeaderConfig.Default,
+	headerModifier: Modifier = HorizontalContentHeaderDefaults.Default,
 	itemModifier: Modifier = Modifier.width(Small),
 	thumbnailHeight: Dp = CardThumbnailPortraitDefault.Height.Default,
 	shimmer: Shimmer = rememberShimmerCustomBounds(),

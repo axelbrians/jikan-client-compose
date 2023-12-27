@@ -9,7 +9,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
-import java.util.UUID
 
 sealed class SectionType(val name: String) {
 	object AnimeAiringPopular: SectionType("Airing Now")
@@ -50,10 +49,7 @@ class GetHomeSectionsUseCaseImpl(
 			add(airingPopular)
 			add(airingToday)
 			add(animeTop)
-			add(airingPopular.copy(id = UUID.randomUUID().toString()))
-			add(airingToday.copy(id = UUID.randomUUID().toString()))
-			add(animeTop.copy(id = UUID.randomUUID().toString()))
-		}.shuffled().toImmutableList()
+		}.toImmutableList()
 	}
 
 	override fun onCleared() {

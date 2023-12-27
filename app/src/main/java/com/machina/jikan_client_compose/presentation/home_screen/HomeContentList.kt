@@ -3,13 +3,9 @@ package com.machina.jikan_client_compose.presentation.home_screen
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
@@ -28,19 +24,10 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.machina.jikan_client_compose.core.constant.Constant
-import com.machina.jikan_client_compose.core.constant.Endpoints
 import com.machina.jikan_client_compose.core.extensions.isScrolledToTheFirst
-import com.machina.jikan_client_compose.domain.use_case.anime.HomeSection
-import com.machina.jikan_client_compose.domain.use_case.anime.SectionType
-import com.machina.jikan_client_compose.presentation.composable.content_horizontal.HorizontalContentHeader
-import com.machina.jikan_client_compose.presentation.composable.content_horizontal.ScrollableHorizontalContent
 import com.machina.jikan_client_compose.presentation.composable.pull_to_refresh.GlowingBeamLoadingIndicator
-import com.machina.jikan_client_compose.presentation.home_screen.composable.anime_popular_current.AnimeHeadlineCarousel
-import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortraitDefault.Arrangement
-import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortraitDefault.Height
-import com.machina.jikan_client_compose.presentation.home_screen.viewmodel.HomeViewModel
+import com.machina.jikan_client_compose.presentation.home_screen.item.ItemHomeSection
+import com.machina.jikan_client_compose.presentation.home_screen.viewmodel.HomeViewModel.HomeState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.StateFlow
 import kotlin.math.roundToInt
@@ -50,7 +37,7 @@ import kotlin.math.roundToInt
 @Composable
 fun HomeContentList(
 	navigator: HomeScreenNavigator,
-	homeSections: StateFlow<HomeViewModel.HomeState>,
+	homeSections: StateFlow<HomeState>,
 	modifier: Modifier = Modifier,
 	getHomeSections: () -> Unit
 ) {
@@ -60,7 +47,7 @@ fun HomeContentList(
 
 	val homeState by homeSections.collectAsState()
 	val isLoading by produceState(initialValue = false, homeState) {
-		value = homeState is HomeViewModel.HomeState.Loading
+		value = homeState is HomeState.Loading
 	}
 	val isRefreshing by remember {
 		derivedStateOf { pullToRefreshState.isRefreshing }
@@ -119,9 +106,9 @@ fun HomeContentList(
 				}
 		) {
 			when (val state = homeState) {
-				is HomeViewModel.HomeState.Success,
-				is HomeViewModel.HomeState.Loading -> {
-					HomeSectionWithData(
+				is HomeState.Success,
+				is HomeState.Loading -> {
+					ItemHomeSection(
 						state = state,
 						navigator = navigator,
 						modifierProvider = { index ->
@@ -137,7 +124,7 @@ fun HomeContentList(
 
 				}
 
-				else -> {}
+				is HomeState.Init -> Unit
 			}
 		}
 
@@ -147,103 +134,6 @@ fun HomeContentList(
 			maxHeight = cardOffset,
 			modifier = Modifier.fillMaxWidth()
 		)
-	}
-}
-
-@Suppress("FunctionName")
-private fun LazyListScope.HomeSectionWithData(
-	state: HomeViewModel.HomeState,
-	navigator: HomeScreenNavigator,
-	modifierProvider: (Int) -> Modifier
-) {
-	if (state is HomeViewModel.HomeState.Success) {
-		itemsIndexed(
-			items = state.sections,
-			key = { _, section -> section.id },
-			contentType = { _, section -> section.type }
-		) { index, section ->
-			HomeSectionInternal(
-				section = section,
-				navigator = navigator,
-				modifier = modifierProvider(index)
-			)
-		}
-	} else if (state is HomeViewModel.HomeState.Loading) {
-		itemsIndexed(
-			items = state.sections,
-			key = { _, section -> section.id },
-			contentType = { _, section -> section.type }
-		) { index, section ->
-			HomeSectionInternal(
-				section = section,
-				navigator = navigator,
-				modifier = modifierProvider(index)
-			)
-		}
-	}
-}
-
-@OptIn(ExperimentalPagerApi::class)
-@Composable
-private fun HomeSectionInternal(
-	section: HomeSection,
-	navigator: HomeScreenNavigator,
-	modifier: Modifier = Modifier
-) {
-	when (section.type) {
-		is SectionType.AnimeAiringPopular -> {
-			AnimeHeadlineCarousel(
-				dataSet = section.contents,
-				onClick = navigator::navigateToContentDetailsScreen,
-				modifier = Modifier
-					.fillMaxWidth()
-					.then(modifier)
-			)
-		}
-
-		is SectionType.AnimeSchedule -> {
-			HorizontalContentHeader(
-				title = Constant.AIRING_TODAY,
-				onButtonClick = {
-					navigator.navigateToContentViewAllScreen(
-						title = Constant.AIRING_TODAY,
-						url = Endpoints.getTodayScheduleAnimeEndpoints()
-					)
-				},
-				modifier = Modifier
-					.fillMaxWidth()
-					.padding(horizontal = 12.dp)
-					.then(modifier)
-			)
-
-			ScrollableHorizontalContent(
-				data = section,
-				contentPadding = PaddingValues(horizontal = 12.dp),
-				contentArrangement = Arrangement.Default,
-				thumbnailHeight = Height.Small,
-				onItemClick = navigator::navigateToContentDetailsScreen,
-				modifier = modifier
-			)
-		}
-
-		is SectionType.AnimeTop -> {
-			HorizontalContentHeader(
-				title = Constant.TOP_ANIME_OF_ALL_TIMES,
-				onButtonClick = { },
-				modifier = Modifier
-					.fillMaxWidth()
-					.padding(horizontal = 12.dp)
-					.then(modifier)
-			)
-			ScrollableHorizontalContent(
-				data = section,
-				contentPadding = PaddingValues(horizontal = 12.dp),
-				contentArrangement = Arrangement.Default,
-				thumbnailHeight = Height.Small,
-				onItemClick = navigator::navigateToContentDetailsScreen,
-				modifier = modifier
-			)
-		}
 	}
 }
 

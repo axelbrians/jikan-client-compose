@@ -22,14 +22,57 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.SubcomposeAsyncImage
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.material.fade
+import com.google.accompanist.placeholder.material.placeholder
 import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.domain.model.anime.AnimePortraitDataModel
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularLoading
-import com.machina.jikan_client_compose.presentation.home_screen.preview.ItemVerticalAnimeProvider
 import com.machina.jikan_client_compose.presentation.home_screen.preview.ItemVerticalAnimePreviewParam
+import com.machina.jikan_client_compose.presentation.home_screen.preview.ItemVerticalAnimeProvider
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.machina.jikan_client_compose.ui.theme.MyShape
 import com.machina.jikan_client_compose.ui.theme.Type
+
+object CardThumbnailPortraitDefault {
+	object Width {
+		val Default = 140.dp
+		val Small = 100.dp
+	}
+
+	object Height {
+		val Default = 190.dp
+		val Grid = 160.dp
+		val Small = 140.dp
+	}
+
+	object Arrangement {
+		val Default = androidx.compose.foundation.layout.Arrangement.spacedBy(12.dp)
+	}
+
+	@OptIn(ExperimentalCoilApi::class)
+	@Composable
+	fun Placeholder(
+		modifier: Modifier = Modifier,
+		thumbnailHeight: Dp = Height.Default,
+		textAlign: TextAlign = TextAlign.Start
+	) {
+		CardThumbnailPortrait(
+			imageUrl = "",
+			text = "",
+			modifier = modifier
+				.placeholder(
+					visible = true,
+					color = MyColor.Grey,
+					shape = MyShape.ThemeShapes.extraSmall,
+					highlight = PlaceholderHighlight.fade()
+				),
+			thumbnailHeight = thumbnailHeight,
+			textAlign = textAlign,
+			onClick = { }
+		)
+	}
+}
 
 @ExperimentalCoilApi
 @Composable
@@ -37,7 +80,7 @@ fun CardThumbnailPortrait(
 	imageUrl: String,
 	text: String,
 	modifier: Modifier = Modifier,
-	thumbnailHeight: Dp = CardThumbnailPortraitDefault.Height.Small,
+	thumbnailHeight: Dp = CardThumbnailPortraitDefault.Height.Default,
 	textAlign: TextAlign = TextAlign.Start,
 	onClick: () -> Unit
 ) {
@@ -53,9 +96,7 @@ fun CardThumbnailPortrait(
 			.height(thumbnailHeight)
 			.clip(MyShape.Rounded12)
 		if (LocalInspectionMode.current) {
-			Box(modifier = thumbnailModifier
-				.background(MyColor.Teal200)
-			)
+			Box(thumbnailModifier.background(MyColor.Teal200))
 		} else {
 			SubcomposeAsyncImage(
 				modifier = thumbnailModifier,

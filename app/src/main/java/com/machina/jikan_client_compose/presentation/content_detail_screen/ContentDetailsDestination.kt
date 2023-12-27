@@ -38,7 +38,7 @@ import com.machina.jikan_client_compose.navigation.Destination
 import com.machina.jikan_client_compose.navigation.destinationParam
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularLoading
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.HorizontalContentHeader
-import com.machina.jikan_client_compose.presentation.composable.content_horizontal.HorizontalContentHeaderConfig
+import com.machina.jikan_client_compose.presentation.composable.content_horizontal.HorizontalContentHeaderDefaults
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.ScrollableHorizontalContent
 import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.ContentDetailsScreenToolbar
 import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.ContentDetailsSynopsis
@@ -270,7 +270,7 @@ fun ContentDetailsScreen(
 					)
 				} else {
 					HorizontalContentHeader(
-						modifier = HorizontalContentHeaderConfig.Default,
+						modifier = HorizontalContentHeaderDefaults.Default,
 						title = "Gallery photos"
 					)
 				}

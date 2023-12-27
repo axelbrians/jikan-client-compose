@@ -118,12 +118,15 @@ dependencies {
 //    testImplementation "org.hamcrest:hamcrest-all:1.3"
 
     // Android Tests
-    androidTestImplementation libs.bundles.compose.test
-    androidTestImplementation libs.test.junit
-    androidTestImplementation libs.test.mockk
-    androidTestImplementation libs.test.androidx.junit
-    androidTestImplementation libs.test.androidx.espresso
-    androidTestImplementation libs.test.kotlinx.coroutine
+    debugImplementation platform(libs.compose.bom)
+    androidTestImplementation platform(libs.compose.bom)
+    debugImplementation libs.compose.test.manifest
+    androidTestImplementation libs.compose.test.junit
+//    androidTestImplementation libs.test.junit
+//    androidTestImplementation libs.test.mockk
+//    androidTestImplementation libs.test.androidx.junit
+//    androidTestImplementation libs.test.androidx.espresso
+//    androidTestImplementation libs.test.kotlinx.coroutine
 
     /* - - - - - - - - - - - - - - - - - - - - - */
 }

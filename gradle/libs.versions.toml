@@ -45,9 +45,9 @@ compose-ui-foundation = { group = "androidx.compose.foundation", name = "foundat
 compose-ui-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 compose-coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
-compose-ui-test = { group = "androidx.compose.ui", name = "ui-test" }
-compose-ui-junit = { group = "androidx.compose.ui", name = "ui-test-junit4" }
-
+#compose-test-ui = { group = "androidx.compose.ui", name = "ui-test" }
+compose-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
+compose-test-junit = { module = "androidx.compose.ui:ui-test-junit4"}
 
 accompanist-flowlayout = { group = "com.google.accompanist", name = "accompanist-flowlayout", version.ref = "accompanist" }
 accompanist-insets = { group = "com.google.accompanist", name = "accompanist-insets", version.ref = "accompanist" }
@@ -124,7 +124,6 @@ ktor = [
     "ktor-okhttp",
     "ktor-serialization"
 ]
-compose-test = ["compose-ui-test", "compose-ui-junit"]
 compose-ui = [
     "compose-activity",
     "compose-coil",

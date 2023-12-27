@@ -13,7 +13,6 @@ import com.machina.jikan_client_compose.domain.use_case.anime.HomeSection
 import com.machina.jikan_client_compose.domain.use_case.anime.SectionType
 import com.machina.jikan_client_compose.presentation.data.StateListWrapper
 import com.machina.jikan_client_compose.presentation.data.StateWrapper
-import com.machina.jikan_client_compose.presentation.home_screen.data.AnimeHorizontalListContentState
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -25,11 +24,6 @@ interface GetAnimeScheduleUseCase {
 		dayInCalendar: Int = Calendar.getInstance().get(Calendar.DAY_OF_WEEK),
 		page: Int = 1
 	): List<AnimeThumbnail>
-
-	fun getAsAnimeHorizontalList(
-		dayInCalendar: Int = Calendar.getInstance().get(Calendar.DAY_OF_WEEK),
-		page: Int = 1
-	): Flow<AnimeHorizontalListContentState>
 
 	fun getAsStateWrapper(
 		dayInCalendar: Int = Calendar.getInstance().get(Calendar.DAY_OF_WEEK),
@@ -72,31 +66,6 @@ class GetAnimeScheduleUseCaseImpl(
 		} else {
 			throw EmptyDataException()
 		}
-	}
-
-	override fun getAsAnimeHorizontalList(
-		dayInCalendar: Int,
-		page: Int
-	): Flow<AnimeHorizontalListContentState> {
-		return flow {
-			emit(AnimeHorizontalListContentState.Loading)
-
-			val state = when (val res = animeService.getAnimeSchedule(dayInCalendar, page)) {
-				is Resource.Success -> {
-					AnimeHorizontalListContentState(
-						data = AnimeVerticalModel(
-							data = res.data!!.data.map {
-								AnimePortraitDataModel.from(it)
-							},
-							pagination = res.data.pagination
-						)
-					)
-				}
-				is Resource.Error -> AnimeHorizontalListContentState(error = Event(res.message))
-			}
-
-			emit(state)
-		}.flowOn(dispatchers.io)
 	}
 
 	override fun getAsStateWrapper(

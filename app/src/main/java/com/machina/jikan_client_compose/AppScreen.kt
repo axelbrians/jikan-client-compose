@@ -9,15 +9,14 @@ import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.machina.jikan_client_compose.navigation.composable
 import com.machina.jikan_client_compose.presentation.content_detail_screen.ContentDetailsArgs
-import com.machina.jikan_client_compose.presentation.content_detail_screen.ContentDetailsNav
 import com.machina.jikan_client_compose.presentation.content_detail_screen.ContentDetailsDestination
-import com.machina.jikan_client_compose.presentation.content_search_screen.SearchDestination
-import com.machina.jikan_client_compose.presentation.content_search_screen.nav.SearchScreenNav
+import com.machina.jikan_client_compose.presentation.content_detail_screen.ContentDetailsNav
+import com.machina.jikan_client_compose.presentation.content_search_screen.addSearchScreen
+import com.machina.jikan_client_compose.presentation.content_view_all_normal.ContentViewAllListDestination
 import com.machina.jikan_client_compose.presentation.content_view_all_normal.ContentViewAllListNav
 import com.machina.jikan_client_compose.presentation.content_view_all_normal.ContentViewAllListNavArgs
-import com.machina.jikan_client_compose.presentation.content_view_all_normal.ContentViewAllListDestination
-import com.machina.jikan_client_compose.presentation.content_view_all_small.ContentSmallViewAllNav
 import com.machina.jikan_client_compose.presentation.content_view_all_small.ContentSmallViewAllDestination
+import com.machina.jikan_client_compose.presentation.content_view_all_small.ContentSmallViewAllNav
 import com.machina.jikan_client_compose.presentation.home_screen.HomeDestination
 import com.machina.jikan_client_compose.presentation.home_screen.addHomeScreen
 import timber.log.Timber
@@ -96,13 +95,10 @@ fun AppScreen(
 			)
 		}
 
-		composable(SearchDestination) {
-			SearchScreenNav(
-				systemUiController = systemUiController,
-				window = window,
-				navController = navController
-			)
-		}
-
+		addSearchScreen(
+			systemUiController = systemUiController,
+			window = window,
+			navController = navController
+		)
 	}
 }

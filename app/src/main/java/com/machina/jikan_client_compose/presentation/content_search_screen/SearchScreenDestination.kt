@@ -1,12 +1,14 @@
 package com.machina.jikan_client_compose.presentation.content_search_screen
 
+import android.view.Window
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -18,15 +20,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
 import coil.annotation.ExperimentalCoilApi
+import com.google.accompanist.systemuicontroller.SystemUiController
+import com.machina.jikan_client_compose.OnDestinationChanged
 import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.core.extensions.isScrolledToTheEnd
 import com.machina.jikan_client_compose.core.extensions.isScrollingUp
 import com.machina.jikan_client_compose.navigation.Destination
+import com.machina.jikan_client_compose.navigation.composable
 import com.machina.jikan_client_compose.navigation.destinationParam
 import com.machina.jikan_client_compose.presentation.composable.MyDivider
 import com.machina.jikan_client_compose.presentation.content_search_screen.composable.ContentSearchList
@@ -36,7 +43,7 @@ import com.machina.jikan_client_compose.presentation.content_search_screen.compo
 import com.machina.jikan_client_compose.presentation.content_search_screen.data.SearchScreenViewModel
 import com.machina.jikan_client_compose.presentation.content_search_screen.data.event.FilterAction
 import com.machina.jikan_client_compose.presentation.content_search_screen.data.event.SearchEvent
-import com.machina.jikan_client_compose.presentation.content_search_screen.nav.SearchScreenNavigator
+import com.machina.jikan_client_compose.ui.theme.MyColor
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -51,6 +58,27 @@ object SearchDestination: Destination(
 	}
 }
 
+fun NavGraphBuilder.addSearchScreen(
+	systemUiController: SystemUiController,
+	window: Window,
+	navController: NavController
+) {
+	composable(SearchDestination) {
+		OnDestinationChanged(
+			systemUiController = systemUiController,
+			color = MyColor.DarkBlueBackground,
+			drawOverStatusBar = false,
+			window = window,
+		)
+
+		SearchScreen(
+			navigator = SearchScreenNavigator(navController),
+			viewModel = hiltViewModel(),
+			modifier = Modifier.fillMaxSize()
+		)
+	}
+}
+
 @OptIn(ExperimentalCoilApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
@@ -58,11 +86,21 @@ fun SearchScreen(
 	viewModel: SearchScreenViewModel,
 	modifier: Modifier = Modifier
 ) {
+	val contentSearchState by viewModel.contentSearchState
+	val filterOptionState = viewModel.filterOptionState
+
 	val selectedType = rememberSaveable { mutableStateOf(ContentType.Anime) }
 	val searchQuery = rememberSaveable { mutableStateOf("") }
 
 	val listState = rememberLazyListState()
 	val isScrolledToTheEnd by listState.isScrolledToTheEnd()
+
+	if (isScrolledToTheEnd) {
+		viewModel.onSearchEvent(
+			SearchEvent.SearchNextPage(selectedType.value, searchQuery.value)
+		)
+	}
+
 	val coroutineScope = rememberCoroutineScope()
 	val focusRequester = remember { FocusRequester() }
 
@@ -75,13 +113,7 @@ fun SearchScreen(
 		Unit
 	}}
 
-	val snackbarHostState = remember { SnackbarHostState() }
-	val snackbarChannel = remember { Channel<String?>(Channel.CONFLATED) }
-
-	val contentSearchState by viewModel.contentSearchState
-	val filterOptionState by viewModel.filterOptionState
-
-	LaunchedEffect(key1 = viewModel.hashCode()) {
+	LaunchedEffect(viewModel.hashCode()) {
 		focusRequester.requestFocus()
 		viewModel.onFilterEvent(FilterAction.GetOption())
 	}
@@ -92,19 +124,9 @@ fun SearchScreen(
 		}.invokeOnCompletion { shouldShowBottomSheet = false }
 	}
 
-	Box(modifier = modifier) {
-		if (shouldShowBottomSheet) {
-			FilterModalBottomSheet(
-				selectedType = selectedType.value,
-				searchQuery = searchQuery.value,
-				filterOptionState = viewModel.filterOptionState,
-				onFilterAction = viewModel::onFilterEvent,
-				bottomSheetState = bottomSheetState,
-				onHideBottomSheet = hideBottomSheet
-			)
-		}
-
-		Column(modifier = Modifier.fillMaxWidth()) {
+	Scaffold(
+		modifier = modifier,
+		topBar = {
 			SearchFieldComponent(
 				value = searchQuery.value,
 				modifier = Modifier.padding(12.dp),
@@ -119,35 +141,49 @@ fun SearchScreen(
 			)
 
 			MyDivider.Horizontal.DarkGreyBackground()
-
-	//      ChipGroup(
-	//        selectedType = selectedType.value,
-	//        onSelectedChanged = { selectedType.value = ContentType.valueOf(it) }
-	//      )
+		},
+		floatingActionButton = {
+			ExpandableFloatingButtonSearchScreen(
+				modifier = Modifier
+					.padding(bottom = 16.dp, end = 16.dp),
+				isExpanded = listState.isScrollingUp(),
+				onClick = {
+					shouldShowBottomSheet = true
+				}
+			)
+		},
+		floatingActionButtonPosition = FabPosition.End
+	) {
+		Box(modifier = Modifier.padding(it)) {
+			//      ChipGroup(
+			//        selectedType = selectedType.value,
+			//        onSelectedChanged = { selectedType.value = ContentType.valueOf(it) }
+			//      )
 
 			ContentSearchList(
 				listState = listState,
 				state = contentSearchState,
-				onItemClick = navigator::navigateToContentDetailsScreen
+				onItemClick = navigator::navigateToContentDetailsScreen,
+				modifier = Modifier.fillMaxSize()
 			)
-		}
 
-		ExpandableFloatingButtonSearchScreen(
-			modifier = Modifier
-				.padding(bottom = 16.dp, end = 16.dp)
-				.align(Alignment.BottomEnd),
-			isExpanded = listState.isScrollingUp(),
-			onClick = {
-				shouldShowBottomSheet = true
+			if (shouldShowBottomSheet) {
+				FilterModalBottomSheet(
+					selectedType = selectedType.value,
+					searchQuery = searchQuery.value,
+					filterOptionState = filterOptionState,
+					onFilterAction = viewModel::onFilterEvent,
+					bottomSheetState = bottomSheetState,
+					onHideBottomSheet = hideBottomSheet
+				)
 			}
-		)
+		}
 	}
 
-	if (isScrolledToTheEnd) {
-		viewModel.onSearchEvent(
-			SearchEvent.SearchNextPage(selectedType.value, searchQuery.value)
-		)
-	}
+
+
+	val snackbarHostState = remember { SnackbarHostState() }
+	val snackbarChannel = remember { Channel<String?>(Channel.CONFLATED) }
 
 	// Try to emmit error message to snackbarChannel if not have been handled before.
 	with(contentSearchState.error.getContentIfNotHandled()) {
@@ -178,3 +214,5 @@ fun SearchScreen(
 		}
 	}
 }
+
+

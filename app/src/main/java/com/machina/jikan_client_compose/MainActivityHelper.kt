@@ -19,5 +19,5 @@ fun OnDestinationChanged(
 		systemUiController.setSystemBarsColor(color = color)
 	}
 
-//	WindowCompat.setDecorFitsSystemWindows(window, !drawOverStatusBar)
+	WindowCompat.setDecorFitsSystemWindows(window, !drawOverStatusBar)
 }

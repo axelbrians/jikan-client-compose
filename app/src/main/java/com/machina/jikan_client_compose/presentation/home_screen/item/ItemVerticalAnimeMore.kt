@@ -28,13 +28,13 @@ import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbn
 import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortraitDefault.Width
 import com.machina.jikan_client_compose.presentation.home_screen.preview.ItemVerticalAnimeMoreParameterProvider
 import com.machina.jikan_client_compose.presentation.home_screen.preview.ItemVerticalAnimeMoreState
+import com.machina.jikan_client_compose.ui.theme.JikanTypography
+import com.machina.jikan_client_compose.ui.theme.JikanTypography.alignCenter
+import com.machina.jikan_client_compose.ui.theme.JikanTypography.bold
+import com.machina.jikan_client_compose.ui.theme.JikanTypography.onDarkSurface
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.machina.jikan_client_compose.ui.theme.MyIcons
 import com.machina.jikan_client_compose.ui.theme.MyShape
-import com.machina.jikan_client_compose.ui.theme.Type
-import com.machina.jikan_client_compose.ui.theme.Type.alignCenter
-import com.machina.jikan_client_compose.ui.theme.Type.bold
-import com.machina.jikan_client_compose.ui.theme.Type.onDarkSurface
 
 @Composable
 fun ItemVerticalAnimeMore(
@@ -67,7 +67,7 @@ fun ItemVerticalAnimeMore(
 			)
 			Text(
 				text = "See all",
-				style = Type.Typography.bodyMedium.bold().onDarkSurface().alignCenter(),
+				style = JikanTypography.JikanTextStyle.bodyMedium.bold().onDarkSurface().alignCenter(),
 				modifier = Modifier.fillMaxWidth()
 			)
 		}

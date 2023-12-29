@@ -26,6 +26,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -64,7 +65,7 @@ import com.machina.jikan_client_compose.presentation.composable.CenterCircularLo
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.HorizontalContentHeader
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.HorizontalContentHeaderDefaults
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.ScrollableHorizontalContent
-import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.ContentDetailsScreenToolbar
+import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.ContentDetailsHeader
 import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.ContentDetailsSynopsis
 import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.ContentDetailsThreeColumnSection
 import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.ContentDetailsTrailerPlayer
@@ -79,9 +80,6 @@ import com.machina.jikan_client_compose.ui.theme.MyShape
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
 import kotlinx.coroutines.launch
-import me.onebone.toolbar.CollapsingToolbarScaffold
-import me.onebone.toolbar.ScrollStrategy
-import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
 
 @Deprecated(message = "Use ContentDetailsScreen instead")
 @OptIn(ExperimentalPagerApi::class)
@@ -107,7 +105,6 @@ fun ContentDetailsScreenDeprecated(
 	val pagerState = rememberPagerState()
 
 	val extraContentPadding = 24.dp - 140.dp
-	val toolbarScaffoldState = rememberCollapsingToolbarScaffoldState()
 	var isSynopsisExpanded by remember { mutableStateOf(false) }
 	val contentDetailsState by viewModel.contentDetailsState
 	val animeCharactersState by viewModel.animeCharactersState
@@ -233,23 +230,20 @@ fun ContentDetailsScreenDeprecated(
 		return
 	}
 
-	CollapsingToolbarScaffold(
+	Scaffold(
 		modifier = Modifier
 			.fillMaxSize()
 			.background(MyColor.DarkBlueBackground),
-		state = toolbarScaffoldState,
-		scrollStrategy = ScrollStrategy.ExitUntilCollapsed,
-		toolbar = {
-			ContentDetailsScreenToolbar(
+		topBar = {
+			ContentDetailsHeader(
 				contentDetailsState = contentDetailsState,
-				toolbarScaffoldState = toolbarScaffoldState,
-				onArrowClick = navigator::navigateUp
 			)
 		}
 	) {
 		LazyColumn(
 			modifier = Modifier
-				.fillMaxWidth(),
+				.fillMaxWidth()
+				.padding(it),
 			contentPadding = PaddingValues(bottom = 32.dp),
 			horizontalAlignment = Alignment.Start,
 		) {

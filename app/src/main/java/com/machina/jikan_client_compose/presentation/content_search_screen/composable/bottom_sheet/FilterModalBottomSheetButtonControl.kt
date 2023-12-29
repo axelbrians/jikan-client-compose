@@ -16,12 +16,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.machina.jikan_client_compose.ui.theme.JikanTypography
+import com.machina.jikan_client_compose.ui.theme.JikanTypography.darkBlue
+import com.machina.jikan_client_compose.ui.theme.JikanTypography.semiBold
+import com.machina.jikan_client_compose.ui.theme.JikanTypography.yellow500
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.machina.jikan_client_compose.ui.theme.MyShape
-import com.machina.jikan_client_compose.ui.theme.Type
-import com.machina.jikan_client_compose.ui.theme.Type.darkBlue
-import com.machina.jikan_client_compose.ui.theme.Type.semiBold
-import com.machina.jikan_client_compose.ui.theme.Type.yellow500
 
 @Composable
 fun FilterModalBottomSheetButtonControl(
@@ -44,7 +44,7 @@ fun FilterModalBottomSheetButtonControl(
 		) {
 			Text(
 				text = "Reset",
-				style = Type.Typography.bodyLarge.semiBold().yellow500(),
+				style = JikanTypography.JikanTextStyle.bodyLarge.semiBold().yellow500(),
 				modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
 			)
 		}
@@ -61,7 +61,7 @@ fun FilterModalBottomSheetButtonControl(
 		) {
 			Text(
 				text = "Apply",
-				style = Type.Typography.bodyLarge.semiBold().darkBlue(),
+				style = JikanTypography.JikanTextStyle.bodyLarge.semiBold().darkBlue(),
 				modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
 			)
 		}

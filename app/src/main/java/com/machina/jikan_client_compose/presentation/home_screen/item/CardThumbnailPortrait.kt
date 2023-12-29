@@ -30,9 +30,9 @@ import com.machina.jikan_client_compose.domain.model.anime.AnimePortraitDataMode
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularLoading
 import com.machina.jikan_client_compose.presentation.home_screen.preview.ItemVerticalAnimePreviewParam
 import com.machina.jikan_client_compose.presentation.home_screen.preview.ItemVerticalAnimeProvider
+import com.machina.jikan_client_compose.ui.theme.JikanTypography
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.machina.jikan_client_compose.ui.theme.MyShape
-import com.machina.jikan_client_compose.ui.theme.Type
 
 object CardThumbnailPortraitDefault {
 	object Width {
@@ -120,7 +120,7 @@ fun CardThumbnailPortrait(
 				.padding(top = 6.dp, bottom = 4.dp),
 			maxLines = 2,
 			overflow = TextOverflow.Ellipsis,
-			style = Type.Typography.bodyMedium,
+			style = JikanTypography.JikanTextStyle.bodyMedium,
 			textAlign = textAlign,
 //      onTextLayout = {
 //        titleLineCount = it.lineCount
@@ -190,7 +190,7 @@ fun CardThumbnailPortrait(
 				.padding(top = 6.dp, bottom = 4.dp),
 			maxLines = 2,
 			overflow = TextOverflow.Ellipsis,
-			style = Type.Typography.bodyMedium,
+			style = JikanTypography.JikanTextStyle.bodyMedium,
 			textAlign = textAlign,
 			color = Color.White
 //      onTextLayout = {

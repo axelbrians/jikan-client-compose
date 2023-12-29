@@ -22,10 +22,10 @@ import androidx.compose.ui.unit.dp
 import com.machina.jikan_client_compose.R
 import com.machina.jikan_client_compose.core.constant.Constant
 import com.machina.jikan_client_compose.presentation.composable.TextFieldScaffold
+import com.machina.jikan_client_compose.ui.theme.JikanTypography
+import com.machina.jikan_client_compose.ui.theme.JikanTypography.grey
+import com.machina.jikan_client_compose.ui.theme.JikanTypography.onDarkSurface
 import com.machina.jikan_client_compose.ui.theme.MyColor
-import com.machina.jikan_client_compose.ui.theme.Type
-import com.machina.jikan_client_compose.ui.theme.Type.grey
-import com.machina.jikan_client_compose.ui.theme.Type.onDarkSurface
 
 @Composable
 fun SearchFieldComponent(
@@ -62,7 +62,7 @@ fun SearchFieldComponent(
 					.fillMaxWidth()
 					.focusRequester(focusRequester),
 				value = value,
-				textStyle = Type.Typography.titleMedium.onDarkSurface(),
+				textStyle = JikanTypography.JikanTextStyle.titleMedium.onDarkSurface(),
 				singleLine = true,
 				cursorBrush = SolidColor(MyColor.Yellow500),
 				onValueChange = { onValueChanged(it) },
@@ -72,7 +72,7 @@ fun SearchFieldComponent(
 		if (value.isEmpty()) {
 			Text(
 				text = placeholder,
-				style = Type.Typography.titleMedium.grey()
+				style = JikanTypography.JikanTextStyle.titleMedium.grey()
 			)
 		}
 	}

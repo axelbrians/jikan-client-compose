@@ -6,7 +6,7 @@ import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.animation.with
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -20,6 +20,8 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,10 +32,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.machina.jikan_client_compose.presentation.content_detail_screen.data.ContentDetailsState
 import com.machina.jikan_client_compose.ui.theme.JikanClientComposeTheme
+import com.machina.jikan_client_compose.ui.theme.JikanTypography
+import com.machina.jikan_client_compose.ui.theme.JikanTypography.alignJustify
+import com.machina.jikan_client_compose.ui.theme.JikanTypography.onDarkSurface
 import com.machina.jikan_client_compose.ui.theme.MyColor
-import com.machina.jikan_client_compose.ui.theme.Type
-import com.machina.jikan_client_compose.ui.theme.Type.alignJustify
-import com.machina.jikan_client_compose.ui.theme.Type.onDarkSurface
 
 @ExperimentalAnimationApi
 @Composable
@@ -42,11 +44,11 @@ fun ContentDetailsSynopsis(
 	isExpanded: Boolean,
 	onExpandChanged: (Boolean) -> Unit,
 ) {
-	val contentSynopsis = resolveContentDetailsSynopsis(state)
+	val contentSynopsis = rememberContentDetailsSynopsis(state)
 	AnimatedContent(
 		targetState = isExpanded,
 		transitionSpec = {
-			expandVertically(animationSpec = tween(150, 150), initialHeight = { it }) with
+			expandVertically(animationSpec = tween(150, 150), initialHeight = { it }) togetherWith
 			  shrinkVertically(animationSpec = tween(150, 0), targetHeight = { it }) using
 			  SizeTransform(clip = true)
 		},
@@ -64,8 +66,8 @@ fun ContentDetailsSynopsis(
 		) {
 			if (targetExpanded) {
 				Text(
-					text = contentSynopsis,
-					style = Type.Typography.bodyLarge.onDarkSurface().alignJustify(),
+					text = contentSynopsis.value,
+					style = JikanTypography.JikanTextStyle.bodyMedium.onDarkSurface().alignJustify(),
 					modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 24.dp)
 				)
 				Icon(
@@ -76,10 +78,10 @@ fun ContentDetailsSynopsis(
 				)
 			} else {
 				Text(
-					text = contentSynopsis,
+					text = contentSynopsis.value,
 					maxLines = 5,
 					overflow = TextOverflow.Ellipsis,
-					style = Type.Typography.bodyLarge.onDarkSurface().alignJustify(),
+					style = JikanTypography.JikanTextStyle.bodyMedium.onDarkSurface().alignJustify(),
 					modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 4.dp)
 				)
 				Box(
@@ -111,36 +113,43 @@ fun ContentDetailsSynopsis(
 	}
 }
 
-private fun resolveContentDetailsSynopsis(state: ContentDetailsState?): String {
-	var synopsis = state?.data?.synopsis.orEmpty()
-	with(state?.data) {
-		if (this == null) {
-			return@with
+@Composable
+private fun rememberContentDetailsSynopsis(state: ContentDetailsState?): State<String> {
+	val synopsisState = remember(state?.data?.synopsis) {
+		var synopsis = state?.data?.synopsis.orEmpty()
+
+		with(state?.data) {
+			if (this == null) {
+				return@with
+			}
+
+			if (titleJapanese.isNotBlank()) {
+				synopsis += "\n\nAlternate title: $titleJapanese"
+			}
+			if (titleEnglish.isNotBlank()) {
+				synopsis += ", $titleEnglish"
+			}
+
+			titleSynonyms.forEach { title ->
+				synopsis += ", $title"
+			}
 		}
 
-		if (titleJapanese.isNotBlank()) {
-			synopsis += "\n\nAlternate title: $titleJapanese"
-		}
-		if (titleEnglish.isNotBlank()) {
-			synopsis += ", $titleEnglish"
-		}
-
-		titleSynonyms.forEach { title ->
-			synopsis += ", $title"
-		}
+		mutableStateOf(synopsis)
 	}
 
-	return synopsis
+	return synopsisState
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Preview
 @Composable
 private fun Preview_ContentDetailsScreenSynopsis() {
 	JikanClientComposeTheme {
-//    ContentDetailsSynopsis(
-//      state = ,
-//      isExpanded = true,
-//      onClick = { }
-//    )
+	    ContentDetailsSynopsis(
+	      state = ContentDetailsState(),
+	      isExpanded = true,
+	      onExpandChanged = { }
+	    )
 	}
 }

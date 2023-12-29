@@ -96,7 +96,6 @@ dependencies {
 
     // Shimmer
     implementation libs.valentinilk.shimmer
-    implementation libs.onebone.toolbar
 
 
     // Logging

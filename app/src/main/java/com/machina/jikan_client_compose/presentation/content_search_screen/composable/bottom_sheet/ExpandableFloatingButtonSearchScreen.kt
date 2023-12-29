@@ -1,7 +1,12 @@
 package com.machina.jikan_client_compose.presentation.content_search_screen.composable.bottom_sheet
 
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.with
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -21,11 +26,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import com.machina.jikan_client_compose.ui.theme.JikanTypography
+import com.machina.jikan_client_compose.ui.theme.JikanTypography.darkBlue
+import com.machina.jikan_client_compose.ui.theme.JikanTypography.medium
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.machina.jikan_client_compose.ui.theme.MyIcons
-import com.machina.jikan_client_compose.ui.theme.Type
-import com.machina.jikan_client_compose.ui.theme.Type.darkBlue
-import com.machina.jikan_client_compose.ui.theme.Type.medium
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -67,7 +72,7 @@ fun ExpandableFloatingButtonSearchScreen(
 				Text(
 					modifier = Modifier.padding(start = 8.dp),
 					text = "Filter",
-					style = Type.Typography.bodyLarge.medium().darkBlue()
+					style = JikanTypography.JikanTextStyle.bodyLarge.medium().darkBlue()
 				)
 			}
 		}

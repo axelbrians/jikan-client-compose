@@ -10,8 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.machina.jikan_client_compose.ui.theme.Type
-import com.machina.jikan_client_compose.ui.theme.Type.onDarkSurface
+import com.machina.jikan_client_compose.ui.theme.JikanTypography
+import com.machina.jikan_client_compose.ui.theme.JikanTypography.onDarkSurface
 
 @Composable
 fun FilterCheckable(
@@ -35,7 +35,7 @@ fun FilterCheckable(
 
 		Text(
 			text = text,
-			style = Type.Typography.bodyLarge.onDarkSurface()
+			style = JikanTypography.JikanTextStyle.bodyLarge.onDarkSurface()
 		)
 	}
 }

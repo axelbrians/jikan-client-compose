@@ -28,10 +28,10 @@ import androidx.compose.ui.unit.dp
 import com.machina.jikan_client_compose.presentation.content_search_screen.data.filter.FilterGroupData
 import com.machina.jikan_client_compose.presentation.content_search_screen.data.filter.FilterGroupType
 import com.machina.jikan_client_compose.presentation.content_search_screen.data.filter.FilterItemData
+import com.machina.jikan_client_compose.ui.theme.JikanTypography
+import com.machina.jikan_client_compose.ui.theme.JikanTypography.bold
+import com.machina.jikan_client_compose.ui.theme.JikanTypography.onDarkSurface
 import com.machina.jikan_client_compose.ui.theme.MyColor
-import com.machina.jikan_client_compose.ui.theme.Type
-import com.machina.jikan_client_compose.ui.theme.Type.bold
-import com.machina.jikan_client_compose.ui.theme.Type.onDarkSurface
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -64,7 +64,7 @@ fun FilterGroupHeader(
 			) {
 				Text(
 					text = filterGroupData.groupName,
-					style = Type.Typography.bodyLarge.onDarkSurface().bold(),
+					style = JikanTypography.JikanTextStyle.bodyLarge.onDarkSurface().bold(),
 					modifier = Modifier
 						.weight(1f)
 						.padding(vertical = 12.dp)

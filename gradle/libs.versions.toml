@@ -74,7 +74,6 @@ ktor-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = 
 ktor-logback = { group = "ch.qos.logback", name = "logback-classic", version.ref = "logback" }
 
 valentinilk-shimmer = { group = "com.valentinilk.shimmer", name = "compose-shimmer", version = "1.0.0" }
-onebone-toolbar = { group = "me.onebone", name = "toolbar-compose", version = "2.3.5" }
 
 
 chucker-core = { group = "com.github.chuckerteam.chucker", name = "library", version.ref = "chucker" }

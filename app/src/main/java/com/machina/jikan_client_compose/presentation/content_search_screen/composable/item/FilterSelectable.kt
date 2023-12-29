@@ -14,9 +14,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.machina.jikan_client_compose.ui.theme.JikanTypography
+import com.machina.jikan_client_compose.ui.theme.JikanTypography.onDarkSurface
 import com.machina.jikan_client_compose.ui.theme.MyColor
-import com.machina.jikan_client_compose.ui.theme.Type
-import com.machina.jikan_client_compose.ui.theme.Type.onDarkSurface
 
 @Composable
 fun FilterSelectable(
@@ -45,7 +45,7 @@ fun FilterSelectable(
 		Spacer(Modifier.size(12.dp))
 		Text(
 			text = text,
-			style = Type.Typography.bodyLarge.onDarkSurface()
+			style = JikanTypography.JikanTextStyle.bodyLarge.onDarkSurface()
 		)
 	}
 }

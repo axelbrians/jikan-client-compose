@@ -6,8 +6,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 
 // Set of Material typography styles to start with
-object Type {
-	val Typography = Typography(
+object JikanTypography {
+	val JikanTextStyle = Typography(
 
 		/* Other default text styles to override
 		button = TextStyle(

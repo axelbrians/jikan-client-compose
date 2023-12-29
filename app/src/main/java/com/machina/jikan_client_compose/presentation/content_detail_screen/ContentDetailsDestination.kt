@@ -1,9 +1,11 @@
 package com.machina.jikan_client_compose.presentation.content_detail_screen
 
+import android.view.Window
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -13,6 +15,16 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -23,8 +35,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import coil.annotation.ExperimentalCoilApi
@@ -32,15 +51,18 @@ import coil.compose.SubcomposeAsyncImage
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.insets.navigationBarsHeight
+import com.google.accompanist.systemuicontroller.SystemUiController
+import com.machina.jikan_client_compose.OnDestinationChanged
 import com.machina.jikan_client_compose.core.constant.Constant
 import com.machina.jikan_client_compose.core.constant.Endpoints
 import com.machina.jikan_client_compose.navigation.Destination
+import com.machina.jikan_client_compose.navigation.composable
 import com.machina.jikan_client_compose.navigation.destinationParam
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularLoading
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.HorizontalContentHeader
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.HorizontalContentHeaderDefaults
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.ScrollableHorizontalContent
-import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.ContentDetailsScreenToolbar
+import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.ContentDetailsHeader
 import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.ContentDetailsSynopsis
 import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.ContentDetailsThreeColumnSection
 import com.machina.jikan_client_compose.presentation.content_detail_screen.composable.GenreChip
@@ -52,18 +74,17 @@ import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.machina.jikan_client_compose.ui.theme.MyShape
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
-import me.onebone.toolbar.CollapsingToolbarScaffold
-import me.onebone.toolbar.ScrollStrategy
-import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
+import timber.log.Timber
 
 internal object ContentDetailsScreenSection {
-	const val ThreeColumn = "three_column_section"
-	const val ContentDescription = "content_description_composable"
-	const val ContentGenre = "content_genre_chips"
-	const val ContentTrailer = "content_trailer"
-	const val ContentCharacters = "content_characters"
-	const val ContentSimilar = "content_similar"
-	const val ContentPhotos = "content_photos"
+	const val Header = "header"
+	const val ThreeColumn = "threeColumn"
+	const val ContentDescription = "contentDescription"
+	const val ContentGenre = "contentGenreChips"
+	const val ContentTrailer = "contentTrailer"
+	const val ContentCharacters = "contentCharacters"
+	const val ContentSimilar = "contentSimilar"
+	const val ContentPhotos = "contentPhotos"
 }
 
 object ContentDetailsDestination: Destination(
@@ -101,11 +122,44 @@ object ContentDetailsDestination: Destination(
 			KEY_MAGIC_NUMBER to number
 		)
 	}
+}
 
+fun NavGraphBuilder.addContentDetailsScreen(
+	systemUiController: SystemUiController,
+	window: Window,
+	navController: NavController
+) {
+	composable(ContentDetailsDestination) { backStack ->
+		OnDestinationChanged(
+			systemUiController = systemUiController,
+			drawOverStatusBar = false,
+			window = window,
+		)
+
+		// todo: ab
+		// Pindahin parsing argument ke Custom Scope
+//			this.navArgs
+//			this.magicNumber
+		val navArgs = ContentDetailsArgs.requireGet(
+			bundle = backStack.arguments,
+			key = ContentDetailsDestination.KEY_CONTENT_DETAIL_ARGS
+		)
+		val magicNumber = backStack.arguments?.getInt(ContentDetailsDestination.KEY_MAGIC_NUMBER)
+
+		Timber.tag("puyo").d("args: $navArgs")
+		Timber.tag("puyo").d("number: $magicNumber")
+
+		ContentDetailsScreen(
+			navigator = ContentDetailsScreenNavigator(navController),
+			viewModel = hiltViewModel(),
+			navArgs = navArgs,
+			modifier = Modifier.fillMaxSize()
+		)
+	}
 }
 
 @Composable
-@OptIn(ExperimentalAnimationApi::class, ExperimentalCoilApi::class)
+@OptIn(ExperimentalAnimationApi::class, ExperimentalCoilApi::class, ExperimentalMaterial3Api::class)
 fun ContentDetailsScreen(
 	navigator: ContentDetailsScreenNavigator,
 	viewModel: ContentDetailsViewModel,
@@ -114,13 +168,11 @@ fun ContentDetailsScreen(
 ) {
 	val galleryListState = rememberLazyListState()
 
-	val toolbarScaffoldState = rememberCollapsingToolbarScaffoldState()
 	var isSynopsisExpanded by remember { mutableStateOf(false) }
 	val contentDetailsState by viewModel.contentDetailsState
 	val animeCharactersState by viewModel.animeCharactersState
 	val animeRecommendationsState by viewModel.animeRecommendationsState
 	val animePhotos by viewModel.animePicturesState
-
 
 	LaunchedEffect(navArgs.malId) {
 		viewModel.getContentDetails(navArgs.contentType.name, navArgs.malId)
@@ -138,24 +190,48 @@ fun ContentDetailsScreen(
 		return
 	}
 
-	CollapsingToolbarScaffold(
+	Scaffold(
 		modifier = modifier,
-		state = toolbarScaffoldState,
-		scrollStrategy = ScrollStrategy.ExitUntilCollapsed,
-		toolbar = {
-			ContentDetailsScreenToolbar(
-				contentDetailsState = contentDetailsState,
-				toolbarScaffoldState = toolbarScaffoldState,
-				onArrowClick = navigator::navigateUp
+		topBar = {
+			TopAppBar(
+				title = {
+					Text(
+						text = contentDetailsState.data?.title ?: "-",
+						overflow = TextOverflow.Ellipsis,
+						maxLines = 1,
+						style = TextStyle(
+							fontWeight = FontWeight.Bold,
+							fontSize = 20.sp
+						)
+					)
+				},
+				navigationIcon = {
+					IconButton(onClick = navigator::navigateUp) {
+						Icon(
+							imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+							contentDescription = "back icon"
+						)
+					}
+				},
+				colors = TopAppBarDefaults.topAppBarColors(
+					containerColor = MaterialTheme.colorScheme.surface,
+					navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
+					titleContentColor = MaterialTheme.colorScheme.onSurface
+				)
 			)
 		}
 	) {
 		LazyColumn(
 			modifier = Modifier
-				.fillMaxWidth(),
+				.fillMaxWidth()
+				.padding(it),
 			contentPadding = PaddingValues(bottom = 32.dp),
 			horizontalAlignment = Alignment.Start,
 		) {
+			item(key = ContentDetailsScreenSection.Header) {
+				ContentDetailsHeader(contentDetailsState = contentDetailsState)
+			}
+
 			// Three Column Section
 			item(key = ContentDetailsScreenSection.ThreeColumn) {
 				ContentDetailsThreeColumnSection(
@@ -170,7 +246,7 @@ fun ContentDetailsScreen(
 				ContentDetailsSynopsis(
 					state = contentDetailsState,
 					isExpanded = isSynopsisExpanded,
-					onExpandChanged = { isSynopsisExpanded = it }
+					onExpandChanged = { isExpanded -> isSynopsisExpanded = isExpanded }
 				)
 			}
 
@@ -304,5 +380,4 @@ fun ContentDetailsScreen(
 			}
 		}
 	}
-
 }

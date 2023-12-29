@@ -7,6 +7,10 @@ import android.view.View
 import android.view.animation.AnticipateInterpolator
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.Modifier
 import androidx.core.animation.doOnEnd
 import com.machina.jikan_client_compose.core.DispatchersProvider
 import com.machina.jikan_client_compose.ui.theme.JikanClientComposeTheme
@@ -24,7 +28,11 @@ class MainActivity : ComponentActivity() {
 
 		setContent {
 			JikanClientComposeTheme {
-				AppScreen(window = window)
+				AppScreen(
+					window = window,
+					modifier = Modifier
+						.background(MaterialTheme.colorScheme.background)
+				)
 			}
 		}
 

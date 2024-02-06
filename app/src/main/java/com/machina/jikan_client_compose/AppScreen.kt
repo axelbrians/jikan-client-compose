@@ -1,6 +1,8 @@
 package com.machina.jikan_client_compose
 
 import android.view.Window
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
@@ -46,7 +48,21 @@ fun AppScreen(
 			navController = navController
 		)
 
-		composable(ContentViewAllListDestination) { backStack ->
+		composable(
+			destination = ContentViewAllListDestination,
+			enterTransition = {
+				this.slideIntoContainer(
+					towards = AnimatedContentTransitionScope.SlideDirection.Start,
+					animationSpec = tween(durationMillis = 500)
+				)
+			},
+			exitTransition = {
+				this.slideOutOfContainer(
+					towards = AnimatedContentTransitionScope.SlideDirection.End,
+					animationSpec = tween(durationMillis = 500)
+				)
+			}
+		) { backStack ->
 			val navArgs = ContentViewAllListNavArgs.requireGet(
 				bundle = backStack.arguments,
 				key = ContentViewAllListDestination.KEY_NAV_ARGS

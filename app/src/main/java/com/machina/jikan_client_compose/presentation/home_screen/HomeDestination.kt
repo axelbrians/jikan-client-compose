@@ -19,8 +19,11 @@ import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.machina.jikan_client_compose.OnDestinationChanged
 import com.machina.jikan_client_compose.navigation.Destination
+import com.machina.jikan_client_compose.navigation.ScaleTransitionDirection
 import com.machina.jikan_client_compose.navigation.composable
 import com.machina.jikan_client_compose.navigation.destinationParam
+import com.machina.jikan_client_compose.navigation.scaleIntoContainer
+import com.machina.jikan_client_compose.navigation.scaleOutOfContainer
 import com.machina.jikan_client_compose.presentation.composable.MyDivider
 import com.machina.jikan_client_compose.presentation.content_search_screen.composable.SearchFieldComponent
 import com.machina.jikan_client_compose.presentation.home_screen.viewmodel.HomeViewModel
@@ -34,13 +37,30 @@ object HomeDestination: Destination(
 	}
 )
 
-@OptIn(InternalCoroutinesApi::class, ExperimentalCoilApi::class)
+@OptIn(
+	InternalCoroutinesApi::class,
+	ExperimentalCoilApi::class
+)
 fun NavGraphBuilder.addHomeScreen(
 	systemUiController: SystemUiController,
 	window: Window,
 	navController: NavController
 ) {
-	composable(HomeDestination) {
+	composable(
+		destination = HomeDestination,
+		enterTransition = {
+			scaleIntoContainer(ScaleTransitionDirection.Inwards)
+		},
+		exitTransition = {
+			scaleOutOfContainer(ScaleTransitionDirection.Outwards)
+		},
+		popEnterTransition = {
+			scaleIntoContainer(ScaleTransitionDirection.Outwards)
+		},
+		popExitTransition = {
+			scaleOutOfContainer(ScaleTransitionDirection.Inwards)
+		}
+	) {
 		val viewModel: HomeViewModel = hiltViewModel()
 
 		LaunchedEffect(viewModel.hashCode()) {

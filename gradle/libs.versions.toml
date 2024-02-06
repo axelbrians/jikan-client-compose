@@ -21,9 +21,9 @@ hyperion = "0.9.34"
 
 accompanist = "0.23.1"
 compose-activity = "1.5.1"
-compose-bom = "2023.05.01"
+compose-bom = "2023.08.00"
 compose-compiler-ext = "1.4.8"
-compose-navigation = "2.6.0"
+compose-navigation = "2.7.0"
 
 
 [libraries]

@@ -21,12 +21,6 @@ class AnimeUseCaseModule {
 
 	@Provides
 	@ViewModelScoped
-	fun provideGetAnimeAiringPopularUseCase(service: AnimeService): GetAnimeAiringPopularUseCase {
-		return GetAnimeAiringPopularUseCaseImpl(service)
-	}
-
-	@Provides
-	@ViewModelScoped
 	fun provideGetAnimeScheduleUseCase(
 		service: AnimeService,
 		dispatchers: DispatchersProvider

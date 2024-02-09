@@ -76,6 +76,11 @@ dependencies {
     implementation libs.bundles.compose.ui
     debugImplementation libs.compose.ui.tooling
 
+    // For AppWidgets support
+    implementation "androidx.glance:glance-appwidget:1.0.0"
+
+    // Work Manager
+    implementation "androidx.work:work-runtime-ktx:2.9.0"
 
     // Accompanist
     implementation libs.accompanist.flowlayout

@@ -24,6 +24,38 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver
+            android:label="Counter"
+            android:name=".glance.counter.CounterAppWidgetReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/counter_app_widget_info" />
+        </receiver>
+
+        <receiver
+            android:label="Image Viewer"
+            android:name=".glance.JikanAppWidgetReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/jikan_today_airing_app_widget_info" />
+        </receiver>
+
+        <provider
+            android:name=".glance.JikanImageFileProvider"
+            android:authorities="com.machina.jikan_client_compose.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true" />
     </application>
 
 </manifest>

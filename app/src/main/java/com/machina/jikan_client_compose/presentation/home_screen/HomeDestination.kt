@@ -18,10 +18,9 @@ import androidx.navigation.NavGraphBuilder
 import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.machina.jikan_client_compose.OnDestinationChanged
-import com.machina.jikan_client_compose.navigation.Destination
 import com.machina.jikan_client_compose.navigation.ScaleTransitionDirection
 import com.machina.jikan_client_compose.navigation.composable
-import com.machina.jikan_client_compose.navigation.destinationParam
+import com.machina.jikan_client_compose.navigation.destination
 import com.machina.jikan_client_compose.navigation.scaleIntoContainer
 import com.machina.jikan_client_compose.navigation.scaleOutOfContainer
 import com.machina.jikan_client_compose.presentation.composable.MyDivider
@@ -31,11 +30,11 @@ import com.machina.jikan_client_compose.ui.theme.MyColor
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 
-object HomeDestination: Destination(
-	destinationParam = destinationParam {
+object HomeDestination {
+	val destination = destination {
 		route = "home"
 	}
-)
+}
 
 @OptIn(
 	InternalCoroutinesApi::class,
@@ -47,7 +46,7 @@ fun NavGraphBuilder.addHomeScreen(
 	navController: NavController
 ) {
 	composable(
-		destination = HomeDestination,
+		destination = HomeDestination.destination,
 		enterTransition = {
 			scaleIntoContainer(ScaleTransitionDirection.Inwards)
 		},
@@ -115,7 +114,9 @@ fun HomeScreen(
 			navigator = navigator,
 			homeSections = homeSections,
 			getHomeSections = getHomeSections,
-			modifier = Modifier.fillMaxSize().padding(it)
+			modifier = Modifier
+				.fillMaxSize()
+				.padding(it)
 		)
 //		val snackbarHostState = remember { SnackbarHostState() }
 

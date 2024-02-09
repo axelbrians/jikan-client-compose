@@ -55,9 +55,8 @@ import com.google.accompanist.systemuicontroller.SystemUiController
 import com.machina.jikan_client_compose.OnDestinationChanged
 import com.machina.jikan_client_compose.core.constant.Constant
 import com.machina.jikan_client_compose.core.constant.Endpoints
-import com.machina.jikan_client_compose.navigation.Destination
 import com.machina.jikan_client_compose.navigation.composable
-import com.machina.jikan_client_compose.navigation.destinationParam
+import com.machina.jikan_client_compose.navigation.destination
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularLoading
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.HorizontalContentHeader
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.HorizontalContentHeaderDefaults
@@ -87,8 +86,11 @@ internal object ContentDetailsScreenSection {
 	const val ContentPhotos = "contentPhotos"
 }
 
-object ContentDetailsDestination: Destination(
-	destinationParam = destinationParam {
+object ContentDetailsDestination {
+	const val KEY_CONTENT_DETAIL_ARGS = "contentDetailArgs"
+	const val KEY_MAGIC_NUMBER = "magicNumber"
+
+	val destination = destination {
 		// todo: ab
 		// DSL karena route wajib ada, harus jadi required
 		// Define route nya kalo bisa ngikutin KTOR, pake path based. bisa apped static path atau
@@ -112,12 +114,9 @@ object ContentDetailsDestination: Destination(
 //			}
 //		)
 	}
-) {
-	const val KEY_CONTENT_DETAIL_ARGS = "contentDetailArgs"
-	const val KEY_MAGIC_NUMBER = "magicNumber"
 
 	fun constructRoute(args: ContentDetailsArgs, number: Int = 0): String {
-		return super.createDestinationRoute(
+		return destination.createDestinationRoute(
 			KEY_CONTENT_DETAIL_ARGS to args,
 			KEY_MAGIC_NUMBER to number
 		)
@@ -129,7 +128,7 @@ fun NavGraphBuilder.addContentDetailsScreen(
 	window: Window,
 	navController: NavController
 ) {
-	composable(ContentDetailsDestination) { backStack ->
+	composable(ContentDetailsDestination.destination) { backStack ->
 		OnDestinationChanged(
 			systemUiController = systemUiController,
 			drawOverStatusBar = false,

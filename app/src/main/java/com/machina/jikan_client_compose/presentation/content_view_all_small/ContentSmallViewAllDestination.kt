@@ -20,8 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.navigation.navArgument
 import com.machina.jikan_client_compose.core.extensions.scrollDirection
-import com.machina.jikan_client_compose.navigation.Destination
-import com.machina.jikan_client_compose.navigation.destinationParam
+import com.machina.jikan_client_compose.navigation.destination
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.ScrollableVerticalGridContent
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.VerticalGridModifier
 import com.machina.jikan_client_compose.presentation.content_view_all_normal.ContentViewAllListNavArgs
@@ -35,20 +34,20 @@ import com.machina.jikan_client_compose.ui.shimmer.rememberShimmerCustomBounds
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.machina.jikan_client_compose.ui.theme.MyIcons
 
-object ContentSmallViewAllDestination : Destination(
-	destinationParam = destinationParam {
+object ContentSmallViewAllDestination {
+	const val KEY_NAV_ARGS = "contentViewAllListScreenNavArgs"
+
+	val destination = destination {
 		route = "home/content/view_all/small"
 		requiredNav(
-			navArgument(ContentSmallViewAllDestination.KEY_NAV_ARGS) {
+			navArgument(KEY_NAV_ARGS) {
 				type = ContentViewAllListNavArgs
 			}
 		)
 	}
-) {
-	const val KEY_NAV_ARGS = "contentViewAllListScreenNavArgs"
 
 	fun constructRoute(navArgs: ContentViewAllListNavArgs): String {
-		return super.createDestinationRoute(KEY_NAV_ARGS to navArgs)
+		return destination.createDestinationRoute(KEY_NAV_ARGS to navArgs)
 	}
 }
 

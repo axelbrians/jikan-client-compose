@@ -34,6 +34,20 @@ object ContentViewAllListDestination {
 	}
 }
 
+@Serializable
+data class ContentViewAllListNavArgs(
+	val title: String,
+	val url: String,
+	val params: Map<String, String> = mapOf()
+) {
+
+	override fun toString(): String {
+		return serializeAsValue(this)
+	}
+
+	companion object : SerializableNavType<ContentViewAllListNavArgs>(serializer())
+}
+
 fun NavGraphBuilder.addContentViewAllDestination(
 	systemUiController: SystemUiController,
 	window: Window,
@@ -59,46 +73,17 @@ fun NavGraphBuilder.addContentViewAllDestination(
 			key = ContentViewAllListDestination.KEY_NAV_ARGS
 		)
 
-		ContentViewAllListNav(
+		OnDestinationChanged(
 			systemUiController = systemUiController,
-			window = window,
-			navController = navController,
+			color = MyColor.DarkGreyBackground,
+			drawOverStatusBar = false,
+			window = window
+		)
+
+		ContentViewAllListScreen(
+			navigator = ContentViewAllScreenNavigator(navController),
+			viewModel = hiltViewModel(),
 			navArgs = navArgs
 		)
 	}
-}
-
-@Composable
-fun ContentViewAllListNav(
-	systemUiController: SystemUiController,
-	window: Window,
-	navController: NavController,
-	navArgs: ContentViewAllListNavArgs
-) {
-	OnDestinationChanged(
-		systemUiController = systemUiController,
-		color = MyColor.DarkGreyBackground,
-		drawOverStatusBar = false,
-		window = window
-	)
-
-	ContentViewAllListScreen(
-		navigator = ContentViewAllScreenNavigator(navController),
-		viewModel = hiltViewModel(),
-		navArgs = navArgs
-	)
-}
-
-@Serializable
-data class ContentViewAllListNavArgs(
-	val title: String,
-	val url: String,
-	val params: Map<String, String> = mapOf()
-) {
-
-	override fun toString(): String {
-		return serializeAsValue(this)
-	}
-
-	companion object : SerializableNavType<ContentViewAllListNavArgs>(serializer())
 }

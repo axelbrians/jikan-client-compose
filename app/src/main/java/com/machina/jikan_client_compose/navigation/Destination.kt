@@ -3,12 +3,6 @@ package com.machina.jikan_client_compose.navigation
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavDeepLink
 
-fun destination(scope: DestinationBuilder.() -> Unit): Destination {
-	return DestinationBuilder()
-		.apply(scope)
-		.build()
-}
-
 open class Destination(
 	private val baseRoute: String,
 	val required: List<NamedNavArgument>,
@@ -93,4 +87,10 @@ class DestinationBuilder {
 	fun optionalNav(navArgument: NamedNavArgument) {
 		optional.add(navArgument)
 	}
+}
+
+fun destination(scope: DestinationBuilder.() -> Unit): Destination {
+	return DestinationBuilder()
+		.apply(scope)
+		.build()
 }

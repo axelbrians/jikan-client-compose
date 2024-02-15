@@ -2,15 +2,18 @@ package com.machina.jikan_client_compose.ui.navigation
 
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import com.machina.jikan_client_compose.navigation.destinationParam
+import com.machina.jikan_client_compose.core.extensions.defaultUrl
+import com.machina.jikan_client_compose.navigation.strongDestination
 import com.machina.jikan_client_compose.presentation.content_detail_screen.ContentDetailsArgs
+import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.parameter
 import org.junit.Test
 
 class MainNavigationRouteKtTest {
 
 	@Test
 	fun test() {
-		val destinationBuilder = destinationParam {
+		val destination = strongDestination {
 			route = "home"
 			requiredNav(
 				navArgument("navArgs") {
@@ -35,11 +38,19 @@ class MainNavigationRouteKtTest {
 			)
 		}
 
-		println(destinationBuilder.graphRoute)
+		println(destination.route)
 	}
 
 	@Test
-	fun `given route object with destination should have proper route`() {
+	fun foo() {
+		val request = HttpRequestBuilder().apply {
+			defaultUrl {
+				path("page")
+				parameter("key", 10)
+				path("super", "nice")
+			}
+		}
 
+		println(request.build().url)
 	}
 }

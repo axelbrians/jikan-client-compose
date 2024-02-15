@@ -1,12 +1,10 @@
 package com.machina.jikan_client_compose.presentation.content_detail_screen
 
-import android.os.Bundle
 import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import androidx.navigation.navOptions
 import com.machina.jikan_client_compose.core.enums.ContentType
-import com.machina.jikan_client_compose.navigation.ArgumentParser
 import com.machina.jikan_client_compose.navigation.SerializableNavType
 import com.machina.jikan_client_compose.navigation.destination
 import com.machina.jikan_client_compose.presentation.content_view_all_normal.ContentViewAllListDestination
@@ -26,10 +24,10 @@ object ContentDetailsDestination {
 		// dynamic (dynamic ini bakal di replace sama argument) static adalah route aslinya.
 		// route = "home/content/{}/details"
 		route = "home/content/details"
+//		argumentParser = ContentDetailArgumentParser()
 		requiredNav(
 			navArgument(KEY_CONTENT_DETAIL_ARGS) {
 				type = ContentDetailsArgs
-
 			}
 		)
 		requiredNav(
@@ -62,18 +60,6 @@ data class ContentDetailsArgs(
 	}
 
 	companion object : SerializableNavType<ContentDetailsArgs>(serializer())
-}
-
-class ContentDetailArgumentParser: ArgumentParser<ContentDetailsArgs> {
-	override fun parse(bundle: Bundle?): ContentDetailsArgs {
-		val navArgs = ContentDetailsArgs.requireGet(
-			bundle = bundle,
-			key = ContentDetailsDestination.KEY_CONTENT_DETAIL_ARGS
-		)
-		val magicNumber = bundle?.getInt(ContentDetailsDestination.KEY_MAGIC_NUMBER)
-
-		return navArgs
-	}
 }
 
 class ContentDetailsScreenNavigator(

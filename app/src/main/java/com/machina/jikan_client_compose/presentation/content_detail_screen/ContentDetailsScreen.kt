@@ -53,6 +53,7 @@ import com.google.accompanist.systemuicontroller.SystemUiController
 import com.machina.jikan_client_compose.OnDestinationChanged
 import com.machina.jikan_client_compose.core.constant.Constant
 import com.machina.jikan_client_compose.core.constant.Endpoints
+import com.machina.jikan_client_compose.navigation.composable
 import com.machina.jikan_client_compose.navigation.strongScopedComposable
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularLoading
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.HorizontalContentHeader
@@ -88,20 +89,12 @@ fun NavGraphBuilder.addContentDetailsScreen(
 	window: Window,
 	navController: NavController
 ) {
-	strongScopedComposable(
-		destination = ContentDetailsDestination.destination,
-		argumentParser = ContentDetailArgumentParser()
-	) { backStack, argument ->
+	composable(ContentDetailsDestination.destination) { backStack ->
 		OnDestinationChanged(
 			systemUiController = systemUiController,
 			drawOverStatusBar = false,
 			window = window,
 		)
-
-		// todo: ab
-		// Pindahin parsing argument ke Custom Scope
-//			this.navArgs
-//			this.magicNumber
 		val navArgs = ContentDetailsArgs.requireGet(
 			bundle = backStack.arguments,
 			key = ContentDetailsDestination.KEY_CONTENT_DETAIL_ARGS
@@ -114,7 +107,7 @@ fun NavGraphBuilder.addContentDetailsScreen(
 		ContentDetailsScreen(
 			navigator = ContentDetailsScreenNavigator(navController),
 			viewModel = hiltViewModel(),
-			navArgs = argument,
+			navArgs = navArgs,
 			modifier = Modifier.fillMaxSize()
 		)
 	}

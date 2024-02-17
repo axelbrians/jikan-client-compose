@@ -92,6 +92,9 @@ hyperion-recorder = { group = "com.willowtreeapps.hyperion", name = "hyperion-re
 hyperion-shared-preferences = { group = "com.willowtreeapps.hyperion", name = "hyperion-shared-preferences", version.ref = "hyperion" }
 hyperion-timber = { group = "com.willowtreeapps.hyperion", name = "hyperion-timber", version.ref = "hyperion" }
 
+# region ------ 3rd party library (external library) ------
+axelbrians-companionkit = { module = "com.github.axelbrians:CompanionKit", version = "0.0.2" }
+
 
 # region -----test-----
 test-androidx-core = { group = "androidx.test", name = "core", version = "1.4.0" }

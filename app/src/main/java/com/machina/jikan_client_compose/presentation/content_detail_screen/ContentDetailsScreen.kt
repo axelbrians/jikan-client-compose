@@ -54,7 +54,6 @@ import com.machina.jikan_client_compose.OnDestinationChanged
 import com.machina.jikan_client_compose.core.constant.Constant
 import com.machina.jikan_client_compose.core.constant.Endpoints
 import com.machina.jikan_client_compose.navigation.composable
-import com.machina.jikan_client_compose.navigation.strongScopedComposable
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularLoading
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.HorizontalContentHeader
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.HorizontalContentHeaderDefaults
@@ -71,7 +70,6 @@ import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.machina.jikan_client_compose.ui.theme.MyShape
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
-import timber.log.Timber
 
 internal object ContentDetailsScreenSection {
 	const val Header = "header"
@@ -89,25 +87,17 @@ fun NavGraphBuilder.addContentDetailsScreen(
 	window: Window,
 	navController: NavController
 ) {
-	composable(ContentDetailsDestination.destination) { backStack ->
+	composable(ContentDetailsNavigation) { _, argument ->
 		OnDestinationChanged(
 			systemUiController = systemUiController,
 			drawOverStatusBar = false,
 			window = window,
 		)
-		val navArgs = ContentDetailsArgs.requireGet(
-			bundle = backStack.arguments,
-			key = ContentDetailsDestination.KEY_CONTENT_DETAIL_ARGS
-		)
-		val magicNumber = backStack.arguments?.getInt(ContentDetailsDestination.KEY_MAGIC_NUMBER)
-
-		Timber.tag("puyo").d("args: $navArgs")
-		Timber.tag("puyo").d("number: $magicNumber")
 
 		ContentDetailsScreen(
 			navigator = ContentDetailsScreenNavigator(navController),
 			viewModel = hiltViewModel(),
-			navArgs = navArgs,
+			navArgs = argument,
 			modifier = Modifier.fillMaxSize()
 		)
 	}
@@ -118,7 +108,7 @@ fun NavGraphBuilder.addContentDetailsScreen(
 fun ContentDetailsScreen(
 	navigator: ContentDetailsScreenNavigator,
 	viewModel: ContentDetailsViewModel,
-	navArgs: ContentDetailsArgs,
+	navArgs: ContentDetailsNavigation.ContentDetailsArgs,
 	modifier: Modifier = Modifier
 ) {
 	val galleryListState = rememberLazyListState()

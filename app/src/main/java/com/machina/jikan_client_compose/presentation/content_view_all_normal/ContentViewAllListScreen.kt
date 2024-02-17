@@ -1,6 +1,9 @@
 package com.machina.jikan_client_compose.presentation.content_view_all_normal
 
+import android.view.Window
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,8 +15,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import com.google.accompanist.systemuicontroller.SystemUiController
+import com.machina.jikan_client_compose.OnDestinationChanged
 import com.machina.jikan_client_compose.core.extensions.isScrolledToTheEnd
 import com.machina.jikan_client_compose.core.extensions.scrollDirection
+import com.machina.jikan_client_compose.navigation.composable
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.ScrollableVerticalGridContent
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.VerticalGridModifier
 import com.machina.jikan_client_compose.presentation.content_view_all_normal.composable.ContentViewAllListScreenToolbar
@@ -23,11 +32,46 @@ import com.machina.jikan_client_compose.ui.animation_spec.TweenSpec
 import com.machina.jikan_client_compose.ui.shimmer.rememberShimmerCustomBounds
 import com.machina.jikan_client_compose.ui.theme.MyColor
 
+fun NavGraphBuilder.addContentViewAllListScreen(
+	systemUiController: SystemUiController,
+	window: Window,
+	navController: NavController
+) {
+	composable(
+		navigation = ContentViewAllListDestination,
+		enterTransition = {
+			this.slideIntoContainer(
+				towards = AnimatedContentTransitionScope.SlideDirection.Start,
+				animationSpec = tween(durationMillis = 500)
+			)
+		},
+		exitTransition = {
+			this.slideOutOfContainer(
+				towards = AnimatedContentTransitionScope.SlideDirection.End,
+				animationSpec = tween(durationMillis = 500)
+			)
+		}
+	) { _, navArgs ->
+		OnDestinationChanged(
+			systemUiController = systemUiController,
+			color = MyColor.DarkGreyBackground,
+			drawOverStatusBar = false,
+			window = window
+		)
+
+		ContentViewAllListScreen(
+			navigator = ContentViewAllScreenNavigator(navController),
+			viewModel = hiltViewModel(),
+			navArgs = navArgs
+		)
+	}
+}
+
 @Composable
 fun ContentViewAllListScreen(
 	navigator: ContentViewAllScreenNavigator,
 	viewModel: ContentViewAllAnimeViewModel,
-	navArgs: ContentViewAllListNavArgs
+	navArgs: ContentViewAllListDestination.ContentViewAllListNavArgs
 ) {
 
 	val contentState by viewModel.contentState

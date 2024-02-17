@@ -13,33 +13,15 @@ open class Destination(
 	val route: String = constructRoute()
 	val arguments: List<NamedNavArgument> = required + optional
 
-	fun getArgKeys(): List<String> {
-		return arguments.getKeys()
-	}
-
-	fun getRequiredArgKeys(): List<String> {
-		return required.getKeys()
-	}
-
-	fun getOptionalArgKeys(): List<String> {
-		return optional.getKeys()
-	}
-
-	// todo: ab
-	// To make this support both required and optional, try to make it as DSL again
-	fun createDestinationRoute(vararg requiredParams: Pair<String, Any?>): String {
+	fun createDestinationRoute(vararg requiredParams: Pair<String, Argument?>): String {
 		val builder = StringBuilder(baseRoute)
 
-		requiredParams.forEach {
-			it.second?.toString()?.let { arg ->
-				builder.append("/$arg")
+		requiredParams.forEach { (_, value) ->
+			value?.let {
+				builder.append("/${it.serialize()}")
 			}
 		}
 		return builder.toString()
-	}
-
-	private fun List<NamedNavArgument>.getKeys(): List<String> {
-		return this.map { it.name }
 	}
 
 	private fun constructRoute(): String {
@@ -71,7 +53,10 @@ class DestinationBuilder {
 	private val optional: MutableList<NamedNavArgument> = mutableListOf()
 	lateinit var route: String
 
+	// Bikin ini biar bisa terima path/argument di tengah
 	fun build(): Destination {
+		assert(this::route.isInitialized) { "property 'route' must be set" }
+
 		return Destination(
 			baseRoute = route,
 			required = required,
@@ -89,7 +74,9 @@ class DestinationBuilder {
 	}
 }
 
-fun destination(scope: DestinationBuilder.() -> Unit): Destination {
+inline fun destination(
+	scope: DestinationBuilder.() -> Unit
+): Destination {
 	return DestinationBuilder()
 		.apply(scope)
 		.build()

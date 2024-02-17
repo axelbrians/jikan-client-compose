@@ -20,33 +20,23 @@ import com.google.accompanist.systemuicontroller.SystemUiController
 import com.machina.jikan_client_compose.OnDestinationChanged
 import com.machina.jikan_client_compose.navigation.ScaleTransitionDirection
 import com.machina.jikan_client_compose.navigation.composable
-import com.machina.jikan_client_compose.navigation.destination
 import com.machina.jikan_client_compose.navigation.scaleIntoContainer
 import com.machina.jikan_client_compose.navigation.scaleOutOfContainer
 import com.machina.jikan_client_compose.presentation.composable.MyDivider
 import com.machina.jikan_client_compose.presentation.content_search_screen.composable.SearchFieldComponent
 import com.machina.jikan_client_compose.presentation.home_screen.viewmodel.HomeViewModel
 import com.machina.jikan_client_compose.ui.theme.MyColor
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 
-object HomeDestination {
-	val destination = destination {
-		route = "home"
-	}
-}
-
-@OptIn(
-	InternalCoroutinesApi::class,
-	ExperimentalCoilApi::class
-)
+@OptIn(ExperimentalCoilApi::class)
 fun NavGraphBuilder.addHomeScreen(
 	systemUiController: SystemUiController,
 	window: Window,
-	navController: NavController
+	navController: NavController,
+	navigator: HomeScreenNavigator = HomeScreenNavigator(navController)
 ) {
 	composable(
-		destination = HomeDestination.destination,
+		navigation = HomeNavigation,
 		enterTransition = {
 			scaleIntoContainer(ScaleTransitionDirection.Inwards)
 		},
@@ -74,7 +64,7 @@ fun NavGraphBuilder.addHomeScreen(
 		)
 
 		HomeScreen(
-			navigator = HomeScreenNavigator(navController),
+			navigator = navigator,
 			homeSections = viewModel.homeState,
 			getHomeSections = viewModel::getHomeSections,
 			modifier = Modifier.fillMaxSize()
@@ -82,7 +72,6 @@ fun NavGraphBuilder.addHomeScreen(
 	}
 }
 
-@InternalCoroutinesApi
 @ExperimentalCoilApi
 @Composable
 fun HomeScreen(

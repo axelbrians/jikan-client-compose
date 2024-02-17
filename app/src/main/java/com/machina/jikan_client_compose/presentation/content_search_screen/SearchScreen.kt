@@ -33,7 +33,6 @@ import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.core.extensions.isScrolledToTheEnd
 import com.machina.jikan_client_compose.core.extensions.isScrollingUp
 import com.machina.jikan_client_compose.navigation.composable
-import com.machina.jikan_client_compose.navigation.destination
 import com.machina.jikan_client_compose.presentation.composable.MyDivider
 import com.machina.jikan_client_compose.presentation.content_search_screen.composable.ContentSearchList
 import com.machina.jikan_client_compose.presentation.content_search_screen.composable.SearchFieldComponent
@@ -47,24 +46,12 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
-object SearchDestination {
-
-	val destination = destination {
-		route = "search"
-	}
-
-
-	fun constructRoute(): String {
-		return destination.createDestinationRoute()
-	}
-}
-
 fun NavGraphBuilder.addSearchScreen(
 	systemUiController: SystemUiController,
 	window: Window,
 	navController: NavController
 ) {
-	composable(SearchDestination.destination) {
+	composable(SearchNavigation) {
 		OnDestinationChanged(
 			systemUiController = systemUiController,
 			color = MyColor.DarkBlueBackground,

@@ -1,4 +1,4 @@
-package com.machina.jikan_client_compose.navigation
+package com.machina.jikan_client_compose.navigation.example
 
 import android.content.res.Configuration
 import android.os.Bundle
@@ -16,6 +16,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.machina.jikan_client_compose.navigation.Argument
+import com.machina.jikan_client_compose.navigation.ArgumentParser
+import com.machina.jikan_client_compose.navigation.Destination
+import com.machina.jikan_client_compose.navigation.Navigation
+import com.machina.jikan_client_compose.navigation.NavigationWithArgument
+import com.machina.jikan_client_compose.navigation.SerializableNavType
+import com.machina.jikan_client_compose.navigation.composable
+import com.machina.jikan_client_compose.navigation.destination
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.serializer
 import kotlin.random.Random
@@ -32,23 +40,23 @@ private fun StrongArgument() {
 			startDestination = "home",
 			modifier = Modifier.fillMaxSize()
 		) {
-			strongScopedComposable(
-				destination = DefaultDestination("home")
+			composable(
+				navigation = DefaultDestination("home")
 			) { _ ->
 				Column {
 					Text(text = "Hello in TestNav")
 					Button(
 						onClick = {
-							val route = StrongArgumentNavigation
-								.constructRoute(Random.nextInt(), "message")
+							val route =
+								StrongArgumentNavigation.constructRoute(Random.nextInt(), "message")
 							navController.navigate(route)
 						}
 					) { Text(text = "Navigate") }
 				}
 			}
 
-			strongScopedComposable(
-				destination = StrongArgumentNavigation
+			composable(
+				navigation = StrongArgumentNavigation
 			) { _, wrapper ->
 				val parsedContent = wrapper.id
 				val referrer = wrapper.message
@@ -65,29 +73,17 @@ class DefaultDestination(
 	val route: String
 ): Navigation {
 
-	override val destination: StrongDestination
-		get() = strongDestination {
+	override val destination: Destination
+		get() = destination {
 			this.route = this@DefaultDestination.route
 		}
-}
-
-interface Navigation {
-	val destination: StrongDestination
-}
-
-interface NavigationWithArgument<T: Argument>: Navigation {
-	val parser: ArgumentParser<T>
-}
-
-interface Argument {
-	fun serialize(): String
 }
 
 object StrongArgumentNavigation: NavigationWithArgument<StrongArgumentNavigation.StrongArgs> {
 
 	const val KEY = "strong_args_key"
 
-	override val destination = strongDestination {
+	override val destination = destination {
 		route = "home/strong"
 		requiredNav(
 			navArgument(KEY) {

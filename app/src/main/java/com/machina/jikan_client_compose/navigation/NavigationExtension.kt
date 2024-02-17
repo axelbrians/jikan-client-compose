@@ -6,11 +6,8 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 
-// Limit the number of argument can be parsed by this strongScopedComposable
-
-@Suppress("UNCHECKED_CAST")
-fun NavGraphBuilder.strongScopedComposable(
-	destination: Navigation,
+fun NavGraphBuilder.composable(
+	navigation: Navigation,
 	enterTransition: EnterTransitionType? = null,
 	exitTransition: ExitTransitionType? = null,
 	popEnterTransition: EnterTransitionType? = enterTransition,
@@ -18,9 +15,9 @@ fun NavGraphBuilder.strongScopedComposable(
 	content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit
 ) {
 	composable(
-		route = destination.destination.route,
-		arguments = destination.destination.arguments,
-		deepLinks = destination.destination.deepLinks,
+		route = navigation.destination.route,
+		arguments = navigation.destination.arguments,
+		deepLinks = navigation.destination.deepLinks,
 		enterTransition = enterTransition,
 		exitTransition = exitTransition,
 		popEnterTransition = popEnterTransition,
@@ -29,8 +26,8 @@ fun NavGraphBuilder.strongScopedComposable(
 	)
 }
 
-fun <T: Argument>NavGraphBuilder.strongScopedComposable(
-	destination: NavigationWithArgument<T>,
+fun <T: Argument>NavGraphBuilder.composable(
+	navigation: NavigationWithArgument<T>,
 	enterTransition: EnterTransitionType? = null,
 	exitTransition: ExitTransitionType? = null,
 	popEnterTransition: EnterTransitionType? = enterTransition,
@@ -38,15 +35,15 @@ fun <T: Argument>NavGraphBuilder.strongScopedComposable(
 	content: @Composable AnimatedContentScope.(NavBackStackEntry, T) -> Unit
 ) {
 	composable(
-		route = destination.destination.route,
-		arguments = destination.destination.arguments,
-		deepLinks = destination.destination.deepLinks,
+		route = navigation.destination.route,
+		arguments = navigation.destination.arguments,
+		deepLinks = navigation.destination.deepLinks,
 		enterTransition = enterTransition,
 		exitTransition = exitTransition,
 		popEnterTransition = popEnterTransition,
 		popExitTransition = popExitTransition,
 		content = { navBackStackEntry ->
-			val param = destination.parser.parse(navBackStackEntry.arguments)
+			val param = navigation.parser.parse(navBackStackEntry.arguments)
 
 			content.invoke(
 				this,
@@ -54,25 +51,5 @@ fun <T: Argument>NavGraphBuilder.strongScopedComposable(
 				param
 			)
 		}
-	)
-}
-
-fun NavGraphBuilder.composable(
-	destination: Destination,
-	enterTransition: EnterTransitionType? = null,
-	exitTransition: ExitTransitionType? = null,
-	popEnterTransition: EnterTransitionType? = enterTransition,
-	popExitTransition: ExitTransitionType? = exitTransition,
-	content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit
-) {
-	composable(
-		route = destination.route,
-		arguments = destination.arguments,
-		deepLinks = destination.deepLinks,
-		enterTransition = enterTransition,
-		exitTransition = exitTransition,
-		popEnterTransition = popEnterTransition,
-		popExitTransition = popExitTransition,
-		content = content
 	)
 }

@@ -1,65 +1,61 @@
 package com.machina.jikan_client_compose.presentation.content_detail_screen
 
+import android.os.Bundle
 import androidx.navigation.NavController
-import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import androidx.navigation.navOptions
 import com.machina.jikan_client_compose.core.enums.ContentType
+import com.machina.jikan_client_compose.navigation.Argument
+import com.machina.jikan_client_compose.navigation.ArgumentParser
+import com.machina.jikan_client_compose.navigation.NavigationWithArgument
 import com.machina.jikan_client_compose.navigation.SerializableNavType
 import com.machina.jikan_client_compose.navigation.destination
 import com.machina.jikan_client_compose.presentation.content_view_all_normal.ContentViewAllListDestination
-import com.machina.jikan_client_compose.presentation.content_view_all_normal.ContentViewAllListNavArgs
-import com.machina.jikan_client_compose.presentation.content_view_all_small.ContentSmallViewAllDestination
+import com.machina.jikan_client_compose.presentation.content_view_all_small.SmallContentViewAllNavigation
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.serializer
 
-object ContentDetailsDestination {
-	const val KEY_CONTENT_DETAIL_ARGS = "contentDetailArgs"
-	const val KEY_MAGIC_NUMBER = "magicNumber"
+object ContentDetailsNavigation: NavigationWithArgument<ContentDetailsNavigation.ContentDetailsArgs> {
+	const val KEY = "contentDetailArgs"
 
-	val destination = destination {
+	override val destination = destination {
 		// todo: ab
 		// DSL karena route wajib ada, harus jadi required
 		// Define route nya kalo bisa ngikutin KTOR, pake path based. bisa apped static path atau
 		// dynamic (dynamic ini bakal di replace sama argument) static adalah route aslinya.
 		// route = "home/content/{}/details"
 		route = "home/content/details"
-//		argumentParser = ContentDetailArgumentParser()
 		requiredNav(
-			navArgument(KEY_CONTENT_DETAIL_ARGS) {
+			navArgument(KEY) {
 				type = ContentDetailsArgs
 			}
 		)
-		requiredNav(
-			navArgument(KEY_MAGIC_NUMBER) {
-				type = NavType.IntType
-			}
-		)
-//		optionalNav(
-//			navArgument("optional") {
-//				type = NavType.IntType
-//			}
-//		)
 	}
 
-	fun constructRoute(args: ContentDetailsArgs, number: Int = 0): String {
+	override val parser = object : ArgumentParser<ContentDetailsArgs> {
+		override fun parse(bundle: Bundle?): ContentDetailsArgs {
+			return ContentDetailsArgs.requireGet(bundle, KEY)
+		}
+	}
+
+	fun constructRoute(malId: Int, contentType: ContentType): String {
 		return destination.createDestinationRoute(
-			KEY_CONTENT_DETAIL_ARGS to args,
-			KEY_MAGIC_NUMBER to number
+			KEY to ContentDetailsArgs(malId, contentType)
 		)
 	}
-}
 
-@Serializable
-data class ContentDetailsArgs(
-	val malId: Int,
-	val contentType: ContentType
-) {
-	override fun toString(): String {
-		return serializeAsValue(this)
+	@Serializable
+	data class ContentDetailsArgs(
+		val malId: Int,
+		val contentType: ContentType
+	): Argument {
+
+		override fun serialize(): String {
+			return serializeAsValue(this)
+		}
+
+		companion object : SerializableNavType<ContentDetailsArgs>(serializer())
 	}
-
-	companion object : SerializableNavType<ContentDetailsArgs>(serializer())
 }
 
 class ContentDetailsScreenNavigator(
@@ -72,7 +68,7 @@ class ContentDetailsScreenNavigator(
 		params: Map<String, String> = mapOf()
 	) {
 		val route = ContentViewAllListDestination.constructRoute(
-			ContentViewAllListNavArgs(title, url, params)
+			ContentViewAllListDestination.ContentViewAllListNavArgs(title, url, params)
 		)
 		navController.navigate(route)
 	}
@@ -82,8 +78,8 @@ class ContentDetailsScreenNavigator(
 		url: String,
 		params: Map<String, String> = mapOf()
 	) {
-		val route = ContentSmallViewAllDestination.constructRoute(
-			ContentViewAllListNavArgs(title, url, params)
+		val route = SmallContentViewAllNavigation.constructRoute(
+			ContentViewAllListDestination.ContentViewAllListNavArgs(title, url, params)
 		)
 		navController.navigate(route)
 	}
@@ -92,11 +88,9 @@ class ContentDetailsScreenNavigator(
 		malId: Int,
 		contentType: ContentType
 	) {
-		val route = ContentDetailsDestination.constructRoute(
-			ContentDetailsArgs(malId, contentType), 10
-		)
+		val route = ContentDetailsNavigation.constructRoute(malId, contentType)
 		navController.navigate(
-			route,
+			route = route,
 			navOptions = navOptions { this.launchSingleTop = true }
 		)
 	}

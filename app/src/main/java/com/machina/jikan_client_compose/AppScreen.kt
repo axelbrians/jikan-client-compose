@@ -6,14 +6,11 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.machina.jikan_client_compose.navigation.composable
 import com.machina.jikan_client_compose.presentation.content_detail_screen.addContentDetailsScreen
 import com.machina.jikan_client_compose.presentation.content_search_screen.addSearchScreen
-import com.machina.jikan_client_compose.presentation.content_view_all_normal.ContentViewAllListNavArgs
-import com.machina.jikan_client_compose.presentation.content_view_all_normal.addContentViewAllDestination
-import com.machina.jikan_client_compose.presentation.content_view_all_small.ContentSmallViewAllDestination
-import com.machina.jikan_client_compose.presentation.content_view_all_small.ContentSmallViewAllNav
-import com.machina.jikan_client_compose.presentation.home_screen.HomeDestination
+import com.machina.jikan_client_compose.presentation.content_view_all_normal.addContentViewAllListScreen
+import com.machina.jikan_client_compose.presentation.content_view_all_small.addSmallContentViewAllScreen
+import com.machina.jikan_client_compose.presentation.home_screen.HomeNavigation
 import com.machina.jikan_client_compose.presentation.home_screen.addHomeScreen
 
 @OptIn(
@@ -30,7 +27,7 @@ fun AppScreen(
 
 	NavHost(
 		navController = navController,
-		startDestination = HomeDestination.destination.route,
+		startDestination = HomeNavigation.destination.route,
 		modifier = modifier
 	) {
 		addHomeScreen(
@@ -45,25 +42,17 @@ fun AppScreen(
 			navController = navController
 		)
 
-		addContentViewAllDestination(
+		addContentViewAllListScreen(
 			systemUiController = systemUiController,
 			window = window,
 			navController = navController
 		)
 
-		composable(ContentSmallViewAllDestination.destination) { backStack ->
-			val navArgs = ContentViewAllListNavArgs.requireGet(
-				bundle = backStack.arguments,
-				key = ContentSmallViewAllDestination.KEY_NAV_ARGS
-			)
-
-			ContentSmallViewAllNav(
-				systemUiController = systemUiController,
-				window = window,
-				navController = navController,
-				navArgs = navArgs
-			)
-		}
+		addSmallContentViewAllScreen(
+			systemUiController = systemUiController,
+			window = window,
+			navController = navController
+		)
 
 		addSearchScreen(
 			systemUiController = systemUiController,

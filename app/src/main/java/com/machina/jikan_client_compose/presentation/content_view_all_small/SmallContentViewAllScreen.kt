@@ -1,5 +1,6 @@
 package com.machina.jikan_client_compose.presentation.content_view_all_small
 
+import android.view.Window
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -18,45 +19,54 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import androidx.navigation.navArgument
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import com.google.accompanist.systemuicontroller.SystemUiController
+import com.machina.jikan_client_compose.OnDestinationChanged
 import com.machina.jikan_client_compose.core.extensions.scrollDirection
-import com.machina.jikan_client_compose.navigation.destination
+import com.machina.jikan_client_compose.navigation.composable
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.ScrollableVerticalGridContent
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.VerticalGridModifier
-import com.machina.jikan_client_compose.presentation.content_view_all_normal.ContentViewAllListNavArgs
+import com.machina.jikan_client_compose.presentation.content_view_all_normal.ContentViewAllListDestination
 import com.machina.jikan_client_compose.presentation.content_view_all_normal.composable.ContentViewAllListScreenToolbar
 import com.machina.jikan_client_compose.presentation.content_view_all_normal.data.ScrollDirection
 import com.machina.jikan_client_compose.presentation.content_view_all_normal.viewmodel.ContentViewAllAnimeViewModel
-import com.machina.jikan_client_compose.presentation.content_view_all_small.view_model.ContentSmallGridSizeViewModel
+import com.machina.jikan_client_compose.presentation.content_view_all_small.view_model.SmallContentGridSizeViewModel
 import com.machina.jikan_client_compose.presentation.home_screen.item.CardThumbnailPortraitDefault.Height
 import com.machina.jikan_client_compose.ui.animation_spec.TweenSpec
 import com.machina.jikan_client_compose.ui.shimmer.rememberShimmerCustomBounds
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.machina.jikan_client_compose.ui.theme.MyIcons
 
-object ContentSmallViewAllDestination {
-	const val KEY_NAV_ARGS = "contentViewAllListScreenNavArgs"
-
-	val destination = destination {
-		route = "home/content/view_all/small"
-		requiredNav(
-			navArgument(KEY_NAV_ARGS) {
-				type = ContentViewAllListNavArgs
-			}
+fun NavGraphBuilder.addSmallContentViewAllScreen(
+	systemUiController: SystemUiController,
+	window: Window,
+	navController: NavController
+) {
+	composable(SmallContentViewAllNavigation) { _, navArgs ->
+		OnDestinationChanged(
+			systemUiController = systemUiController,
+			color = MyColor.DarkGreyBackground,
+			drawOverStatusBar = false,
+			window = window,
 		)
-	}
 
-	fun constructRoute(navArgs: ContentViewAllListNavArgs): String {
-		return destination.createDestinationRoute(KEY_NAV_ARGS to navArgs)
+		ContentSmallViewAllScreen(
+			navigator = SmallContentViewAllNavigator(navController),
+			viewModel = hiltViewModel(),
+			gridSizeViewModel = hiltViewModel(),
+			navArgs = navArgs
+		)
 	}
 }
 
 @Composable
 fun ContentSmallViewAllScreen(
-	navigator: ContentSmallViewAllNavigator,
+	navigator: SmallContentViewAllNavigator,
 	viewModel: ContentViewAllAnimeViewModel,
-	gridSizeViewModel: ContentSmallGridSizeViewModel,
-	navArgs: ContentViewAllListNavArgs
+	gridSizeViewModel: SmallContentGridSizeViewModel,
+	navArgs: ContentViewAllListDestination.ContentViewAllListNavArgs
 ) {
 	val shimmerInstance = rememberShimmerCustomBounds()
 	val lazyGridState = rememberLazyGridState()

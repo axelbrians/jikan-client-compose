@@ -3,8 +3,8 @@ package com.machina.jikan_client_compose.ui.navigation
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.machina.jikan_client_compose.core.extensions.defaultUrl
-import com.machina.jikan_client_compose.navigation.strongDestination
-import com.machina.jikan_client_compose.presentation.content_detail_screen.ContentDetailsArgs
+import com.machina.jikan_client_compose.navigation.destination
+import com.machina.jikan_client_compose.presentation.content_detail_screen.ContentDetailsNavigation
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.parameter
 import org.junit.Test
@@ -13,11 +13,11 @@ class MainNavigationRouteKtTest {
 
 	@Test
 	fun test() {
-		val destination = strongDestination {
+		val destination = destination {
 			route = "home"
 			requiredNav(
 				navArgument("navArgs") {
-					type = ContentDetailsArgs
+					type = ContentDetailsNavigation.ContentDetailsArgs
 				}
 			)
 			requiredNav(

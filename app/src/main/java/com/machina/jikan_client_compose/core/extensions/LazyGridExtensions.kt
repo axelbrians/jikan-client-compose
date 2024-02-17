@@ -9,6 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.machina.jikan_client_compose.presentation.content_view_all_normal.data.ScrollDirection
 
+@Deprecated("should use derivedStateOf { } for much better performance")
 fun LazyGridState.isScrolledToTheEnd(): Boolean {
 	return layoutInfo.visibleItemsInfo.lastOrNull()?.index == layoutInfo.totalItemsCount - 1
 }

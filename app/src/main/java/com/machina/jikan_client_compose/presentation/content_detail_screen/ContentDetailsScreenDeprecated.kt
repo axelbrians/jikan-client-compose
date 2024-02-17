@@ -89,7 +89,7 @@ import kotlinx.coroutines.launch
 fun ContentDetailsScreenDeprecated(
 	navigator: ContentDetailsScreenNavigator,
 	viewModel: ContentDetailsViewModel,
-	navArgs: ContentDetailsArgs
+	navArgs: ContentDetailsNavigation.ContentDetailsArgs
 ) {
 	val animateDuration = 250
 	val density = LocalDensity.current

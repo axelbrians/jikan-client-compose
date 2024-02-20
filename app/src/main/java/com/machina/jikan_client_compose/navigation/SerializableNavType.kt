@@ -7,8 +7,9 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 
 open class SerializableNavType<T>(
-	private val serializer: KSerializer<T>
-) : NavType<T>(false) {
+	private val serializer: KSerializer<T>,
+	isNullableAllowed: Boolean = false
+) : NavType<T>(isNullableAllowed) {
 
 	open fun requireGet(bundle: Bundle?, key: String): T {
 		return requireNotNull(get(requireNotNull(bundle), key))

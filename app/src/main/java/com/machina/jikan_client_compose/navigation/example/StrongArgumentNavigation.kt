@@ -15,7 +15,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.machina.jikan_client_compose.navigation.Argument
 import com.machina.jikan_client_compose.navigation.ArgumentParser
 import com.machina.jikan_client_compose.navigation.Destination
@@ -47,8 +46,8 @@ private fun StrongArgument() {
 					Text(text = "Hello in TestNav")
 					Button(
 						onClick = {
-							val route =
-								StrongArgumentNavigation.constructRoute(Random.nextInt(), "message")
+							val route = StrongArgumentNavigation
+								.constructRoute(Random.nextInt(), "message")
 							navController.navigate(route)
 						}
 					) { Text(text = "Navigate") }
@@ -85,11 +84,9 @@ object StrongArgumentNavigation: NavigationWithArgument<StrongArgumentNavigation
 
 	override val destination = destination {
 		route = "home/strong"
-		requiredNav(
-			navArgument(KEY) {
-				type = StrongArgs
-			}
-		)
+		addNav(KEY) {
+			type = StrongArgs
+		}
 	}
 
 	override val parser = object : ArgumentParser<StrongArgs> {
@@ -100,7 +97,7 @@ object StrongArgumentNavigation: NavigationWithArgument<StrongArgumentNavigation
 
 	fun constructRoute(id: Int, message: String): String {
 		return destination.createDestinationRoute(
-			KEY to StrongArgs(id, message)
+			required = listOf(KEY to StrongArgs(id, message))
 		)
 	}
 

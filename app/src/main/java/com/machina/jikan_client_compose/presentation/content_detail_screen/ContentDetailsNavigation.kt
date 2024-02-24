@@ -2,7 +2,6 @@ package com.machina.jikan_client_compose.presentation.content_detail_screen
 
 import android.os.Bundle
 import androidx.navigation.NavController
-import androidx.navigation.navArgument
 import androidx.navigation.navOptions
 import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.navigation.Argument
@@ -25,11 +24,9 @@ object ContentDetailsNavigation: NavigationWithArgument<ContentDetailsNavigation
 		// dynamic (dynamic ini bakal di replace sama argument) static adalah route aslinya.
 		// route = "home/content/{}/details"
 		route = "home/content/details"
-		requiredNav(
-			navArgument(KEY) {
-				type = ContentDetailsArgs
-			}
-		)
+		addNav(KEY) {
+			type = ContentDetailsArgs
+		}
 	}
 
 	override val parser = object : ArgumentParser<ContentDetailsArgs> {
@@ -40,7 +37,7 @@ object ContentDetailsNavigation: NavigationWithArgument<ContentDetailsNavigation
 
 	fun constructRoute(malId: Int, contentType: ContentType): String {
 		return destination.createDestinationRoute(
-			KEY to ContentDetailsArgs(malId, contentType)
+			required = listOf(KEY to ContentDetailsArgs(malId, contentType))
 		)
 	}
 

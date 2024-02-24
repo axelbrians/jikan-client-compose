@@ -2,7 +2,6 @@ package com.machina.jikan_client_compose.presentation.content_view_all_normal
 
 import android.os.Bundle
 import androidx.navigation.NavController
-import androidx.navigation.navArgument
 import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.navigation.Argument
 import com.machina.jikan_client_compose.navigation.ArgumentParser
@@ -19,11 +18,9 @@ object ContentViewAllListDestination :
 
 	override val destination = destination {
 		route = "home/content/view_all/normal"
-		requiredNav(
-			navArgument(KEY_NAV_ARGS) {
-				type = ContentViewAllListNavArgs
-			}
-		)
+		addNav(KEY_NAV_ARGS) {
+			type = ContentViewAllListNavArgs
+		}
 	}
 
 	override val parser = object : ArgumentParser<ContentViewAllListNavArgs> {
@@ -36,7 +33,9 @@ object ContentViewAllListDestination :
 	}
 
 	fun constructRoute(navArgs: ContentViewAllListNavArgs): String {
-		return destination.createDestinationRoute(KEY_NAV_ARGS to navArgs)
+		return destination.createDestinationRoute(
+			required = listOf(KEY_NAV_ARGS to navArgs)
+		)
 	}
 
 	@Serializable

@@ -28,7 +28,7 @@ import com.machina.jikan_client_compose.core.extensions.scrollDirection
 import com.machina.jikan_client_compose.navigation.composable
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.ScrollableVerticalGridContent
 import com.machina.jikan_client_compose.presentation.composable.content_horizontal.VerticalGridModifier
-import com.machina.jikan_client_compose.presentation.content_view_all_normal.ContentViewAllListDestination
+import com.machina.jikan_client_compose.presentation.content_view_all_normal.ContentViewAllNavigation
 import com.machina.jikan_client_compose.presentation.content_view_all_normal.composable.ContentViewAllListScreenToolbar
 import com.machina.jikan_client_compose.presentation.content_view_all_normal.data.ScrollDirection
 import com.machina.jikan_client_compose.presentation.content_view_all_normal.viewmodel.ContentViewAllAnimeViewModel
@@ -66,7 +66,7 @@ fun ContentSmallViewAllScreen(
 	navigator: SmallContentViewAllNavigator,
 	viewModel: ContentViewAllAnimeViewModel,
 	gridSizeViewModel: SmallContentGridSizeViewModel,
-	navArgs: ContentViewAllListDestination.ContentViewAllListNavArgs
+	navArgs: ContentViewAllNavigation.ContentViewAllArgs
 ) {
 	val shimmerInstance = rememberShimmerCustomBounds()
 	val lazyGridState = rememberLazyGridState()

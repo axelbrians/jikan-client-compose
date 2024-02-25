@@ -6,8 +6,8 @@ import com.machina.jikan_client_compose.navigation.Navigation
 import com.machina.jikan_client_compose.navigation.destination
 import com.machina.jikan_client_compose.presentation.content_detail_screen.ContentDetailsNavigation
 import com.machina.jikan_client_compose.presentation.content_search_screen.SearchNavigation
-import com.machina.jikan_client_compose.presentation.content_view_all_normal.ContentViewAllListDestination
-import com.machina.jikan_client_compose.presentation.content_view_all_normal.ContentViewAllListDestination.ContentViewAllListNavArgs
+import com.machina.jikan_client_compose.presentation.content_view_all_normal.ContentViewAllNavigation
+import com.machina.jikan_client_compose.presentation.content_view_all_normal.ContentViewAllNavigation.ContentViewAllArgs
 
 object HomeNavigation: Navigation {
 	override val destination = destination {
@@ -26,8 +26,8 @@ class HomeScreenNavigator(private val navController: NavController) {
 		url: String,
 		params: Map<String, String> = mapOf()
 	) {
-		val route = ContentViewAllListDestination.constructRoute(
-			ContentViewAllListNavArgs(title, url, params)
+		val route = ContentViewAllNavigation.constructRoute(
+			ContentViewAllArgs(title, url, params)
 		)
 		navController.navigate(route)
 	}

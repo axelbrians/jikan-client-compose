@@ -7,9 +7,11 @@ import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.navigation.Argument
 import com.machina.jikan_client_compose.navigation.ArgumentParser
 import com.machina.jikan_client_compose.navigation.NavigationWithArgument
+import com.machina.jikan_client_compose.navigation.Navigator
+import com.machina.jikan_client_compose.navigation.NavigatorDelegate
 import com.machina.jikan_client_compose.navigation.SerializableNavType
 import com.machina.jikan_client_compose.navigation.destination
-import com.machina.jikan_client_compose.presentation.content_view_all_normal.ContentViewAllListDestination
+import com.machina.jikan_client_compose.presentation.content_view_all_normal.ContentViewAllNavigation
 import com.machina.jikan_client_compose.presentation.content_view_all_small.SmallContentViewAllNavigation
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.serializer
@@ -24,7 +26,7 @@ object ContentDetailsNavigation: NavigationWithArgument<ContentDetailsNavigation
 		// dynamic (dynamic ini bakal di replace sama argument) static adalah route aslinya.
 		// route = "home/content/{}/details"
 		route = "home/content/details"
-		addNav(KEY) {
+		addArgument(KEY) {
 			type = ContentDetailsArgs
 		}
 	}
@@ -53,46 +55,30 @@ object ContentDetailsNavigation: NavigationWithArgument<ContentDetailsNavigation
 
 		companion object : SerializableNavType<ContentDetailsArgs>(serializer())
 	}
+
+	interface Navigator {
+		fun navigateToContentDetails(
+			malId: Int,
+			contentType: ContentType
+		)
+	}
+
+	class NavigatorDelegate(private val navController: NavController): Navigator {
+		override fun navigateToContentDetails(
+			malId: Int,
+			contentType: ContentType
+		) {
+			val route = constructRoute(malId, contentType)
+			navController.navigate(
+				route = route,
+				navOptions = navOptions { this.launchSingleTop = true }
+			)
+		}
+	}
 }
 
-class ContentDetailsScreenNavigator(
-	private val navController: NavController
-) {
-
-	fun navigateToContentViewAllScreen(
-		title: String,
-		url: String,
-		params: Map<String, String> = mapOf()
-	) {
-		val route = ContentViewAllListDestination.constructRoute(
-			ContentViewAllListDestination.ContentViewAllListNavArgs(title, url, params)
-		)
-		navController.navigate(route)
-	}
-
-	fun navigateToContentSmallViewAllScreen(
-		title: String,
-		url: String,
-		params: Map<String, String> = mapOf()
-	) {
-		val route = SmallContentViewAllNavigation.constructRoute(
-			ContentViewAllListDestination.ContentViewAllListNavArgs(title, url, params)
-		)
-		navController.navigate(route)
-	}
-
-	fun navigateToContentDetailsScreen(
-		malId: Int,
-		contentType: ContentType
-	) {
-		val route = ContentDetailsNavigation.constructRoute(malId, contentType)
-		navController.navigate(
-			route = route,
-			navOptions = navOptions { this.launchSingleTop = true }
-		)
-	}
-
-	fun navigateUp(): Boolean {
-		return navController.navigateUp()
-	}
-}
+class ContentDetailsScreenNavigator(navController: NavController) :
+	Navigator.WithNavigateUp by NavigatorDelegate(navController),
+    ContentDetailsNavigation.Navigator by ContentDetailsNavigation.NavigatorDelegate(navController),
+    ContentViewAllNavigation.Navigator by ContentViewAllNavigation.NavigatorDelegate(navController),
+	SmallContentViewAllNavigation.Navigator by SmallContentViewAllNavigation.NavigatorDelegate(navController)

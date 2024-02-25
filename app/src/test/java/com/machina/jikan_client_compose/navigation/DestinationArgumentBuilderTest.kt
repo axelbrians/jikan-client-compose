@@ -23,12 +23,12 @@ class DestinationArgumentBuilderTest {
 	fun `test nullable default on namedNavArgument`() {
 		val destination = destination {
 			route = "root"
-			addNav("user-id") { }
-			addNav("strong-args") {
+			addArgument("user-id") { }
+			addArgument("strong-args") {
 				type = StrongArgumentNavigation.StrongArgs
 				nullable = true
 			}
-			addNav("second-id") {
+			addArgument("second-id") {
 				type = NavType.IntType
 				nullable = false
 				defaultValue = null
@@ -40,7 +40,7 @@ class DestinationArgumentBuilderTest {
 	fun `given destination nav type is not allowed as nullable, if set as nullable at destination, then should throw exception`() {
 		destination {
 			route = "root"
-			addNav("strong-args") {
+			addArgument("strong-args") {
 				type = StrongArgumentNavigation.StrongArgs
 				nullable = true
 			}
@@ -62,7 +62,7 @@ class DestinationArgumentBuilderTest {
 		val baseRoute = "root"
 		val destination = destination {
 			route = baseRoute
-			addNav("argument") {
+			addArgument("argument") {
 				type = NavType.IntType
 			}
 		}

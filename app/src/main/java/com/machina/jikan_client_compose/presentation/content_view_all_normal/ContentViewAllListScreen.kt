@@ -38,7 +38,7 @@ fun NavGraphBuilder.addContentViewAllListScreen(
 	navController: NavController
 ) {
 	composable(
-		navigation = ContentViewAllListDestination,
+		navigation = ContentViewAllNavigation,
 		enterTransition = {
 			this.slideIntoContainer(
 				towards = AnimatedContentTransitionScope.SlideDirection.Start,
@@ -71,7 +71,7 @@ fun NavGraphBuilder.addContentViewAllListScreen(
 fun ContentViewAllListScreen(
 	navigator: ContentViewAllScreenNavigator,
 	viewModel: ContentViewAllAnimeViewModel,
-	navArgs: ContentViewAllListDestination.ContentViewAllListNavArgs
+	navArgs: ContentViewAllNavigation.ContentViewAllArgs
 ) {
 
 	val contentState by viewModel.contentState

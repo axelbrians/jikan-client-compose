@@ -249,7 +249,7 @@ fun ContentDetailsScreen(
 					contentArrangement = CardThumbnailPortraitDefault.Arrangement.Default,
 					textAlign = TextAlign.Center,
 					onHeaderClick = {
-						navigator.navigateToContentSmallViewAllScreen(
+						navigator.navigateToSmallContentViewAll(
 							Constant.CHARACTERS,
 							Endpoints.getAnimeCharactersEndpoint(
 								contentDetailsState.data?.malId ?: 0
@@ -277,7 +277,7 @@ fun ContentDetailsScreen(
 							)
 						)
 					},
-					onItemClick = navigator::navigateToContentDetailsScreen
+					onItemClick = navigator::navigateToContentDetails
 				)
 			}
 

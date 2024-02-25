@@ -84,7 +84,7 @@ object StrongArgumentNavigation: NavigationWithArgument<StrongArgumentNavigation
 
 	override val destination = destination {
 		route = "home/strong"
-		addNav(KEY) {
+		addArgument(KEY) {
 			type = StrongArgs
 		}
 	}

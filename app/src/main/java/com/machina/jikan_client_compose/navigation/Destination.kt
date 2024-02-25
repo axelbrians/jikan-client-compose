@@ -16,15 +16,6 @@ open class Destination(
 	private val optionalArguments = arguments.filter { it.argument.isNullable }
 	val route: String = constructRoute()
 
-	fun createDestinationRoute(vararg requiredParams: Pair<String, Argument>): String {
-		val builder = StringBuilder(baseRoute)
-
-		requiredParams.forEach { (_, value) ->
-			builder.append("/${value.serialize()}")
-		}
-		return builder.toString()
-	}
-
 	fun createDestinationRoute(
 		required: List<Pair<String, Any?>> = emptyList(),
 		optional: List<Pair<String, Any?>> = emptyList()
@@ -83,8 +74,6 @@ open class Destination(
 
 class DestinationBuilder {
 
-	private val required: MutableList<NamedNavArgument> = mutableListOf()
-	private val optional: MutableList<NamedNavArgument> = mutableListOf()
 	private val arguments: MutableList<NamedNavArgument> = mutableListOf()
 	private val deepLinks: MutableList<NavDeepLink> = mutableListOf()
 	lateinit var route: String
@@ -100,16 +89,8 @@ class DestinationBuilder {
 		)
 	}
 
-	fun requiredNav(navArgument: NamedNavArgument) {
-		required.add(navArgument)
-	}
-
-	fun addNav(key: String, builder: NavArgumentBuilder.() -> Unit) {
+	fun addArgument(key: String, builder: NavArgumentBuilder.() -> Unit) {
 		arguments.add(navArgument(key, builder))
-	}
-
-	fun optionalNav(navArgument: NamedNavArgument) {
-		optional.add(navArgument)
 	}
 
 	fun addDeeplink(builder: NavDeepLinkDslBuilder.() -> Unit) {

@@ -24,14 +24,14 @@ open class Destination(
 
 		required.forEach { (_, value) ->
 			builder.append("/")
-			builder.append(getArgument(value))
+			builder.append(value.toString())
 		}
 
 		if (optional.isNotEmpty()) {
 			builder.append("?")
 			optional.forEachIndexed { index, (key, value) ->
 				builder.append("$key=")
-				builder.append(getArgument(value))
+				builder.append(value.toString())
 
 				if (index < optional.lastIndex) {
 					builder.append("&")
@@ -40,14 +40,6 @@ open class Destination(
 		}
 
 		return builder.toString()
-	}
-
-	private fun getArgument(value: Any?): String {
-		return if (value is Argument?) {
-			value?.serialize() ?: "null"
-		} else {
-			value.toString()
-		}
 	}
 
 	private fun constructRoute(): String {
@@ -104,4 +96,12 @@ inline fun destination(
 	return DestinationBuilder()
 		.apply(scope)
 		.build()
+}
+
+interface Navigation {
+	val destination: Destination
+}
+
+interface NavigationWithArgument<T>: Navigation {
+	val parser: ArgumentParser<T>
 }

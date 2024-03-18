@@ -26,7 +26,7 @@ fun NavGraphBuilder.composable(
 	)
 }
 
-fun <T: Argument>NavGraphBuilder.composable(
+fun <T>NavGraphBuilder.composable(
 	navigation: NavigationWithArgument<T>,
 	enterTransition: EnterTransitionType? = null,
 	exitTransition: ExitTransitionType? = null,

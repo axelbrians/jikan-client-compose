@@ -8,12 +8,13 @@ import com.machina.jikan_client_compose.navigation.NavigatorDelegate
 import com.machina.jikan_client_compose.navigation.destination
 import com.machina.jikan_client_compose.presentation.content_view_all_normal.ContentViewAllNavigation
 import com.machina.jikan_client_compose.presentation.content_view_all_normal.ContentViewAllNavigation.ContentViewAllArgs
+import com.machina.jikan_client_compose.presentation.content_view_all_normal.ContentViewAllNavigation.ContentViewAllNavType
 
 object SmallContentViewAllNavigation: NavigationWithArgument<ContentViewAllArgs> {
 	override val destination = destination {
 		route = "home/content/view_all/small"
 		addArgument(ContentViewAllNavigation.KEY_NAV_ARGS) {
-			type = ContentViewAllArgs
+			type = ContentViewAllNavType
 		}
 	}
 
@@ -22,7 +23,9 @@ object SmallContentViewAllNavigation: NavigationWithArgument<ContentViewAllArgs>
 
 	fun constructRoute(navArgs: ContentViewAllArgs): String {
 		return destination.createDestinationRoute(
-			required = listOf(ContentViewAllNavigation.KEY_NAV_ARGS to navArgs)
+			required = listOf(
+				ContentViewAllNavigation.KEY_NAV_ARGS to ContentViewAllNavType.serializeAsValue(navArgs)
+			)
 		)
 	}
 

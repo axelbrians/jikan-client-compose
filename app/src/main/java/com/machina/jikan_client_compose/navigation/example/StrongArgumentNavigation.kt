@@ -15,7 +15,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.machina.jikan_client_compose.navigation.Argument
 import com.machina.jikan_client_compose.navigation.ArgumentParser
 import com.machina.jikan_client_compose.navigation.Destination
 import com.machina.jikan_client_compose.navigation.Navigation
@@ -78,36 +77,31 @@ class DefaultDestination(
 		}
 }
 
-object StrongArgumentNavigation: NavigationWithArgument<StrongArgumentNavigation.StrongArgs> {
+object StrongArgumentNavigation: NavigationWithArgument<StrongArgumentNavigation.StrongArgument> {
 
 	const val KEY = "strong_args_key"
 
 	override val destination = destination {
 		route = "home/strong"
 		addArgument(KEY) {
-			type = StrongArgs
+			type = StrongNavType
 		}
 	}
 
-	override val parser = object : ArgumentParser<StrongArgs> {
-		override fun parse(bundle: Bundle?): StrongArgs {
-			return StrongArgs.requireGet(bundle, KEY)
+	override val parser = object : ArgumentParser<StrongArgument> {
+		override fun parse(bundle: Bundle?): StrongArgument {
+			return StrongNavType.requireGet(bundle, KEY)
 		}
 	}
 
 	fun constructRoute(id: Int, message: String): String {
 		return destination.createDestinationRoute(
-			required = listOf(KEY to StrongArgs(id, message))
+			required = listOf(KEY to StrongArgument(id, message))
 		)
 	}
 
 	@Serializable
-	data class StrongArgs(val id: Int, val message: String): Argument {
+	data class StrongArgument(val id: Int, val message: String)
 
-		override fun serialize(): String {
-			return serializeAsValue(this)
-		}
-
-		companion object: SerializableNavType<StrongArgs>(serializer())
-	}
+	object StrongNavType: SerializableNavType<StrongArgument>(serializer())
 }

@@ -25,7 +25,7 @@ class DestinationArgumentBuilderTest {
 			route = "root"
 			addArgument("user-id") { }
 			addArgument("strong-args") {
-				type = StrongArgumentNavigation.StrongArgs
+				type = StrongArgumentNavigation.StrongNavType
 				nullable = true
 			}
 			addArgument("second-id") {
@@ -41,7 +41,7 @@ class DestinationArgumentBuilderTest {
 		destination {
 			route = "root"
 			addArgument("strong-args") {
-				type = StrongArgumentNavigation.StrongArgs
+				type = StrongArgumentNavigation.StrongNavType
 				nullable = true
 			}
 		}

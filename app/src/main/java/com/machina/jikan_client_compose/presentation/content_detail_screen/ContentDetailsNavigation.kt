@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.navigation.NavController
 import androidx.navigation.navOptions
 import com.machina.jikan_client_compose.core.enums.ContentType
-import com.machina.jikan_client_compose.navigation.Argument
 import com.machina.jikan_client_compose.navigation.ArgumentParser
 import com.machina.jikan_client_compose.navigation.NavigationWithArgument
 import com.machina.jikan_client_compose.navigation.Navigator
@@ -27,19 +26,20 @@ object ContentDetailsNavigation: NavigationWithArgument<ContentDetailsNavigation
 		// route = "home/content/{}/details"
 		route = "home/content/details"
 		addArgument(KEY) {
-			type = ContentDetailsArgs
+			type = ContentDetailsNavType
 		}
 	}
 
 	override val parser = object : ArgumentParser<ContentDetailsArgs> {
 		override fun parse(bundle: Bundle?): ContentDetailsArgs {
-			return ContentDetailsArgs.requireGet(bundle, KEY)
+			return ContentDetailsNavType.requireGet(bundle, KEY)
 		}
 	}
 
 	fun constructRoute(malId: Int, contentType: ContentType): String {
+		val argument = ContentDetailsArgs(malId, contentType)
 		return destination.createDestinationRoute(
-			required = listOf(KEY to ContentDetailsArgs(malId, contentType))
+			required = listOf(KEY to ContentDetailsNavType.serializeAsValue(argument))
 		)
 	}
 
@@ -47,14 +47,9 @@ object ContentDetailsNavigation: NavigationWithArgument<ContentDetailsNavigation
 	data class ContentDetailsArgs(
 		val malId: Int,
 		val contentType: ContentType
-	): Argument {
+	)
 
-		override fun serialize(): String {
-			return serializeAsValue(this)
-		}
-
-		companion object : SerializableNavType<ContentDetailsArgs>(serializer())
-	}
+	object ContentDetailsNavType: SerializableNavType<ContentDetailsArgs>(serializer())
 
 	interface Navigator {
 		fun navigateToContentDetails(

@@ -1,7 +1,7 @@
 package com.machina.jikan_client_compose.navigation
 
 import androidx.navigation.NavType
-import com.machina.jikan_client_compose.navigation.example.StrongArgumentNavigation
+import com.machina.jikan_client_compose.StrongArgumentNavigation
 import junit.framework.Assert.assertEquals
 import org.junit.Test
 

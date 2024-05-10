@@ -15,41 +15,39 @@ import io.ktor.network.sockets.ConnectTimeoutException
 import kotlinx.coroutines.delay
 import timber.log.Timber
 
-class SafeCall {
-	companion object {
-		const val DefaultRetryCount = 5
-	}
+object SafeCall {
+	const val RetryCount = 5
+}
 
-	suspend inline operator fun <reified T: Any, reified U: Any> invoke(
-		client: HttpClient,
-		request: HttpRequestBuilder,
-		retryCount: Int = 0
-	): Resource<T> {
-		return try {
-			val res = if (retryCount > 0) {
-				callWithRetry(client, request, retryCount)
-			} else {
-				client.request(request)
-			}
+suspend inline fun <reified T: Any, reified U: Any> HttpClient.safeCall(
+	request: HttpRequestBuilder,
+	retryCount: Int = 0
+): Resource<T> {
+	return try {
+		val res = if (retryCount > 0) {
+			callWithRetry(this, request, retryCount)
+		} else {
+			this.request(request)
+		}
 
-			if (res.status.isSuccess()) {
-				val body = res.receive<T>()
-				Resource.Success(body)
-			} else {
-				when (val error = res.receive<U>()) {
-					is GeneralError -> Resource.Error(error.message)
-					else -> Resource.Error(MyError.UNKNOWN_ERROR)
-				}
-			}
-		} catch (e: Exception) {
-			Timber.d(e.message)
-			when (e) {
-				is ClientRequestException -> Resource.Error(e.message)
-				is ConnectTimeoutException -> Resource.Error(e.message)
+		if (res.status.isSuccess()) {
+			val body = res.receive<T>()
+			Resource.Success(body)
+		} else {
+			when (val error = res.receive<U>()) {
+				is GeneralError -> Resource.Error(error.message)
 				else -> Resource.Error(MyError.UNKNOWN_ERROR)
 			}
 		}
+	} catch (e: Exception) {
+		Timber.d(e.message)
+		when (e) {
+			is ClientRequestException -> Resource.Error(e.message)
+			is ConnectTimeoutException -> Resource.Error(e.message)
+			else -> Resource.Error(MyError.UNKNOWN_ERROR)
+		}
 	}
+}
 
 //  suspend inline fun <reified T: Any, reified U: Any> invokeWithRetry(
 //    client: HttpClient,
@@ -79,35 +77,34 @@ class SafeCall {
 //    }
 //  }
 
-	/**
-	 * Function to retry HttpCalls if the server responded with a 429
-	 * [HttpStatusCode.TooManyRequests]. Will return at the first call when it was not a 429.
-	 *
-	 * @param client The HttpClient to use for the call.
-	 * @param request The HttpRequestBuilder.
-	 * @param times The amount of times to retry.
-	 *
-	 * @return HttpResponse The response of the call.
-	 */
-	suspend inline fun callWithRetry(
-		client: HttpClient,
-		request: HttpRequestBuilder,
-		times: Int
-	): HttpResponse {
-		var res = client.request<HttpResponse>(request)
+/**
+ * Function to retry HttpCalls if the server responded with a 429
+ * [HttpStatusCode.TooManyRequests]. Will return at the first call when it was not a 429.
+ *
+ * @param client The HttpClient to use for the call.
+ * @param request The HttpRequestBuilder.
+ * @param times The amount of times to retry.
+ *
+ * @return HttpResponse The response of the call.
+ */
+suspend inline fun callWithRetry(
+	client: HttpClient,
+	request: HttpRequestBuilder,
+	times: Int
+): HttpResponse {
+	var res = client.request<HttpResponse>(request)
 //    Timber.v(res.call.response.toString())
 //    Timber.v(res.status.toString())
 //    Timber.v(res.status.value.toString())
-		repeat(times) {
-			if (res.status.value != HttpStatusCode.TooManyRequests.value) {
-				return res
-			} else {
-				delay(1000L)
-				res = client.request(request)
-			}
+	repeat(times) {
+		if (res.status.value != HttpStatusCode.TooManyRequests.value) {
+			return res
+		} else {
+			delay(1000L)
+			res = client.request(request)
 		}
-
-		// Return last fetched response, regardless of status code
-		return res
 	}
+
+	// Return last fetched response, regardless of status code
+	return res
 }

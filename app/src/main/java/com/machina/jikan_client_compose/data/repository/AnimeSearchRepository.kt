@@ -1,13 +1,13 @@
 package com.machina.jikan_client_compose.data.repository
 
 import com.machina.jikan_client_compose.core.SafeCall
-import com.machina.jikan_client_compose.core.SafeCall.Companion.DefaultRetryCount
 import com.machina.jikan_client_compose.core.constant.AnimeConstant
 import com.machina.jikan_client_compose.core.constant.AnimeGenres
 import com.machina.jikan_client_compose.core.constant.Endpoints
 import com.machina.jikan_client_compose.core.error.GeneralError
 import com.machina.jikan_client_compose.core.extensions.defaultUrl
 import com.machina.jikan_client_compose.core.helper.ParamHelper
+import com.machina.jikan_client_compose.core.safeCall
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.core.wrapper.ResponseListWrapper
 import com.machina.jikan_client_compose.data.remote.anime_search.AnimeSearchService
@@ -26,8 +26,7 @@ import io.ktor.client.request.parameter
 import timber.log.Timber
 
 class AnimeSearchRepository(
-	@AndroidKtorClient private val client: HttpClient,
-	private val safeCall: SafeCall
+	@AndroidKtorClient private val client: HttpClient
 ): AnimeSearchService {
 
 	override suspend fun searchAnime(
@@ -57,10 +56,9 @@ class AnimeSearchRepository(
 				}
 			}
 		}
-		return safeCall.invoke<ResponseListWrapper<AnimeDetailsDto>, GeneralError>(
-			client = client,
-			request = request,
-			retryCount = DefaultRetryCount
+		return client.safeCall<ResponseListWrapper<AnimeDetailsDto>, GeneralError>(
+			request,
+			SafeCall.RetryCount
 		)
 	}
 
@@ -94,8 +92,8 @@ class AnimeSearchRepository(
 	private suspend fun handleAnimeRecommendationCall(
 		request: HttpRequestBuilder
 	): Resource<ResponseListWrapper<AnimeMinimalDataResponse>> {
-		val res = safeCall<ResponseListWrapper<AnimeRecommendationResponse>, GeneralError>(
-			client, request, DefaultRetryCount
+		val res = client.safeCall<ResponseListWrapper<AnimeRecommendationResponse>, GeneralError>(
+			request, SafeCall.RetryCount
 		)
 		return if (res is Resource.Success && res.data != null) {
 			Resource.Success(
@@ -112,8 +110,8 @@ class AnimeSearchRepository(
 	private suspend fun handleAnimeCharactersCall(
 		request: HttpRequestBuilder
 	): Resource<ResponseListWrapper<AnimeMinimalDataResponse>> {
-		val res = safeCall<ResponseListWrapper<AnimeCharacterResponse>, GeneralError>(
-			client, request, DefaultRetryCount
+		val res = client.safeCall<ResponseListWrapper<AnimeCharacterResponse>, GeneralError>(
+			request, SafeCall.RetryCount
 		)
 		return if (res is Resource.Success && res.data != null) {
 			val orderedCharacters = res.data.data.sortedByDescending { it.favoritesCount }
@@ -131,8 +129,8 @@ class AnimeSearchRepository(
 	private suspend fun handleDefaultAnimeViewAllCall(
 		request: HttpRequestBuilder
 	): Resource<ResponseListWrapper<AnimeMinimalDataResponse>> {
-		val res = safeCall<ResponseListWrapper<AnimeDetailsDto>, GeneralError>(
-			client, request, DefaultRetryCount
+		val res = client.safeCall<ResponseListWrapper<AnimeDetailsDto>, GeneralError>(
+			request, SafeCall.RetryCount
 		)
 		return if (res is Resource.Success && res.data != null) {
 			val sortedSchedule = res.data.data.sortedBy { it.rank }.toMutableList()
@@ -159,8 +157,8 @@ class AnimeSearchRepository(
 			parameter(AnimeConstant.FilterKey, AnimeGenres.GenreKey)
 		}
 
-		val res = safeCall<ResponseListWrapper<Genre>, GeneralError>(
-			client, request, DefaultRetryCount
+		val res = client.safeCall<ResponseListWrapper<Genre>, GeneralError>(
+			request, SafeCall.RetryCount
 		)
 
 		return if (res is Resource.Success) {
@@ -182,8 +180,8 @@ class AnimeSearchRepository(
 			parameter(AnimeConstant.FilterKey, AnimeGenres.DemographicsKey)
 		}
 
-		val res = safeCall<ResponseListWrapper<Genre>, GeneralError>(
-			client, request, DefaultRetryCount
+		val res = client.safeCall<ResponseListWrapper<Genre>, GeneralError>(
+			request, SafeCall.RetryCount
 		)
 
 		return if (res is Resource.Success) {
@@ -205,8 +203,8 @@ class AnimeSearchRepository(
 			parameter(AnimeConstant.FilterKey, AnimeGenres.ThemesKey)
 		}
 
-		val res = safeCall<ResponseListWrapper<Genre>, GeneralError>(
-			client, request, DefaultRetryCount
+		val res = client.safeCall<ResponseListWrapper<Genre>, GeneralError>(
+			request, SafeCall.RetryCount
 		)
 
 		return if (res is Resource.Success) {
@@ -228,8 +226,8 @@ class AnimeSearchRepository(
 			parameter(AnimeConstant.FilterKey, AnimeGenres.ExplicitKey)
 		}
 
-		val res = safeCall<ResponseListWrapper<Genre>, GeneralError>(
-			client, request, DefaultRetryCount
+		val res = client.safeCall<ResponseListWrapper<Genre>, GeneralError>(
+			request, SafeCall.RetryCount
 		)
 
 		return if (res is Resource.Success) {

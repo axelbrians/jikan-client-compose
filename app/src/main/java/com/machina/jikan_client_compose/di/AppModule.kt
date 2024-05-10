@@ -104,12 +104,6 @@ class AppModule {
 
 	@Provides
 	@Singleton
-	fun provideCall(): SafeCall {
-		return SafeCall()
-	}
-
-	@Provides
-	@Singleton
 	fun provideSharedPrefsContract(
 		@ApplicationContext context: Context
 	): SharedPrefsContract {
@@ -121,37 +115,33 @@ class AppModule {
 	@Provides
 	@Singleton
 	fun provideAnimeService(
-		@AndroidKtorClient client: HttpClient,
-		safeCall: SafeCall
+		@AndroidKtorClient client: HttpClient
 	): AnimeService {
-		return AnimeServiceImpl(client, safeCall)
+		return AnimeServiceImpl(client)
 	}
 
 	@Provides
 	@Singleton
 	fun provideAnimeDetailsService(
-		@AndroidKtorClient client: HttpClient,
-		safeCall: SafeCall
+		@AndroidKtorClient client: HttpClient
 	): AnimeDetailsService {
-		return AnimeDetailsRepository(client, safeCall)
+		return AnimeDetailsRepository(client)
 	}
 
 	@Provides
 	@Singleton
 	fun provideAnimeSearchService(
-		@AndroidKtorClient client: HttpClient,
-		safeCall: SafeCall
+		@AndroidKtorClient client: HttpClient
 	): AnimeSearchService {
-		return AnimeSearchRepository(client, safeCall)
+		return AnimeSearchRepository(client)
 	}
 
 	@Provides
 	@Singleton
 	fun provideMangaService(
-		@AndroidKtorClient client: HttpClient,
-		safeCall: SafeCall
+		@AndroidKtorClient client: HttpClient
 	): MangaService {
-		return MangaRepository(client, safeCall)
+		return MangaRepository(client)
 	}
 
 }

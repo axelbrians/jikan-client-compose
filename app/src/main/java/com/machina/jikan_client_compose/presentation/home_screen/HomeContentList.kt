@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
@@ -32,6 +33,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.StateFlow
 import kotlin.math.roundToInt
 
+
+private const val maxCardRotation = 5f
+private const val maxCardOffset = 200
+
 @OptIn(ExperimentalMaterial3Api::class)
 @ExperimentalCoilApi
 @Composable
@@ -39,19 +44,24 @@ fun HomeContentList(
 	navigator: HomeScreenNavigator,
 	homeSections: StateFlow<HomeState>,
 	modifier: Modifier = Modifier,
+	lazyListState: LazyListState = rememberLazyListState(),
 	getHomeSections: () -> Unit
 ) {
-	val lazyListState = rememberLazyListState()
 	val isScrolledToTheTop by lazyListState.isScrolledToTheFirst()
-	val pullToRefreshState = rememberPullToRefreshState()
 
 	val homeState by homeSections.collectAsState()
 	val isLoading by produceState(initialValue = false, homeState) {
 		value = homeState is HomeState.Loading
 	}
+
+	val pullToRefreshState = rememberPullToRefreshState()
 	val isRefreshing by remember {
 		derivedStateOf { pullToRefreshState.isRefreshing }
 	}
+	val willRefresh = remember {
+		derivedStateOf { pullToRefreshState.progress > 1f }
+	}
+
 
 	LaunchedEffect(isRefreshing) {
 		if (isRefreshing) {
@@ -63,33 +73,15 @@ fun HomeContentList(
 			pullToRefreshState.endRefresh()
 		}
 	}
-
-	val willRefresh = remember {
-		derivedStateOf { pullToRefreshState.progress > 1f }
-	}
 	HomeContentRefreshHapticHandler(
 		willRefresh = willRefresh,
 		isRefreshing = isRefreshing,
 		progress = pullToRefreshState.progress
 	)
 
-
-	val maxCardRotation = 5f
-	val maxCardOffset = 200
-	val cardOffset by animateIntAsState(
-		targetValue = when {
-			isRefreshing -> maxCardOffset
-			pullToRefreshState.progress in 0f..1f -> (maxCardOffset * pullToRefreshState.progress).roundToInt()
-			pullToRefreshState.progress > 1f -> (maxCardOffset + ((pullToRefreshState.progress - 1f) * .1f) * 100).roundToInt()
-			else -> 0
-		}, label = "cardOffset"
-	)
-	val cardRotation by animateFloatAsState(
-		targetValue = when {
-			isRefreshing || pullToRefreshState.progress > 1f -> maxCardRotation
-			pullToRefreshState.progress > 0f -> 5 * pullToRefreshState.progress
-			else -> 0f
-		}, label = "cardRotation"
+	val (cardOffset, cardRotation) = getOffsetAndRotation(
+		isRefreshing = isRefreshing,
+		progress = pullToRefreshState.progress
 	)
 
 	Box(modifier = modifier) {
@@ -113,9 +105,10 @@ fun HomeContentList(
 						navigator = navigator,
 						modifierProvider = { index ->
 							Modifier.graphicsLayer {
-								rotationZ = cardRotation * if (index % 2 == 0) 1 else -1
+								val rotateDirection = if (index % 2 == 0) 1 else -1
+								rotationZ = cardRotation.value * rotateDirection
 								translationY =
-									(cardOffset * ((maxCardRotation - (index + 1)) / maxCardRotation)).dp
+									(cardOffset.value * ((maxCardRotation - (index + 1)) / maxCardRotation)).dp
 										.roundToPx()
 										.toFloat()
 							}
@@ -131,7 +124,7 @@ fun HomeContentList(
 		GlowingBeamLoadingIndicator(
 			pullToRefreshState = pullToRefreshState,
 			isRefreshing = isRefreshing,
-			maxHeight = cardOffset,
+			maxHeight = cardOffset.value,
 			modifier = Modifier.fillMaxWidth()
 		)
 	}
@@ -159,4 +152,28 @@ private fun HomeContentRefreshHapticHandler(
 			}
 		}
 	}
+}
+
+@Composable
+private fun getOffsetAndRotation(
+	isRefreshing: Boolean,
+	progress: Float
+): Pair<State<Int>, State<Float>> {
+	val cardOffset = animateIntAsState(
+		targetValue = when {
+			isRefreshing -> maxCardOffset
+			progress in 0f..1f -> (maxCardOffset * progress).roundToInt()
+			progress > 1f -> (maxCardOffset + ((progress - 1f) * .1f) * 100).roundToInt()
+			else -> 0
+		}, label = "cardOffset"
+	)
+	val cardRotation = animateFloatAsState(
+		targetValue = when {
+			isRefreshing || progress > 1f -> maxCardRotation
+			progress > 0f -> 5 * progress
+			else -> 0f
+		}, label = "cardRotation"
+	)
+
+	return cardOffset to cardRotation
 }

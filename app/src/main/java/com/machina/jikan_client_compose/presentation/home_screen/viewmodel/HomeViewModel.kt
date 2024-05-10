@@ -44,7 +44,6 @@ class HomeViewModel @Inject constructor(
 
 	override fun onCleared() {
 		super.onCleared()
-		getHomeSectionsUseCase.onCleared()
 	}
 
 	sealed interface HomeState {

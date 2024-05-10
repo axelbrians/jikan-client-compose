@@ -54,8 +54,7 @@ class AnimeUseCaseModule {
 		return GetHomeSectionsUseCaseImpl(
 			airingPopularUseCase = animeAiringPopularUseCase,
 			animeScheduleUseCase = animeScheduleUseCase,
-			animeTopUseCase = animeTopUseCase,
-			dispatchers = dispatchers
+			animeTopUseCase = animeTopUseCase
 		)
 	}
 }

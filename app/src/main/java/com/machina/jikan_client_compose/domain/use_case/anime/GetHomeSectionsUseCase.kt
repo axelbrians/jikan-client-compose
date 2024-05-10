@@ -25,19 +25,13 @@ data class HomeSection(
 interface GetHomeSectionsUseCase {
 
 	suspend fun invoke(): ImmutableList<HomeSection>
-
-	fun onCleared()
 }
 
 class GetHomeSectionsUseCaseImpl(
 	private val airingPopularUseCase: GetAnimeAiringPopularUseCase,
 	private val animeScheduleUseCase: GetAnimeScheduleUseCase,
-	private val animeTopUseCase: GetAnimeTopUseCase,
-	private val dispatchers: DispatchersProvider
+	private val animeTopUseCase: GetAnimeTopUseCase
 ): GetHomeSectionsUseCase {
-
-	private val supervisorJob = SupervisorJob()
-	private val concurrentScope = CoroutineScope(dispatchers.io + supervisorJob)
 
 	override suspend fun invoke(): ImmutableList<HomeSection> {
 		val airingPopular = airingPopularUseCase.executeAsHomeSection()
@@ -50,9 +44,5 @@ class GetHomeSectionsUseCaseImpl(
 			add(airingToday)
 			add(animeTop)
 		}.toImmutableList()
-	}
-
-	override fun onCleared() {
-		supervisorJob.cancel()
 	}
 }

@@ -1,10 +1,10 @@
 package com.machina.jikan_client_compose.data.repository
 
 import com.machina.jikan_client_compose.core.SafeCall
-import com.machina.jikan_client_compose.core.SafeCall.Companion.DefaultRetryCount
 import com.machina.jikan_client_compose.core.constant.Endpoints
 import com.machina.jikan_client_compose.core.error.GeneralError
 import com.machina.jikan_client_compose.core.extensions.defaultUrl
+import com.machina.jikan_client_compose.core.safeCall
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.core.wrapper.ResponseListWrapper
 import com.machina.jikan_client_compose.data.remote.anime_details.AnimeDetailsService
@@ -19,8 +19,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.request.HttpRequestBuilder
 
 class AnimeDetailsRepository(
-	@AndroidKtorClient private val client: HttpClient,
-	private val safeCall: SafeCall
+	@AndroidKtorClient private val client: HttpClient
 ): AnimeDetailsService {
 
 	override suspend fun getAnimeDetails(malId: Int): Resource<AnimeDetailsDto> {
@@ -28,9 +27,7 @@ class AnimeDetailsRepository(
 			defaultUrl { encodedPath = Endpoints.ANIME_DETAILS + "/$malId" }
 		}
 
-		val res = safeCall<AnimeDetailsResponseV4, GeneralError>(
-			client, request, 5
-		)
+		val res = client.safeCall<AnimeDetailsResponseV4, GeneralError>(request, SafeCall.RetryCount)
 		return if (res is Resource.Success && res.data != null) {
 			Resource.Success(res.data.data)
 		} else {
@@ -45,8 +42,8 @@ class AnimeDetailsRepository(
 			}
 		}
 
-		val res = safeCall<ResponseListWrapper<AnimeCharacterResponse>, GeneralError>(
-			client, request, DefaultRetryCount
+		val res = client.safeCall<ResponseListWrapper<AnimeCharacterResponse>, GeneralError>(
+			request, SafeCall.RetryCount
 		)
 		return if (res is Resource.Success && res.data != null) {
 			val orderedCharacters = res.data.data.sortedByDescending { it.favoritesCount }
@@ -61,8 +58,8 @@ class AnimeDetailsRepository(
 			defaultUrl { encodedPath = Endpoints.getAnimeRecommendationEndpoint(malId) }
 		}
 
-		val res = safeCall<ResponseListWrapper<AnimeRecommendationResponse>, GeneralError>(
-			client, request, DefaultRetryCount
+		val res = client.safeCall<ResponseListWrapper<AnimeRecommendationResponse>, GeneralError>(
+			request, SafeCall.RetryCount
 		)
 
 		return if (res is Resource.Success && res.data != null) {
@@ -79,6 +76,6 @@ class AnimeDetailsRepository(
 			defaultUrl { encodedPath = Endpoints.getAnimePicturesEndpoint(malId) }
 		}
 
-		return safeCall<ResponseListWrapper<Images>, GeneralError>(client, request, DefaultRetryCount)
+		return client.safeCall<ResponseListWrapper<Images>, GeneralError>(request, SafeCall.RetryCount)
 	}
 }

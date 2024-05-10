@@ -1,12 +1,12 @@
 package com.machina.jikan_client_compose.data.remote.anime
 
 import com.machina.jikan_client_compose.core.SafeCall
-import com.machina.jikan_client_compose.core.SafeCall.Companion.DefaultRetryCount
 import com.machina.jikan_client_compose.core.constant.AnimeConstant
 import com.machina.jikan_client_compose.core.constant.Endpoints
 import com.machina.jikan_client_compose.core.error.GeneralError
 import com.machina.jikan_client_compose.core.extensions.defaultUrl
 import com.machina.jikan_client_compose.core.helper.DateHelper
+import com.machina.jikan_client_compose.core.safeCall
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import com.machina.jikan_client_compose.data.remote.dto.anime_airing_popular.AnimeAiringPopularResponseV4
 import com.machina.jikan_client_compose.data.remote.dto.anime_schedules.AnimeScheduleResponseV4
@@ -29,8 +29,7 @@ interface AnimeService {
 }
 
 class AnimeServiceImpl(
-	@AndroidKtorClient private val client: HttpClient,
-	private val safeCall: SafeCall
+	@AndroidKtorClient private val client: HttpClient
 ) : AnimeService {
 
 	override suspend fun getAnimeTopOfAllTime(page: Int): Resource<AnimeTopResponseV4> {
@@ -39,7 +38,7 @@ class AnimeServiceImpl(
 			parameter(AnimeConstant.PageKey, page)
 		}
 
-		return safeCall<AnimeTopResponseV4, GeneralError>(client, request, DefaultRetryCount)
+		return client.safeCall<AnimeTopResponseV4, GeneralError>(request, SafeCall.RetryCount)
 	}
 
 	override suspend fun getAnimeAiringPopular(): Resource<AnimeAiringPopularResponseV4> {
@@ -56,7 +55,7 @@ class AnimeServiceImpl(
 			parameter(AnimeConstant.SortKey, "desc")
 		}
 
-		return safeCall<AnimeAiringPopularResponseV4, GeneralError>(client, request, DefaultRetryCount)
+		return client.safeCall<AnimeAiringPopularResponseV4, GeneralError>(request, SafeCall.RetryCount)
 	}
 
 	override suspend fun getAnimeSchedule(day: Int, page: Int): Resource<AnimeScheduleResponseV4> {
@@ -68,7 +67,7 @@ class AnimeServiceImpl(
 			parameter(AnimeConstant.PageKey, page)
 		}
 
-		val res = safeCall<AnimeScheduleResponseV4, GeneralError>(client, request, DefaultRetryCount)
+		val res = client.safeCall<AnimeScheduleResponseV4, GeneralError>(request, SafeCall.RetryCount)
 
 		// Sort the result by Rank, and move the 0 rank value to last
 		return if (res is Resource.Success && res.data != null) {

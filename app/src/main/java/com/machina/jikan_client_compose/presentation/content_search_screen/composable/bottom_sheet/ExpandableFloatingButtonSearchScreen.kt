@@ -15,7 +15,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.ripple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -45,7 +45,7 @@ fun ExpandableFloatingButtonSearchScreen(
 			.background(MyColor.Yellow500)
 			.clickable(
 				interactionSource = remember { MutableInteractionSource() },
-				indication = rememberRipple(color = MyColor.Yellow500Ripple),
+				indication = ripple(color = MyColor.Yellow500Ripple),
 				onClick = onClick
 			)
 			.padding(12.dp)

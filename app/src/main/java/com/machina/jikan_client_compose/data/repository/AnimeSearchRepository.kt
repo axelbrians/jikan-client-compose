@@ -21,6 +21,7 @@ import com.machina.jikan_client_compose.presentation.content_search_screen.data.
 import com.machina.jikan_client_compose.presentation.content_search_screen.data.filter.FilterGroupType
 import com.machina.jikan_client_compose.presentation.content_search_screen.data.filter.FilterItemData
 import io.ktor.client.HttpClient
+import io.ktor.http.encodedPath
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.parameter
 import timber.log.Timber

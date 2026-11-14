@@ -17,8 +17,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.annotation.ExperimentalCoilApi
-import coil.compose.SubcomposeAsyncImage
+import coil3.annotation.ExperimentalCoilApi
+import coil3.compose.SubcomposeAsyncImage
 import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.domain.model.ContentSearch
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularLoading

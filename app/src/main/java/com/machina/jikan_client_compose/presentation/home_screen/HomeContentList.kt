@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.pulltorefresh.pullToRefresh
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -27,15 +28,16 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
-import coil.annotation.ExperimentalCoilApi
+import coil3.annotation.ExperimentalCoilApi
 import com.machina.jikan_client_compose.core.extensions.isScrolledToTheFirst
 import com.machina.jikan_client_compose.presentation.composable.pull_to_refresh.GlowingBeamLoadingIndicator
 import com.machina.jikan_client_compose.presentation.home_screen.item.ItemHomeSection
@@ -66,33 +68,26 @@ fun HomeContentList(
 	}
 
 	val pullToRefreshState = rememberPullToRefreshState()
-	val isRefreshing by remember {
-		derivedStateOf { pullToRefreshState.isRefreshing }
-	}
+	var isRefreshing by remember { mutableStateOf(false) }
+	val progress = pullToRefreshState.distanceFraction
 	val willRefresh = remember {
-		derivedStateOf { pullToRefreshState.progress > 1f }
+		derivedStateOf { pullToRefreshState.distanceFraction > 1f }
 	}
 
-
-	LaunchedEffect(isRefreshing) {
-		if (isRefreshing) {
-			getHomeSections()
-		}
-	}
 	LaunchedEffect(isLoading) {
 		if (!isLoading) {
-			pullToRefreshState.endRefresh()
+			isRefreshing = false
 		}
 	}
 	HomeContentRefreshHapticHandler(
 		willRefresh = willRefresh,
 		isRefreshing = isRefreshing,
-		progress = pullToRefreshState.progress
+		progress = progress
 	)
 
 	val (cardOffset, cardRotation) = getOffsetAndRotation(
 		isRefreshing = isRefreshing,
-		progress = pullToRefreshState.progress
+		progress = progress
 	)
 
 	Box(modifier = modifier) {
@@ -100,13 +95,15 @@ fun HomeContentList(
 			state = lazyListState,
 			modifier = Modifier
 				.fillMaxSize()
-				.let {
-					if (isScrolledToTheTop) {
-						it.nestedScroll(pullToRefreshState.nestedScrollConnection)
-					} else {
-						it
+				.pullToRefresh(
+					isRefreshing = isRefreshing,
+					state = pullToRefreshState,
+					enabled = isScrolledToTheTop,
+					onRefresh = {
+						isRefreshing = true
+						getHomeSections()
 					}
-				}
+				)
 		) {
 			when (val state = homeState) {
 				is HomeState.Success,

@@ -17,4 +17,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "jikan-client-compose"
 include ':app'
-enableFeaturePreview("VERSION_CATALOGS")

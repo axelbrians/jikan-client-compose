@@ -1,6 +1,7 @@
 package com.machina.jikan_client_compose.data.remote.anime
 
 import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.http.path
 import org.junit.Test
 
 class AnimeServiceImplTest {

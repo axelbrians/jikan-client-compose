@@ -13,6 +13,7 @@ import com.machina.jikan_client_compose.data.remote.dto.anime_schedules.AnimeSch
 import com.machina.jikan_client_compose.data.remote.dto.anime_top.AnimeTopResponseV4
 import com.machina.jikan_client_compose.di.AndroidKtorClient
 import io.ktor.client.HttpClient
+import io.ktor.http.encodedPath
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.parameter
 

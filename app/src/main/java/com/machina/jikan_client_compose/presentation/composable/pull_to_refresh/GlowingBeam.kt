@@ -37,13 +37,13 @@ fun GlowingBeamLoadingIndicator(
 		targetValue = when {
 			isRefreshing -> maxHeightInDp
 
-			pullToRefreshState.progress in 0f..1f -> {
-				(pullToRefreshState.progress * maxHeight).dp
+			pullToRefreshState.distanceFraction in 0f..1f -> {
+				(pullToRefreshState.distanceFraction * maxHeight).dp
 			}
 
-			pullToRefreshState.progress > 1f -> {
+			pullToRefreshState.distanceFraction > 1f -> {
 				(maxHeight + (
-				  ((pullToRefreshState.progress - 1f) * .1f) * maxHeight
+				  ((pullToRefreshState.distanceFraction - 1f) * .1f) * maxHeight
 		        )).dp
 			}
 
@@ -60,7 +60,7 @@ fun GlowingBeamLoadingIndicator(
 			}
 	) {
 	    GlowingBeam(
-		    progress = pullToRefreshState.progress,
+		    progress = pullToRefreshState.distanceFraction,
 		    isRefreshing = isRefreshing
 	    )
     }

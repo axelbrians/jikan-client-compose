@@ -51,7 +51,7 @@ fun FilterModalBottomSheet(
 		containerColor = MyColor.DarkBlueBackground,
 		contentColor = MyColor.Yellow500,
 		shape = RoundedCornerShape(topEnd = 12.dp, topStart = 12.dp),
-		windowInsets = WindowInsets.systemBars,
+		contentWindowInsets = { WindowInsets.systemBars },
 		dragHandle = {
 			Box(
 				modifier = Modifier

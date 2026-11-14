@@ -23,10 +23,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import coil.annotation.ExperimentalCoilApi
+import coil3.annotation.ExperimentalCoilApi
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.machina.jikan_client_compose.OnDestinationChanged
 import com.machina.jikan_client_compose.core.enums.ContentType

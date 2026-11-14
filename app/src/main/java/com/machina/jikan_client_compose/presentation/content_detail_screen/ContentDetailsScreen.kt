@@ -41,14 +41,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import coil.annotation.ExperimentalCoilApi
-import coil.compose.SubcomposeAsyncImage
-import com.google.accompanist.flowlayout.FlowMainAxisAlignment
-import com.google.accompanist.flowlayout.FlowRow
-import com.google.accompanist.insets.navigationBarsHeight
+import coil3.annotation.ExperimentalCoilApi
+import coil3.compose.SubcomposeAsyncImage
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.add
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.machina.jikan_client_compose.OnDestinationChanged
 import com.machina.jikan_client_compose.core.constant.Constant
@@ -203,9 +205,8 @@ fun ContentDetailsScreen(
 					if (isSynopsisExpanded) {
 						FlowRow(
 							modifier = Modifier.padding(horizontal = 10.dp),
-							lastLineMainAxisAlignment = FlowMainAxisAlignment.Start,
-							mainAxisSpacing = 4.dp,
-							crossAxisSpacing = 4.dp
+							horizontalArrangement = Arrangement.spacedBy(4.dp),
+							verticalArrangement = Arrangement.spacedBy(4.dp)
 						) {
 							genres.forEach {
 								GenreChip(text = it.name)
@@ -321,7 +322,7 @@ fun ContentDetailsScreen(
 					}
 				}
 
-				Spacer(modifier = Modifier.navigationBarsHeight(additional = 12.dp))
+				Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars.add(WindowInsets(bottom = 12.dp))))
 			}
 		}
 	}

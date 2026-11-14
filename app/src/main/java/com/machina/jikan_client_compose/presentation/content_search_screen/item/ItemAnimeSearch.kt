@@ -20,7 +20,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.SubcomposeAsyncImage
+import coil3.compose.SubcomposeAsyncImage
 import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.domain.model.anime.AnimeHorizontalDataModel
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularLoading

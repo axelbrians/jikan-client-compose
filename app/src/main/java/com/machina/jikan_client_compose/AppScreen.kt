@@ -14,7 +14,7 @@ import com.machina.jikan_client_compose.presentation.home_screen.HomeNavigation
 import com.machina.jikan_client_compose.presentation.home_screen.addHomeScreen
 
 @OptIn(
-	coil.annotation.ExperimentalCoilApi::class,
+	coil3.annotation.ExperimentalCoilApi::class,
 	androidx.compose.animation.ExperimentalAnimationApi::class
 )
 @Composable

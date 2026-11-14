@@ -22,15 +22,18 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import io.ktor.client.*
-import io.ktor.client.engine.*
-import io.ktor.client.engine.android.*
-import io.ktor.client.engine.okhttp.*
-import io.ktor.client.features.*
-import io.ktor.client.features.json.*
-import io.ktor.client.features.json.serializer.*
-import io.ktor.client.features.logging.*
-import io.ktor.http.*
+import io.ktor.client.HttpClient
+import io.ktor.client.HttpClientConfig
+import io.ktor.client.engine.HttpClientEngineConfig
+import io.ktor.client.engine.android.Android
+import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.logging.ANDROID
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Singleton
 
@@ -62,11 +65,8 @@ class AppModule {
 			}
 			installJsonFeature()
 			install(Logging) {
-				logger = Logger.DEFAULT
+				logger = Logger.ANDROID
 				level = LogLevel.HEADERS
-			}
-			install(DefaultRequest) {
-				method = HttpMethod.Get
 			}
 		}
 	}
@@ -93,8 +93,8 @@ class AppModule {
 	}
 
 	private fun<T : HttpClientEngineConfig> HttpClientConfig<T>.installJsonFeature() {
-		install(JsonFeature) {
-			serializer = KotlinxSerializer(kotlinx.serialization.json.Json {
+		install(ContentNegotiation) {
+			json(Json {
 				ignoreUnknownKeys = true
 				coerceInputValues = true
 				prettyPrint = true

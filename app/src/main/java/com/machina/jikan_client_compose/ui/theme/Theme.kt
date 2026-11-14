@@ -5,7 +5,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import com.google.accompanist.insets.ProvideWindowInsets
 
 private val DarkColorPalette = darkColorScheme(
 	primary = MyColor.Yellow500,
@@ -43,12 +42,10 @@ fun JikanClientComposeTheme(
 //    }
 
 	val colors = DarkColorPalette
-	ProvideWindowInsets {
-		MaterialTheme(
-			colorScheme = colors,
-			typography = JikanTypography.JikanTextStyle,
-			shapes = MyShape.ThemeShapes,
-			content = content
-		)
-	}
+	MaterialTheme(
+		colorScheme = colors,
+		typography = JikanTypography.JikanTextStyle,
+		shapes = MyShape.ThemeShapes,
+		content = content
+	)
 }

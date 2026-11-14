@@ -13,17 +13,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.PagerScope
-import com.google.accompanist.pager.calculateCurrentOffsetForPage
+import androidx.compose.foundation.pager.PagerState
+import com.machina.jikan_client_compose.core.extensions.calculateCurrentOffsetForPage
 import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.valentinilk.shimmer.Shimmer
 import com.valentinilk.shimmer.shimmer
 import kotlin.math.absoluteValue
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
-fun PagerScope.PagerItemAnimeAiringPopularShimmer(
+fun PagerItemAnimeAiringPopularShimmer(
+	pagerState: PagerState,
 	shimmerInstance: Shimmer,
 	currentPage: Int,
 ) {
@@ -34,7 +33,7 @@ fun PagerScope.PagerItemAnimeAiringPopularShimmer(
 				// Calculate the absolute offset for the current page from the
 				// scroll position. We use the absolute value which allows us to mirror
 				// any effects for both directions
-				val pageOffset = calculateCurrentOffsetForPage(currentPage).absoluteValue
+				val pageOffset = pagerState.calculateCurrentOffsetForPage(currentPage).absoluteValue
 				// We animate the scaleX + scaleY, between 85% and 100%
 				lerp(
 					start = 0.85f,

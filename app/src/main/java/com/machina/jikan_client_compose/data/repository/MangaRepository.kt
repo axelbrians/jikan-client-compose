@@ -14,6 +14,7 @@ import com.machina.jikan_client_compose.data.remote.dto.manga_details.MangaDetai
 import com.machina.jikan_client_compose.data.remote.dto.manga_details.MangaDetailsResponseV4
 import com.machina.jikan_client_compose.di.AndroidKtorClient
 import io.ktor.client.*
+import io.ktor.http.encodedPath
 import io.ktor.client.request.*
 import io.ktor.http.*
 

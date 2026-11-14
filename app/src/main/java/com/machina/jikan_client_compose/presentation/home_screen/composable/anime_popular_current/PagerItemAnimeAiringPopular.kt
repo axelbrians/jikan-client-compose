@@ -22,10 +22,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import androidx.compose.ui.zIndex
-import coil.compose.SubcomposeAsyncImage
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.PagerScope
-import com.google.accompanist.pager.calculateCurrentOffsetForPage
+import coil3.compose.SubcomposeAsyncImage
+import androidx.compose.foundation.pager.PagerState
+import com.machina.jikan_client_compose.core.extensions.calculateCurrentOffsetForPage
 import com.machina.jikan_client_compose.domain.model.anime.AnimeAiringPopular
 import com.machina.jikan_client_compose.domain.model.anime.AnimeThumbnail
 import com.machina.jikan_client_compose.presentation.composable.CenterCircularLoading
@@ -36,9 +35,9 @@ import com.machina.jikan_client_compose.ui.theme.MyColor
 import com.machina.jikan_client_compose.ui.theme.MyShape
 import kotlin.math.absoluteValue
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
-fun PagerScope.ItemHeadlineCarousel(
+fun ItemHeadlineCarousel(
+	pagerState: PagerState,
 	modifier: Modifier = Modifier,
 	data: AnimeThumbnail,
 	currentPage: Int,
@@ -51,7 +50,7 @@ fun PagerScope.ItemHeadlineCarousel(
 				// Calculate the absolute offset for the current page from the
 				// scroll position. We use the absolute value which allows us to mirror
 				// any effects for both directions
-				val pageOffset = calculateCurrentOffsetForPage(currentPage).absoluteValue
+				val pageOffset = pagerState.calculateCurrentOffsetForPage(currentPage).absoluteValue
 				// We animate the scaleX + scaleY, between 85% and 100%
 				lerp(
 					start = 0.9f,
@@ -126,9 +125,9 @@ fun PagerScope.ItemHeadlineCarousel(
 	}
 }
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
-fun PagerScope.PagerItemAnimeAiringPopular(
+fun PagerItemAnimeAiringPopular(
+	pagerState: PagerState,
 	modifier: Modifier = Modifier,
 	data: AnimeAiringPopular,
 	currentPage: Int,
@@ -141,7 +140,7 @@ fun PagerScope.PagerItemAnimeAiringPopular(
 				// Calculate the absolute offset for the current page from the
 				// scroll position. We use the absolute value which allows us to mirror
 				// any effects for both directions
-				val pageOffset = calculateCurrentOffsetForPage(currentPage).absoluteValue
+				val pageOffset = pagerState.calculateCurrentOffsetForPage(currentPage).absoluteValue
 				// We animate the scaleX + scaleY, between 85% and 100%
 				lerp(
 					start = 0.9f,

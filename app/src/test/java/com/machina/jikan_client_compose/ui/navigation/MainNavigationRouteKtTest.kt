@@ -2,6 +2,7 @@ package com.machina.jikan_client_compose.ui.navigation
 
 import com.machina.jikan_client_compose.core.extensions.defaultUrl
 import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.http.path
 import io.ktor.client.request.parameter
 import org.junit.Test
 

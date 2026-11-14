@@ -4,14 +4,14 @@ import com.machina.jikan_client_compose.core.error.GeneralError
 import com.machina.jikan_client_compose.core.error.MyError
 import com.machina.jikan_client_compose.core.wrapper.Resource
 import io.ktor.client.HttpClient
-import io.ktor.client.call.receive
-import io.ktor.client.features.ClientRequestException
+import io.ktor.client.call.body
+import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.request
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.isSuccess
-import io.ktor.network.sockets.ConnectTimeoutException
+import io.ktor.client.network.sockets.ConnectTimeoutException
 import kotlinx.coroutines.delay
 import timber.log.Timber
 
@@ -31,10 +31,10 @@ suspend inline fun <reified T: Any, reified U: Any> HttpClient.safeCall(
 		}
 
 		if (res.status.isSuccess()) {
-			val body = res.receive<T>()
+			val body = res.body<T>()
 			Resource.Success(body)
 		} else {
-			when (val error = res.receive<U>()) {
+			when (val error = res.body<U>()) {
 				is GeneralError -> Resource.Error(error.message)
 				else -> Resource.Error(MyError.UNKNOWN_ERROR)
 			}
@@ -92,7 +92,7 @@ suspend inline fun callWithRetry(
 	request: HttpRequestBuilder,
 	times: Int
 ): HttpResponse {
-	var res = client.request<HttpResponse>(request)
+	var res = client.request(request)
 //    Timber.v(res.call.response.toString())
 //    Timber.v(res.status.toString())
 //    Timber.v(res.status.value.toString())

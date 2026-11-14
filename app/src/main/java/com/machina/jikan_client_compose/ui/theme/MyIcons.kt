@@ -8,12 +8,12 @@ import com.machina.jikan_client_compose.R
 object MyIcons {
 
   object Outlined {
-    const val DoubleCheck = R.drawable.ic_double_check_outlined
-    const val Clock4 = R.drawable.ic_clock_outlined
+    val DoubleCheck = R.drawable.ic_double_check_outlined
+    val Clock4 = R.drawable.ic_clock_outlined
   }
 
   object Filled {
-    const val ChevronDown = R.drawable.ic_circle_chevron_down_filled
+    val ChevronDown = R.drawable.ic_circle_chevron_down_filled
 
     @Composable
     fun grid3(): Painter {
@@ -61,7 +61,7 @@ object MyIcons {
   }
 
   object Solid {
-    const val Filter = R.drawable.ic_filter_solid
+    val Filter = R.drawable.ic_filter_solid
   }
 
 }

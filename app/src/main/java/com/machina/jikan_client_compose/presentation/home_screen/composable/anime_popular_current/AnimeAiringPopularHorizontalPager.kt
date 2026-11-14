@@ -10,10 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.PagerState
-import com.google.accompanist.pager.rememberPagerState
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import com.machina.jikan_client_compose.core.enums.ContentType
 import com.machina.jikan_client_compose.domain.model.anime.AnimeAiringPopular
 import com.machina.jikan_client_compose.domain.model.anime.AnimeThumbnail
@@ -21,12 +20,12 @@ import com.machina.jikan_client_compose.presentation.data.StateListWrapper
 import com.valentinilk.shimmer.Shimmer
 import kotlin.math.absoluteValue
 
-@OptIn(ExperimentalPagerApi::class, coil.annotation.ExperimentalCoilApi::class)
+@OptIn(coil3.annotation.ExperimentalCoilApi::class)
 @Composable
 fun AnimeHeadlineCarousel(
 	dataSet: List<AnimeThumbnail>,
 	modifier: Modifier = Modifier,
-	pagerState: PagerState = rememberPagerState(),
+	pagerState: PagerState = rememberPagerState { dataSet.size },
 	onClick: (Int, ContentType) -> Unit
 ) {
 	Box(modifier = modifier.fillMaxWidth()) {
@@ -35,12 +34,12 @@ fun AnimeHeadlineCarousel(
 				.fillMaxWidth()
 				.height(280.dp),
 			state = pagerState,
-			count = dataSet.size,
-			itemSpacing = 12.dp,
+						pageSpacing = 12.dp,
 			contentPadding = PaddingValues(horizontal = 48.dp),
 			key = { dataSet[it].malId }
 		) { index ->
 			ItemHeadlineCarousel(
+				pagerState = pagerState,
 				modifier = Modifier,
 				data = dataSet[index],
 				currentPage = index,
@@ -56,14 +55,14 @@ fun AnimeHeadlineCarousel(
 		) {
 			repeat(dataSet.size) {
 				val targetPageOffset = (
-					pagerState.currentPage + pagerState.currentPageOffset - pagerState.targetPage
+					pagerState.currentPage + pagerState.currentPageOffsetFraction - pagerState.targetPage
 					).absoluteValue
 
 				HorizontalPagerChipIndicator(
 					itemIndex = it,
 					currentPage = pagerState.currentPage,
 					targetPage = pagerState.targetPage,
-					currentPageOffset = pagerState.currentPageOffset.absoluteValue,
+					currentPageOffset = pagerState.currentPageOffsetFraction.absoluteValue,
 					targetPageOffset = targetPageOffset
 				)
 			}
@@ -72,12 +71,12 @@ fun AnimeHeadlineCarousel(
 	}
 }
 
-@OptIn(ExperimentalPagerApi::class, coil.annotation.ExperimentalCoilApi::class)
+@OptIn(coil3.annotation.ExperimentalCoilApi::class)
 @Composable
 fun AnimeAiringPopularHorizontalPager(
 	modifier: Modifier = Modifier,
 	dataSet: StateListWrapper<AnimeAiringPopular> = StateListWrapper(),
-	pagerState: PagerState = rememberPagerState(),
+	pagerState: PagerState = rememberPagerState { if (dataSet.isLoading) 3 else dataSet.data.size },
 	shimmerInstance: Shimmer,
 	navigateToContentDetailsScreen: (Int, ContentType) -> Unit
 ) {
@@ -90,18 +89,19 @@ fun AnimeAiringPopularHorizontalPager(
 				.fillMaxWidth()
 				.height(280.dp),
 			state = pagerState,
-			count = shownCount,
-			itemSpacing = 12.dp,
+						pageSpacing = 12.dp,
 			contentPadding = PaddingValues(horizontal = 48.dp),
 			key = { page -> if (isLoading) page else data[page].malId }
 		) { page ->
 			if (isLoading) {
 				PagerItemAnimeAiringPopularShimmer(
+					pagerState = pagerState,
 					shimmerInstance = shimmerInstance,
 					currentPage = page
 				)
 			} else {
 				PagerItemAnimeAiringPopular(
+					pagerState = pagerState,
 					modifier = Modifier,
 					data = data[page],
 					currentPage = page,
@@ -121,14 +121,14 @@ fun AnimeAiringPopularHorizontalPager(
 			} else {
 				repeat(data.size) {
 					val targetPageOffset = (
-						pagerState.currentPage + pagerState.currentPageOffset - pagerState.targetPage
+						pagerState.currentPage + pagerState.currentPageOffsetFraction - pagerState.targetPage
 					).absoluteValue
 
 					HorizontalPagerChipIndicator(
 						itemIndex = it,
 						currentPage = pagerState.currentPage,
 						targetPage = pagerState.targetPage,
-						currentPageOffset = pagerState.currentPageOffset.absoluteValue,
+						currentPageOffset = pagerState.currentPageOffsetFraction.absoluteValue,
 						targetPageOffset = targetPageOffset
 					)
 				}

@@ -16,6 +16,7 @@ import com.machina.jikan_client_compose.data.remote.dto.common.Images
 import com.machina.jikan_client_compose.di.AndroidKtorClient
 import com.machina.jikan_client_compose.domain.model.anime.AnimePortraitDataModel
 import io.ktor.client.HttpClient
+import io.ktor.http.encodedPath
 import io.ktor.client.request.HttpRequestBuilder
 
 class AnimeDetailsRepository(

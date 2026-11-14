@@ -14,7 +14,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.pager.ExperimentalPagerApi
 import com.machina.jikan_client_compose.core.constant.Constant
 import com.machina.jikan_client_compose.core.constant.Endpoints
 import com.machina.jikan_client_compose.domain.use_case.anime.HomeSection
@@ -89,7 +88,6 @@ fun LazyListScope.ItemHomeSection(
 	}
 }
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun ItemHomeSectionInternal(
 	section: HomeSection,

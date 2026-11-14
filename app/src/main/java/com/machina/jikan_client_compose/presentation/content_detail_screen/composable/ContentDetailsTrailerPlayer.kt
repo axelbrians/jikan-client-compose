@@ -9,9 +9,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
-import coil.annotation.ExperimentalCoilApi
-import coil.compose.ImagePainter
-import coil.compose.rememberImagePainter
+import coil3.annotation.ExperimentalCoilApi
+import coil3.compose.AsyncImagePainter
+import coil3.compose.rememberAsyncImagePainter
 
 private enum class TrailerState {
   THUMBNAIL,
@@ -24,7 +24,7 @@ private enum class TrailerState {
 fun ContentDetailsTrailerPlayer(
   modifier: Modifier = Modifier,
   trailerUrl: String = "",
-  coilPainter: ImagePainter = rememberImagePainter("")
+  coilPainter: AsyncImagePainter = rememberAsyncImagePainter("")
 ) {
   val trailerState = remember { mutableStateOf(TrailerState.THUMBNAIL) }
 

@@ -1,0 +1,118 @@
+app/src/main/java/com/machina/jikan_client_compose/presentation/content_search_screen/item/ItemAnimeSearch.kt
+  s_d16e6a3f4d1009::t_c0dc11ca921c37 23
+app/src/main/java/com/machina/jikan_client_compose/presentation/content_search_screen/composable/ContentSearchList.kt
+  s_d16e6a3f4d1009::t_c0dc11ca921c37 26
+app/src/main/java/com/machina/jikan_client_compose/presentation/content_view_all_small/SmallContentViewAllScreen.kt
+  s_d16e6a3f4d1009::t_3064f4379bd5b3 22
+app/src/main/java/com/machina/jikan_client_compose/core/extensions/PagerExtension.kt
+  s_d16e6a3f4d1009::t_aed4108027b895 1-11
+app/src/main/java/com/machina/jikan_client_compose/presentation/content_search_screen/composable/bottom_sheet/FilterModalBottomSheetButtonControl.kt
+  s_d16e6a3f4d1009::t_31999d1339a12b 9,57
+app/src/main/java/com/machina/jikan_client_compose/presentation/home_screen/composable/anime_popular_current/PagerItemAnimeAiringPopularShimmer.kt
+  s_d16e6a3f4d1009::t_aed4108027b895 16-17,24-25,36
+app/src/main/java/com/machina/jikan_client_compose/data/repository/AnimeDetailsRepository.kt
+  s_d16e6a3f4d1009::t_ebf2222f267b09 19
+app/src/test/java/com/machina/jikan_client_compose/data/remote/anime/AnimeServiceImplTest.kt
+  s_d16e6a3f4d1009::t_6d6aef2de7e9a9 4
+app/src/main/java/com/machina/jikan_client_compose/ui/theme/Theme.kt
+  s_d16e6a3f4d1009::t_5490b4aaec18e1 45,50
+  s_d16e6a3f4d1009::t_6ec75867a41017 46-49
+app/src/main/java/com/machina/jikan_client_compose/presentation/home_screen/HomeScreen.kt
+  s_d16e6a3f4d1009::t_c0dc11ca921c37 18
+  s_d16e6a3f4d1009::t_3064f4379bd5b3 15
+app/src/main/java/com/machina/jikan_client_compose/core/constant/Endpoints.kt
+  s_d16e6a3f4d1009::t_ebf2222f267b09 24-26
+app/src/test/java/com/machina/jikan_client_compose/core/extensions/KtorExtensionTest.kt
+  s_d16e6a3f4d1009::t_95df6277b6771c 1-30
+app/src/main/java/com/machina/jikan_client_compose/presentation/content_detail_screen/composable/ContentDetailsTrailerPlayer.kt
+  s_d16e6a3f4d1009::t_c0dc11ca921c37 12-14,27
+app/src/main/java/com/machina/jikan_client_compose/data/repository/MangaRepository.kt
+  s_d16e6a3f4d1009::t_ebf2222f267b09 17
+app/src/main/java/com/machina/jikan_client_compose/data/remote/anime/AnimeService.kt
+  s_d16e6a3f4d1009::t_ebf2222f267b09 16
+app/src/main/java/com/machina/jikan_client_compose/core/SafeCall.kt
+  s_d16e6a3f4d1009::t_29bc3bcf1504d6 7-8,14,34,37,95
+app/src/main/java/com/machina/jikan_client_compose/data/repository/AnimeSearchRepository.kt
+  s_d16e6a3f4d1009::t_ebf2222f267b09 24
+build.gradle
+  s_d16e6a3f4d1009::t_e83653199acc94 2-8,11-13
+app/src/main/java/com/machina/jikan_client_compose/presentation/home_screen/composable/anime_popular_current/AnimeAiringPopularHorizontalPager.kt
+  s_d16e6a3f4d1009::t_0bcf2725f9cda4 65,131
+  s_d16e6a3f4d1009::t_aed4108027b895 13-15,23,28,37,42,58,74,79,92,98,104,124
+app/src/main/java/com/machina/jikan_client_compose/presentation/composable/content_horizontal/ScrollableHorizontalContent.kt
+  s_d16e6a3f4d1009::t_c0dc11ca921c37 16
+app/src/main/java/com/machina/jikan_client_compose/presentation/content_detail_screen/composable/ContentDetailsHeader.kt
+  s_d16e6a3f4d1009::t_c0dc11ca921c37 31-33
+app/build.gradle
+  s_d16e6a3f4d1009::t_5f1bdc5add3f73 57
+  s_d16e6a3f4d1009::t_4c414669e0e9a3 2-7,11,35-36,40,42,47,49-52,65,80-81,103,113
+gradle/libs.versions.toml
+  s_d16e6a3f4d1009::t_9d5107fc13b8e6 8-20,22,24-27,32,41-42,48,66-67,73-74,77,101-107,110-115,121,130,132
+  s_d16e6a3f4d1009::t_5f1bdc5add3f73 33
+  s_d16e6a3f4d1009::t_3064f4379bd5b3 61
+  s_d16e6a3f4d1009::t_b507916ff3742c 4
+  s_d16e6a3f4d1009::t_16a8ffefe2b635 49
+app/src/main/java/com/machina/jikan_client_compose/presentation/content_search_screen/item/ItemMangaSearch.kt
+  s_d16e6a3f4d1009::t_c0dc11ca921c37 20-21
+app/src/main/java/com/machina/jikan_client_compose/presentation/home_screen/item/CardThumbnailPortrait.kt
+  s_d16e6a3f4d1009::t_c0dc11ca921c37 23-24
+app/src/main/java/com/machina/jikan_client_compose/di/AppModule.kt
+  s_d16e6a3f4d1009::t_29bc3bcf1504d6 25-36,68,96-97
+app/src/main/java/com/machina/jikan_client_compose/presentation/composable/pull_to_refresh/GlowingBeam.kt
+  s_d16e6a3f4d1009::t_88607861ac8f1e 40-41,44,46,63
+app/src/main/java/com/machina/jikan_client_compose/presentation/content_search_screen/composable/bottom_sheet/ExpandableFloatingButtonSearchScreen.kt
+  s_d16e6a3f4d1009::t_31999d1339a12b 18,48
+app/src/main/java/com/machina/jikan_client_compose/presentation/content_search_screen/composable/bottom_sheet/FilterModalBottomSheet.kt
+  s_d16e6a3f4d1009::t_31999d1339a12b 54
+gradle.properties
+  s_d16e6a3f4d1009::t_e83653199acc94 19
+app/src/main/java/com/machina/jikan_client_compose/presentation/content_detail_screen/ContentDetailsScreen.kt
+  s_d16e6a3f4d1009::t_3064f4379bd5b3 44
+  s_d16e6a3f4d1009::t_c0dc11ca921c37 47-48
+  s_d16e6a3f4d1009::t_0ebabd614a217a 49-53,208-209,325
+app/src/main/java/com/machina/jikan_client_compose/AppScreen.kt
+  s_d16e6a3f4d1009::t_c0dc11ca921c37 17
+app/src/main/java/com/machina/jikan_client_compose/presentation/composable/content_horizontal/ScrollableVerticalGridContent.kt
+  s_d16e6a3f4d1009::t_c0dc11ca921c37 13
+app/src/main/java/com/machina/jikan_client_compose/presentation/home_screen/composable/anime_popular_current/PagerItemAnimeAiringPopular.kt
+  s_d16e6a3f4d1009::t_c0dc11ca921c37 25
+  s_d16e6a3f4d1009::t_aed4108027b895 26-27,39-40,53,129-130,143
+app/src/main/java/com/machina/jikan_client_compose/presentation/content_view_all_normal/ContentViewAllListScreen.kt
+  s_d16e6a3f4d1009::t_3064f4379bd5b3 18
+app/src/main/java/com/machina/jikan_client_compose/presentation/content_search_screen/SearchScreen.kt
+  s_d16e6a3f4d1009::t_3064f4379bd5b3 26
+  s_d16e6a3f4d1009::t_c0dc11ca921c37 29
+app/src/main/java/com/machina/jikan_client_compose/ui/theme/MyIcons.kt
+  s_d16e6a3f4d1009::t_07062ad9fbdbc6 11-12,16,64
+app/src/main/java/com/machina/jikan_client_compose/presentation/home_screen/HomeContentList.kt
+  s_d16e6a3f4d1009::t_c0dc11ca921c37 40
+  s_d16e6a3f4d1009::t_88607861ac8f1e 23,31-32,71-72,74,79,85,90,98-104,106
+app/src/main/java/com/machina/jikan_client_compose/core/extensions/KtorExtension.kt
+  s_d16e6a3f4d1009::t_ebf2222f267b09 4-7,9-12,16,18,20
+app/src/test/java/com/machina/jikan_client_compose/ui/navigation/MainNavigationRouteKtTest.kt
+  s_d16e6a3f4d1009::t_6d6aef2de7e9a9 5
+app/src/main/AndroidManifest.xml
+  s_d16e6a3f4d1009::t_133da73d8e92f7 2
+gradle/wrapper/gradle-wrapper.properties
+  s_d16e6a3f4d1009::t_7d2918c3d0499f 3-7,9
+gradlew
+  s_d16e6a3f4d1009::t_4acf9cbdc53bfc 1,4,18-19,22-64,68,70-82,85-89,92,96,103,110-114,123,125,134-137,141,145-160,163-169,172-176,178-187,189-197,202-246
+gradlew.bat
+  s_d16e6a3f4d1009::t_bce382b6c65a8f 1-112
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "c45869fdded8af3d00ad48b93183d7cdc0430d51",
+  "prompts": {},
+  "sessions": {
+    "s_d16e6a3f4d1009": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9765dadd-7085-4260-843c-4729768bb28a",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Axel Briano <54673215+axelbrians@users.noreply.github.com>"
+    }
+  }
+}

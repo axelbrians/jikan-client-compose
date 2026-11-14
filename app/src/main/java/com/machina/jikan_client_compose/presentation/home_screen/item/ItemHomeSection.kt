@@ -113,7 +113,8 @@ private fun ItemHomeSectionInternal(
 				onButtonClick = {
 					navigator.navigateToContentViewAllScreen(
 						title = Constant.AIRING_TODAY,
-						url = Endpoints.getTodayScheduleAnimeEndpoints()
+						url = Endpoints.ANIME_SCHEDULES,
+						params = Endpoints.getTodayScheduleAnimeParams()
 					)
 				},
 				modifier = Modifier

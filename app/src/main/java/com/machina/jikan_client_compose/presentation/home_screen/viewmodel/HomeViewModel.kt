@@ -8,11 +8,13 @@ import com.machina.jikan_client_compose.domain.use_case.anime.HomeSection
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -37,8 +39,20 @@ class HomeViewModel @Inject constructor(
 			}
 			_homeState.update { loadingState }
 
-			val homeContentList = getHomeSectionsUseCase.invoke()
-			_homeState.update { HomeState.Success(homeContentList) }
+			try {
+				val homeContentList = getHomeSectionsUseCase.invoke()
+				_homeState.update { HomeState.Success(homeContentList) }
+			} catch (e: CancellationException) {
+				throw e
+			} catch (e: Exception) {
+				Timber.e(e, "Failed to load home sections")
+				_homeState.update {
+					HomeState.Error(
+						message = e.message ?: "Something went wrong",
+						sections = loadingState.sections
+					)
+				}
+			}
 		}
 	}
 
@@ -52,5 +66,10 @@ class HomeViewModel @Inject constructor(
 		data class Loading(val sections: ImmutableList<HomeSection>): HomeState
 
 		data class Success(val sections: ImmutableList<HomeSection>): HomeState
+
+		data class Error(
+			val message: String,
+			val sections: ImmutableList<HomeSection>
+		): HomeState
 	}
 }

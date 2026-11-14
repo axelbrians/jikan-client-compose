@@ -37,7 +37,7 @@ object Endpoints {
         return "$MANGA_DETAILS/$malId"
     }
 
-    fun getTodayScheduleAnimeEndpoints(): String {
-        return ANIME_SCHEDULES + "/" + DateHelper.getTodayDayNameInString()
+    fun getTodayScheduleAnimeParams(): Map<String, String> {
+        return mapOf(AnimeConstant.FilterKey to DateHelper.getTodayDayNameInString())
     }
 }

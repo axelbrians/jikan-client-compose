@@ -3,6 +3,17 @@ package com.machina.jikan_client_compose.presentation.home_screen
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.style.TextAlign
+import com.machina.jikan_client_compose.ui.theme.MyColor
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
@@ -117,6 +128,16 @@ fun HomeContentList(
 
 				}
 
+				is HomeState.Error -> {
+					item(key = "home_error") {
+						HomeErrorContent(
+							message = state.message,
+							onRetry = getHomeSections,
+							modifier = Modifier.fillParentMaxSize()
+						)
+					}
+				}
+
 				is HomeState.Init -> Unit
 			}
 		}
@@ -127,6 +148,37 @@ fun HomeContentList(
 			maxHeight = cardOffset.value,
 			modifier = Modifier.fillMaxWidth()
 		)
+	}
+}
+
+@Composable
+private fun HomeErrorContent(
+	message: String,
+	onRetry: () -> Unit,
+	modifier: Modifier = Modifier
+) {
+	Column(
+		modifier = modifier.padding(24.dp),
+		verticalArrangement = Arrangement.Center,
+		horizontalAlignment = Alignment.CenterHorizontally
+	) {
+		Text(
+			text = "Couldn't load anime",
+			color = MyColor.OnDarkSurfaceLight,
+			style = MaterialTheme.typography.titleMedium,
+			textAlign = TextAlign.Center
+		)
+		Spacer(modifier = Modifier.height(8.dp))
+		Text(
+			text = message,
+			color = MyColor.OnDarkSurface,
+			style = MaterialTheme.typography.bodyMedium,
+			textAlign = TextAlign.Center
+		)
+		Spacer(modifier = Modifier.height(16.dp))
+		Button(onClick = onRetry) {
+			Text(text = "Retry")
+		}
 	}
 }
 

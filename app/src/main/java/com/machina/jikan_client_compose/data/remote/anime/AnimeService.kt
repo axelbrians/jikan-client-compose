@@ -62,8 +62,9 @@ class AnimeServiceImpl(
 		val dayInString = DateHelper.parseDayIntToDayString(day)
 		val request = HttpRequestBuilder().apply {
 			defaultUrl {
-				encodedPath = Endpoints.ANIME_SCHEDULES + "/$dayInString"
+				encodedPath = Endpoints.ANIME_SCHEDULES
 			}
+			parameter(AnimeConstant.FilterKey, dayInString)
 			parameter(AnimeConstant.PageKey, page)
 		}
 

@@ -1,0 +1,28 @@
+app/src/main/java/com/machina/jikan_client_compose/presentation/home_screen/HomeContentList.kt
+  s_d2b25b93b01e11::t_4f17f30bb27bb8 182-184
+  s_d2b25b93b01e11::t_f25103275cf159 6-16,131-140,154-181
+app/src/main/java/com/machina/jikan_client_compose/presentation/home_screen/item/ItemHomeSection.kt
+  s_d2b25b93b01e11::t_e61833940ca7b0 116-117
+app/src/main/java/com/machina/jikan_client_compose/presentation/home_screen/viewmodel/HomeViewModel.kt
+  s_d2b25b93b01e11::t_e61833940ca7b0 11,17,42-55,69-73
+app/src/main/java/com/machina/jikan_client_compose/data/remote/anime/AnimeService.kt
+  s_d2b25b93b01e11::t_e61833940ca7b0 65,67
+app/src/main/java/com/machina/jikan_client_compose/core/constant/Endpoints.kt
+  s_d2b25b93b01e11::t_e61833940ca7b0 40-41
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "08dd42fb1d5bdf68f92cb6d94c3f4a8d88d118ee",
+  "prompts": {},
+  "sessions": {
+    "s_d2b25b93b01e11": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d6f81e42-4bca-4370-b252-28bd4ed7839a",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "axel-briano-hs <axel.suherik@hungerstation.com>"
+    }
+  }
+}
